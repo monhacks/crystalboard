@@ -18,7 +18,6 @@ TrainerHouseReceptionistScript:
 	iftrue .FoughtTooManyTimes
 	writetext TrainerHouseB1FIntroText
 	promptbutton
-	special TrainerHouse
 	iffalse .GetCal3Name
 	gettrainername STRING_BUFFER_3, CAL, CAL2
 	sjump .GotName
@@ -40,7 +39,6 @@ TrainerHouseReceptionistScript:
 	writetext TrainerHouseB1FCalBeforeText
 	waitbutton
 	closetext
-	special TrainerHouse
 	iffalse .NoSpecialBattle
 	winlosstext TrainerHouseB1FCalBeatenText, 0
 	setlasttalked TRAINERHOUSEB1F_CHRIS

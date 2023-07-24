@@ -26,7 +26,6 @@ SaveMenu:
 SaveAfterLinkTrade:
 	call PauseGameLogic
 	farcall StageRTCTimeForSave
-	farcall BackupMysteryGift
 	call SavePokemonData
 	call SaveChecksum
 	call SaveBackupPokemonData
@@ -92,7 +91,6 @@ MoveMonWOMail_InsertMon_SaveGame:
 	ld a, TRUE
 	ld [wSaveFileExists], a
 	farcall StageRTCTimeForSave
-	farcall BackupMysteryGift
 	call ValidateSave
 	call SaveOptions
 	call SavePlayerData
@@ -104,7 +102,6 @@ MoveMonWOMail_InsertMon_SaveGame:
 	call SaveBackupPokemonData
 	call SaveBackupChecksum
 	farcall BackupPartyMonMail
-	farcall BackupMobileEventIndex
 	farcall SaveRTC
 	call LoadBox
 	call ResumeGameLogic
@@ -267,7 +264,6 @@ _SaveGameData:
 	ld a, TRUE
 	ld [wSaveFileExists], a
 	farcall StageRTCTimeForSave
-	farcall BackupMysteryGift
 	call ValidateSave
 	call SaveOptions
 	call SavePlayerData
@@ -281,7 +277,6 @@ _SaveGameData:
 	call SaveBackupChecksum
 	call UpdateStackTop
 	farcall BackupPartyMonMail
-	farcall BackupMobileEventIndex
 	farcall SaveRTC
 	ld a, BANK(sBattleTowerChallengeState)
 	call OpenSRAM
@@ -361,9 +356,7 @@ ErasePreviousSave:
 	call EraseBoxes
 	call EraseHallOfFame
 	call EraseLinkBattleStats
-	call EraseMysteryGift
 	call SaveData
-	call EraseBattleTowerStatus
 	ld a, BANK(sStackTop)
 	call OpenSRAM
 	xor a
@@ -383,15 +376,6 @@ EraseLinkBattleStats:
 	call ByteFill
 	jp CloseSRAM
 
-EraseMysteryGift:
-	ld a, BANK(sBackupMysteryGiftItem)
-	call OpenSRAM
-	ld hl, sBackupMysteryGiftItem
-	ld bc, sBackupMysteryGiftItemEnd - sBackupMysteryGiftItem
-	xor a
-	call ByteFill
-	jp CloseSRAM
-
 EraseHallOfFame:
 	ld a, BANK(sHallOfFame)
 	call OpenSRAM
@@ -401,70 +385,8 @@ EraseHallOfFame:
 	call ByteFill
 	jp CloseSRAM
 
-InitDefaultEZChatMsgs: ; unreferenced
-	ld a, BANK(sEZChatMessages) ; MBC30 bank used by JP Crystal; inaccessible by MBC3
-	call OpenSRAM
-	ld hl, .Data
-	ld de, sEZChatMessages
-	ld bc, EASY_CHAT_MESSAGE_LENGTH * 4
-	call CopyBytes
-	jp CloseSRAM
-
-.Data:
-; introduction
-	db $0d, EZCHAT_GREETINGS,    $00, EZCHAT_EXCLAMATIONS, $00, EZCHAT_POKEMON
-	db $22, EZCHAT_GREETINGS,    $01, EZCHAT_EXCLAMATIONS, $00, EZCHAT_POKEMON
-; begin battle
-	db $03, EZCHAT_BATTLE,       $05, EZCHAT_CONDITIONS,   $03, EZCHAT_EXCLAMATIONS
-	db $0e, EZCHAT_CONVERSATION, $03, EZCHAT_GREETINGS,    $00, EZCHAT_POKEMON
-; win battle
-	db $39, EZCHAT_FEELINGS,     $07, EZCHAT_BATTLE,       $00, EZCHAT_EXCLAMATIONS
-	db $04, EZCHAT_FEELINGS,     $01, EZCHAT_EXCLAMATIONS, $00, EZCHAT_POKEMON
-; lose battle
-	db $0f, EZCHAT_EXCLAMATIONS, $14, EZCHAT_FEELINGS,     $05, EZCHAT_EXCLAMATIONS
-	db $11, EZCHAT_TIME,         $0c, EZCHAT_CONVERSATION, $06, EZCHAT_BATTLE
-
-EraseBattleTowerStatus:
-	ld a, BANK(sBattleTowerChallengeState)
-	call OpenSRAM
-	xor a
-	ld [sBattleTowerChallengeState], a
-	jp CloseSRAM
-
 SaveData:
 	call _SaveData
-	ret
-
-Function14d6c: ; unreferenced
-	ld a, BANK(s4_a60b) ; MBC30 bank used by JP Crystal; inaccessible by MBC3
-	call OpenSRAM
-	ld a, [s4_a60b] ; address of MBC30 bank
-	ld b, $0
-	and a
-	jr z, .ok
-	ld b, $2
-
-.ok
-	ld a, b
-	ld [s4_a60b], a ; address of MBC30 bank
-	call CloseSRAM
-	ret
-
-Function14d83: ; unreferenced
-	ld a, BANK(s4_a60c) ; aka BANK(s4_a60d) ; MBC30 bank used by JP Crystal; inaccessible by MBC3
-	call OpenSRAM
-	xor a
-	ld [s4_a60c], a ; address of MBC30 bank
-	ld [s4_a60d], a ; address of MBC30 bank
-	call CloseSRAM
-	ret
-
-Function14d93: ; unreferenced
-	ld a, BANK(s7_a000) ; MBC30 bank used by JP Crystal; inaccessible by MBC3
-	call OpenSRAM
-	xor a
-	ld [s7_a000], a ; address of MBC30 bank
-	call CloseSRAM
 	ret
 
 HallOfFame_InitSaveIfNeeded:
@@ -600,8 +522,6 @@ TryLoadSaveFile:
 	call LoadPokemonData
 	call LoadBox
 	farcall RestorePartyMonMail
-	farcall RestoreMobileEventIndex
-	farcall RestoreMysteryGift
 	call ValidateBackupSave
 	call SaveBackupOptions
 	call SaveBackupPlayerData
@@ -617,8 +537,6 @@ TryLoadSaveFile:
 	call LoadBackupPokemonData
 	call LoadBox
 	farcall RestorePartyMonMail
-	farcall RestoreMobileEventIndex
-	farcall RestoreMysteryGift
 	call ValidateSave
 	call SaveOptions
 	call SavePlayerData
@@ -839,17 +757,6 @@ _SaveData:
 	ld bc, wCrystalDataEnd - wCrystalData
 	call CopyBytes
 
-	; This block originally had some mobile functionality, but since we're still in
-	; BANK(sCrystalData), it instead overwrites the sixteen wEventFlags starting at 1:s4_a60e with
-	; garbage from wd479. This isn't an issue, since ErasePreviousSave is followed by a regular
-	; save that unwrites the garbage.
-
-	ld hl, wd479
-	ld a, [hli]
-	ld [s4_a60e + 0], a
-	ld a, [hli]
-	ld [s4_a60e + 1], a
-
 	jp CloseSRAM
 
 _LoadData:
@@ -859,15 +766,6 @@ _LoadData:
 	ld de, wCrystalData
 	ld bc, wCrystalDataEnd - wCrystalData
 	call CopyBytes
-
-	; This block originally had some mobile functionality to mirror _SaveData above, but instead it
-	; (harmlessly) writes the aforementioned wEventFlags to the unused wd479.
-
-	ld hl, wd479
-	ld a, [s4_a60e + 0]
-	ld [hli], a
-	ld a, [s4_a60e + 1]
-	ld [hli], a
 
 	jp CloseSRAM
 

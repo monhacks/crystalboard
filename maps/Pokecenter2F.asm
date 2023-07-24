@@ -16,7 +16,6 @@ Pokecenter2F_MapScripts:
 	def_callbacks
 
 Pokecenter2FCheckMysteryGiftScene:
-	special CheckMysteryGift
 	ifequal $0, .done
 	clearevent EVENT_MYSTERY_GIFT_DELIVERY_GUY
 	checkevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2
@@ -73,13 +72,6 @@ LinkReceptionistScript_Trade:
 	writetext Text_TradeReceptionistIntro
 	yesorno
 	iffalse .Cancel
-	special Mobile_DummyReturnFalse ; always returns false
-	iffalse .NoMobile
-	writetext Text_TradeReceptionistMobile
-	special AskMobileOrCable
-	iffalse .Cancel
-	ifequal $1, .Mobile
-.NoMobile:
 	special SetBitsForLinkTradeRequest
 	writetext Text_PleaseWait
 	special WaitForLinkedFriend
@@ -150,7 +142,6 @@ LinkReceptionistScript_Trade:
 	iffalse .Mobile_DidNotSave
 	special TryQuickSave
 	iffalse .Mobile_DidNotSave
-	special Function1011f1
 	writetext Text_PleaseComeIn
 	waitbutton
 	closetext
@@ -175,13 +166,6 @@ LinkReceptionistScript_Battle:
 	writetext Text_BattleReceptionistIntro
 	yesorno
 	iffalse .Cancel
-	special Mobile_DummyReturnFalse ; always returns false
-	iffalse .NoMobile
-	writetext Text_BattleReceptionistMobile
-	special AskMobileOrCable
-	iffalse .Cancel
-	ifequal $1, .Mobile
-.NoMobile:
 	special SetBitsForBattleRequest
 	writetext Text_PleaseWait
 	special WaitForLinkedFriend
@@ -252,9 +236,6 @@ LinkReceptionistScript_Battle:
 	writetext Text_MustSaveGame
 	yesorno
 	iffalse .Mobile_DidNotSave
-	special Function103780
-	iffalse .Mobile_DidNotSave
-	special Function1011f1
 	writetext Text_PleaseComeIn
 	waitbutton
 	closetext
@@ -268,16 +249,6 @@ LinkReceptionistScript_Battle:
 	end
 
 .SelectThreeMons:
-	special Mobile_SelectThreeMons
-	iffalse .Mobile_DidNotSelect
-	ifequal $1, .Mobile_OK
-	ifequal $2, .Mobile_OK
-	ifequal $3, .Mobile_InvalidParty
-	sjump .Mobile_DidNotSelect
-
-.Mobile_InvalidParty:
-	writetext Text_BrokeStadiumRules
-	waitbutton
 .Mobile_DidNotSelect:
 	closetext
 	setval FALSE
@@ -378,7 +349,6 @@ Script_LeftCableTradeCenter:
 	end
 
 Script_LeftMobileTradeRoom:
-	special Function101220
 	scall Script_WalkOutOfMobileTradeRoom
 	setscene SCENE_POKECENTER2F_CHECK_MYSTERY_GIFT
 	setmapscene MOBILE_TRADE_ROOM, SCENE_MOBILETRADEROOM_INITIALIZE
@@ -398,7 +368,6 @@ Script_LeftCableColosseum:
 	end
 
 Script_LeftMobileBattleRoom:
-	special Function101220
 	scall Script_WalkOutOfMobileBattleRoom
 	setscene SCENE_POKECENTER2F_CHECK_MYSTERY_GIFT
 	setmapscene MOBILE_BATTLE_ROOM, SCENE_MOBILEBATTLEROOM_INITIALIZE
@@ -597,7 +566,6 @@ Pokecenter2FOfficerScript:
 	writetext Text_MysteryGiftDeliveryGuy_HereYouGo
 	promptbutton
 	waitsfx
-	special GetMysteryGiftItem
 	iffalse .BagIsFull
 	itemnotify
 	setevent EVENT_MYSTERY_GIFT_DELIVERY_GUY

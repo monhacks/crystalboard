@@ -30,7 +30,6 @@ DayCareManScript_Inside:
 	closetext
 	readvar VAR_PARTYCOUNT
 	ifequal PARTY_LENGTH, .PartyFull
-	special GiveOddEgg
 	opentext
 	writetext DayCareText_GotOddEgg
 	playsound SFX_KEY_ITEM

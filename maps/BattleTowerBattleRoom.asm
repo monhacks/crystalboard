@@ -21,8 +21,6 @@ Script_BattleRoom:
 	applymovement PLAYER, MovementData_BattleTowerBattleRoomPlayerWalksIn
 ; beat all 7 opponents in a row
 Script_BattleRoomLoop:
-	setval BATTLETOWERBATTLEROOM_YOUNGSTER
-	special LoadOpponentTrainerAndPokemonWithOTSprite
 	appear BATTLETOWERBATTLEROOM_YOUNGSTER
 	warpsound
 	waitsfx
@@ -31,12 +29,9 @@ Script_BattleRoomLoop:
 	battletowertext BATTLETOWERTEXT_INTRO
 	promptbutton
 	closetext
-	special BattleTowerBattle ; predef StartBattle
 	special FadeOutPalettes
 	reloadmap
 	ifnotequal $0, Script_FailedBattleTowerChallenge
-	readmem wNrOfBeatenBattleTowerTrainers
-	ifequal BATTLETOWER_STREAK_LENGTH, Script_BeatenAllTrainers
 	applymovement BATTLETOWERBATTLEROOM_YOUNGSTER, MovementData_BattleTowerBattleRoomOpponentWalksOut
 	warpsound
 	disappear BATTLETOWERBATTLEROOM_YOUNGSTER
@@ -66,12 +61,6 @@ Script_DontBattleNextOpponent:
 	writetext Text_SaveAndEndTheSession
 	yesorno
 	iffalse Script_DontSaveAndEndTheSession
-	setval BATTLETOWERACTION_SAVELEVELGROUP ; save level group
-	special BattleTowerAction
-	setval BATTLETOWERACTION_SAVEOPTIONS ; choose reward
-	special BattleTowerAction
-	setval BATTLETOWERACTION_SAVE_AND_QUIT ; quicksave
-	special BattleTowerAction
 	playsound SFX_SAVE
 	waitsfx
 	special FadeOutPalettes
@@ -80,10 +69,6 @@ Script_DontSaveAndEndTheSession:
 	writetext Text_CancelYourBattleRoomChallenge
 	yesorno
 	iffalse Script_ContinueAndBattleNextOpponent
-	setval BATTLETOWERACTION_CHALLENGECANCELED
-	special BattleTowerAction
-	setval BATTLETOWERACTION_06
-	special BattleTowerAction
 	closetext
 	special FadeOutPalettes
 	warpfacing UP, BATTLE_TOWER_1F, 7, 7
@@ -92,10 +77,7 @@ Script_DontSaveAndEndTheSession:
 
 Script_FailedBattleTowerChallenge:
 	pause 60
-	special BattleTowerFade
 	warpfacing UP, BATTLE_TOWER_1F, 7, 7
-	setval BATTLETOWERACTION_CHALLENGECANCELED
-	special BattleTowerAction
 	opentext
 	writetext Text_ThanksForVisiting
 	waitbutton
@@ -104,7 +86,6 @@ Script_FailedBattleTowerChallenge:
 
 Script_BeatenAllTrainers:
 	pause 60
-	special BattleTowerFade
 	warpfacing UP, BATTLE_TOWER_1F, 7, 7
 Script_BeatenAllTrainers2:
 	opentext
@@ -112,8 +93,6 @@ Script_BeatenAllTrainers2:
 	sjump Script_GivePlayerHisPrize
 
 Script_TooMuchTimeElapsedNoRegister: ; unreferenced
-	setval BATTLETOWERACTION_CHALLENGECANCELED
-	special BattleTowerAction
 	opentext
 	writetext Text_TooMuchTimeElapsedNoRegister
 	waitbutton
@@ -121,10 +100,6 @@ Script_TooMuchTimeElapsedNoRegister: ; unreferenced
 	end
 
 Script_ChallengeCanceled: ; unreferenced
-	setval BATTLETOWERACTION_CHALLENGECANCELED
-	special BattleTowerAction
-	setval BATTLETOWERACTION_06
-	special BattleTowerAction
 	opentext
 	writetext Text_ThanksForVisiting
 	writetext Text_WeHopeToServeYouAgain

@@ -125,51 +125,6 @@ PlayersHousePC:
 	ld [wScriptVar], a
 	ret
 
-CheckMysteryGift:
-	ld a, BANK(sMysteryGiftItem)
-	call OpenSRAM
-	ld a, [sMysteryGiftItem]
-	and a
-	jr z, .no
-	inc a
-
-.no
-	ld [wScriptVar], a
-	call CloseSRAM
-	ret
-
-GetMysteryGiftItem:
-	ld a, BANK(sMysteryGiftItem)
-	call OpenSRAM
-	ld a, [sMysteryGiftItem]
-	ld [wCurItem], a
-	ld a, 1
-	ld [wItemQuantityChange], a
-	ld hl, wNumItems
-	call ReceiveItem
-	jr nc, .no_room
-	xor a
-	ld [sMysteryGiftItem], a
-	call CloseSRAM
-	ld a, [wCurItem]
-	ld [wNamedObjectIndex], a
-	call GetItemName
-	ld hl, .ReceiveItemText
-	call PrintText
-	ld a, TRUE
-	ld [wScriptVar], a
-	ret
-
-.no_room
-	call CloseSRAM
-	xor a
-	ld [wScriptVar], a
-	ret
-
-.ReceiveItemText:
-	text_far _ReceiveItemText
-	text_end
-
 BugContestJudging:
 	farcall _BugContestJudging
 	ld a, b
@@ -416,10 +371,3 @@ PrintDiploma:
 	farcall _PrintDiploma
 	call ExitAllMenus
 	ret
-
-TrainerHouse:
-	ld a, BANK(sMysteryGiftTrainerHouseFlag)
-	call OpenSRAM
-	ld a, [sMysteryGiftTrainerHouseFlag]
-	ld [wScriptVar], a
-	jp CloseSRAM

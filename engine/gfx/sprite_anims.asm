@@ -740,11 +740,9 @@ AnimSeq_FlyTo:
 	ret
 
 AnimSeq_MobileTradeSentPulse:
-	farcall MobileTradeAnim_AnimateSentPulse
 	ret
 
 AnimSeq_MobileTradeOTPulse:
-	farcall MobileTradeAnim_AnimateOTPulse
 	ret
 
 AnimSeq_IntroSuicune:
@@ -837,7 +835,6 @@ AnimSeq_IntroSuicuneAway:
 	ret
 
 AnimSeq_EZChatCursor:
-	farcall AnimateEZChatCursor
 	ret
 
 AnimSeq_Celebi:

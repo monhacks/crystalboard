@@ -109,7 +109,6 @@ Carrie:
 	writetext GoldenrodDeptStore5FCarrieMysteryGiftExplanationText
 	waitbutton
 	closetext
-	special UnlockMysteryGift
 	end
 
 .NotGBC:

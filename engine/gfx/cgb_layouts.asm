@@ -59,8 +59,7 @@ CGBLayoutJumptable:
 	dw _CGB_PlayerOrMonFrontpicPals
 	dw _CGB_TradeTube
 	dw _CGB_TrainerOrMonFrontpicPals
-	dw _CGB_MysteryGift
-	dw _CGB_Unused1E
+	dw _CGB_Unused1D
 	assert_table_length NUM_SCGB_LAYOUTS
 
 _CGB_BattleGrayscale:
@@ -151,12 +150,7 @@ _CGB_FinishBattleScreenLayout:
 	ret
 
 InitPartyMenuBGPal7:
-	farcall Function100dc0
-Mobile_InitPartyMenuBGPal7:
 	ld hl, PartyMenuBGPalette
-	jr nc, .not_mobile
-	ld hl, PartyMenuBGMobilePalette
-.not_mobile
 	ld de, wBGPals1 palette 7
 	ld bc, 1 palettes
 	ld a, BANK(wBGPals1)
@@ -164,11 +158,7 @@ Mobile_InitPartyMenuBGPal7:
 	ret
 
 InitPartyMenuBGPal0:
-	farcall Function100dc0
 	ld hl, PartyMenuBGPalette
-	jr nc, .not_mobile
-	ld hl, PartyMenuBGMobilePalette
-.not_mobile
 	ld de, wBGPals1 palette 0
 	ld bc, 1 palettes
 	ld a, BANK(wBGPals1)
@@ -901,7 +891,7 @@ _CGB_PlayerOrMonFrontpicPals:
 	call ApplyPals
 	ret
 
-_CGB_Unused1E:
+_CGB_Unused1D:
 	ld de, wBGPals1
 	ld a, [wCurPartySpecies]
 	call GetMonPalettePointer
@@ -935,51 +925,3 @@ _CGB_TrainerOrMonFrontpicPals:
 	call ApplyAttrmap
 	call ApplyPals
 	ret
-
-_CGB_MysteryGift:
-	ld hl, .MysteryGiftPalettes
-	ld de, wBGPals1
-	ld bc, 2 palettes
-	ld a, BANK(wBGPals1)
-	call FarCopyWRAM
-	call ApplyPals
-	call WipeAttrmap
-	hlcoord 3, 7, wAttrmap
-	lb bc, 8, 14
-	ld a, $1
-	call FillBoxCGB
-	hlcoord 1, 5, wAttrmap
-	lb bc, 1, 18
-	ld a, $1
-	call FillBoxCGB
-	hlcoord 1, 16, wAttrmap
-	lb bc, 1, 18
-	ld a, $1
-	call FillBoxCGB
-	hlcoord 0, 0, wAttrmap
-	lb bc, 17, 2
-	ld a, $1
-	call FillBoxCGB
-	hlcoord 18, 5, wAttrmap
-	lb bc, 12, 1
-	ld a, $1
-	call FillBoxCGB
-	call ApplyAttrmap
-	ret
-
-.MysteryGiftPalettes:
-INCLUDE "gfx/mystery_gift/mystery_gift.pal"
-
-GS_CGB_MysteryGift: ; unreferenced
-	ld hl, .MysteryGiftPalette
-	ld de, wBGPals1
-	ld bc, 1 palettes
-	ld a, BANK(wBGPals1)
-	call FarCopyWRAM
-	call ApplyPals
-	call WipeAttrmap
-	call ApplyAttrmap
-	ret
-
-.MysteryGiftPalette:
-INCLUDE "gfx/mystery_gift/gs_mystery_gift.pal"

@@ -213,85 +213,6 @@ _ReceivedTMHMText::
 	text "!"
 	prompt
 
-_MysteryGiftCanceledText::
-	text "The link has been"
-	line "cancelled."
-	prompt
-
-_MysteryGiftCommErrorText::
-	text "Communication"
-	line "error."
-	prompt
-
-_RetrieveMysteryGiftText::
-	text "Must retrieve GIFT"
-	line "at #MON CENTER."
-	prompt
-
-_YourFriendIsNotReadyText::
-	text "Your friend isn't"
-	line "ready."
-	prompt
-
-_MysteryGiftFiveADayText::
-	text "Sorry--only five"
-	line "GIFTS a day."
-	prompt
-
-_MysteryGiftOneADayText::
-	text "Sorry. One GIFT"
-	line "a day per person."
-	prompt
-
-_MysteryGiftSentText::
-	text_ram wMysteryGiftPartnerName
-	text " sent"
-	line "@"
-	text_ram wStringBuffer1
-	text "."
-	prompt
-
-_MysteryGiftSentHomeText::
-	text_ram wMysteryGiftPartnerName
-	text " sent"
-	line "@"
-	text_ram wStringBuffer1
-	text_start
-	cont "to @"
-	text_ram wMysteryGiftPlayerName
-	text "'s home."
-	prompt
-
-_NameCardReceivedCardText::
-	text "Received"
-	line "@"
-	text_ram wMysteryGiftCardHolderName
-	text "'s CARD."
-	prompt
-
-_NameCardListedCardText::
-	text_ram wMysteryGiftCardHolderName
-	text "'s CARD was"
-	line "listed as no.@"
-	text_decimal wTextDecimalByte, 1, 2
-	text "."
-	prompt
-
-_NameCardNotRegisteredCardText::
-	text "The CARD was not"
-	line "registered."
-	prompt
-
-_NameCardLinkCancelledText::
-	text "The link has been"
-	line "cancelled."
-	prompt
-
-_NameCardLinkCommErrorText::
-	text "Communication"
-	line "error."
-	prompt
-
 _BadgeRequiredText::
 	text "Sorry! A new BADGE"
 	line "is required."
@@ -889,29 +810,6 @@ _MailMovedFromBoxText::
 	text "The MAIL was moved"
 	line "from the MAILBOX."
 	prompt
-
-_YesPromptText:: ; unreferenced
-	text "Yes"
-	prompt
-
-_NoPromptText:: ; unreferenced
-	text "No"
-	prompt
-
-_AnimationTypeText:: ; unreferenced
-	text_decimal wcf64, 1, 3
-	text " @"
-	text_ram wStringBuffer1
-	text_start
-	line "Animation type @"
-	text_ram wStringBuffer2
-	text_end
-
-	text_end ; unreferenced
-
-_MonNumberText:: ; unreferenced
-	text "#MON number?"
-	done
 
 _WasSentToBillsPCText::
 	text_ram wStringBuffer1
