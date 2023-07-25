@@ -2628,15 +2628,9 @@ wdc41:: ds 1
 wdc42:: ds 8
 wBuenasPassword:: db
 wBlueCardBalance:: db
-wDailyRematchFlags:: ds 4
-wDailyPhoneItemFlags:: ds 4
-wDailyPhoneTimeOfDayFlags:: ds 4
 wKenjiBreakTimer:: ds 2 ; Kenji
 wYanmaMapGroup:: db
 wYanmaMapNumber:: db
-wPlayerMonSelection:: ds 3
-wdc5f:: db
-wdc60:: db
 
 	ds 18
 

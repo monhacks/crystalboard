@@ -11,5 +11,5 @@ Landmarks:
 	landmark 140, 100, Level1LandmarkName
 	assert_table_length NUM_LANDMARKS
 
-Level1LandmarkName:     db "LEVEL 1@"
 SpecialLandmarkName:    db "SPECIAL@"
+Level1LandmarkName:     db "LEVEL 1@"

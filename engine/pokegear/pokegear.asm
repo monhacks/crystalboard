@@ -520,12 +520,13 @@ PokegearMap_Init:
 	ret
 
 PokegearMap_KantoMap:
-	call TownMap_GetKantoLandmarkLimits
+	ld d, NUM_LANDMARKS - 1
+	ld e, LANDMARK_LEVEL_1
 	jr PokegearMap_ContinueMap
 
 PokegearMap_JohtoMap:
-	ld d, LANDMARK_SPECIAL
-	ld e, LANDMARK_SPECIAL
+	ld d, NUM_LANDMARKS - 1
+	ld e, LANDMARK_LEVEL_1
 PokegearMap_ContinueMap:
 	ld hl, hJoyLast
 	ld a, [hl]
@@ -681,19 +682,6 @@ PokegearMap_UpdateCursorPosition:
 	ld hl, SPRITEANIMSTRUCT_YCOORD
 	add hl, bc
 	ld [hl], d
-	ret
-
-TownMap_GetKantoLandmarkLimits:
-	ld a, [wStatusFlags]
-	bit STATUSFLAGS_HALL_OF_FAME_F, a
-	jr z, .not_hof
-	ld d, LANDMARK_SPECIAL
-	ld e, LANDMARK_SPECIAL
-	ret
-
-.not_hof
-	ld d, LANDMARK_SPECIAL
-	ld e, LANDMARK_SPECIAL
 	ret
 
 PokegearRadio_Init:

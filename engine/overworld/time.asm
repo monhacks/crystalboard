@@ -110,18 +110,6 @@ CheckDailyResetTimer::
 	ld [hli], a ; wDailyFlags2
 	ld [hli], a ; wSwarmFlags
 	ld [hl], a  ; wSwarmFlags + 1
-	ld hl, wDailyRematchFlags
-rept 4
-	ld [hli], a
-endr
-	ld hl, wDailyPhoneItemFlags
-rept 4
-	ld [hli], a
-endr
-	ld hl, wDailyPhoneTimeOfDayFlags
-rept 4
-	ld [hli], a
-endr
 	ld hl, wKenjiBreakTimer
 	ld a, [hl]
 	and a
