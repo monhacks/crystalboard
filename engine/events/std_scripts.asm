@@ -162,7 +162,6 @@ PokecenterNurseScript:
 
 .pokerus_done
 	setflag ENGINE_CAUGHT_POKERUS
-	specialphonecall SPECIALCALL_POKERUS
 	end
 
 DifficultBookshelfScript:
@@ -300,8 +299,6 @@ RadioTowerRocketsScript:
 	clearevent EVENT_RADIO_TOWER_ROCKET_TAKEOVER
 	clearevent EVENT_USED_THE_CARD_KEY_IN_THE_RADIO_TOWER
 	setevent EVENT_MAHOGANY_TOWN_POKEFAN_M_BLOCKS_EAST
-	specialphonecall SPECIALCALL_WEIRDBROADCAST
-	setmapscene MAHOGANY_TOWN, SCENE_MAHOGANYTOWN_NOOP
 	end
 
 BugContestResultsWarpScript:
@@ -310,7 +307,6 @@ BugContestResultsWarpScript:
 	setevent EVENT_ROUTE_36_NATIONAL_PARK_GATE_OFFICER_CONTEST_DAY
 	clearevent EVENT_ROUTE_36_NATIONAL_PARK_GATE_OFFICER_NOT_CONTEST_DAY
 	setevent EVENT_WARPED_FROM_ROUTE_35_NATIONAL_PARK_GATE
-	warp ROUTE_36_NATIONAL_PARK_GATE, 0, 4
 	applymovement PLAYER, Movement_ContestResults_WalkAfterWarp
 
 BugContestResultsScript:
@@ -358,8 +354,6 @@ BugContestResults_DidNotLeaveMons:
 	waitbutton
 BugContestResults_CleanUp:
 	closetext
-	setscene SCENE_ROUTE36NATIONALPARKGATE_NOOP
-	setmapscene ROUTE_35_NATIONAL_PARK_GATE, SCENE_ROUTE35NATIONALPARKGATE_NOOP
 	setevent EVENT_BUG_CATCHING_CONTESTANT_1A
 	setevent EVENT_BUG_CATCHING_CONTESTANT_2A
 	setevent EVENT_BUG_CATCHING_CONTESTANT_3A

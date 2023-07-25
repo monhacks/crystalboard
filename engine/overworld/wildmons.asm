@@ -387,8 +387,6 @@ _GrassWildmonLookup:
 	call _SwarmWildmonCheck
 	ret c
 	ld hl, JohtoGrassWildMons
-	ld de, KantoGrassWildMons
-	call _JohtoWildmonCheck
 	ld bc, GRASS_WILDDATA_LENGTH
 	jr _NormalWildmonOK
 
@@ -398,18 +396,8 @@ _WaterWildmonLookup:
 	call _SwarmWildmonCheck
 	ret c
 	ld hl, JohtoWaterWildMons
-	ld de, KantoWaterWildMons
-	call _JohtoWildmonCheck
 	ld bc, WATER_WILDDATA_LENGTH
 	jr _NormalWildmonOK
-
-_JohtoWildmonCheck:
-	call IsInJohto
-	and a
-	ret z
-	ld h, d
-	ld l, e
-	ret
 
 _SwarmWildmonCheck:
 	call CopyCurrMapDE
@@ -505,15 +493,15 @@ InitRoamMons:
 	ld [wRoamMon2Level], a
 
 ; raikou starting map
-	ld a, GROUP_ROUTE_42
+	ld a, GROUP_N_A
 	ld [wRoamMon1MapGroup], a
-	ld a, MAP_ROUTE_42
+	ld a, MAP_N_A
 	ld [wRoamMon1MapNumber], a
 
 ; entei starting map
-	ld a, GROUP_ROUTE_37
+	ld a, GROUP_N_A
 	ld [wRoamMon2MapGroup], a
-	ld a, MAP_ROUTE_37
+	ld a, MAP_N_A
 	ld [wRoamMon2MapNumber], a
 
 ; hp

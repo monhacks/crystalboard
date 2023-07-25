@@ -6038,13 +6038,6 @@ LoadEnemyMon:
 	jr nc, .GenerateDVs
 
 .CheckMagikarpArea:
-; BUG: Magikarp in Lake of Rage are shorter, not longer (see docs/bugs_and_glitches.md)
-	ld a, [wMapGroup]
-	cp GROUP_LAKE_OF_RAGE
-	jr z, .Happiness
-	ld a, [wMapNumber]
-	cp MAP_LAKE_OF_RAGE
-	jr z, .Happiness
 ; 40% chance of not flooring
 	call Random
 	cp 39 percent + 1

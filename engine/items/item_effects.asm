@@ -2531,15 +2531,12 @@ PPRestoredText:
 	text_end
 
 SquirtbottleEffect:
-	farcall _Squirtbottle
 	ret
 
 CardKeyEffect:
-	farcall _CardKey
 	ret
 
 BasementKeyEffect:
-	farcall _BasementKey
 	ret
 
 SacredAshEffect:

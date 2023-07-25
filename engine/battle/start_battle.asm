@@ -70,20 +70,11 @@ PlayBattleMusic:
 	and a
 	jr nz, .trainermusic
 
-	farcall RegionCheck
-	ld a, e
-	and a
-	jr nz, .kantowild
-
 	ld de, MUSIC_JOHTO_WILD_BATTLE
 	ld a, [wTimeOfDay]
 	cp NITE_F
 	jr nz, .done
 	ld de, MUSIC_JOHTO_WILD_BATTLE_NIGHT
-	jr .done
-
-.kantowild
-	ld de, MUSIC_KANTO_WILD_BATTLE
 	jr .done
 
 .trainermusic
@@ -124,21 +115,7 @@ PlayBattleMusic:
 	jr .done
 
 .othertrainer
-	ld a, [wLinkMode]
-	and a
-	jr nz, .johtotrainer
-
-	farcall RegionCheck
-	ld a, e
-	and a
-	jr nz, .kantotrainer
-
-.johtotrainer
 	ld de, MUSIC_JOHTO_TRAINER_BATTLE
-	jr .done
-
-.kantotrainer
-	ld de, MUSIC_KANTO_TRAINER_BATTLE
 
 .done
 	call PlayMusic

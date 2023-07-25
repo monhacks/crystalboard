@@ -61,10 +61,10 @@ NewGame:
 	call OakSpeech
 	call InitializeWorld
 
-	ld a, LANDMARK_NEW_BARK_TOWN
+	ld a, LANDMARK_LEVEL_1
 	ld [wPrevLandmark], a
 
-	ld a, SPAWN_HOME
+	ld a, SPAWN_LEVEL_1
 	ld [wDefaultSpawnpoint], a
 
 	ld a, MAPSETUP_WARP
@@ -347,7 +347,7 @@ Continue:
 	farcall JumpRoamMons
 	farcall ClockContinue
 	ld a, [wSpawnAfterChampion]
-	cp SPAWN_LANCE
+	cp SPAWN_LEVEL_1
 	jr z, .SpawnAfterE4
 	ld a, MAPSETUP_CONTINUE
 	ldh [hMapEntryMethod], a
@@ -357,13 +357,13 @@ Continue:
 	ret
 
 .SpawnAfterE4:
-	ld a, SPAWN_NEW_BARK
+	ld a, SPAWN_LEVEL_1
 	ld [wDefaultSpawnpoint], a
 	call PostCreditsSpawn
 	jp FinishContinueFunction
 
 SpawnAfterRed:
-	ld a, SPAWN_MT_SILVER
+	ld a, SPAWN_LEVEL_1
 	ld [wDefaultSpawnpoint], a
 
 PostCreditsSpawn:
@@ -415,7 +415,7 @@ FinishContinueFunction:
 	set 1, [hl]
 	farcall OverworldLoop
 	ld a, [wSpawnAfterChampion]
-	cp SPAWN_RED
+	cp SPAWN_LEVEL_1
 	jr z, .AfterRed
 	jp Reset
 

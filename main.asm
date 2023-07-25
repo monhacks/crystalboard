@@ -226,9 +226,6 @@ SECTION "bank14", ROMX
 INCLUDE "engine/pokemon/party_menu.asm"
 INCLUDE "engine/events/poisonstep.asm"
 INCLUDE "engine/events/sweet_scent.asm"
-INCLUDE "engine/events/squirtbottle.asm"
-INCLUDE "engine/events/card_key.asm"
-INCLUDE "engine/events/basement_key.asm"
 INCLUDE "engine/events/sacred_ash.asm"
 INCLUDE "engine/pokemon/tempmon.asm"
 INCLUDE "engine/pokemon/types.asm"
@@ -308,20 +305,11 @@ INCLUDE "engine/events/fish.asm"
 INCLUDE "engine/games/slot_machine.asm"
 
 
-SECTION "Phone Scripts 1", ROMX
+SECTION "bank28", ROMX
 
-INCLUDE "engine/phone/scripts/generic_caller.asm"
-INCLUDE "engine/phone/scripts/jack_gossip.asm"
-INCLUDE "engine/phone/scripts/liz_gossip.asm"
-INCLUDE "engine/phone/scripts/chad_gossip.asm"
-INCLUDE "engine/phone/scripts/brent_gossip.asm"
-INCLUDE "engine/phone/scripts/irwin_gossip.asm"
-INCLUDE "engine/phone/scripts/hangups.asm"
-INCLUDE "engine/phone/scripts/reminders.asm"
-INCLUDE "engine/phone/scripts/hangups_2.asm"
-INCLUDE "engine/phone/scripts/reminders_2.asm"
-INCLUDE "engine/phone/scripts/bike_shop.asm"
-INCLUDE "engine/phone/scripts/buena.asm"
+INCLUDE "engine/phone/scripts/unused.asm"
+INCLUDE "engine/events/std_scripts.asm"
+INCLUDE "engine/events/trainer_scripts.asm"
 
 
 SECTION "Phone Text", ROMX
@@ -353,45 +341,6 @@ INCLUDE "engine/events/treemons.asm"
 INCLUDE "engine/events/fishing_gfx.asm"
 INCLUDE "engine/pokegear/radio.asm"
 INCLUDE "engine/pokemon/mail_2.asm"
-
-
-SECTION "Phone Scripts 2", ROMX
-
-INCLUDE "engine/events/std_scripts.asm"
-INCLUDE "engine/phone/scripts/unused.asm"
-INCLUDE "engine/phone/scripts/mom.asm"
-INCLUDE "engine/phone/scripts/bill.asm"
-INCLUDE "engine/phone/scripts/elm.asm"
-INCLUDE "engine/phone/scripts/jack.asm"
-INCLUDE "engine/phone/scripts/beverly.asm"
-INCLUDE "engine/phone/scripts/huey.asm"
-INCLUDE "engine/phone/scripts/gaven.asm"
-INCLUDE "engine/phone/scripts/beth.asm"
-INCLUDE "engine/phone/scripts/jose.asm"
-INCLUDE "engine/phone/scripts/reena.asm"
-INCLUDE "engine/phone/scripts/joey.asm"
-INCLUDE "engine/phone/scripts/wade.asm"
-INCLUDE "engine/phone/scripts/ralph.asm"
-INCLUDE "engine/phone/scripts/liz.asm"
-INCLUDE "engine/phone/scripts/anthony.asm"
-INCLUDE "engine/phone/scripts/todd.asm"
-INCLUDE "engine/phone/scripts/gina.asm"
-INCLUDE "engine/phone/scripts/irwin.asm"
-INCLUDE "engine/phone/scripts/arnie.asm"
-INCLUDE "engine/phone/scripts/alan.asm"
-INCLUDE "engine/phone/scripts/dana.asm"
-INCLUDE "engine/phone/scripts/chad.asm"
-INCLUDE "engine/phone/scripts/derek.asm"
-INCLUDE "engine/phone/scripts/tully.asm"
-INCLUDE "engine/phone/scripts/brent.asm"
-INCLUDE "engine/phone/scripts/tiffany.asm"
-INCLUDE "engine/phone/scripts/vance.asm"
-INCLUDE "engine/phone/scripts/wilton.asm"
-INCLUDE "engine/phone/scripts/kenji.asm"
-INCLUDE "engine/phone/scripts/parry.asm"
-INCLUDE "engine/phone/scripts/erin.asm"
-INCLUDE "engine/phone/scripts/generic_callee.asm"
-INCLUDE "engine/events/trainer_scripts.asm"
 
 
 SECTION "bank32", ROMX

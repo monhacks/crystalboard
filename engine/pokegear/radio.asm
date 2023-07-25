@@ -7,10 +7,6 @@ PlayRadioShow:
 	ld a, [wStatusFlags2]
 	bit STATUSFLAGS2_ROCKETS_IN_RADIO_TOWER_F, a
 	jr z, .ok
-; If we're in Kanto, we don't need to be here.
-	call IsInJohto
-	and a
-	jr nz, .ok
 ; Team Rocket broadcasts on all stations.
 	ld a, ROCKET_RADIO
 	ld [wCurRadioLine], a

@@ -4,32 +4,10 @@
 	const PLAYERSHOUSE2F_DOLL_2
 	const PLAYERSHOUSE2F_BIG_DOLL
 
-PlayersHouse2F_MapScripts:
+Level1_Map1_MapScripts:
 	def_scene_scripts
 
 	def_callbacks
-	callback MAPCALLBACK_NEWMAP, PlayersHouse2FInitializeRoomCallback
-	callback MAPCALLBACK_TILES, PlayersHouse2FSetUpTileDecorationsCallback
-
-PlayersHouse2FNoopScene: ; unreferenced
-	end
-
-PlayersHouse2FInitializeRoomCallback:
-	special ToggleDecorationsVisibility
-	setevent EVENT_TEMPORARY_UNTIL_MAP_RELOAD_8
-	checkevent EVENT_INITIALIZED_EVENTS
-	iftrue .SkipInitialization
-	jumpstd InitializeEventsScript
-	endcallback
-
-.SkipInitialization:
-	endcallback
-
-PlayersHouse2FSetUpTileDecorationsCallback:
-	special ToggleMaptileDecorations
-	endcallback
-
-	db 0, 0, 0 ; unused
 
 PlayersHouseDoll1Script::
 	describedecoration DECODESC_LEFT_DOLL
@@ -44,32 +22,9 @@ PlayersHouseGameConsoleScript:
 	describedecoration DECODESC_CONSOLE
 
 PlayersHousePosterScript:
-	conditional_event EVENT_PLAYERS_ROOM_POSTER, .Script
-
-.Script:
 	describedecoration DECODESC_POSTER
 
 PlayersHouseRadioScript:
-	checkevent EVENT_GOT_A_POKEMON_FROM_ELM
-	iftrue .NormalRadio
-	checkevent EVENT_LISTENED_TO_INITIAL_RADIO
-	iftrue .AbbreviatedRadio
-	playmusic MUSIC_POKEMON_TALK
-	opentext
-	writetext PlayersRadioText1
-	pause 45
-	writetext PlayersRadioText2
-	pause 45
-	writetext PlayersRadioText3
-	pause 45
-	musicfadeout MUSIC_NEW_BARK_TOWN, 16
-	writetext PlayersRadioText4
-	pause 45
-	closetext
-	setevent EVENT_LISTENED_TO_INITIAL_RADIO
-	end
-
-.NormalRadio:
 	jumpstd Radio1Script
 
 .AbbreviatedRadio:
@@ -112,11 +67,10 @@ PlayersRadioText4:
 	line "#MON CHANNEL…"
 	done
 
-PlayersHouse2F_MapEvents:
+Level1_Map1_MapEvents:
 	db 0, 0 ; filler
 
 	def_warp_events
-	warp_event  7,  0, PLAYERS_HOUSE_1F, 3
 
 	def_coord_events
 
