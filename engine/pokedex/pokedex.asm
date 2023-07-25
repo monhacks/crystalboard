@@ -167,17 +167,6 @@ Pokedex_GetLandmark:
 	ld a, [wMapNumber]
 	ld c, a
 	call GetWorldMapLocation
-
-	cp LANDMARK_SPECIAL
-	jr nz, .load
-
-	ld a, [wBackupMapGroup]
-	ld b, a
-	ld a, [wBackupMapNumber]
-	ld c, a
-	call GetWorldMapLocation
-
-.load
 	ld [wDexCurLocation], a
 	ret
 

@@ -60,15 +60,11 @@ InitMapNameSign::
 	ld c, a
 	ld a, [wPrevLandmark]
 	cp c
-	ret z
-	cp LANDMARK_SPECIAL
 	ret
 
 .CheckSpecialMap:
 ; These landmarks do not get pop-up signs.
 	cp -1
-	ret z
-	cp LANDMARK_SPECIAL ; redundant check
 	ret z
 	ld a, 1
 	and a

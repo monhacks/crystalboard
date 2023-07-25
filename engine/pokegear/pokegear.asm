@@ -185,13 +185,6 @@ TownMap_GetCurrentLandmark:
 	ld a, [wMapNumber]
 	ld c, a
 	call GetWorldMapLocation
-	cp LANDMARK_SPECIAL
-	ret nz
-	ld a, [wBackupMapGroup]
-	ld b, a
-	ld a, [wBackupMapNumber]
-	ld c, a
-	call GetWorldMapLocation
 	ret
 
 TownMap_InitCursorAndPlayerIconPositions:
@@ -200,14 +193,6 @@ TownMap_InitCursorAndPlayerIconPositions:
 	ld a, [wMapNumber]
 	ld c, a
 	call GetWorldMapLocation
-	cp LANDMARK_SPECIAL
-	jr nz, .LoadLandmark
-	ld a, [wBackupMapGroup]
-	ld b, a
-	ld a, [wBackupMapNumber]
-	ld c, a
-	call GetWorldMapLocation
-.LoadLandmark:
 	ld [wPokegearMapPlayerIconLandmark], a
 	ld [wPokegearMapCursorLandmark], a
 	ret
@@ -2126,16 +2111,6 @@ FlyMap:
 	ld a, [wMapNumber]
 	ld c, a
 	call GetWorldMapLocation
-; If we're not in a valid location, i.e. Pokecenter floor 2F,
-; the backup map information is used.
-	cp LANDMARK_SPECIAL
-	jr nz, .CheckRegion
-	ld a, [wBackupMapGroup]
-	ld b, a
-	ld a, [wBackupMapNumber]
-	ld c, a
-	call GetWorldMapLocation
-.CheckRegion:
 ; Johto fly map
 	push af
 	ld a, FLY_1 ; first Johto flypoint
