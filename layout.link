@@ -80,8 +80,6 @@ ROMX $14
 	"Unused Egg Pic"
 ROMX $15
 	"Map Scripts 1"
-ROMX $19
-	"Crystal Phone Text"
 ROMX $20
 	"bank20"
 ROMX $21
@@ -97,8 +95,6 @@ ROMX $25
 	"Events"
 ROMX $28
 	"bank28"
-ROMX $29
-	"Phone Text"
 ROMX $2a
 	"Map Blocks 1"
 ROMX $2d
@@ -200,7 +196,6 @@ ROMX $5b
 ROMX $5c
 	"Pics 21"
 ROMX $5d
-	"Crystal Phone Text 2"
 	"Pics 22"
 ROMX $5e
 	"UpdateBattleHUDs"
@@ -212,9 +207,9 @@ ROMX $5f
 ROMX $60
 	"Pokedex Entries 001-064"
 ROMX $6c
-	"Phone Text 2"
+	"Std Text"
 ROMX $6d
-	"Special Phone Text"
+	"Phone Text"
 ROMX $6e
 	"Pokedex Entries 065-128"
 ROMX $6f
