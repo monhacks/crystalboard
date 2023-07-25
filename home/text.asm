@@ -128,10 +128,6 @@ SpeechTextbox::
 	ld c, TEXTBOX_INNERW
 	jp Textbox
 
-GameFreakText:: ; unreferenced
-	text "ゲームフりーク！" ; "GAMEFREAK!"
-	done
-
 RadioTerminator::
 	ld hl, .stop
 	ret
@@ -176,10 +172,6 @@ PlaceNextChar::
 	ld c, l
 	pop hl
 	ret
-
-DummyChar:: ; unreferenced
-	pop de
-	; fallthrough
 
 NextChar::
 	inc de
@@ -241,11 +233,11 @@ ENDM
 	dict "<USER>",    PlaceMoveUsersName
 	dict "<ENEMY>",   PlaceEnemysName
 	dict "<PLAY_G>",  PlaceGenderedPlayerName
-	dict "ﾟ",         .place ; should be .diacritic
-	dict "ﾞ",         .place ; should be .diacritic
+	dict "ﾟ",         .diacritic
+	dict "ﾞ",         .diacritic
 	jr .not_diacritic
 
-.diacritic ; unreferenced
+.diacritic
 	ld b, a
 	call Diacritic
 	jp NextChar

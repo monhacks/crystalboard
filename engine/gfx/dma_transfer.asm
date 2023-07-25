@@ -1,24 +1,3 @@
-HDMATransferAttrmapAndTilemapToWRAMBank3::
-	ld hl, .Function
-	jp CallInSafeGFXMode
-
-.Function:
-	decoord 0, 0, wAttrmap
-	ld hl, wScratchAttrmap
-	call PadAttrmapForHDMATransfer
-	decoord 0, 0
-	ld hl, wScratchTilemap
-	call PadTilemapForHDMATransfer
-	ld a, $0
-	ldh [rVBK], a
-	ld hl, wScratchTilemap
-	call HDMATransferToWRAMBank3
-	ld a, $1
-	ldh [rVBK], a
-	ld hl, wScratchAttrmap
-	call HDMATransferToWRAMBank3
-	ret
-
 HDMATransferTilemapToWRAMBank3::
 	ld hl, .Function
 	jp CallInSafeGFXMode
