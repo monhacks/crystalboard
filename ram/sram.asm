@@ -32,7 +32,6 @@ sMailbox{d:n}Backup:: mailmsg sMailbox{d:n}Backup
 endr
 
 sRTCStatusFlags:: db
-	ds 7
 sLuckyNumberDay:: db
 sLuckyIDNumber::  dw
 
@@ -48,8 +47,6 @@ sBackupPlayerData::  ds wPlayerDataEnd - wPlayerData
 sBackupCurMapData::  ds wCurMapDataEnd - wCurMapData
 sBackupPokemonData:: ds wPokemonDataEnd - wPokemonData
 sBackupGameDataEnd::
-
-	ds $18a
 
 sBackupChecksum:: dw
 
@@ -78,8 +75,6 @@ sCurMapData::  ds wCurMapDataEnd - wCurMapData
 sPokemonData:: ds wPokemonDataEnd - wPokemonData
 sGameDataEnd::
 
-	ds $18a
-
 sChecksum:: dw
 
 sCheckValue2:: db ; loaded with SAVE_CHECK_VALUE_2, used to check save corruption
@@ -88,8 +83,6 @@ sCheckValue2:: db ; loaded with SAVE_CHECK_VALUE_2, used to check save corruptio
 SECTION "Active Box", SRAM
 
 sBox:: box sBox
-
-	ds $100
 
 
 SECTION "Link Battle Data", SRAM
@@ -120,34 +113,6 @@ sHallOfFameEnd::
 SECTION "SRAM Crystal Data", SRAM
 
 sCrystalData:: ds wCrystalDataEnd - wCrystalData
-
-
-SECTION "SRAM Battle Tower", SRAM
-
-; Battle Tower data must be in SRAM because you can save and leave between battles
-sBattleTowerChallengeState::
-; 0: normal
-; 2: battle tower
-	db
-
-sNrOfBeatenBattleTowerTrainers:: db
-sBTChoiceOfLevelGroup:: db
-; Battle Tower trainers are saved here, so nobody appears more than once
-sBTTrainers:: ds BATTLETOWER_STREAK_LENGTH
-sBattleTowerSaveFileFlags:: db
-sBattleTowerReward:: db
-
-sBTMonOfTrainers::
-; team of previous trainer
-; sBTMonPrevTrainer1 - sBTMonPrevTrainer3
-for n, 1, BATTLETOWER_PARTY_LENGTH + 1
-sBTMonPrevTrainer{d:n}:: db
-endr
-; team of preprevious trainer
-; sBTMonPrevPrevTrainer1 - sBTMonPrevPrevTrainer3
-for n, 1, BATTLETOWER_PARTY_LENGTH + 1
-sBTMonPrevPrevTrainer{d:n}:: db
-endr
 
 
 ; The PC boxes will not fit into one SRAM bank,
