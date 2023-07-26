@@ -82,5 +82,3 @@ DEF SPAWN_N_A EQU -1
 	const_def
 	const FLY_1
 DEF NUM_FLYPOINTS EQU const_value
-
-DEF MAX_OUTDOOR_SPRITES EQU 23 ; see engine/overworld/overworld.asm

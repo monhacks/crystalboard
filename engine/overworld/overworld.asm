@@ -92,32 +92,6 @@ GetPlayerSprite:
 INCLUDE "data/sprites/player_sprites.asm"
 
 AddMapSprites:
-	call GetMapEnvironment
-	call CheckOutdoorMap
-	jr z, .outdoor
-	call AddIndoorSprites
-	ret
-
-.outdoor
-	call AddOutdoorSprites
-	ret
-
-AddIndoorSprites:
-	ld hl, wMap1ObjectSprite
-	ld a, 1
-.loop
-	push af
-	ld a, [hl]
-	call AddSpriteGFX
-	ld de, MAPOBJECT_LENGTH
-	add hl, de
-	pop af
-	inc a
-	cp NUM_OBJECTS
-	jr nz, .loop
-	ret
-
-AddOutdoorSprites:
 	ld a, [wMapGroup]
 	dec a
 	ld c, a
@@ -128,15 +102,12 @@ AddOutdoorSprites:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld c, MAX_OUTDOOR_SPRITES
 .loop
-	push bc
 	ld a, [hli]
+	and a
+	ret z
 	call AddSpriteGFX
-	pop bc
-	dec c
-	jr nz, .loop
-	ret
+	jr .loop
 
 LoadUsedSpritesGFX:
 	ld a, MAPCALLBACK_SPRITES
@@ -303,7 +274,6 @@ _GetSpritePalette::
 
 LoadAndSortSprites:
 	call LoadSpriteGFX
-	call SortUsedSprites
 	call ArrangeUsedSprites
 	ret
 
@@ -367,76 +337,6 @@ LoadSpriteGFX:
 .LoadSprite:
 	call GetSprite
 	ld a, l
-	ret
-
-SortUsedSprites:
-; Bubble-sort sprites by type.
-
-; Run backwards through wUsedSprites to find the last one.
-
-	ld c, SPRITE_GFX_LIST_CAPACITY
-	ld de, wUsedSprites + (SPRITE_GFX_LIST_CAPACITY - 1) * 2
-.FindLastSprite:
-	ld a, [de]
-	and a
-	jr nz, .FoundLastSprite
-	dec de
-	dec de
-	dec c
-	jr nz, .FindLastSprite
-.FoundLastSprite:
-	dec c
-	jr z, .quit
-
-; If the length of the current sprite is
-; higher than a later one, swap them.
-
-	inc de
-	ld hl, wUsedSprites + 1
-
-.CheckSprite:
-	push bc
-	push de
-	push hl
-
-.CheckFollowing:
-	ld a, [de]
-	cp [hl]
-	jr nc, .loop
-
-; Swap the two sprites.
-
-	ld b, a
-	ld a, [hl]
-	ld [hl], b
-	ld [de], a
-	dec de
-	dec hl
-	ld a, [de]
-	ld b, a
-	ld a, [hl]
-	ld [hl], b
-	ld [de], a
-	inc de
-	inc hl
-
-; Keep doing this until everything's in order.
-
-.loop
-	dec de
-	dec de
-	dec c
-	jr nz, .CheckFollowing
-
-	pop hl
-	inc hl
-	inc hl
-	pop de
-	pop bc
-	dec c
-	jr nz, .CheckSprite
-
-.quit
 	ret
 
 ArrangeUsedSprites:
