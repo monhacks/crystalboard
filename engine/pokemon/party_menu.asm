@@ -18,8 +18,8 @@ SelectTradeOrDayCareMon:
 	call ClearBGPalettes
 	call InitPartyMenuLayout
 	call WaitBGMap
-	ld b, SCGB_PARTY_MENU
-	call GetSGBLayout
+	ld b, CGB_PARTY_MENU
+	call GetCGBLayout
 	call SetPalettes
 	call DelayFrame
 	call PartyMenuSelect
@@ -113,7 +113,7 @@ PlacePartyNicknames:
 
 PlacePartyHPBar:
 	xor a
-	ld [wSGBPals], a
+	ld [wWhichPartyMonHPPal], a
 	ld a, [wPartyCount]
 	and a
 	ret z
@@ -132,15 +132,15 @@ PlacePartyHPBar:
 	ld b, $0
 	call DrawBattleHPBar
 	ld hl, wHPPals
-	ld a, [wSGBPals]
+	ld a, [wWhichPartyMonHPPal]
 	ld c, a
 	ld b, 0
 	add hl, bc
 	call SetHPPal
-	ld b, SCGB_PARTY_MENU_HP_BARS
-	call GetSGBLayout
+	ld b, CGB_PARTY_MENU_HP_BARS
+	call GetCGBLayout
 .skip
-	ld hl, wSGBPals
+	ld hl, wWhichPartyMonHPPal
 	inc [hl]
 	pop hl
 	ld de, 2 * SCREEN_WIDTH
@@ -149,8 +149,8 @@ PlacePartyHPBar:
 	inc b
 	dec c
 	jr nz, .loop
-	ld b, SCGB_PARTY_MENU
-	call GetSGBLayout
+	ld b, CGB_PARTY_MENU
+	call GetCGBLayout
 	ret
 
 PlacePartymonHPBar:

@@ -291,11 +291,6 @@ BattleBGEffect_CycleOBPalsGrayAndYellow:
 	dc 2, 1, 0, 0
 	db -2
 
-.PalsSGB:
-	dc 3, 3, 0, 0
-	dc 3, 0, 0, 0
-	db -2
-
 BattleBGEffect_CycleMidOBPalsGrayAndYellow:
 	ld de, .PalsCGB
 	call BattleBGEffect_GetNthDMGPal
@@ -305,11 +300,6 @@ BattleBGEffect_CycleMidOBPalsGrayAndYellow:
 .PalsCGB:
 	dc 3, 2, 1, 0
 	dc 3, 1, 2, 0
-	db -2
-
-.PalsSGB:
-	dc 3, 3, 0, 0
-	dc 3, 0, 3, 0
 	db -2
 
 BattleBGEffect_CycleBGPals_Inverted:

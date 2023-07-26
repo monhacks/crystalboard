@@ -1910,8 +1910,8 @@ ExitAllMenus::
 	call UpdateSprites
 	call GSReloadPalettes
 FinishExitMenu::
-	ld b, SCGB_MAPPALS
-	call GetSGBLayout
+	ld b, CGB_MAPPALS
+	call GetCGBLayout
 	farcall LoadOW_BGPal7
 	call WaitBGMap2
 	farcall FadeInPalettes
@@ -1932,8 +1932,8 @@ ReturnToMapWithSpeechTextbox::
 	set 0, [hl]
 	call UpdateSprites
 	call WaitBGMap2
-	ld b, SCGB_MAPPALS
-	call GetSGBLayout
+	ld b, CGB_MAPPALS
+	call GetCGBLayout
 	farcall LoadOW_BGPal7
 	call UpdateTimePals
 	call DelayFrame

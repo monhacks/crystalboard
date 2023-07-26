@@ -1127,8 +1127,8 @@ SetUpMoveScreenBG:
 	call PrintLevel
 	ld hl, wPlayerHPPal
 	call SetHPPal
-	ld b, SCGB_MOVE_LIST
-	call GetSGBLayout
+	ld b, CGB_MOVE_LIST
+	call GetCGBLayout
 	hlcoord 16, 0
 	lb bc, 1, 3
 	jp ClearBox

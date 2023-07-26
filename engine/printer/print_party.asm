@@ -223,8 +223,8 @@ PrintPartyMonPage1:
 	hlcoord 0, 0
 	call _PrepMonFrontpic
 	call WaitBGMap
-	ld b, SCGB_STATS_SCREEN_HP_PALS
-	call GetSGBLayout
+	ld b, CGB_STATS_SCREEN_HP_PALS
+	call GetCGBLayout
 	call SetPalettes
 	ret
 
@@ -274,8 +274,8 @@ PrintPartyMonPage2:
 	ld de, wTempMonSpeed
 	call .PrintTempMonStats
 	call WaitBGMap
-	ld b, SCGB_STATS_SCREEN_HP_PALS
-	call GetSGBLayout
+	ld b, CGB_STATS_SCREEN_HP_PALS
+	call GetCGBLayout
 	call SetPalettes
 	ret
 

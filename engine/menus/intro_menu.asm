@@ -591,8 +591,8 @@ OakSpeech:
 	ld [wTrainerClass], a
 	call Intro_PrepTrainerPic
 
-	ld b, SCGB_TRAINER_OR_MON_FRONTPIC_PALS
-	call GetSGBLayout
+	ld b, CGB_TRAINER_OR_MON_FRONTPIC_PALS
+	call GetCGBLayout
 	call Intro_RotatePalettesLeftFrontpic
 
 	ld hl, OakText1
@@ -612,8 +612,8 @@ OakSpeech:
 	ld [wTempMonDVs], a
 	ld [wTempMonDVs + 1], a
 
-	ld b, SCGB_TRAINER_OR_MON_FRONTPIC_PALS
-	call GetSGBLayout
+	ld b, CGB_TRAINER_OR_MON_FRONTPIC_PALS
+	call GetCGBLayout
 	call Intro_WipeInFrontpic
 
 	ld hl, OakText2
@@ -629,8 +629,8 @@ OakSpeech:
 	ld [wTrainerClass], a
 	call Intro_PrepTrainerPic
 
-	ld b, SCGB_TRAINER_OR_MON_FRONTPIC_PALS
-	call GetSGBLayout
+	ld b, CGB_TRAINER_OR_MON_FRONTPIC_PALS
+	call GetCGBLayout
 	call Intro_RotatePalettesLeftFrontpic
 
 	ld hl, OakText5
@@ -642,8 +642,8 @@ OakSpeech:
 	ld [wCurPartySpecies], a
 	farcall DrawIntroPlayerPic
 
-	ld b, SCGB_TRAINER_OR_MON_FRONTPIC_PALS
-	call GetSGBLayout
+	ld b, CGB_TRAINER_OR_MON_FRONTPIC_PALS
+	call GetCGBLayout
 	call Intro_RotatePalettesLeftFrontpic
 
 	ld hl, OakText6
@@ -712,8 +712,8 @@ NamePlayer:
 	ld [wCurPartySpecies], a
 	farcall DrawIntroPlayerPic
 
-	ld b, SCGB_TRAINER_OR_MON_FRONTPIC_PALS
-	call GetSGBLayout
+	ld b, CGB_TRAINER_OR_MON_FRONTPIC_PALS
+	call GetCGBLayout
 	call RotateThreePalettesLeft
 
 	ld hl, wPlayerName
@@ -949,8 +949,8 @@ StartTitleScreen:
 	ldh [hWX], a
 	ld a, $90
 	ldh [hWY], a
-	ld b, SCGB_DIPLOMA
-	call GetSGBLayout
+	ld b, CGB_DIPLOMA
+	call GetCGBLayout
 	call UpdateTimePals
 	ld a, [wTitleScreenSelectedOption]
 	cp NUM_TITLESCREENOPTIONS

@@ -552,8 +552,8 @@ LinkTimeout:
 	call PlaceHLTextAtBC
 	call RotateThreePalettesRight
 	call ClearScreen
-	ld b, SCGB_DIPLOMA
-	call GetSGBLayout
+	ld b, CGB_DIPLOMA
+	call GetCGBLayout
 	call WaitBGMap2
 	ret
 
@@ -1631,8 +1631,8 @@ LinkTradePartymonMenuCheckCancel:
 ExitLinkCommunications:
 	call RotateThreePalettesRight
 	call ClearScreen
-	ld b, SCGB_DIPLOMA
-	call GetSGBLayout
+	ld b, CGB_DIPLOMA
+	call GetCGBLayout
 	call WaitBGMap2
 	xor a
 	ld [wUnusedLinkCommunicationByte], a
@@ -1955,8 +1955,8 @@ LinkTrade:
 	call DelayFrames
 	call ClearTilemap
 	call LoadFontsBattleExtra
-	ld b, SCGB_DIPLOMA
-	call GetSGBLayout
+	ld b, CGB_DIPLOMA
+	call GetCGBLayout
 	ldh a, [hSerialConnectionStatus]
 	cp USING_EXTERNAL_CLOCK
 	jr z, .player_2

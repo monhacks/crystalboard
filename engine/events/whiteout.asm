@@ -37,8 +37,8 @@ OverworldBGMap:
 	ret
 
 BattleBGMap:
-	ld b, SCGB_BATTLE_GRAYSCALE
-	call GetSGBLayout
+	ld b, CGB_BATTLE_GRAYSCALE
+	call GetCGBLayout
 	call SetPalettes
 	ret
 

@@ -254,8 +254,8 @@ AnimateHOFMonEntrance:
 	call WaitBGMap
 	xor a
 	ldh [hBGMapMode], a
-	ld b, SCGB_PLAYER_OR_MON_FRONTPIC_PALS
-	call GetSGBLayout
+	ld b, CGB_PLAYER_OR_MON_FRONTPIC_PALS
+	call GetCGBLayout
 	call SetPalettes
 	call HOF_SlideBackpic
 	xor a
@@ -387,8 +387,8 @@ _HallOfFamePC:
 	ld de, .EmptyString
 	call PlaceString
 	call WaitBGMap
-	ld b, SCGB_PLAYER_OR_MON_FRONTPIC_PALS
-	call GetSGBLayout
+	ld b, CGB_PLAYER_OR_MON_FRONTPIC_PALS
+	call GetCGBLayout
 	call SetPalettes
 	decoord 6, 5
 	ld c, ANIM_MON_HOF
@@ -541,8 +541,8 @@ HOF_AnimatePlayerPic:
 	xor a
 	ldh [hBGMapMode], a
 	ld [wCurPartySpecies], a
-	ld b, SCGB_PLAYER_OR_MON_FRONTPIC_PALS
-	call GetSGBLayout
+	ld b, CGB_PLAYER_OR_MON_FRONTPIC_PALS
+	call GetCGBLayout
 	call SetPalettes
 	call HOF_SlideBackpic
 	xor a

@@ -17,8 +17,8 @@ SplashScreen:
 	ld a, SCREEN_HEIGHT_PX
 	ldh [hWY], a
 	call WaitBGMap
-	ld b, SCGB_GAMEFREAK_LOGO
-	call GetSGBLayout
+	ld b, CGB_GAMEFREAK_LOGO
+	call GetCGBLayout
 	call SetPalettes
 	ld c, 10
 	call DelayFrames

@@ -3410,8 +3410,6 @@ BattleAnimFunction_SkyAttack:
 
 .GBCPals:
 	db $ff, $aa, $55, $aa
-.SGBPals:
-	db $ff, $ff, $00, $00
 
 BattleAnimFunction_GrowthSwordsDance:
 ; Moves object in a circle where the height is 1/8 the width, while also moving upward 2 pixels per frame

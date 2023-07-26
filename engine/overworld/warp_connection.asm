@@ -292,8 +292,8 @@ LoadMapGraphics:
 	ret
 
 LoadMapPalettes:
-	ld b, SCGB_MAPPALS
-	jp GetSGBLayout
+	ld b, CGB_MAPPALS
+	jp GetCGBLayout
 
 RefreshMapSprites:
 	call ClearSprites

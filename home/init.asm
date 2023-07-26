@@ -160,8 +160,6 @@ Init::
 
 	call DelayFrame
 
-	predef InitSGBBorder
-
 	call InitSound
 	xor a
 	ld [wMapMusic], a

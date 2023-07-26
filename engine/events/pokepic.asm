@@ -4,8 +4,8 @@ Pokepic::
 	call MenuBox
 	call UpdateSprites
 	call ApplyTilemap
-	ld b, SCGB_POKEPIC
-	call GetSGBLayout
+	ld b, CGB_POKEPIC
+	call GetCGBLayout
 	xor a
 	ldh [hBGMapMode], a
 	ld a, [wCurPartySpecies]
@@ -32,7 +32,7 @@ ClosePokepic::
 	call CopyMenuHeader
 	call ClearMenuBoxInterior
 	call WaitBGMap
-	call GetMemSGBLayout
+	call GetMemCGBLayout
 	xor a
 	ldh [hBGMapMode], a
 	call OverworldTextModeSwitch

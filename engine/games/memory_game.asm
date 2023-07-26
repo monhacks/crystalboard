@@ -8,8 +8,8 @@ _MemoryGame:
 
 .LoadGFXAndPals:
 	call DisableLCD
-	ld b, SCGB_DIPLOMA
-	call GetSGBLayout
+	ld b, CGB_DIPLOMA
+	call GetCGBLayout
 	callfar ClearSpriteAnims
 	ld hl, MemoryGameLZ
 	ld de, vTiles2 tile $00

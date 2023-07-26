@@ -1,40 +1,39 @@
 ; CGBLayoutJumptable indexes (see engine/gfx/cgb_layouts.asm)
-; SGBLayoutJumptable indexes (see engine/gfx/sgb_layouts.asm)
 	const_def
-	const SCGB_BATTLE_GRAYSCALE
-	const SCGB_BATTLE_COLORS
-	const SCGB_POKEGEAR_PALS
-	const SCGB_STATS_SCREEN_HP_PALS
-	const SCGB_POKEDEX
-	const SCGB_SLOT_MACHINE
-	const SCGB_BETA_TITLE_SCREEN
-	const SCGB_GS_INTRO
-	const SCGB_DIPLOMA
-	const SCGB_MAPPALS
-	const SCGB_PARTY_MENU
-	const SCGB_EVOLUTION
-	const SCGB_GS_TITLE_SCREEN
-	const SCGB_0D
-	const SCGB_MOVE_LIST
-	const SCGB_BETA_PIKACHU_MINIGAME
-	const SCGB_POKEDEX_SEARCH_OPTION
-	const SCGB_BETA_POKER
-	const SCGB_POKEPIC
-	const SCGB_MAGNET_TRAIN
-	const SCGB_PACKPALS
-	const SCGB_TRAINER_CARD
-	const SCGB_POKEDEX_UNOWN_MODE
-	const SCGB_BILLS_PC
-	const SCGB_UNOWN_PUZZLE
-	const SCGB_GAMEFREAK_LOGO
-	const SCGB_PLAYER_OR_MON_FRONTPIC_PALS
-	const SCGB_TRADE_TUBE
-	const SCGB_TRAINER_OR_MON_FRONTPIC_PALS
-	const SCGB_1D
-DEF NUM_SCGB_LAYOUTS EQU const_value
+	const CGB_BATTLE_GRAYSCALE
+	const CGB_BATTLE_COLORS
+	const CGB_POKEGEAR_PALS
+	const CGB_STATS_SCREEN_HP_PALS
+	const CGB_POKEDEX
+	const CGB_SLOT_MACHINE
+	const CGB_BETA_TITLE_SCREEN
+	const CGB_GS_INTRO
+	const CGB_DIPLOMA
+	const CGB_MAPPALS
+	const CGB_PARTY_MENU
+	const CGB_EVOLUTION
+	const CGB_GS_TITLE_SCREEN
+	const CGB_0D
+	const CGB_MOVE_LIST
+	const CGB_BETA_PIKACHU_MINIGAME
+	const CGB_POKEDEX_SEARCH_OPTION
+	const CGB_BETA_POKER
+	const CGB_POKEPIC
+	const CGB_MAGNET_TRAIN
+	const CGB_PACKPALS
+	const CGB_TRAINER_CARD
+	const CGB_POKEDEX_UNOWN_MODE
+	const CGB_BILLS_PC
+	const CGB_UNOWN_PUZZLE
+	const CGB_GAMEFREAK_LOGO
+	const CGB_PLAYER_OR_MON_FRONTPIC_PALS
+	const CGB_TRADE_TUBE
+	const CGB_TRAINER_OR_MON_FRONTPIC_PALS
+	const CGB_1D
+DEF NUM_CGB_LAYOUTS EQU const_value
 
-DEF SCGB_PARTY_MENU_HP_BARS EQU $fc
-DEF SCGB_DEFAULT EQU $ff
+DEF CGB_PARTY_MENU_HP_BARS EQU $fc
+DEF CGB_DEFAULT EQU $ff
 
 ; GetCrystalCGBLayout arguments (see engine/gfx/crystal_layouts.asm)
 	const_def
@@ -42,7 +41,7 @@ DEF SCGB_DEFAULT EQU $ff
 	const CRYSTAL_CGB_MOBILE_1
 	const CRYSTAL_CGB_NAME_CARD
 
-; PredefPals indexes (see gfx/sgb/predef.pal)
+; PredefPals indexes (see gfx/predef/predef.pal)
 ; GetPredefPal arguments (see engine/gfx/color.asm)
 	const_def
 	const PREDEFPAL_ROUTES
@@ -125,34 +124,3 @@ DEF SCGB_DEFAULT EQU $ff
 	const PREDEFPAL_GAMEFREAK_LOGO_OB
 	const PREDEFPAL_GAMEFREAK_LOGO_BG
 DEF NUM_PREDEF_PALS EQU const_value
-
-; SGB system command codes
-; http://gbdev.gg8.se/wiki/articles/SGB_Functions#SGB_System_Command_Table
-	const_def
-	const SGB_PAL01
-	const SGB_PAL23
-	const SGB_PAL03
-	const SGB_PAL12
-	const SGB_ATTR_BLK
-	const SGB_ATTR_LIN
-	const SGB_ATTR_DIV
-	const SGB_ATTR_CHR
-	const SGB_SOUND
-	const SGB_SOU_TRN
-	const SGB_PAL_SET
-	const SGB_PAL_TRN
-	const SGB_ATRC_EN
-	const SGB_TEST_EN
-	const SGB_ICON_EN
-	const SGB_DATA_SND
-	const SGB_DATA_TRN
-	const SGB_MLT_REQ
-	const SGB_JUMP
-	const SGB_CHR_TRN
-	const SGB_PCT_TRN
-	const SGB_ATTR_TRN
-	const SGB_ATTR_SET
-	const SGB_MASK_EN
-	const SGB_OBJ_TRN
-
-DEF PALPACKET_LENGTH EQU $10

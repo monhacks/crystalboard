@@ -953,7 +953,7 @@ wEnemyHPPal:: db
 wHPPals:: ds PARTY_LENGTH
 wCurHPPal:: db
 
-wSGBPals:: ds 48
+wWhichPartyMonHPPal:: db
 
 wAttrmap::
 ; 20x18 grid of bg tile attributes for 8x8 tiles

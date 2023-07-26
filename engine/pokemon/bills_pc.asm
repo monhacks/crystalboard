@@ -62,7 +62,7 @@ _DepositPKMN:
 	call PCMonInfo
 	ld a, $ff
 	ld [wCurPartySpecies], a
-	ld a, SCGB_BILLS_PC
+	ld a, CGB_BILLS_PC
 	call BillsPC_ApplyPalettes
 	call WaitBGMap
 	call BillsPC_UpdateSelectionCursor
@@ -117,7 +117,7 @@ _DepositPKMN:
 	call ClearSprites
 	call BillsPC_GetSelectedPokemonSpecies
 	ld [wCurPartySpecies], a
-	ld a, SCGB_BILLS_PC
+	ld a, CGB_BILLS_PC
 	call BillsPC_ApplyPalettes
 	ld de, PCString_WhatsUp
 	call BillsPC_PlaceString
@@ -176,7 +176,7 @@ BillsPCDepositFuncStats:
 	call PCMonInfo
 	call BillsPC_GetSelectedPokemonSpecies
 	ld [wCurPartySpecies], a
-	ld a, SCGB_BILLS_PC
+	ld a, CGB_BILLS_PC
 	call BillsPC_ApplyPalettes
 	ret
 
@@ -320,7 +320,7 @@ _WithdrawPKMN:
 	call PCMonInfo
 	ld a, $ff
 	ld [wCurPartySpecies], a
-	ld a, SCGB_BILLS_PC
+	ld a, CGB_BILLS_PC
 	call BillsPC_ApplyPalettes
 	call WaitBGMap
 	call BillsPC_UpdateSelectionCursor
@@ -374,7 +374,7 @@ _WithdrawPKMN:
 	call ClearSprites
 	call BillsPC_GetSelectedPokemonSpecies
 	ld [wCurPartySpecies], a
-	ld a, SCGB_BILLS_PC
+	ld a, CGB_BILLS_PC
 	call BillsPC_ApplyPalettes
 	ld de, PCString_WhatsUp
 	call BillsPC_PlaceString
@@ -432,7 +432,7 @@ BillsPC_Withdraw:
 	call PCMonInfo
 	call BillsPC_GetSelectedPokemonSpecies
 	ld [wCurPartySpecies], a
-	ld a, SCGB_BILLS_PC
+	ld a, CGB_BILLS_PC
 	call BillsPC_ApplyPalettes
 	ret
 
@@ -561,7 +561,7 @@ _MovePKMNWithoutMail:
 	call PCMonInfo
 	ld a, $ff
 	ld [wCurPartySpecies], a
-	ld a, SCGB_BILLS_PC
+	ld a, CGB_BILLS_PC
 	call BillsPC_ApplyPalettes
 	call WaitBGMap
 	call BillsPC_UpdateSelectionCursor
@@ -625,7 +625,7 @@ _MovePKMNWithoutMail:
 	call ClearSprites
 	call BillsPC_GetSelectedPokemonSpecies
 	ld [wCurPartySpecies], a
-	ld a, SCGB_BILLS_PC
+	ld a, CGB_BILLS_PC
 	call BillsPC_ApplyPalettes
 	ld de, PCString_WhatsUp
 	call BillsPC_PlaceString
@@ -679,7 +679,7 @@ _MovePKMNWithoutMail:
 	call PCMonInfo
 	call BillsPC_GetSelectedPokemonSpecies
 	ld [wCurPartySpecies], a
-	ld a, SCGB_BILLS_PC
+	ld a, CGB_BILLS_PC
 	call BillsPC_ApplyPalettes
 	ret
 
@@ -2160,7 +2160,7 @@ endr
 
 BillsPC_ApplyPalettes:
 	ld b, a
-	call GetSGBLayout
+	call GetCGBLayout
 	ld a, %11100100
 	call DmgToCgbBGPals
 	ld a, %11111100

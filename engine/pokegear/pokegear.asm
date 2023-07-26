@@ -101,8 +101,8 @@ PokeGear:
 	ld [wPokegearRadioChannelAddr + 1], a
 	call Pokegear_InitJumptableIndices
 	call InitPokegearTilemap
-	ld b, SCGB_POKEGEAR_PALS
-	call GetSGBLayout
+	ld b, CGB_POKEGEAR_PALS
+	call GetCGBLayout
 	call SetPalettes
 	ld a, %11100100
 	call DmgToCgbObjPal0
@@ -1666,8 +1666,8 @@ _TownMap:
 	ld [wTownMapCursorObjectPointer], a
 	ld a, b
 	ld [wTownMapCursorObjectPointer + 1], a
-	ld b, SCGB_POKEGEAR_PALS
-	call GetSGBLayout
+	ld b, CGB_POKEGEAR_PALS
+	call GetCGBLayout
 	call SetPalettes
 	ld a, %11100100
 	call DmgToCgbObjPal0
@@ -1886,8 +1886,8 @@ _FlyMap:
 	call Request1bpp
 	call FlyMap
 	call Pokegear_DummyFunction
-	ld b, SCGB_POKEGEAR_PALS
-	call GetSGBLayout
+	ld b, CGB_POKEGEAR_PALS
+	call GetCGBLayout
 	call SetPalettes
 .loop
 	call JoyTextDelay
@@ -2156,8 +2156,8 @@ Pokedex_GetArea:
 	call TownMapPals
 	hlbgcoord 0, 0
 	call TownMapBGUpdate
-	ld b, SCGB_POKEGEAR_PALS
-	call GetSGBLayout
+	ld b, CGB_POKEGEAR_PALS
+	call GetCGBLayout
 	call SetPalettes
 	xor a
 	ldh [hBGMapMode], a
@@ -2583,8 +2583,8 @@ EntireFlyMap: ; unreferenced
 	ld [wTownMapCursorCoordinates], a
 	ld a, b
 	ld [wTownMapCursorCoordinates + 1], a
-	ld b, SCGB_POKEGEAR_PALS
-	call GetSGBLayout
+	ld b, CGB_POKEGEAR_PALS
+	call GetCGBLayout
 	call SetPalettes
 .loop
 	call JoyTextDelay

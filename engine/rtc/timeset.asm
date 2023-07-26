@@ -21,8 +21,8 @@ InitClock:
 	call RotateFourPalettesLeft
 	call ClearTilemap
 	call ClearSprites
-	ld b, SCGB_DIPLOMA
-	call GetSGBLayout
+	ld b, CGB_DIPLOMA
+	call GetCGBLayout
 	xor a
 	ldh [hBGMapMode], a
 	call LoadStandardFont
