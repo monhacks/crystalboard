@@ -1,8 +1,4 @@
 SaveMenu_CopyTilemapAtOnce:
-	ldh a, [hCGB]
-	and a
-	jp z, WaitBGMap
-
 ; The following is a modified version of _CopyTilemapAtOnce
 ; that waits for [rLY] to be $60 instead of $80 - 1.
 	ldh a, [hBGMapMode]

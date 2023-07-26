@@ -69,7 +69,7 @@ DoBattleTransition:
 	call UpdateSprites
 	call DelayFrame
 	call .LoadPokeballTiles
-	call BattleStart_CopyTilemapAtOnce
+	call CopyTilemapAtOnce
 	ld a, SCREEN_HEIGHT_PX
 	ldh [hWY], a
 	call DelayFrame
@@ -636,16 +636,6 @@ StartTrainerBattle_LoadPokeBallGraphics:
 	dec b
 	jr nz, .tile_loop
 
-	ldh a, [hCGB]
-	and a
-	jr nz, .cgb
-	ld a, 1
-	ldh [hBGMapMode], a
-	call DelayFrame
-	call DelayFrame
-	jr .nextscene
-
-.cgb
 	ld hl, .pals
 	ld a, [wTimeOfDayPal]
 	maskbits NUM_DAYTIMES
@@ -671,7 +661,7 @@ StartTrainerBattle_LoadPokeBallGraphics:
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a
 	call DelayFrame
-	call BattleStart_CopyTilemapAtOnce
+	call CopyTilemapAtOnce
 
 .nextscene
 	call StartTrainerBattle_NextScene

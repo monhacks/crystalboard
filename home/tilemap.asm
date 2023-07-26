@@ -10,52 +10,33 @@ WaitBGMap::
 	ret
 
 WaitBGMap2::
-	ldh a, [hCGB]
-	and a
-	jr z, .bg0
-
 	ld a, 2
 	ldh [hBGMapMode], a
 	ld c, 4
 	call DelayFrames
 
-.bg0
 	ld a, 1
 	ldh [hBGMapMode], a
 	ld c, 4
 	call DelayFrames
 	ret
 
-IsCGB::
-	ldh a, [hCGB]
-	and a
-	ret
-
 ApplyTilemap::
-	ldh a, [hCGB]
-	and a
-	jr z, .dmg
-
 	ld a, [wSpriteUpdatesEnabled]
 	cp 0
-	jr z, .dmg
+	jr z, .wait_bg_map
 
 	ld a, 1
 	ldh [hBGMapMode], a
 	jr CopyTilemapAtOnce
 
-.dmg
+.wait_bg_map
 ; WaitBGMap
 	ld a, 1
 	ldh [hBGMapMode], a
 	ld c, 4
 	call DelayFrames
 	ret
-
-CGBOnly_CopyTilemapAtOnce::
-	ldh a, [hCGB]
-	and a
-	jr z, WaitBGMap
 
 CopyTilemapAtOnce::
 	jr _CopyTilemapAtOnce

@@ -670,12 +670,7 @@ AnimateFlowerTile:
 ; A cycle of 2 frames, updating every other tick
 	ld a, [wTileAnimationTimer]
 	and %10
-
-; CGB has different tile graphics for flowers
-	ld e, a
-	ldh a, [hCGB]
-	and 1
-	add e
+	srl a
 
 ; hl = .FlowerTileFrames + a * 16
 	swap a
@@ -690,9 +685,7 @@ AnimateFlowerTile:
 	jp WriteTile
 
 .FlowerTileFrames:
-	INCBIN "gfx/tilesets/flower/dmg_1.2bpp"
 	INCBIN "gfx/tilesets/flower/cgb_1.2bpp"
-	INCBIN "gfx/tilesets/flower/dmg_2.2bpp"
 	INCBIN "gfx/tilesets/flower/cgb_2.2bpp"
 
 AnimateLavaBubbleTile1:
@@ -905,11 +898,6 @@ endr
 AnimateWaterPalette:
 ; Transition between color values 0-2 for color 0 in palette 3.
 
-; Don't update the palette on DMG
-	ldh a, [hCGB]
-	and a
-	ret z
-
 ; Don't update a non-standard palette order
 	ldh a, [rBGP]
 	cp %11100100
@@ -968,11 +956,6 @@ AnimateWaterPalette:
 	ret
 
 FlickeringCaveEntrancePalette:
-; Don't update the palette on DMG
-	ldh a, [hCGB]
-	and a
-	ret z
-
 ; Don't update a non-standard palette order
 	ldh a, [rBGP]
 	cp %11100100

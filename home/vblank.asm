@@ -177,7 +177,7 @@ VBlank1::
 	ldh a, [hSCY]
 	ldh [rSCY], a
 
-	call UpdatePals
+	call UpdateCGBPals
 	jr c, .done
 
 	call UpdateBGMap
@@ -225,24 +225,6 @@ VBlank1::
 	; rerequest ints
 	ld a, b
 	ldh [rIF], a
-	ret
-
-UpdatePals::
-; update pals for either dmg or cgb
-
-	ldh a, [hCGB]
-	and a
-	jp nz, UpdateCGBPals
-
-	; update gb pals
-	ld a, [wBGP]
-	ldh [rBGP], a
-	ld a, [wOBP0]
-	ldh [rOBP0], a
-	ld a, [wOBP1]
-	ldh [rOBP1], a
-
-	and a
 	ret
 
 VBlank3::

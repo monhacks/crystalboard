@@ -1,7 +1,4 @@
 PhoneRing_CopyTilemapAtOnce:
-	ldh a, [hCGB]
-	and a
-	jp z, WaitBGMap
 	ld a, [wSpriteUpdatesEnabled]
 	cp $0
 	jp z, WaitBGMap

@@ -281,14 +281,7 @@ BattleBGEffect_AlternateHues:
 	db -2
 
 BattleBGEffect_CycleOBPalsGrayAndYellow:
-	call BattleBGEffects_CheckSGB
-	jr nz, .sgb
 	ld de, .PalsCGB
-	jr .okay
-
-.sgb
-	ld de, .PalsSGB
-.okay
 	call BattleBGEffect_GetNthDMGPal
 	ld [wOBP0], a
 	ret
@@ -304,14 +297,7 @@ BattleBGEffect_CycleOBPalsGrayAndYellow:
 	db -2
 
 BattleBGEffect_CycleMidOBPalsGrayAndYellow:
-	call BattleBGEffects_CheckSGB
-	jr nz, .sgb
 	ld de, .PalsCGB
-	jr .okay
-
-.sgb
-	ld de, .PalsSGB
-.okay
 	call BattleBGEffect_GetNthDMGPal
 	ld [wOBP0], a
 	ret
@@ -1955,90 +1941,6 @@ BattleBGEffect_BetaSendOutMon2: ; unused
 	ret
 
 BattleBGEffect_FadeMonsToBlackRepeating:
-	ldh a, [hCGB]
-	and a
-	jr nz, .cgb
-	call BattleBGEffects_AnonJumptable
-.anon_dw
-	dw .zero
-	dw .one
-	dw .two
-
-.zero
-	call BattleBGEffects_IncAnonJumptableIndex
-	ld a, $e4
-	call BattleBGEffects_SetLYOverrides
-	ld a, LOW(rBGP)
-	ldh [hLCDCPointer], a
-	xor a
-	ldh [hLYOverrideStart], a
-	ld a, $60
-	ldh [hLYOverrideEnd], a
-	ret
-
-.one
-	ld hl, BG_EFFECT_STRUCT_PARAM
-	add hl, bc
-	ld a, [hl]
-	inc [hl]
-	ld e, a
-	and $7
-	ret nz
-	ld a, e
-	and $18
-	sla a
-	swap a
-	sla a
-	ld e, a
-	ld d, 0
-	push bc
-	call BGEffect_CheckBattleTurn
-	jr nz, .player
-	ld hl, .CGB_DMGEnemyData
-	add hl, de
-	ld a, [hli]
-	ld [wOBP1], a
-	ld d, a
-	ld e, [hl]
-	lb bc, $2f, $30
-	jr .okay
-
-.player
-	ld hl, .DMG_PlayerData
-	add hl, de
-	ld d, [hl]
-	inc hl
-	ld a, [hl]
-	ld [wOBP1], a
-	ld e, a
-	lb bc, $37, $28
-.okay
-	call .DMG_LYOverrideLoads
-	pop bc
-	ret
-
-.two
-	call BattleBGEffects_ResetVideoHRAM
-	ld a, $e4
-	ld [wBGP], a
-	ld [wOBP1], a
-	ret
-
-.DMG_LYOverrideLoads:
-	ld hl, wLYOverridesBackup
-.loop1
-	ld [hl], d
-	inc hl
-	dec b
-	jr nz, .loop1
-.loop2
-	ld [hl], e
-	inc hl
-	dec c
-	jr nz, .loop2
-	ret
-
-.cgb
 	ld de, .Jumptable
 	call BatttleBGEffects_GetNamedJumptablePointer
 	jp hl
@@ -2397,71 +2299,6 @@ BattleBGEffect_GetNthDMGPal:
 
 BGEffect_RapidCyclePals:
 ; Last index in DE: $fe signals a loop, $ff signals end
-	ldh a, [hCGB]
-	and a
-	jr nz, .cgb
-	push de
-	ld de, .Jumptable_DMG
-	call BatttleBGEffects_GetNamedJumptablePointer
-	pop de
-	jp hl
-
-.Jumptable_DMG:
-	dw .zero_dmg
-	dw .one_dmg
-	dw .two_dmg
-
-.zero_dmg
-	call BattleBGEffects_IncAnonJumptableIndex
-	ld a, $e4
-	call BattleBGEffects_SetLYOverrides
-	ld a, $47
-	call BattleBGEffect_SetLCDStatCustoms1
-	ldh a, [hLYOverrideEnd]
-	inc a
-	ldh [hLYOverrideEnd], a
-	ld hl, BG_EFFECT_STRUCT_PARAM
-	add hl, bc
-	ld a, [hl]
-	ld [hl], $0
-	ld hl, BG_EFFECT_STRUCT_BATTLE_TURN
-	add hl, bc
-	ld [hl], a
-	ret
-
-.one_dmg
-	ld hl, BG_EFFECT_STRUCT_BATTLE_TURN
-	add hl, bc
-	ld a, [hl]
-	and $f
-	jr z, .okay_1_dmg
-	dec [hl]
-	ret
-
-.okay_1_dmg
-	ld a, [hl]
-	swap a
-	or [hl]
-	ld [hl], a
-	call BattleBGEffect_GetFirstDMGPal
-	jr c, .okay_2_dmg
-	call BGEffect_FillLYOverridesBackup
-	ret
-
-.okay_2_dmg
-	ld hl, BG_EFFECT_STRUCT_PARAM
-	add hl, bc
-	dec [hl]
-	ret
-
-.two_dmg
-	call BattleBGEffects_ResetVideoHRAM
-	ld a, %11100100
-	ldh [rBGP], a
-	call EndBattleBGEffect
-	ret
-
-.cgb
 	push de
 	ld de, .Jumptable_CGB
 	call BatttleBGEffects_GetNamedJumptablePointer
@@ -2917,11 +2754,6 @@ BGEffect_CheckFlyDigStatus:
 .player
 	ld a, [wPlayerSubStatus3] ; PlayerSubStatus3
 	and 1 << SUBSTATUS_FLYING | 1 << SUBSTATUS_UNDERGROUND
-	ret
-
-BattleBGEffects_CheckSGB:
-	ldh a, [hSGB]
-	and a
 	ret
 
 BattleBGEffects_Sine:

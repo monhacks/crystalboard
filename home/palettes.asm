@@ -73,12 +73,6 @@ DmgToCgbBGPals::
 
 	ldh [rBGP], a
 	push af
-
-; Don't need to be here if DMG
-	ldh a, [hCGB]
-	and a
-	jr z, .end
-
 	push hl
 	push de
 	push bc
@@ -108,7 +102,6 @@ DmgToCgbBGPals::
 	pop bc
 	pop de
 	pop hl
-.end
 	pop af
 	ret
 
@@ -122,10 +115,6 @@ DmgToCgbObjPals::
 	ldh [rOBP0], a
 	ld a, d
 	ldh [rOBP1], a
-
-	ldh a, [hCGB]
-	and a
-	ret z
 
 	push hl
 	push de
@@ -161,12 +150,6 @@ DmgToCgbObjPals::
 DmgToCgbObjPal0::
 	ldh [rOBP0], a
 	push af
-
-; Don't need to be here if not CGB
-	ldh a, [hCGB]
-	and a
-	jr z, .dmg
-
 	push hl
 	push de
 	push bc
@@ -191,19 +174,12 @@ DmgToCgbObjPal0::
 	pop bc
 	pop de
 	pop hl
-
-.dmg
 	pop af
 	ret
 
 DmgToCgbObjPal1::
 	ldh [rOBP1], a
 	push af
-
-	ldh a, [hCGB]
-	and a
-	jr z, .dmg
-
 	push hl
 	push de
 	push bc
@@ -228,8 +204,6 @@ DmgToCgbObjPal1::
 	pop bc
 	pop de
 	pop hl
-
-.dmg
 	pop af
 	ret
 
@@ -286,10 +260,6 @@ endr
 	ret
 
 ClearVBank1::
-	ldh a, [hCGB]
-	and a
-	ret z
-
 	ld a, 1
 	ldh [rVBK], a
 
@@ -306,9 +276,6 @@ GSReloadPalettes:: ; dummied out
 	ret
 
 ReloadSpritesNoPalettes::
-	ldh a, [hCGB]
-	and a
-	ret z
 	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBGPals2)

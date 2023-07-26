@@ -34,14 +34,6 @@
 
 DebugColorPicker: ; unreferenced
 ; A debug menu to test monster and trainer palettes at runtime.
-	ldh a, [hCGB]
-	and a
-	jr nz, .cgb
-	ldh a, [hSGB]
-	and a
-	ret z
-
-.cgb
 	ldh a, [hInMenu]
 	push af
 	ld a, TRUE
@@ -180,10 +172,6 @@ DebugColor_LoadGFX:
 	ret
 
 DebugColor_InitPalettes:
-	ldh a, [hCGB]
-	and a
-	ret z
-
 	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBGPals2)
@@ -439,17 +427,11 @@ DebugColor_SetRGBMeter:
 	ret
 
 DebugColor_UpdateScreen:
-	ldh a, [hCGB]
-	and a
-	jr z, .sgb
-
 	ld a, 2
 	ldh [hBGMapMode], a
 	call DelayFrame
 	call DelayFrame
 	call DelayFrame
-
-.sgb
 	call WaitBGMap
 
 	ld a, DEBUGCOLORMAIN_UPDATEPALETTES
@@ -457,11 +439,6 @@ DebugColor_UpdateScreen:
 	ret
 
 DebugColor_UpdatePalettes:
-	ldh a, [hCGB]
-	and a
-	jr z, .sgb
-
-; cgb
 	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBGPals2)
@@ -487,41 +464,6 @@ DebugColor_UpdatePalettes:
 
 	pop af
 	ldh [rSVBK], a
-	ret
-
-.sgb
-	ld hl, wSGBPals
-	ld a, 1
-	ld [hli], a
-	ld a, LOW(PALRGB_WHITE)
-	ld [hli], a
-	ld a, HIGH(PALRGB_WHITE)
-	ld [hli], a
-	ld a, [wDebugLightColor + 0]
-	ld [hli], a
-	ld a, [wDebugLightColor + 1]
-	ld [hli], a
-	ld a, [wDebugDarkColor + 0]
-	ld [hli], a
-	ld a, [wDebugDarkColor + 1]
-	ld [hli], a
-	xor a
-	ld [hli], a
-	ld [hli], a
-	ld [hl], a
-
-	ld hl, wSGBPals
-	call DebugColor_PushSGBPals
-
-	hlcoord 10, 2
-	ld de, wDebugLightColor
-	call DebugColor_PrintHexColor
-	hlcoord 15, 2
-	ld de, wDebugDarkColor
-	call DebugColor_PrintHexColor
-
-	ld a, DEBUGCOLORMAIN_JOYPAD
-	ld [wJumptableIndex], a
 	ret
 
 DebugColor_PrintHexColor:

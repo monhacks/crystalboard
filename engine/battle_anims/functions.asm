@@ -3399,15 +3399,7 @@ BattleAnimFunction_SkyAttack:
 	srl a
 	ld e, a
 	ld d, 0
-	ldh a, [hSGB]
-	and a
-	jr nz, .sgb
 	ld hl, .GBCPals
-	jr .got_pals
-
-.sgb
-	ld hl, .SGBPals
-.got_pals
 	add hl, de
 	ld a, [hl]
 	ld hl, BATTLEANIMSTRUCT_VAR1

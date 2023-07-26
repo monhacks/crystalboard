@@ -161,77 +161,6 @@ INCLUDE "gfx/intro/gs_magikarp_bg.pal"
 .MagikarpOBPal:
 INCLUDE "gfx/intro/gs_magikarp_ob.pal"
 
-Intro_LoadAllPal0: ; unreferenced
-	call CheckCGB
-	ret nz
-	ldh a, [hSGB]
-	and a
-	ret z
-	ld hl, BlkPacket_AllPal0
-	jp PushSGBPals
-
-Intro_LoadBetaIntroVenusaurPalettes: ; unreferenced
-	call CheckCGB
-	jr nz, .cgb
-	ldh a, [hSGB]
-	and a
-	ret z
-	ld hl, PalPacket_BetaIntroVenusaur
-	jp PushSGBPals
-
-.cgb
-	ld de, wOBPals1
-	ld a, PREDEFPAL_BETA_INTRO_VENUSAUR
-	call GetPredefPal
-	jp LoadHLPaletteIntoDE
-
-Intro_LoadPackPalettes: ; unreferenced
-	call CheckCGB
-	jr nz, .cgb
-	ldh a, [hSGB]
-	and a
-	ret z
-	ld hl, PalPacket_Pack
-	jp PushSGBPals
-
-.cgb
-	ld de, wOBPals1
-	ld a, PREDEFPAL_PACK
-	call GetPredefPal
-	jp LoadHLPaletteIntoDE
-
-GSIntro_LoadMonPalette: ; unreferenced
-	call CheckCGB
-	jr nz, .cgb
-	ldh a, [hSGB]
-	and a
-	ret z
-	ld a, c
-	push af
-	ld hl, PalPacket_Pal01
-	ld de, wSGBPals
-	ld bc, PALPACKET_LENGTH
-	call CopyBytes
-	pop af
-	call GetMonPalettePointer
-	ld a, [hli]
-	ld [wSGBPals + 3], a
-	ld a, [hli]
-	ld [wSGBPals + 4], a
-	ld a, [hli]
-	ld [wSGBPals + 5], a
-	ld a, [hl]
-	ld [wSGBPals + 6], a
-	ld hl, wSGBPals
-	jp PushSGBPals
-
-.cgb
-	ld de, wOBPals1
-	ld a, c
-	call GetMonPalettePointer
-	call LoadPalette_White_Col1_Col2_Black
-	ret
-
 LoadTrainerClassPaletteAsNthBGPal:
 	ld a, [wTrainerClass]
 	call GetTrainerPalettePointer
@@ -269,13 +198,6 @@ LoadNthMiddleBGPal:
 	ret
 
 LoadBetaPokerPalettes: ; unreferenced
-	ldh a, [hCGB]
-	and a
-	jr nz, .cgb
-	ld hl, wBetaPokerSGBPals
-	jp PushSGBPals
-
-.cgb
 	ld a, [wBetaPokerSGBCol]
 	ld c, a
 	ld a, [wBetaPokerSGBRow]

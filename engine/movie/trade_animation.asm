@@ -162,9 +162,7 @@ RunTradeAnimScript:
 	call DisableLCD
 	call LoadFontsBattleExtra
 	callfar ClearSpriteAnims
-	ldh a, [hCGB]
-	and a
-	jr z, .NotCGB
+
 	ld a, $1
 	ldh [rVBK], a
 	ld hl, vTiles0
@@ -174,7 +172,6 @@ RunTradeAnimScript:
 	ld a, $0
 	ldh [rVBK], a
 
-.NotCGB:
 	hlbgcoord 0, 0
 	ld bc, VRAM_End - vBGMap0
 	ld a, " "
@@ -1302,13 +1299,7 @@ TradeAnim_CopyBoxFromDEtoHL:
 	ret
 
 TradeAnim_NormalPals:
-	ldh a, [hSGB]
-	and a
 	ld a, %11100100 ; 3,2,1,0
-	jr z, .not_sgb
-	ld a, $f0
-
-.not_sgb
 	call DmgToCgbObjPal0
 	ld a, %11100100 ; 3,2,1,0
 	call DmgToCgbBGPals

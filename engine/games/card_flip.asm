@@ -443,11 +443,6 @@ CardFlip_DisplayCardFaceUp:
 	jr nz, .row
 	pop hl
 
-	; Pointless CGB check
-	ldh a, [hCGB]
-	and a
-	ret z
-
 	; Set the attributes
 	ld de, wAttrmap - wTilemap
 	add hl, de
@@ -1313,14 +1308,6 @@ ChooseCard_HandleJoypad:
 
 CardFlip_UpdateCursorOAM:
 	call ClearSprites
-	ldh a, [hCGB]
-	and a
-	jr nz, .skip
-	ldh a, [hVBlankCounter]
-	and $4
-	ret nz
-
-.skip
 	call CollapseCursorPosition
 	add hl, hl
 	add hl, hl
@@ -1546,10 +1533,6 @@ ENDM
 	dbsprite   1,  1, 0, 0, $00, 0 | X_FLIP | Y_FLIP | PRIORITY
 
 CardFlip_InitAttrPals:
-	ldh a, [hCGB]
-	and a
-	ret z
-
 	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	xor a
