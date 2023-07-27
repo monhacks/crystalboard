@@ -1378,12 +1378,12 @@ DebugRoom_SaveRTC:
 	call YesNoBox
 	ret c
 	ld hl, wDebugRoomRTCSec
-	call DebugRoom_SetClock
+;	call DebugRoom_SetClock
 	ret
 
 DebugRoomMenu_RTCEdit_UpdateClock:
 	ld hl, wDebugRoomRTCCurSec
-	call DebugRoom_GetClock
+;	call DebugRoom_GetClock
 	ld de, DebugRoom_DayHTimeString
 	hlcoord 3, 14
 	call PlaceString
@@ -1417,42 +1417,6 @@ DebugRoomMenu_RTCEdit_UpdateClock:
 
 DebugRoom_DayHTimeString:
 	db "DAY     H<LF>TIME@"
-
-DebugRoom_GetClock:
-	ld a, SRAM_ENABLE
-	ld [MBC3SRamEnable], a
-	xor a
-	ld [MBC3LatchClock], a
-	inc a
-	ld [MBC3LatchClock], a
-	ld b, RTC_DH - RTC_S + 1
-	ld c, RTC_S
-.loop
-	ld a, c
-	ld [MBC3SRamBank], a
-	ld a, [MBC3RTC]
-	ld [hli], a
-	inc c
-	dec b
-	jr nz, .loop
-	call CloseSRAM
-	ret
-
-DebugRoom_SetClock:
-	ld a, SRAM_ENABLE
-	ld [MBC3SRamEnable], a
-	ld b, RTC_DH - RTC_S + 1
-	ld c, RTC_S
-.loop
-	ld a, c
-	ld [MBC3SRamBank], a
-	ld a, [hli]
-	ld [MBC3RTC], a
-	inc c
-	dec b
-	jr nz, .loop
-	call CloseSRAM
-	ret
 
 DebugRoomMenu_RTCEdit_Page1Values:
 	db 5

@@ -2,7 +2,7 @@ _InitializeStartDay:
 	call InitializeStartDay
 	ret
 
-ClearDailyTimers:
+ClearDailyTimers::
 	xor a
 	ld [wLuckyNumberDayTimer], a
 	ld [wDailyResetTimer], a
@@ -80,12 +80,12 @@ RestartReceiveCallDelay:
 	ld hl, wReceiveCallDelay_MinsRemaining
 	ld [hl], a
 	ld hl, wReceiveCallDelay_StartTime
-	call CopyDayHourMinToHL
+	call CopyHourMinToHL
 	ret
 
 CheckReceiveCallDelay:
 	ld hl, wReceiveCallDelay_StartTime
-	call CalcMinsHoursDaysSince
+	call CalcMinsHoursSince
 	call GetMinutesSinceIfLessThan60
 	ld hl, wReceiveCallDelay_MinsRemaining
 	call UpdateTimeRemaining
@@ -105,24 +105,7 @@ CheckDailyResetTimer::
 	ld [hli], a ; wDailyFlags2
 	ld [hli], a ; wSwarmFlags
 	ld [hl], a  ; wSwarmFlags + 1
-	ld hl, wKenjiBreakTimer
-	ld a, [hl]
-	and a
-	jr z, .RestartKenjiBreakCountdown
-	dec [hl]
-	jr nz, .DontRestartKenjiBreakCountdown
-.RestartKenjiBreakCountdown:
-	call SampleKenjiBreakCountdown
-.DontRestartKenjiBreakCountdown:
 	jr RestartDailyResetTimer
-
-SampleKenjiBreakCountdown:
-; Generate a random number between 3 and 6
-	call Random
-	and %11
-	add 3
-	ld [wKenjiBreakTimer], a
-	ret
 
 StartBugContestTimer:
 	ld a, BUG_CONTEST_MINUTES
@@ -130,15 +113,12 @@ StartBugContestTimer:
 	ld a, BUG_CONTEST_SECONDS
 	ld [wBugContestSecsRemaining], a
 	ld hl, wBugContestStartTime
-	call CopyDayHourMinSecToHL
+	call CopyHourMinSecToHL
 	ret
 
 CheckBugContestTimer::
 	ld hl, wBugContestStartTime
-	call CalcSecsMinsHoursDaysSince
-	ld a, [wDaysSince]
-	and a
-	jr nz, .timed_out
+	call CalcSecsMinsHoursSince
 	ld a, [wHoursSince]
 	and a
 	jr nz, .timed_out
@@ -231,9 +211,6 @@ UpdateTimeRemaining:
 	ret
 
 GetSecondsSinceIfLessThan60: ; unreferenced
-	ld a, [wDaysSince]
-	and a
-	jr nz, GetTimeElapsed_ExceedsUnitLimit
 	ld a, [wHoursSince]
 	and a
 	jr nz, GetTimeElapsed_ExceedsUnitLimit
@@ -243,9 +220,6 @@ GetSecondsSinceIfLessThan60: ; unreferenced
 	ret
 
 GetMinutesSinceIfLessThan60:
-	ld a, [wDaysSince]
-	and a
-	jr nz, GetTimeElapsed_ExceedsUnitLimit
 	ld a, [wHoursSince]
 	and a
 	jr nz, GetTimeElapsed_ExceedsUnitLimit
@@ -253,9 +227,6 @@ GetMinutesSinceIfLessThan60:
 	ret
 
 GetHoursSinceIfLessThan24: ; unreferenced
-	ld a, [wDaysSince]
-	and a
-	jr nz, GetTimeElapsed_ExceedsUnitLimit
 	ld a, [wHoursSince]
 	ret
 
@@ -271,22 +242,19 @@ CalcDaysSince:
 	xor a
 	jr _CalcDaysSince
 
-CalcHoursDaysSince: ; unreferenced
+CalcHoursSince: ; unreferenced
+	xor a
+	jr _CalcHoursSince
+
+CalcMinsHoursSince:
 	inc hl
 	xor a
-	jr _CalcHoursDaysSince
+	jr _CalcMinsHoursSince
 
-CalcMinsHoursDaysSince:
+CalcSecsMinsHoursSince:
 	inc hl
 	inc hl
-	xor a
-	jr _CalcMinsHoursDaysSince
-
-CalcSecsMinsHoursDaysSince:
-	inc hl
-	inc hl
-	inc hl
-	ldh a, [hSeconds]
+	ld a, [wGameTimeSeconds]
 	ld c, a
 	sub [hl]
 	jr nc, .skip
@@ -296,8 +264,8 @@ CalcSecsMinsHoursDaysSince:
 	dec hl
 	ld [wSecondsSince], a ; seconds since
 
-_CalcMinsHoursDaysSince:
-	ldh a, [hMinutes]
+_CalcMinsHoursSince:
+	ld a, [wGameTimeMinutes]
 	ld c, a
 	sbc [hl]
 	jr nc, .skip
@@ -307,36 +275,32 @@ _CalcMinsHoursDaysSince:
 	dec hl
 	ld [wMinutesSince], a ; minutes since
 
-_CalcHoursDaysSince:
-	ldh a, [hHours]
+_CalcHoursSince:
+; assumes differentials below 256 hours
+	ld a, [wGameTimeHours + 1]
 	ld c, a
-	sbc [hl]
-	jr nc, .skip
-	add MAX_HOUR
-.skip
+	sub [hl]
 	ld [hl], c ; current hours
-	dec hl
 	ld [wHoursSince], a ; hours since
+	ret
 
 _CalcDaysSince:
 	ld a, [wCurDay]
 	ld c, a
 	sbc [hl]
 	jr nc, .skip
-	add 20 * 7
+	add MAX_DAYS
 .skip
 	ld [hl], c ; current days
 	ld [wDaysSince], a ; days since
 	ret
 
-CopyDayHourMinSecToHL:
-	ld a, [wCurDay]
+CopyHourMinSecToHL:
+	ld a, [wGameTimeHours + 1]
 	ld [hli], a
-	ldh a, [hHours]
+	ld a, [wGameTimeMinutes]
 	ld [hli], a
-	ldh a, [hMinutes]
-	ld [hli], a
-	ldh a, [hSeconds]
+	ld a, [wGameTimeSeconds]
 	ld [hli], a
 	ret
 
@@ -345,11 +309,9 @@ CopyDayToHL:
 	ld [hl], a
 	ret
 
-CopyDayHourMinToHL:
-	ld a, [wCurDay]
+CopyHourMinToHL:
+	ld a, [wGameTimeHours + 1]
 	ld [hli], a
-	ldh a, [hHours]
-	ld [hli], a
-	ldh a, [hMinutes]
+	ld a, [wGameTimeMinutes]
 	ld [hli], a
 	ret

@@ -31,9 +31,11 @@ for n, 1, MAILBOX_CAPACITY + 1
 sMailbox{d:n}Backup:: mailmsg sMailbox{d:n}Backup
 endr
 
-sRTCStatusFlags:: db
 sLuckyNumberDay:: db
 sLuckyIDNumber::  dw
+if DEF(_DEBUG)
+sRTCStatusFlags:: db
+endc
 
 
 SECTION "Backup Save", SRAM

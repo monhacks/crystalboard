@@ -1161,20 +1161,6 @@ PokegearPhoneContactSubmenu:
 	dw .Call
 	dw .Cancel
 
-GetAMPMHours: ; unreferenced
-	ldh a, [hHours]
-	cp NOON_HOUR
-	jr c, .am
-	sub NOON_HOUR
-	ld [wTempByteValue], a
-	scf
-	ret
-
-.am
-	ld [wTempByteValue], a
-	and a
-	ret
-
 Pokegear_SwitchPage:
 	ld de, SFX_READ_TEXT_2
 	call PlaySFX

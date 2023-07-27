@@ -270,7 +270,7 @@ CheckObjectTime::
 	ld hl, MAPOBJECT_HOUR_2
 	add hl, bc
 	ld e, [hl]
-	ld hl, hHours
+	ld hl, wGameTimeHours + 1
 	ld a, d
 	cp e
 	jr z, .yes

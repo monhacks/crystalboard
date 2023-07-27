@@ -1269,7 +1269,6 @@ wGBPrinterBrightness::
 wOptions2::
 ; bit 1: menu account off/on
 	db
-	ds 2
 wOptionsEnd::
 
 ; Time buffer, for counting the amount of time since
@@ -2202,7 +2201,7 @@ wMapReentryScriptAddress:: dw
 
 wTimeCyclesSinceLastCall:: db
 wReceiveCallDelay_MinsRemaining:: db
-wReceiveCallDelay_StartTime:: ds 3
+wReceiveCallDelay_StartTime:: ds 2 ; hour, min
 
 wBugContestMinsRemaining:: db
 wBugContestSecsRemaining:: db
@@ -2425,11 +2424,10 @@ wLuckyNumberDayTimer:: dw
 
 wSpecialPhoneCallID:: db
 
-wBugContestStartTime:: ds 4 ; day, hour, min, sec
+wBugContestStartTime:: ds 3 ; hour, min, sec
 
 wBuenasPassword:: db
 wBlueCardBalance:: db
-wKenjiBreakTimer:: ds 2 ; Kenji
 wYanmaMapGroup:: db
 wYanmaMapNumber:: db
 

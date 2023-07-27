@@ -127,7 +127,6 @@ SpecialsPointers::
 	add_special BuenasPassword
 	add_special BuenaPrize
 	add_special GiveDratini
-	add_special SampleKenjiBreakCountdown
 	add_special BeastsCheck
 	add_special MonCheck
 	add_special SetPlayerPalette

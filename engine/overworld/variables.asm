@@ -48,7 +48,6 @@ _GetVarAction::
 	dwb .CountBadges,                   RETVAR_EXECUTE
 	dwb wPlayerState,                   RETVAR_ADDR_DE
 	dwb .PlayerFacing,                  RETVAR_EXECUTE
-	dwb hHours,                         RETVAR_STRBUF2
 	dwb .DayOfWeek,                     RETVAR_EXECUTE
 	dwb wMapGroup,                      RETVAR_STRBUF2
 	dwb wMapNumber,                     RETVAR_STRBUF2
@@ -63,7 +62,6 @@ _GetVarAction::
 	dwb wCurCaller,                     RETVAR_ADDR_DE
 	dwb wBlueCardBalance,               RETVAR_ADDR_DE
 	dwb wBuenasPassword,                RETVAR_ADDR_DE
-	dwb wKenjiBreakTimer,               RETVAR_STRBUF2
 	dwb NULL,                           RETVAR_STRBUF2
 
 .CountCaughtMons:

@@ -5,10 +5,6 @@ hFarByte::
 hTempBank:: db
 hSRAMBank:: db
 
-hHours:: db
-hMinutes:: db
-hSeconds:: db
-
 hVBlankCounter:: db
 
 hROMBank:: db
@@ -124,8 +120,6 @@ hLastTalked:: db
 
 hRandomAdd:: db
 hRandomSub:: db
-
-hUnusedBackup:: db
 
 hBattleTurn::
 ; Which trainer's turn is it? 0: player, 1: opponent trainer

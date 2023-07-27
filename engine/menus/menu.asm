@@ -233,7 +233,7 @@ MenuJoypadLoop:
 .loop
 	call Move2DMenuCursor
 	call .BGMap_OAM
-	call Do2DMenuRTCJoypad
+	call Do2DMenuJoypad
 	jr nc, .done
 	call _2DMenuInterpretJoypad
 	jr c, .done
@@ -261,14 +261,14 @@ MenuJoypadLoop:
 	ldh [hBGMapMode], a
 	ret
 
-Do2DMenuRTCJoypad:
-.loopRTC
+Do2DMenuJoypad:
+.loop
 	call UpdateTimeSensitivePals
 	call Menu_WasButtonPressed
 	ret c
 	ld a, [w2DMenuFlags1]
 	bit 7, a
-	jr z, .loopRTC
+	jr z, .loop
 	and a
 	ret
 
