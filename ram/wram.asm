@@ -1968,15 +1968,6 @@ wTreeMonCoordScore:: db
 wTreeMonOTIDScore::  db
 
 NEXTU
-; restart clock
-wRestartClockCurDivision::   db
-wRestartClockPrevDivision::  db
-wRestartClockUpArrowYCoord:: db
-wRestartClockDay::  db
-wRestartClockHour:: db
-wRestartClockMin::  db
-
-NEXTU
 ; link
 wLinkBattleRNPreamble:: ds SERIAL_RN_PREAMBLE_LENGTH
 wLinkBattleRNs:: ds SERIAL_RNS_LENGTH
@@ -2253,12 +2244,6 @@ wStartHour::   db
 wStartMinute:: db
 wStartSecond:: db
 
-wRTC:: ds 4
-
-wDST::
-; bit 7: dst
-	db
-
 wGameTime:: ; used only for BANK(wGameTime)
 wGameTimeCap::     db
 wGameTimeHours::   dw
@@ -2441,9 +2426,6 @@ wLuckyNumberDayTimer:: dw
 wSpecialPhoneCallID:: db
 
 wBugContestStartTime:: ds 4 ; day, hour, min, sec
-wUnusedTwoDayTimerOn:: db
-wUnusedTwoDayTimer:: db
-wUnusedTwoDayTimerStartDate:: db
 
 wBuenasPassword:: db
 wBlueCardBalance:: db

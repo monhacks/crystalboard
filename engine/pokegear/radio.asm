@@ -1701,9 +1701,9 @@ BuenasPassword21:
 	jp NextRadioLine
 
 BuenasPasswordCheckTime:
-	call UpdateTime
-	ldh a, [hHours]
-	cp NITE_HOUR
+	ld a, [wTimeOfDay]
+	maskbits NUM_DAYTIMES
+	cp NITE
 	ret
 
 BuenasPasswordChannelName:

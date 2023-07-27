@@ -5,7 +5,6 @@ _InitializeStartDay:
 ClearDailyTimers:
 	xor a
 	ld [wLuckyNumberDayTimer], a
-	ld [wUnusedTwoDayTimer], a
 	ld [wDailyResetTimer], a
 	ret
 
@@ -63,10 +62,7 @@ InitOneDayCountdown:
 
 InitNDaysCountdown:
 	ld [hl], a
-	push hl
-	call UpdateTime
-	pop hl
-	inc hl
+	inc hl ; wLuckyNumberDayTimer + 1 or wDailyResetTimer + 1 (both are dw)
 	call CopyDayToHL
 	ret
 
@@ -83,7 +79,6 @@ CheckDayDependentEventHL:
 RestartReceiveCallDelay:
 	ld hl, wReceiveCallDelay_MinsRemaining
 	ld [hl], a
-	call UpdateTime
 	ld hl, wReceiveCallDelay_StartTime
 	call CopyDayHourMinToHL
 	ret
@@ -134,7 +129,6 @@ StartBugContestTimer:
 	ld [wBugContestMinsRemaining], a
 	ld a, BUG_CONTEST_SECONDS
 	ld [wBugContestSecsRemaining], a
-	call UpdateTime
 	ld hl, wBugContestStartTime
 	call CopyDayHourMinSecToHL
 	ret
@@ -174,7 +168,6 @@ CheckBugContestTimer::
 	ret
 
 InitializeStartDay:
-	call UpdateTime
 	ld hl, wTimerEventStartDay
 	call CopyDayToHL
 	ret
@@ -189,36 +182,6 @@ CheckPokerusTick::
 	farcall ApplyPokerusTick
 .done
 	xor a
-	ret
-
-SetUnusedTwoDayTimer: ; unreferenced
-	ld a, 2
-	ld hl, wUnusedTwoDayTimer
-	ld [hl], a
-	call UpdateTime
-	ld hl, wUnusedTwoDayTimerStartDate
-	call CopyDayToHL
-	ret
-
-CheckUnusedTwoDayTimer:
-	ld hl, wUnusedTwoDayTimerStartDate
-	call CalcDaysSince
-	call GetDaysSince
-	ld hl, wUnusedTwoDayTimer
-	call UpdateTimeRemaining
-	ret
-
-UnusedSetSwarmFlag: ; unreferenced
-	ld hl, wDailyFlags1
-	set DAILYFLAGS1_FISH_SWARM_F, [hl]
-	ret
-
-UnusedCheckSwarmFlag: ; unreferenced
-	and a
-	ld hl, wDailyFlags1
-	bit DAILYFLAGS1_FISH_SWARM_F, [hl]
-	ret nz
-	scf
 	ret
 
 RestartLuckyNumberCountdown:
@@ -380,13 +343,6 @@ CopyDayHourMinSecToHL:
 CopyDayToHL:
 	ld a, [wCurDay]
 	ld [hl], a
-	ret
-
-CopyDayHourToHL: ; unreferenced
-	ld a, [wCurDay]
-	ld [hli], a
-	ldh a, [hHours]
-	ld [hli], a
 	ret
 
 CopyDayHourMinToHL:

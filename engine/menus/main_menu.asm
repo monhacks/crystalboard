@@ -55,9 +55,6 @@ MainMenu:
 	db "CONTINUE@"
 	db "NEW GAME@"
 	db "OPTION@"
-	db "MYSTERY GIFT@"
-	db "MOBILE@"
-	db "MOBILE STUDIUM@"
 if DEF(_DEBUG)
 	db "DEBUG ROOM@"
 endc
@@ -147,57 +144,25 @@ MainMenu_PrintCurrentTimeAndDay:
 	ret
 
 .PlaceBox:
-	call CheckRTCStatus
-	and %10000000 ; Day count exceeded 16383
-	jr nz, .TimeFail
 	hlcoord 0, 14
 	ld b, 2
 	ld c, 18
 	call Textbox
 	ret
 
-.TimeFail:
-	call SpeechTextbox
-	ret
-
 .PlaceTime:
 	ld a, [wSaveFileExists]
 	and a
 	ret z
-	call CheckRTCStatus
-	and $80
-	jp nz, .PrintTimeNotSet
-	call UpdateTime
 	call GetWeekday
 	ld b, a
 	decoord 1, 15
 	call .PrintDayOfWeek
+	ld a, [wTimeOfDay]
+	maskbits NUM_DAYTIMES
 	decoord 4, 16
-	ldh a, [hHours]
-	ld c, a
-	farcall PrintHour
-	ld [hl], ":"
-	inc hl
-	ld de, hMinutes
-	lb bc, PRINTNUM_LEADINGZEROS | 1, 2
-	call PrintNum
+	call .PrintTimeOfDay
 	ret
-
-.minString: ; unreferenced
-	db "min.@"
-
-.PrintTimeNotSet:
-	hlcoord 1, 14
-	ld de, .TimeNotSetString
-	call PlaceString
-	ret
-
-.TimeNotSetString:
-	db "TIME NOT SET@"
-
-.MainMenuTimeUnknownText: ; unreferenced
-	text_far _MainMenuTimeUnknownText
-	text_end
 
 .PrintDayOfWeek:
 	push de
@@ -225,6 +190,22 @@ MainMenu_PrintCurrentTimeAndDay:
 .Day:
 	db "DAY@"
 
+.PrintTimeOfDay:
+	push de
+	ld hl, .TimesOfDay
+	call GetNthString
+	ld d, h
+	ld e, l
+	pop hl
+	call PlaceString
+	ret
+
+.TimesOfDay:
+	db "MORN@"
+	db "DAY@"
+	db "NITE@"
+	db "NITE@"
+
 ClearTilemapEtc:
 	xor a
 	ldh [hMapAnims], a
@@ -245,3 +226,9 @@ MainMenu_Option:
 MainMenu_Continue:
 	farcall Continue
 	ret
+
+if DEF(_DEBUG)
+MainMenu_DebugRoom:
+	farcall _DebugRoom
+	ret
+endc

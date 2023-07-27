@@ -243,7 +243,7 @@ LinkTradeMenu:
 	ret
 
 .loop2
-	call UpdateTimeAndPals
+	call UpdateTimeSensitivePals
 	call .TryAnims
 	ret c
 	ld a, [w2DMenuFlags1]

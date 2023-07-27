@@ -45,7 +45,6 @@ SpecialsPointers::
 	add_special BankOfMom
 	add_special MagnetTrain
 	add_special NameRival
-	add_special SetDayOfWeek
 	add_special OverworldTownMap
 	add_special UnownPrinter
 	add_special MapRadio
@@ -76,7 +75,6 @@ SpecialsPointers::
 	add_special FindPartyMonAtLeastThatHappy ; unused
 	add_special FindPartyMonThatSpecies
 	add_special FindPartyMonThatSpeciesYourTrainerID
-	add_special UnusedCheckUnusedTwoDayTimer ; unused
 	add_special DayCareMon1
 	add_special DayCareMon2
 	add_special SelectRandomBugContestContestants
@@ -136,7 +134,3 @@ SpecialsPointers::
 	add_special RefreshSprites
 	add_special AskRememberPassword
 	add_special LoadMapPalettes
-
-	add_special InitialSetDSTFlag
-	add_special InitialClearDSTFlag
-	add_special UnusedDummySpecial ; unused

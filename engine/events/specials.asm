@@ -15,9 +15,6 @@ Special::
 
 INCLUDE "data/events/special_pointers.asm"
 
-UnusedDummySpecial:
-	ret
-
 SetPlayerPalette:
 	ld a, [wScriptVar]
 	ld d, a
@@ -228,12 +225,6 @@ ScriptReturnCarry:
 	ret
 .carry
 	ld a, 1
-	ld [wScriptVar], a
-	ret
-
-UnusedCheckUnusedTwoDayTimer:
-	farcall CheckUnusedTwoDayTimer
-	ld a, [wUnusedTwoDayTimer]
 	ld [wScriptVar], a
 	ret
 

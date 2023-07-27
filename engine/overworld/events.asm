@@ -195,7 +195,6 @@ HandleMapTimeAndJoypad:
 	cp MAPEVENTS_OFF
 	ret z
 
-	call UpdateTime
 	call GetJoypad
 	call TimeOfDayPals
 	ret
@@ -466,11 +465,6 @@ CheckTimeEvents:
 	ld a, BANK(BugCatchingContestOverScript)
 	ld hl, BugCatchingContestOverScript
 	call CallScript
-	scf
-	ret
-
-.unused ; unreferenced
-	ld a, $8 ; ???
 	scf
 	ret
 

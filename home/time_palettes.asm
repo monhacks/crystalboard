@@ -1,12 +1,10 @@
-UpdateTimeAndPals::
-; update time and time-sensitive palettes
+UpdateTimeSensitivePals::
+; update time-sensitive palettes if overworld sprite updates are enabled
 
-; rtc enabled?
+; sprite updates enabled?
 	ld a, [wSpriteUpdatesEnabled]
 	cp 0
 	ret z
-
-	call UpdateTime
 
 ; obj update on?
 	ld a, [wVramState]

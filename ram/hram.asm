@@ -5,18 +5,9 @@ hFarByte::
 hTempBank:: db
 hSRAMBank:: db
 
-hRTCDayHi::   db
-hRTCDayLo::   db
-hRTCHours::   db
-hRTCMinutes:: db
-hRTCSeconds:: db
-
 hHours:: db
-	ds 1
 hMinutes:: db
-	ds 1
 hSeconds:: db
-	ds 1
 
 hVBlankCounter:: db
 
@@ -150,4 +141,3 @@ hSystemBooted:: db
 if DEF(_DEBUG)
 hDebugRoomMenuPage::
 endc
-hClockResetTrigger:: db

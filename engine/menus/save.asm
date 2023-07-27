@@ -25,13 +25,11 @@ SaveMenu:
 
 SaveAfterLinkTrade:
 	call PauseGameLogic
-	farcall StageRTCTimeForSave
 	call SavePokemonData
 	call SaveChecksum
 	call SaveBackupPokemonData
 	call SaveBackupChecksum
 	farcall BackupPartyMonMail
-	farcall SaveRTC
 	call ResumeGameLogic
 	ret
 
@@ -90,7 +88,6 @@ MoveMonWOMail_InsertMon_SaveGame:
 	ld [wCurBox], a
 	ld a, TRUE
 	ld [wSaveFileExists], a
-	farcall StageRTCTimeForSave
 	call ValidateSave
 	call SaveOptions
 	call SavePlayerData
@@ -102,7 +99,6 @@ MoveMonWOMail_InsertMon_SaveGame:
 	call SaveBackupPokemonData
 	call SaveBackupChecksum
 	farcall BackupPartyMonMail
-	farcall SaveRTC
 	call LoadBox
 	call ResumeGameLogic
 	ld de, SFX_SAVE
@@ -263,7 +259,6 @@ SavedTheGame:
 _SaveGameData:
 	ld a, TRUE
 	ld [wSaveFileExists], a
-	farcall StageRTCTimeForSave
 	call ValidateSave
 	call SaveOptions
 	call SavePlayerData
@@ -277,7 +272,6 @@ _SaveGameData:
 	call SaveBackupChecksum
 	call UpdateStackTop
 	farcall BackupPartyMonMail
-	farcall SaveRTC
 	ret
 
 UpdateStackTop:
@@ -593,7 +587,6 @@ TryLoadSaveData:
 	ld de, wOptions
 	ld bc, wOptionsEnd - wOptions
 	call CopyBytes
-	call ClearClock
 	ret
 
 INCLUDE "data/default_options.asm"

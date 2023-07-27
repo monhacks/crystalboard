@@ -3,7 +3,6 @@ DummyPredef36:
 	ret
 
 UpdateTimeOfDayPal::
-	call UpdateTime
 	ld a, [wTimeOfDay]
 	ld [wCurTimeOfDay], a
 	call GetTimePalette
@@ -64,7 +63,7 @@ _TimeOfDayPals::
 	ld a, b
 	ldh [rSVBK], a
 
-; update sgb pals
+; update cgb pals
 	ld b, CGB_MAPPALS
 	call GetCGBLayout
 

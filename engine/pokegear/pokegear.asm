@@ -40,7 +40,6 @@ PokeGear:
 	call .InitTilemap
 	call DelayFrame
 .loop
-	call UpdateTime
 	call JoyTextDelay
 	ld a, [wJumptableIndex]
 	bit 7, a
@@ -276,7 +275,6 @@ InitPokegearTilemap:
 	hlcoord 0, 12
 	lb bc, 4, 18
 	call Textbox
-	call Pokegear_UpdateClock
 	ret
 
 .switch
@@ -409,7 +407,6 @@ PokegearClock_Init:
 	ret
 
 PokegearClock_Joypad:
-	call .UpdateClock
 	ld hl, hJoyLast
 	ld a, [hl]
 	and A_BUTTON | B_BUTTON | START | SELECT
@@ -446,36 +443,6 @@ PokegearClock_Joypad:
 	ld hl, wJumptableIndex
 	set 7, [hl]
 	ret
-
-.UpdateClock:
-	xor a
-	ldh [hBGMapMode], a
-	call Pokegear_UpdateClock
-	ld a, $1
-	ldh [hBGMapMode], a
-	ret
-
-Pokegear_UpdateClock:
-	hlcoord 3, 5
-	lb bc, 5, 14
-	call ClearBox
-	ldh a, [hHours]
-	ld b, a
-	ldh a, [hMinutes]
-	ld c, a
-	decoord 6, 8
-	farcall PrintHoursMins
-	ld hl, .GearTodayText
-	bccoord 6, 6
-	call PlaceHLTextAtBC
-	ret
-
-	db "ごぜん@"
-	db "ごご@"
-
-.GearTodayText:
-	text_far _GearTodayText
-	text_end
 
 PokegearMap_CheckRegion:
 	ld a, POKEGEARSTATE_JOHTOMAPINIT
@@ -1849,7 +1816,6 @@ PlayRadioStationPointers:
 	assert_table_length NUM_MAP_RADIO_STATIONS
 
 LoadStation_PokemonChannel:
-	call UpdateTime
 	ld a, [wTimeOfDay]
 	and a
 	jp z, LoadStation_PokedexShow
