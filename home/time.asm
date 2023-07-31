@@ -40,4 +40,4 @@ AdvanceTimeOfDay::
 	ret
 
 .TimeOfDayOrder:
-	db MORN_F, DAY_F, NITE_F, MORN_F, MORN_F
+	db MORN_F, DAY_F, NITE_F, EVE_F, MORN_F
