@@ -297,7 +297,8 @@ LoadMapPalettes:
 
 RefreshMapSprites:
 	call ClearSprites
-	farcall InitMapNameSign
+	xor a
+	ldh [hBGMapMode], a
 	call GetMovementPermissions
 	farcall RefreshPlayerSprite
 	farcall CheckUpdatePlayerSprite

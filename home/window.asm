@@ -39,7 +39,8 @@ CloseText::
 	ld a, $90
 	ldh [hWY], a
 	call UpdatePlayerSprite
-	farcall InitMapNameSign
+	xor a
+	ldh [hBGMapMode], a
 	farcall LoadOverworldFont
 	ret
 

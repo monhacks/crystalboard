@@ -135,7 +135,6 @@ wPrevDexEntry:: db
 wDisableTextAcceleration:: db
 wPrevLandmark:: db
 wCurLandmark:: db
-wLandmarkSignTimer:: dw
 
 wLinkMode::
 ; a LINK_* value for the link type

@@ -208,7 +208,6 @@ HandleMapObjects:
 HandleMapBackground:
 	farcall _UpdateSprites
 	farcall ScrollScreen
-	farcall PlaceMapNameSign
 	ret
 
 CheckPlayerState:
@@ -272,16 +271,6 @@ PlayerEvents:
 
 	ld [wScriptRunning], a
 	call DoPlayerEvent
-	ld a, [wScriptRunning]
-	cp PLAYEREVENT_CONNECTION
-	jr z, .ok2
-	cp PLAYEREVENT_JOYCHANGEFACING
-	jr z, .ok2
-
-	xor a
-	ld [wLandmarkSignTimer], a
-
-.ok2
 	scf
 	ret
 
