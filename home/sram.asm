@@ -25,16 +25,16 @@ endc
 	push af
 ; enable sram write
 	ld a, SRAM_ENABLE
-	ld [MBC3SRamEnable], a
+	ld [MBC5SRamEnable], a
 ; select sram bank
 	pop af
-	ld [MBC3SRamBank], a
+	ld [MBC5SRamBank], a
 	ret
 
 CloseSRAM::
 	push af
 	ld a, SRAM_DISABLE
 ; disable sram write
-	ld [MBC3SRamEnable], a
+	ld [MBC5SRamEnable], a
 	pop af
 	ret

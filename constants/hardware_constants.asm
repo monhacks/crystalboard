@@ -37,6 +37,12 @@ DEF RTC_DH EQU $0c ; Upper 1 bit of Day Counter, Carry Bit, Halt Flag
                    ; Bit 6  Halt (0=Active, 1=Stop Timer)
                    ; Bit 7  Day Counter Carry Bit (1=Counter Overflow)
 
+; MBC5
+DEF MBC5SRamEnable EQU $0000
+DEF MBC5RomBankLo  EQU $2000
+DEF MBC5RomBankHi  EQU $3000
+DEF MBC5SRamBank   EQU $4000
+
 ; interrupt flags
 DEF VBLANK     EQU 0
 DEF LCD_STAT   EQU 1
