@@ -166,6 +166,7 @@ SetBoxmonOrEggmonCaughtData:
 	inc a
 	rrca
 	rrca
+	and CAUGHT_TIME_MASK ; caught in eve becomes $0
 	ld b, a
 	ld a, [wCurPartyLevel]
 	or b

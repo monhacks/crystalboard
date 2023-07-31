@@ -2064,6 +2064,7 @@ wCurDamage:: dw
 wMornEncounterRate::  db
 wDayEncounterRate::   db
 wNiteEncounterRate::  db
+wEveEncounterRate::   db
 wWaterEncounterRate:: db
 wListMoves_MoveIndicesBuffer:: ds NUM_MOVES
 wPutativeTMHMMove:: db

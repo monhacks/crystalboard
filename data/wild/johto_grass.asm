@@ -3,7 +3,7 @@
 JohtoGrassWildMons:
 
 	def_grass_wildmons N_A
-	db 2 percent, 2 percent, 2 percent ; encounter rates: morn/day/nite
+	db 2 percent, 2 percent, 2 percent, 2 percent ; encounter rates: morn/day/nite/eve
 	; morn
 	db 3, RATTATA
 	db 4, RATTATA
@@ -24,6 +24,14 @@ JohtoGrassWildMons:
 	db 3, GASTLY
 	db 4, GASTLY
 	db 5, GASTLY
+	db 3, RATTATA
+	db 6, GASTLY
+	db 5, RATTATA
+	db 5, RATTATA
+	; eve
+	db 3, RATTATA
+	db 4, GASTLY
+	db 5, RATTATA
 	db 3, RATTATA
 	db 6, GASTLY
 	db 5, RATTATA

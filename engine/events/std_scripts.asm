@@ -63,6 +63,8 @@ PokecenterNurseScript:
 	iftrue .morn
 	checktime DAY
 	iftrue .day
+	checktime EVE
+	iftrue .eve
 	checktime NITE
 	iftrue .nite
 	sjump .ok
@@ -74,6 +76,11 @@ PokecenterNurseScript:
 
 .day
 	farwritetext NurseDayText
+	promptbutton
+	sjump .ok
+
+.eve
+	farwritetext NurseEveText
 	promptbutton
 	sjump .ok
 

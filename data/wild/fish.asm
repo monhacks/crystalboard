@@ -208,7 +208,7 @@ FishGroups:
 	db 100 percent,     REMORAID,   40
 
 TimeFishGroups:
-	;  day              nite
+	;  morn/day         eve/nite
 	db CORSOLA,    20,  STARYU,     20 ; 0
 	db CORSOLA,    40,  STARYU,     40 ; 1
 	db SHELLDER,   20,  SHELLDER,   20 ; 2

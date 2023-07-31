@@ -5,6 +5,7 @@ LoadWildMonData:
 	xor a
 	ld [hli], a
 	ld [hli], a
+	ld [hli], a
 	ld [hl], a
 	jr .done_copy
 
@@ -12,7 +13,7 @@ LoadWildMonData:
 	inc hl
 	inc hl
 	ld de, wMornEncounterRate
-	ld bc, 3
+	ld bc, NUM_DAYTIMES
 	call CopyBytes
 .done_copy
 	call _WaterWildmonLookup

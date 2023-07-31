@@ -231,12 +231,10 @@ OaksPKMNTalk4:
 rept 4
 	inc hl
 endr
-	; Generate a number, either 0, 1, or 2, to choose a time of day.
+	; Generate a number, either 0, 1, 2, or 3 to choose a time of day.
 .loop2
 	call Random
 	maskbits NUM_DAYTIMES
-	cp DARKNESS_F
-	jr z, .loop2
 
 	ld bc, 2 * NUM_GRASSMON
 	call AddNTimes

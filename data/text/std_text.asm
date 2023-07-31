@@ -10,6 +10,12 @@ NurseDayText:
 	cont "#MON CENTER."
 	done
 
+NurseEveText:
+	text "Good evening!"
+	line "Welcome to our"
+	cont "#MON CENTER."
+	done
+
 NurseNiteText:
 	text "Good evening!"
 	line "You're out late."

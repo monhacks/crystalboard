@@ -204,7 +204,7 @@ MainMenu_PrintCurrentTimeAndDay:
 	db "MORN@"
 	db "DAY@"
 	db "NITE@"
-	db "NITE@"
+	db "EVE@"
 
 ClearTilemapEtc:
 	xor a

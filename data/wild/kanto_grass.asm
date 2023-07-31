@@ -3,7 +3,7 @@
 KantoGrassWildMons:
 
 	def_grass_wildmons N_A
-	db 4 percent, 2 percent, 8 percent ; encounter rates: morn/day/nite
+	db 4 percent, 2 percent, 8 percent, 4 percent ; encounter rates: morn/day/nite/eve
 	; morn
 	db 3, DIGLETT
 	db 6, DIGLETT
@@ -28,6 +28,14 @@ KantoGrassWildMons:
 	db 32, DUGTRIO
 	db 32, DUGTRIO
 	db 32, DUGTRIO
+	; eve
+	db 3, DIGLETT
+	db 6, DIGLETT
+	db 12, DIGLETT
+	db 24, DIGLETT
+	db 24, DUGTRIO
+	db 24, DUGTRIO
+	db 24, DUGTRIO
 	end_grass_wildmons
 
 	db -1 ; end

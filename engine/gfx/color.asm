@@ -628,7 +628,7 @@ INCLUDE "data/pokemon/palettes.asm"
 INCLUDE "data/trainers/palettes.asm"
 
 LoadMapPals:
-	farcall LoadSpecialMapPalette
+	farcall LoadSpecialMapPalette ; also handles darkness palettes
 	jr c, .got_pals
 
 	; Which palette group is based on whether we're outside or inside
@@ -688,6 +688,20 @@ LoadMapPals:
 	ldh [rSVBK], a
 
 .got_pals
+	; BG pals done. Now do OBJ pals.
+	call GetMapTimeOfDay
+	bit IN_DARKNESS_F, a
+	jr z, .not_darkness
+	ld a, [wStatusFlags]
+	bit STATUSFLAGS_FLASH_F, a
+	jr nz, .not_darkness
+	ld a, BANK(wOBPals1)
+	ld de, wOBPals1
+	ld hl, NPCDarknessPalette
+	ld bc, 8 palettes
+	jp FarCopyWRAM
+
+.not_darkness
 	ld a, [wTimeOfDayPal]
 	maskbits NUM_DAYTIMES
 	ld bc, 8 palettes
@@ -705,21 +719,21 @@ LoadMapPals:
 	ret nz
 .outside
 	ld a, [wMapGroup]
-	ld l, a
-	ld h, 0
-	add hl, hl
-	add hl, hl
-	add hl, hl
-	ld de, RoofPals
+	add a
+	add a
+	ld e, a
+	ld d, 0
+	ld hl, RoofPals
+rept NUM_DAYTIMES
 	add hl, de
+endr
 	ld a, [wTimeOfDayPal]
 	maskbits NUM_DAYTIMES
-	cp NITE_F
-	jr c, .morn_day
-rept 4
-	inc hl
-endr
-.morn_day
+	add a
+	add a
+	ld e, a
+	ld d, 0
+	add hl, de
 	ld de, wBGPals1 palette PAL_BG_ROOF color 1
 	ld bc, 4
 	ld a, BANK(wBGPals1)
@@ -737,11 +751,14 @@ INCLUDE "gfx/stats/party_menu_bg.pal"
 TilesetBGPalette:
 INCLUDE "gfx/tilesets/bg_tiles.pal"
 
+NPCDarknessPalette:
+INCLUDE "gfx/overworld/npc_sprites_darkness.pal"
+
 MapObjectPals::
 INCLUDE "gfx/overworld/npc_sprites.pal"
 
 RoofPals:
-	table_width PAL_COLOR_SIZE * 2 * 2, RoofPals
+	table_width PAL_COLOR_SIZE * 4 * 2, RoofPals
 INCLUDE "gfx/tilesets/roofs.pal"
 	assert_table_length NUM_MAP_GROUPS + 1
 

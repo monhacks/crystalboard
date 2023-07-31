@@ -15,5 +15,5 @@ CheckTime::
 	db MORN_F, MORN
 	db DAY_F,  DAY
 	db NITE_F, NITE
-	db NITE_F, NITE
+	db EVE_F,  EVE
 	db -1
