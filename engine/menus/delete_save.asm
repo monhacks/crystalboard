@@ -3,7 +3,7 @@ _DeleteSaveData:
 	ld b, CGB_DIPLOMA
 	call GetCGBLayout
 	call LoadStandardFont
-	call LoadFontsExtra
+	call LoadFrame
 	ld de, MUSIC_MAIN_MENU
 	call PlayMusic
 	ld hl, .ClearAllSaveDataText

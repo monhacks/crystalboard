@@ -26,7 +26,7 @@ ReadAnyMail:
 	call ClearSprites
 	call ClearTilemap
 	call DisableLCD
-	call LoadFontsExtra
+	call LoadFrame
 	pop de
 	push de
 	ld hl, vTiles1

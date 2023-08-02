@@ -63,7 +63,7 @@ InitGenderScreen:
 	call DelayFrames
 	call ClearBGPalettes
 	call InitCrystalData
-	call LoadFontsExtra
+	call LoadFrame
 	hlcoord 0, 0
 	ld bc, SCREEN_HEIGHT * SCREEN_WIDTH
 	ld a, $0

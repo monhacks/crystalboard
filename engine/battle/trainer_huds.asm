@@ -234,7 +234,7 @@ INCBIN "gfx/battle/balls.2bpp"
 
 _ShowLinkBattleParticipants:
 	call ClearBGPalettes
-	call LoadFontsExtra
+	call LoadFrame
 	hlcoord 2, 3
 	ld b, 9
 	ld c, 14

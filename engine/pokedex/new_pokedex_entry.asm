@@ -35,7 +35,7 @@ NewPokedexEntry:
 
 .ReturnFromDexRegistration:
 	call ClearTilemap
-	call LoadFontsExtra
+	call LoadFrame
 	call LoadStandardFont
 	farcall Pokedex_PlaceFrontpicTopLeftCorner
 	call WaitBGMap2

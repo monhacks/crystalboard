@@ -1,7 +1,7 @@
 LoadOverworldFont::
 	ld de, .OverworldFontGFX
 	ld hl, vTiles1
-	lb bc, BANK(.OverworldFontGFX), $80
+	lb bc, BANK(.OverworldFontGFX), 112
 	call Get2bpp
 	ld de, .OverworldFontSpaceGFX
 	ld hl, vTiles2 tile " "

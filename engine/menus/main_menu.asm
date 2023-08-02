@@ -210,7 +210,7 @@ ClearTilemapEtc:
 	xor a
 	ldh [hMapAnims], a
 	call ClearTilemap
-	call LoadFontsExtra
+	call LoadFrame
 	call LoadStandardFont
 	call ClearWindowData
 	ret
