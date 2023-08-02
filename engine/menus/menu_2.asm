@@ -127,9 +127,9 @@ StartMenu_PrintSafariGameStatus: ; unreferenced
 	ld de, .slash_500
 	call PlaceString
 	hlcoord 1, 3
-	ld de, .booru_ko
+	ld de, .ball
 	call PlaceString
-	hlcoord 5, 3
+	hlcoord 6, 3
 	ld de, wSafariBallsRemaining
 	lb bc, 1, 2
 	call PrintNum
@@ -138,9 +138,9 @@ StartMenu_PrintSafariGameStatus: ; unreferenced
 	ret
 
 .slash_500
-	db "／５００@"
-.booru_ko
-	db "ボール　　　こ@"
+	db "/500@"
+.ball
+	db "BALL@"
 
 StartMenu_DrawBugContestStatusBox:
 	hlcoord 0, 0
@@ -193,8 +193,6 @@ StartMenu_PrintBugContestStatus:
 	ld [wOptions], a
 	ret
 
-.BallsJPString: ; unreferenced
-	db "ボール　　　こ@"
 .CaughtString:
 	db "CAUGHT@"
 .BallsString:

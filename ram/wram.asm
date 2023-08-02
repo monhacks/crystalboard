@@ -1070,10 +1070,7 @@ wBattleTransitionCounter:: db
 wBattleTransitionSineWaveOffset::
 wBattleTransitionSpinQuadrant:: db
 
-NEXTU
-; bill's pc
-wUnusedBillsPCData:: ds 3
-
+if DEF(_DEBUG)
 NEXTU
 ; debug mon color picker
 wDebugColorRGBJumptableIndex:: db
@@ -1085,6 +1082,8 @@ NEXTU
 wDebugTilesetCurPalette:: db
 wDebugTilesetRGBJumptableIndex:: db
 wDebugTilesetCurColor:: db
+
+endc
 
 NEXTU
 ; stats screen

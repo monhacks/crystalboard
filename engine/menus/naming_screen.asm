@@ -2,7 +2,7 @@ DEF NAMINGSCREEN_CURSOR     EQU $7e
 
 DEF NAMINGSCREEN_BORDER     EQU "■" ; $60
 DEF NAMINGSCREEN_MIDDLELINE EQU "→" ; $eb
-DEF NAMINGSCREEN_UNDERLINE  EQU "<DOT>" ; $f2
+DEF NAMINGSCREEN_UNDERLINE  EQU "." ; $e8
 
 _NamingScreen:
 	call DisableSpriteUpdates
@@ -79,7 +79,7 @@ NamingScreen:
 	dw .Rival
 	dw .Mom
 	dw .Box
-	dw .Tomodachi
+	dw .Pokemon
 	dw .Pokemon
 	dw .Pokemon
 
@@ -179,16 +179,6 @@ NamingScreen:
 
 .BoxNameString:
 	db "BOX NAME?@"
-
-.Tomodachi:
-	hlcoord 3, 2
-	ld de, .oTomodachi_no_namae_sutoringu
-	call PlaceString
-	call .StoreSpriteIconParams
-	ret
-
-.oTomodachi_no_namae_sutoringu
-	db "おともだち　の　なまえは？@"
 
 .LoadSprite:
 	push de
@@ -715,8 +705,6 @@ AddDakutenToCharacter: ; unreferenced
 	ld a, [hl]
 	jr NamingScreen_LoadNextCharacter
 
-INCLUDE "data/text/unused_dakutens.asm"
-
 NamingScreen_DeleteCharacter:
 	ld hl, wNamingScreenCurNameLength
 	ld a, [hl]
@@ -881,9 +869,6 @@ INCBIN "gfx/naming_screen/cursor.2bpp"
 
 INCLUDE "data/text/name_input_chars.asm"
 
-NamingScreenGFX_End: ; unreferenced
-INCBIN "gfx/naming_screen/end.1bpp"
-
 NamingScreenGFX_MiddleLine:
 INCBIN "gfx/naming_screen/middle_line.1bpp"
 
@@ -967,9 +952,6 @@ INCBIN "gfx/naming_screen/mail.2bpp"
 	ld a, MAIL_MSG_LENGTH + 1
 	ld [wNamingScreenMaxNameLength], a
 	ret
-
-.PleaseWriteAMailString: ; unreferenced
-	db "メールを　かいてね@"
 
 .InitCharset:
 	call WaitTop

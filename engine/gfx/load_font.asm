@@ -50,9 +50,9 @@ _LoadFontsExtra1::
 	ld hl, vTiles2 tile "☎" ; $62
 	lb bc, BANK(PokegearPhoneIconGFX), 1
 	call Get2bppViaHDMA
-	ld de, FontExtra + 3 tiles ; "<BOLD_D>"
-	ld hl, vTiles2 tile "<BOLD_D>"
-	lb bc, BANK(FontExtra), 22 ; "<BOLD_D>" to "ぉ"
+	ld de, FontExtra ; "<PO>"
+	ld hl, vTiles2 tile "<PO>" ; $63
+	lb bc, BANK(FontExtra), 5 ; "<PO>" to "…"
 	call Get2bppViaHDMA
 	jr LoadFrame
 

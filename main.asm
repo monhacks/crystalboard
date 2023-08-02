@@ -222,7 +222,6 @@ INCLUDE "engine/events/sweet_scent.asm"
 INCLUDE "engine/events/sacred_ash.asm"
 INCLUDE "engine/pokemon/tempmon.asm"
 INCLUDE "engine/pokemon/types.asm"
-INCLUDE "engine/battle/getgen1trainerclassname.asm"
 INCLUDE "engine/pokemon/mon_stats.asm"
 INCLUDE "engine/link/init_list.asm"
 INCLUDE "engine/pokemon/experience.asm"
@@ -240,7 +239,9 @@ INCLUDE "engine/overworld/player_movement.asm"
 INCLUDE "engine/events/engine_flags.asm"
 INCLUDE "engine/overworld/variables.asm"
 INCLUDE "data/text/battle.asm"
+if DEF(_DEBUG)
 INCLUDE "engine/debug/color_picker.asm"
+endc
 
 
 SECTION "bank21", ROMX
@@ -431,11 +432,6 @@ INCLUDE "engine/events/diploma.asm"
 INCLUDE "engine/pokedex/pokedex_3.asm"
 INCLUDE "engine/events/catch_tutorial_input.asm"
 INCLUDE "engine/pokegear/townmap_convertlinebreakcharacters.asm"
-
-
-SECTION "European Mail", ROMX
-
-INCLUDE "engine/pokemon/european_mail.asm"
 
 
 SECTION "Debug Room", ROMX
