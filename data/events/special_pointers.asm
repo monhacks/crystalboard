@@ -53,11 +53,10 @@ SpecialsPointers::
 	add_special CardFlip
 	add_special UnusedMemoryGame ; unused
 	add_special ClearBGPalettesBufferScreen ; unused
-	add_special FadeOutPalettes
-	add_special BattleTowerFade
-	add_special FadeBlackQuickly
-	add_special FadeInPalettes
-	add_special FadeInQuickly
+	add_special FadeOutPalettesToWhite
+	add_special FadeOutPalettesToBlack
+	add_special FadeInPalettesFromWhite
+	add_special FadeInPalettesFromBlack
 	add_special ReloadSpritesNoPalettes ; bank 0
 	add_special ClearBGPalettes ; bank 0
 	add_special UpdateTimePals ; bank 0

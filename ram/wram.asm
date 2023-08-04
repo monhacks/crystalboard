@@ -2621,8 +2621,6 @@ wOBPals2:: ds 8 palettes
 wLYOverrides:: ds SCREEN_HEIGHT_PX
 wLYOverridesEnd::
 
-	ds 1
-
 wMagnetTrain:: ; used only for BANK(wMagnetTrain)
 wMagnetTrainDirection:: db
 wMagnetTrainInitPosition:: db
@@ -2630,7 +2628,10 @@ wMagnetTrainHoldPosition:: db
 wMagnetTrainFinalPosition:: db
 wMagnetTrainPlayerSpriteInitX:: db
 
-	ds 106
+ ; Used by FadeInPalettesFromWhite
+wBGPalsRegularWhiteColors:: ds 8 * PAL_COLOR_SIZE
+
+	ds 91
 
 	align 8
 wLYOverridesBackup:: ds SCREEN_HEIGHT_PX

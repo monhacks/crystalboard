@@ -111,45 +111,44 @@ _UpdateTimePals::
 	call DmgToCgbTimePals
 	ret
 
-FadeInPalettes::
+FadeInPalettesFromWhite::
+; fades from white to normal palettes in four steps
+; all palettes use white color of Pal0 before step 3
+	call BackupWhiteColorFromBGPals1
+	call FillWhiteBGColor
 	ld c, $12
 	call GetTimePalFade
-	ld b, $4
+	ld b, $2
+	call ConvertTimePalsDecHL
+	call RestoreWhiteColorToBGPals1
+	ld c, $c
+	call GetTimePalFade
+	ld b, $2
 	call ConvertTimePalsDecHL
 	ret
 
-FadeOutPalettes::
-	call FillWhiteBGColor
+FadeOutPalettesToWhite::
+; fades from normal palettes to white in four steps
+; all palettes use white color of Pal0 after step 2
 	ld c, $9
 	call GetTimePalFade
-	ld b, $4
+	ld b, $2
+	call ConvertTimePalsIncHL
+	call FillWhiteBGColor
+	ld c, $f
+	call GetTimePalFade
+	ld b, $2
 	call ConvertTimePalsIncHL
 	ret
 
-BattleTowerFade:
-	call FillWhiteBGColor
-	ld c, $9
-	call GetTimePalFade
-	ld b, $4
-.loop
-	call DmgToCgbTimePals
-	inc hl
-	inc hl
-	inc hl
-	ld c, $7
-	call DelayFrames
-	dec b
-	jr nz, .loop
-	ret
-
-FadeInQuickly:
+FadeInPalettesFromBlack:
 	ld c, $0
 	call GetTimePalFade
 	ld b, $4
 	call ConvertTimePalsIncHL
 	ret
 
-FadeBlackQuickly:
+FadeOutPalettesToBlack:
 	ld c, $9
 	call GetTimePalFade
 	ld b, $4
@@ -157,6 +156,7 @@ FadeBlackQuickly:
 	ret
 
 FillWhiteBGColor:
+; copy white palette of wBGPals1 Pal0 into white palette of wBGPals1 Pal1-Pal6
 	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wBGPals1)
@@ -183,6 +183,60 @@ endr
 	pop af
 	ldh [rSVBK], a
 	ret
+
+BackupWhiteColorFromBGPals1:
+	ldh a, [rSVBK]
+	push af
+	ld a, BANK(wBGPals1)
+	ldh [rSVBK], a
+
+	ld hl, wBGPals1
+	ld de, wBGPalsRegularWhiteColors
+	ld c, 8
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hli]
+	ld [de], a
+	inc de
+rept PALETTE_SIZE - 1 * PAL_COLOR_SIZE
+	inc hl
+endr
+	dec c
+	jr nz, .loop
+
+	pop af
+	ldh [rSVBK], a
+	ret
+
+RestoreWhiteColorToBGPals1:
+	ldh a, [rSVBK]
+	push af
+	ld a, BANK(wBGPals1)
+	ldh [rSVBK], a
+
+	ld hl, wBGPalsRegularWhiteColors
+	ld de, wBGPals1
+	ld c, 8
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hli]
+	ld [de], a
+	inc de
+rept PALETTE_SIZE - 1 * PAL_COLOR_SIZE
+	inc de
+endr
+	dec c
+	jr nz, .loop
+
+	pop af
+	ldh [rSVBK], a
+	ret
+
+
 
 ReplaceTimeOfDayPals:
 	ld a, [wMapTimeOfDay]

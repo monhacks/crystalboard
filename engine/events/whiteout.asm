@@ -9,7 +9,7 @@ OverworldWhiteoutScript::
 Script_Whiteout:
 	writetext .WhitedOutText
 	waitbutton
-	special FadeOutPalettes
+	special FadeOutPalettesToWhite
 	pause 40
 	special HealParty
 	checkflag ENGINE_BUG_CONTEST_TIMER

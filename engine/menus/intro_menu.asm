@@ -670,15 +670,6 @@ NamePlayer:
 .Kris:
 	db "KRIS@@@@@@@"
 
-GSShowPlayerNamingChoices: ; unreferenced
-	call LoadMenuHeader
-	call VerticalMenu
-	ld a, [wMenuCursorY]
-	dec a
-	call CopyNameFromMenu
-	call CloseWindow
-	ret
-
 StorePlayerName:
 	ld a, "@"
 	ld bc, NAME_LENGTH

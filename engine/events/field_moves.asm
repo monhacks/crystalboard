@@ -10,14 +10,14 @@ PlayWhirlpoolSound:
 	ret
 
 BlindingFlash:
-	farcall FadeOutPalettes
+	farcall FadeOutPalettesToWhite
 	ld hl, wStatusFlags
 	set STATUSFLAGS_FLASH_F, [hl]
 	farcall ReplaceTimeOfDayPals
 	farcall UpdateTimeOfDayPal
 	ld b, CGB_MAPPALS
 	call GetCGBLayout
-	farcall FadeInPalettes
+	farcall FadeInPalettesFromWhite
 	ret
 
 ShakeHeadbuttTree:

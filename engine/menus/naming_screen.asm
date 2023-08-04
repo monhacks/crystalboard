@@ -1,8 +1,8 @@
 DEF NAMINGSCREEN_CURSOR     EQU $7e
 
-DEF NAMINGSCREEN_BORDER     EQU "■" ; $60
-DEF NAMINGSCREEN_MIDDLELINE EQU "→" ; $eb
-DEF NAMINGSCREEN_UNDERLINE  EQU "." ; $e8
+DEF NAMINGSCREEN_BORDER     EQU "■" ; $ba
+DEF NAMINGSCREEN_MIDDLELINE EQU "▲" ; $bb
+DEF NAMINGSCREEN_UNDERLINE  EQU "☎" ; $bc
 
 _NamingScreen:
 	call DisableSpriteUpdates
@@ -832,7 +832,7 @@ LoadNamingScreenGFX:
 	lb bc, BANK(NamingScreenGFX_UnderLine), 1
 	call Get1bpp
 
-	ld de, vTiles2 tile NAMINGSCREEN_BORDER
+	ld de, vTiles0 tile NAMINGSCREEN_BORDER
 	ld hl, NamingScreenGFX_Border
 	ld bc, 1 tiles
 	ld a, BANK(NamingScreenGFX_Border)
