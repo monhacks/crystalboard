@@ -236,6 +236,8 @@ ApplyCleanseTagEffectOnEncounterRate::
 	ld hl, wPartyMon1Item
 	ld de, PARTYMON_STRUCT_LENGTH
 	ld a, [wPartyCount]
+	and a
+	ret z
 	ld c, a
 .loop
 	ld a, [hl]

@@ -351,20 +351,20 @@ CopyWarpData::
 	ret
 
 CheckOutdoorMap::
-	cp ROUTE
-	ret z
-	cp TOWN
-	ret
+	cp INDOOR_ENVIRONMENT
+	jr c, .outdoor
+	ret ; nz
+.outdoor
+	xor a
+	ret ; z
 
 CheckIndoorMap::
-	cp INDOOR
-	ret z
-	cp CAVE
-	ret z
-	cp DUNGEON
-	ret z
-	cp GATE
-	ret
+	cp INDOOR_ENVIRONMENT
+	jr nc, .indoor
+	ret ; nz
+.indoor
+	xor a
+	ret ; z
 
 LoadMapAttributes::
 	call CopyMapPartialAndAttributes
@@ -1912,7 +1912,6 @@ ExitAllMenus::
 FinishExitMenu::
 	ld b, CGB_MAPPALS
 	call GetCGBLayout
-	farcall LoadOW_BGPal7
 	call WaitBGMap2
 	farcall FadeInPalettes
 	call EnableSpriteUpdates
@@ -1934,7 +1933,6 @@ ReturnToMapWithSpeechTextbox::
 	call WaitBGMap2
 	ld b, CGB_MAPPALS
 	call GetCGBLayout
-	farcall LoadOW_BGPal7
 	call UpdateTimePals
 	call DelayFrame
 	ld a, $1

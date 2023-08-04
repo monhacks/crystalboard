@@ -762,9 +762,9 @@ EscapeRopeOrDig:
 
 .CheckCanDig:
 	call GetMapEnvironment
-	cp CAVE
+	cp INDOOR_CAVE
 	jr z, .incave
-	cp DUNGEON
+	cp INDOOR_ICE_CAVE
 	jr z, .incave
 .fail
 	ld a, $2
@@ -1677,13 +1677,8 @@ BikeFunction:
 
 .CheckEnvironment:
 	call GetMapEnvironment
-	call CheckOutdoorMap
-	jr z, .ok
-	cp CAVE
-	jr z, .ok
-	cp GATE
-	jr z, .ok
-	jr .nope
+	cp INDOOR_BUILDING
+	jr z, .nope
 
 .ok
 	call GetPlayerTile

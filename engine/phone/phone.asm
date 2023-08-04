@@ -285,10 +285,8 @@ CheckSpecialPhoneCall::
 
 SpecialCallOnlyWhenOutside:
 	ld a, [wEnvironment]
-	cp TOWN
-	jr z, .outside
-	cp ROUTE
-	jr z, .outside
+	cp INDOOR_ENVIRONMENT
+	jr c, .outside
 	xor a
 	ret
 

@@ -404,7 +404,7 @@ MagnetTrain_Jumptable_FirstRunThrough:
 	ld a, [wTimeOfDay]
 	maskbits NUM_DAYTIMES
 	ld [wTimeOfDayPal], a
-	ld a, TOWN
+	ld a, OUTDOOR_GRASSY
 	ld [wEnvironment], a
 	ld b, CGB_MAPPALS
 	call GetCGBLayout

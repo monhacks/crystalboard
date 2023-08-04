@@ -628,12 +628,12 @@ INCLUDE "data/pokemon/palettes.asm"
 INCLUDE "data/trainers/palettes.asm"
 
 LoadMapPals:
-	farcall LoadSpecialMapPalette ; also handles darkness palettes
+	call LoadDarknessPaletteIfDark ; also handles darkness palettes
 	jr c, .got_pals
 
 	; Which palette group is based on whether we're outside or inside
 	ld a, [wEnvironment]
-	and 7
+	maskbits NUM_ENVIRONMENTS + 1
 	ld e, a
 	ld d, 0
 	ld hl, EnvironmentColorsPointers
@@ -713,9 +713,8 @@ LoadMapPals:
 	call FarCopyWRAM
 
 	ld a, [wEnvironment]
-	cp TOWN
-	jr z, .outside
-	cp ROUTE
+	cp INDOOR_ENVIRONMENT
+	jr c, .outside
 	ret nz
 .outside
 	ld a, [wMapGroup]
@@ -740,6 +739,30 @@ endr
 	call FarCopyWRAM
 	ret
 
+LoadDarknessPaletteIfDark:
+	call GetMapTimeOfDay
+	bit IN_DARKNESS_F, a
+	jr z, .do_nothing
+	ld a, [wStatusFlags]
+	bit STATUSFLAGS_FLASH_F, a
+	jr nz, .do_nothing
+
+.darkness
+	call LoadDarknessPalette
+	scf
+	ret
+
+.do_nothing
+	and a
+	ret
+
+LoadDarknessPalette:
+	ld a, BANK(wBGPals1)
+	ld de, wBGPals1
+	ld hl, DarknessPalette
+	ld bc, 8 palettes
+	jp FarCopyWRAM
+
 INCLUDE "data/maps/environment_colors.asm"
 
 PartyMenuBGMobilePalette:
@@ -747,6 +770,9 @@ INCLUDE "gfx/stats/party_menu_bg_mobile.pal"
 
 PartyMenuBGPalette:
 INCLUDE "gfx/stats/party_menu_bg.pal"
+
+DarknessPalette:
+INCLUDE "gfx/tilesets/bg_tiles_darkness.pal"
 
 TilesetBGPalette:
 INCLUDE "gfx/tilesets/bg_tiles.pal"

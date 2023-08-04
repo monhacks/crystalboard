@@ -31,7 +31,6 @@ ReanchorBGMap_NoOAMUpdate::
 	ld a, HIGH(vBGMap1)
 	call .LoadBGMapAddrIntoHRAM
 	call _OpenAndCloseMenu_HDMATransferTilemapAndAttrmap
-	farcall LoadOW_BGPal7
 	farcall ApplyPals
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a

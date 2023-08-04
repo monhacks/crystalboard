@@ -130,11 +130,7 @@ CheckUpdatePlayerSprite:
 	cp PLAYER_SURF_PIKA
 	jr z, .surfing
 	call GetMapEnvironment
-	cp INDOOR
-	jr z, .no_biking
-	cp ENVIRONMENT_5
-	jr z, .no_biking
-	cp DUNGEON
+	cp INDOOR_BUILDING
 	jr z, .no_biking
 	jr .nope
 .no_biking

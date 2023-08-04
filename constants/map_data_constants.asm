@@ -20,13 +20,15 @@ DEF MAP_LENGTH EQU _RS
 ; map environments (wEnvironment)
 ; EnvironmentColorsPointers indexes (see data/maps/environment_colors.asm)
 	const_def 1
-	const TOWN
-	const ROUTE
-	const INDOOR
-	const CAVE
-	const ENVIRONMENT_5
-	const GATE
-	const DUNGEON
+	const OUTDOOR_GRASSY
+	const OUTDOOR_MOUNTAIN
+	const OUTDOOR_COAST
+	const OUTDOOR_SEA
+DEF INDOOR_ENVIRONMENT EQU const_value
+	const INDOOR_FOREST
+	const INDOOR_CAVE
+	const INDOOR_ICE_CAVE
+	const INDOOR_BUILDING
 DEF NUM_ENVIRONMENTS EQU const_value - 1
 
 ; map palettes (wEnvironment)

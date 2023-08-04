@@ -1109,7 +1109,7 @@ RandomEncounter::
 
 	call CheckWildEncounterCooldown
 	jr c, .nope
-	call CanUseSweetScent
+	call CanEncounterWildMonInThisTile
 	jr nc, .nope
 	ld hl, wStatusFlags2
 	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, [hl]
@@ -1149,15 +1149,13 @@ WildBattleScript:
 	reloadmapafterbattle
 	end
 
-CanUseSweetScent::
+CanEncounterWildMonInThisTile::
 	ld hl, wStatusFlags
 	bit STATUSFLAGS_NO_WILD_ENCOUNTERS_F, [hl]
 	jr nz, .no
 	ld a, [wEnvironment]
-	cp CAVE
-	jr z, .ice_check
-	cp DUNGEON
-	jr z, .ice_check
+	cp INDOOR_ENVIRONMENT
+	jr nc, .ice_check
 	farcall CheckGrassCollision
 	jr nc, .no
 

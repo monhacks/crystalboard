@@ -1,16 +1,3 @@
-LoadOW_BGPal7::
-	ld hl, Palette_TextBG7
-	ld de, wBGPals1 palette PAL_BG_TEXT
-	ld bc, 1 palettes
-	ld a, BANK(wBGPals1)
-	call FarCopyWRAM
-	ret
-
-Palette_TextBG7:
-INCLUDE "gfx/font/bg_text.pal"
-
-INCLUDE "engine/tilesets/tileset_palettes.asm"
-
 _InitMG_Mobile_LinkTradePalMap:
 	hlcoord 0, 0, wAttrmap
 	lb bc, 16, 2

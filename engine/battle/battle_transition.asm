@@ -215,12 +215,8 @@ StartTrainerBattle_DetermineWhichAnimation:
 	set TRANS_STRONGER_F, e
 .not_stronger
 	ld a, [wEnvironment]
-	cp CAVE
-	jr z, .cave
-	cp ENVIRONMENT_5
-	jr z, .cave
-	cp DUNGEON
-	jr z, .cave
+	cp INDOOR_ENVIRONMENT
+	jr nc, .cave
 	set TRANS_NO_CAVE_F, e
 .cave
 	ld hl, .StartingPoints
