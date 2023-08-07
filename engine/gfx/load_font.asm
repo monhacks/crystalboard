@@ -44,7 +44,7 @@ _LoadFrame::
 	ld hl, vTiles0 tile "┌" ; $f0
 	lb bc, BANK(Frames), TEXTBOX_FRAME_TILES ; "┌" to "┘"
 	call Get1bppViaHDMA
-	ld hl, vTiles2 tile " " ; $f5
+	ld hl, vTiles2 tile " " ; $7f
 	ld de, TextboxSpaceGFX
 	lb bc, BANK(TextboxSpaceGFX), 1
 	call Get1bppViaHDMA

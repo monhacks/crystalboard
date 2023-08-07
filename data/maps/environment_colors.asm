@@ -1,7 +1,6 @@
 EnvironmentColorsPointers:
 ; entries correspond to environment constants (see constants/map_data_constants.asm)
 	table_width 2, EnvironmentColorsPointers
-	dw .GrassyColors   ; unused
 	dw .GrassyColors   ; OUTDOOR_GRASSY
 	dw .MountainColors ; OUTDOOR_MOUNTAIN
 	dw .CoastColors    ; OUTDOOR_COAST
@@ -10,7 +9,7 @@ EnvironmentColorsPointers:
 	dw .CaveColors     ; INDOOR_CAVE
 	dw .IceCaveColors  ; INDOOR_ICE_CAVE
 	dw .BuildingColors ; INDOOR_BUILDING
-	assert_table_length NUM_ENVIRONMENTS + 1
+	assert_table_length NUM_ENVIRONMENTS
 
 ; Valid indices: $00 - $35 (see gfx/tilesets/bg_tiles.pal)
 ; assumes that maps with an environment of INDOOR_CAVE and INDOOR_ICE_CAVE always have PALETTE_NITE

@@ -127,6 +127,14 @@ SpeechTextbox::
 	ld b, TEXTBOX_INNERH
 	ld c, TEXTBOX_INNERW
 	jp Textbox
+	; decoord TEXTBOX_X, TEXTBOX_Y
+	; lb bc, 4, SCREEN_WIDTH - 2
+	; push bc
+	; push de
+	; farcall OverworldTextbox
+	; pop hl
+	; pop bc
+	; jp TextboxPalette
 
 RadioTerminator::
 	ld hl, .stop

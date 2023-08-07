@@ -48,6 +48,10 @@ LoadFrame::
 	farcall _LoadFrame
 	ret
 
+LoadOverworldFontAndFrame::
+	farcall _LoadOverworldFontAndFrame
+	ret
+
 DecompressRequest2bpp::
 	push de
 	ld a, BANK(sScratch)

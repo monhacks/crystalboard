@@ -966,15 +966,7 @@ wAttrmap::
 	ds SCREEN_WIDTH * SCREEN_HEIGHT
 wAttrmapEnd::
 
-UNION
-; addresses dealing with serial comms
-wcf42:: db
-wcf44:: db
-wcf45:: db
-
-NEXTU
 wTileAnimBuffer:: ds 1 tiles
-ENDU
 
 ; link data
 UNION

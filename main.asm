@@ -385,6 +385,7 @@ INCLUDE "gfx/emotes.asm"
 INCLUDE "engine/overworld/warp_connection.asm"
 INCLUDE "engine/battle/used_move_text.asm"
 INCLUDE "engine/gfx/load_overworld_font.asm"
+INCLUDE "engine/gfx/overworld_textbox.asm"
 
 
 SECTION "Title", ROMX

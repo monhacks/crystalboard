@@ -19,7 +19,7 @@ DEF MAP_LENGTH EQU _RS
 
 ; map environments (wEnvironment)
 ; EnvironmentColorsPointers indexes (see data/maps/environment_colors.asm)
-	const_def 1
+	const_def
 	const OUTDOOR_GRASSY
 	const OUTDOOR_MOUNTAIN
 	const OUTDOOR_COAST
@@ -29,9 +29,9 @@ DEF INDOOR_ENVIRONMENT EQU const_value
 	const INDOOR_CAVE
 	const INDOOR_ICE_CAVE
 	const INDOOR_BUILDING
-DEF NUM_ENVIRONMENTS EQU const_value - 1
+DEF NUM_ENVIRONMENTS EQU const_value
 
-; map palettes (wEnvironment)
+; map palettes (wMapTimeOfDay)
 	const_def
 	const PALETTE_AUTO
 	const PALETTE_DAY

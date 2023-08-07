@@ -1537,22 +1537,6 @@ endr
 	dbsprite 19, 4, 0, 7, $07, 0
 	db -1
 
-BillsPC_FillBox: ; unreferenced
-.row
-	push bc
-	push hl
-.col
-	ld [hli], a
-	dec c
-	jr nz, .col
-	pop hl
-	ld bc, SCREEN_WIDTH
-	add hl, bc
-	pop bc
-	dec b
-	jr nz, .row
-	ret
-
 BillsPC_CheckSpaceInDestination:
 ; If moving within a box, no need to be here.
 	ld hl, wBillsPC_LoadedBox

@@ -41,7 +41,7 @@ CloseText::
 	call UpdatePlayerSprite
 	xor a
 	ldh [hBGMapMode], a
-	farcall LoadOverworldFont
+	call LoadOverworldFontAndFrame
 	ret
 
 OpenText::
