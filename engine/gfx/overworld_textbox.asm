@@ -17,7 +17,7 @@
 OW_TEXTBOX_FRAME_MIN_HEIGHT EQU 4
 OW_TEXTBOX_FRAME_MIN_WIDTH  EQU 6
 
-OverworldTextbox::
+_OverworldTextbox::
 ; Draw a textbox at de with room for b rows and c columns using the 2bpp overworld frame tiles.
 	ld a, b
 	cp OW_TEXTBOX_FRAME_MIN_HEIGHT - 2
@@ -32,30 +32,41 @@ OverworldTextbox::
 	ld h, d
 	ld l, e
 ; top row
+	push hl
 	ld [hl], OW_TEXTBOX_FRAME_TOP_LEFT_CORNER
 	inc hl
 	ld e, 0
 	call .GetTileArrangementPointer
 	call .CopyHorizontalTiles
 	ld [hl], OW_TEXTBOX_FRAME_TOP_RIGHT_CORNER
+	pop hl
 ; left column
-	inc hl
 	push hl
+	ld de, SCREEN_WIDTH
+	add hl, de
 	ld e, 4
 	call .GetTileArrangementPointer
 	call .CopyVerticalTiles
 	pop hl
 ; right column
+	ld de, SCREEN_WIDTH
+	add hl, de
 	push hl
-	ld de, SCREEN_WIDTH - 1
+	ld e, c
+	ld d, 0
+	inc de
 	add hl, de
 	ld e, 6
 	call .GetTileArrangementPointer
 	call .CopyVerticalTiles
 ; bottom row
 	; we are in the bottom right corner, so first go back to the start of the line
-	ld de, -(SCREEN_WIDTH - 1)
-	add hl, de
+	ld a, c
+.loop
+	dec hl
+	dec a
+	jr nz, .loop
+	dec hl
 	ld [hl], OW_TEXTBOX_FRAME_BOTTOM_LEFT_CORNER
 	inc hl
 	ld e, 2
@@ -64,6 +75,7 @@ OverworldTextbox::
 	ld [hl], OW_TEXTBOX_FRAME_BOTTOM_RIGHT_CORNER
 ; background
 	pop hl
+	; we are in the left column, second line
 	inc hl
 	ld a, OW_TEXTBOX_FRAME_BACKGROUND
 	jp FillBoxWithByte
@@ -154,6 +166,8 @@ ENDM
 .TilesTop1:
 	ow_textbox_tiles TOP_1, TOP_1, TOP_2, TOP_2
 .TilesBottom1:
+	; to support textboxes with a prompt cursor, the last two tiles before the bottom right corner
+	; must be the same, as the previous tile is copied into the cursor tile to clear the cursor.
 	ow_textbox_tiles BOTTOM_1, BOTTOM_1, BOTTOM_2, BOTTOM_2
 .TilesLeft1:
 	ow_textbox_tiles LEFT_1, LEFT_2
