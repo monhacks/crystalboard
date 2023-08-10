@@ -218,7 +218,7 @@ Pokedex_InitMainScreen:
 	ld a, 7
 	ld [wDexListingHeight], a
 	call Pokedex_PrintListing
-	call Pokedex_SetBGMapMode4
+	call Pokedex_SetBGMapMode4And3
 	call Pokedex_ResetBGMapMode
 	call Pokedex_DrawMainScreenBG
 	ld a, POKEDEX_SCX
@@ -713,7 +713,7 @@ Pokedex_InitSearchResultsScreen:
 	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call ByteFill
-	call Pokedex_SetBGMapMode4
+	call Pokedex_SetBGMapMode4And3
 	call Pokedex_ResetBGMapMode
 	farcall DrawPokedexSearchResultsWindow
 	call Pokedex_PlaceSearchResultsTypeStrings
@@ -2519,15 +2519,14 @@ _NewPokedexEntry:
 	call PlayMonCry
 	ret
 
-Pokedex_SetBGMapMode3:
-	ld a, $3
+Pokedex_SetBGMapMode4And3:
+	ld a, $4
 	ldh [hBGMapMode], a
 	ld c, 4
 	call DelayFrames
-	ret
 
-Pokedex_SetBGMapMode4:
-	ld a, $4
+Pokedex_SetBGMapMode3:
+	ld a, $3
 	ldh [hBGMapMode], a
 	ld c, 4
 	call DelayFrames
