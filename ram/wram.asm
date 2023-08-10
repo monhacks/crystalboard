@@ -972,8 +972,10 @@ wTileAnimBuffer:: ds 1 tiles
 UNION
 wOtherPlayerLinkMode:: db
 wOtherPlayerLinkAction:: db
+	ds 3
 wPlayerLinkAction:: db
 wUnusedLinkAction:: db
+	ds 3
 NEXTU
 wLinkReceivedSyncBuffer:: ds 5
 wLinkPlayerSyncBuffer:: ds 5
@@ -1286,6 +1288,7 @@ SECTION UNION "Miscellaneous WRAM 1", WRAMX
 wBufferMonNickname:: ds MON_NAME_LENGTH
 wBufferMonOT:: ds NAME_LENGTH
 wBufferMon:: party_struct wBufferMon
+	ds 8
 wMonOrItemNameBuffer:: ds NAME_LENGTH
 	ds NAME_LENGTH
 
@@ -1320,6 +1323,7 @@ wBugContestResults::
 	bugcontestwinner wBugContestThirdPlace
 wBugContestWinnersEnd::
 	bugcontestwinner wBugContestTemp
+	ds 4
 wBugContestWinnerName:: ds NAME_LENGTH
 
 
@@ -1367,6 +1371,7 @@ wNextRadioLine:: db
 wRadioTextDelay:: db
 wNumRadioLinesPrinted:: db
 wOaksPKMNTalkSegmentCounter:: db
+	ds 5
 wRadioText:: ds 2 * SCREEN_WIDTH
 
 
@@ -1406,6 +1411,7 @@ wPrintedUnownTileDest:: ds 1 tiles
 SECTION UNION "Miscellaneous WRAM 1", WRAMX
 
 ; trainer HUD data
+	ds 1
 wPlaceBallsDirection:: db
 wTrainerHUDTiles:: ds 4
 
@@ -1454,6 +1460,7 @@ SECTION UNION "Miscellaneous WRAM 1", WRAMX
 UNION
 wBoxNameBuffer:: ds BOX_NAME_LENGTH
 NEXTU
+	ds 1
 wBillsPCTempListIndex:: db
 wBillsPCTempBoxCount:: db
 ENDU
@@ -1518,6 +1525,12 @@ wDebugColorIsShiny:: db
 wDebugColorCurTMHM:: db
 
 
+SECTION UNION "Miscellaneous WRAM 1", WRAMX
+
+; Every previous SECTION UNION takes up 60 or fewer bytes,
+; except the initial "mon buffer" one.
+	ds 60
+
 UNION
 ; trainer data
 wSeenTrainerBank:: db
@@ -1572,6 +1585,7 @@ wCurCoordEvent::
 wCurCoordEventSceneID:: db
 wCurCoordEventMapY:: db
 wCurCoordEventMapX:: db
+	ds 1
 wCurCoordEventScriptAddr:: dw
 
 NEXTU
@@ -1603,10 +1617,12 @@ wFacingDirection:: db
 wWalkingX:: db
 wWalkingY:: db
 wWalkingTile:: db
+	ds 6
 wPlayerTurningDirection:: db
 
 NEXTU
 ; std script buffer
+	ds 1
 wJumpStdScriptBuffer:: ds 3
 
 NEXTU
@@ -1618,10 +1634,12 @@ wAvailableCallers:: ds CONTACT_LIST_SIZE
 
 NEXTU
 ; phone caller contact
+	ds 1
 wCallerContact:: ds PHONE_CONTACT_SIZE
 
 NEXTU
 ; backup menu data
+	ds 7
 wMenuCursorPositionBackup:: db
 wMenuScrollPositionBackup:: db
 
