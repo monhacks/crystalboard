@@ -52,7 +52,7 @@ LearnMove:
 
 	call GetMoveName
 	ld hl, Text_1_2_and_Poof ; 1, 2 and…
-	call PrintText
+	call PrintText1bpp
 	pop de
 	pop hl
 
@@ -103,25 +103,25 @@ LearnMove:
 
 .cancel
 	ld hl, StopLearningMoveText
-	call PrintText
+	call PrintText1bpp
 	call YesNoBox
 	jp c, .loop
 
 	ld hl, DidNotLearnMoveText
-	call PrintText
+	call PrintText1bpp
 	ld b, 0
 	ret
 
 .learned
 	ld hl, LearnedMoveText
-	call PrintText
+	call PrintText1bpp
 	ld b, 1
 	ret
 
 ForgetMove:
 	push hl
 	ld hl, AskForgetMoveText
-	call PrintText
+	call PrintText1bpp
 	call YesNoBox
 	pop hl
 	ret c
@@ -135,11 +135,11 @@ ForgetMove:
 .loop
 	push hl
 	ld hl, MoveAskForgetText
-	call PrintText
+	call PrintText1bpp
 	hlcoord 5, 2
 	ld b, NUM_MOVES * 2
 	ld c, MOVE_NAME_LENGTH
-	call Textbox
+	call Textbox1bpp
 	hlcoord 5 + 2, 2 + 2
 	ld a, SCREEN_WIDTH * 2
 	ld [wListMovesLineSpacing], a
@@ -192,7 +192,7 @@ ForgetMove:
 
 .hmmove
 	ld hl, MoveCantForgetHMText
-	call PrintText
+	call PrintText1bpp
 	pop hl
 	jr .loop
 

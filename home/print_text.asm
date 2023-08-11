@@ -15,7 +15,7 @@ PrintLetterDelay::
 
 ; non-scrolling text?
 	ld a, [wTextboxFlags]
-	bit NO_TEXT_DELAY_F, a
+	bit TEXT_DELAY_F, a
 	ret z
 
 	push hl
@@ -102,14 +102,14 @@ PrintNum::
 	homecall _PrintNum
 	ret
 
-FarPrintText::
+FarPrintText1bpp::
 	ldh [hTempBank], a
 	ldh a, [hROMBank]
 	push af
 	ldh a, [hTempBank]
 	rst Bankswitch
 
-	call PrintText
+	call PrintText1bpp
 
 	pop af
 	rst Bankswitch

@@ -620,7 +620,6 @@ FlyFunction:
 	farcall RespawnPlayer
 	call DelayFrame
 	call UpdatePlayerSprite
-	call LoadOverworldFontAndFrame
 	ret
 
 WaterfallFunction:

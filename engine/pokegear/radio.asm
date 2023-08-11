@@ -129,7 +129,7 @@ PrintRadioLine:
 	cp 2
 	jr nz, .print
 	bccoord 1, 16
-	call PlaceHLTextAtBC
+	call PrintHLTextAtBC
 	jr .skip
 .print
 	call PrintTextboxText
@@ -538,10 +538,10 @@ OaksPKMNTalk9:
 OaksPKMNTalk10:
 	farcall RadioMusicRestartPokemonChannel
 	ld hl, OPT_RestartText
-	call PrintText
+	call PrintText1bpp
 	call WaitBGMap
 	ld hl, OPT_PokemonChannelText
-	call PrintText
+	call PrintText1bpp
 	ld a, OAKS_POKEMON_TALK_11
 	ld [wCurRadioLine], a
 	ld a, 100
@@ -598,7 +598,7 @@ OaksPKMNTalk14:
 	ld de, MUSIC_POKEMON_TALK
 	callfar RadioMusicRestartDE
 	ld hl, .terminator
-	call PrintText
+	call PrintText1bpp
 	ld a, OAKS_POKEMON_TALK_4
 	ld [wNextRadioLine], a
 	xor a
@@ -858,7 +858,7 @@ BenFernMusic7:
 
 StartPokemonMusicChannel:
 	call RadioTerminator
-	call PrintText
+	call PrintText1bpp
 	ld de, MUSIC_POKEMON_MARCH
 	call GetWeekday
 	and 1
@@ -1792,7 +1792,7 @@ StartRadioStation:
 	and a
 	ret nz
 	call RadioTerminator
-	call PrintText
+	call PrintText1bpp
 	ld hl, RadioChannelSongs
 	ld a, [wCurRadioLine]
 	ld c, a

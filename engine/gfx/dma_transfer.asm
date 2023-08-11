@@ -57,7 +57,6 @@ ReloadMapPart::
 	ret
 
 OpenAndCloseMenu_HDMATransferTilemapAndAttrmap::
-; OpenText
 	ld hl, .Function
 	jp CallInSafeGFXMode
 

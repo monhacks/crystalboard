@@ -1188,7 +1188,8 @@ wMenuCursorY:: db
 wMenuCursorX:: db
 wCursorOffCharacter:: db
 wCursorCurrentTile:: dw
-	ds 3
+wMenuBoxUse2bppFrame:: db
+	ds 2
 wMoreMenuDataEnd::
 
 wOverworldDelay:: db

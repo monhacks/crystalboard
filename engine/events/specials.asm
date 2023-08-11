@@ -201,7 +201,7 @@ CheckCoinsAndCoinCase:
 	ld hl, .NoCoinCaseText
 
 .print
-	call PrintText
+	call PrintText2bpp
 	scf
 	ret
 

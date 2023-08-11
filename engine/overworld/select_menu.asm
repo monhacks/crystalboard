@@ -4,7 +4,7 @@ SelectMenu::
 	jp UseRegisteredItem
 
 .NotRegistered:
-	call OpenText
+	call OpenText2bpp
 	ld b, BANK(MayRegisterItemText)
 	ld hl, MayRegisterItemText
 	call MapTextbox
@@ -125,14 +125,14 @@ UseRegisteredItem:
 	dw .Overworld
 
 .NoFunction:
-	call OpenText
+	call OpenText2bpp
 	call CantUseItem
 	call CloseText
 	and a
 	ret
 
 .Current:
-	call OpenText
+	call OpenText2bpp
 	call DoItemEffect
 	call CloseText
 	and a

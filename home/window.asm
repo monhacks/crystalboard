@@ -1,13 +1,14 @@
 RefreshScreen::
-	call ClearWindowData
+	call ClearMenuAndWindowData
 	ldh a, [hROMBank]
 	push af
-	ld a, BANK(ReanchorBGMap_NoOAMUpdate) ; aka BANK(LoadFonts_NoOAMUpdate)
+	ld a, BANK(ReanchorBGMap_NoOAMUpdate) ; aka BANK(LoadFont_NoOAMUpdate)
 	rst Bankswitch
 
 	call ReanchorBGMap_NoOAMUpdate
 	call _OpenAndCloseMenu_HDMATransferTilemapAndAttrmap
-	call LoadFonts_NoOAMUpdate
+	ld a, $90
+	ldh [hWY], a
 
 	pop af
 	rst Bankswitch
@@ -19,16 +20,7 @@ CloseText::
 	ld a, $1
 	ldh [hOAMUpdate], a
 
-	call .CloseText
-
-	pop af
-	ldh [hOAMUpdate], a
-	ld hl, wVramState
-	res 6, [hl]
-	ret
-
-.CloseText:
-	call ClearWindowData
+	call ClearMenuAndWindowData
 	xor a
 	ldh [hBGMapMode], a
 	call OverworldTextModeSwitch
@@ -41,20 +33,43 @@ CloseText::
 	call UpdatePlayerSprite
 	xor a
 	ldh [hBGMapMode], a
-	call LoadOverworldFontAndFrame
+
+	pop af
+	ldh [hOAMUpdate], a
+	ld hl, wVramState
+	res 6, [hl]
 	ret
 
-OpenText::
-	call ClearWindowData
+OpenText2bpp::
+	call ClearMenuAndWindowData
 	ldh a, [hROMBank]
 	push af
-	ld a, BANK(ReanchorBGMap_NoOAMUpdate) ; aka BANK(LoadFonts_NoOAMUpdate)
+	ld a, BANK(ReanchorBGMap_NoOAMUpdate)
+	rst Bankswitch
+
+; assumes that the overworld 2bpp font and frame are loaded when calling this
+	call ReanchorBGMap_NoOAMUpdate ; clear bgmap
+	call SpeechTextbox2bpp
+	call _OpenAndCloseMenu_HDMATransferTilemapAndAttrmap ; anchor bgmap
+	ld a, $90
+	ldh [hWY], a
+
+	pop af
+	rst Bankswitch
+
+	ret
+
+OpenText1bpp::
+	call ClearMenuAndWindowData
+	ldh a, [hROMBank]
+	push af
+	ld a, BANK(ReanchorBGMap_NoOAMUpdate) ; aka BANK(LoadFont_NoOAMUpdate)
 	rst Bankswitch
 
 	call ReanchorBGMap_NoOAMUpdate ; clear bgmap
-	call SpeechTextbox
+	call SpeechTextbox1bpp
 	call _OpenAndCloseMenu_HDMATransferTilemapAndAttrmap ; anchor bgmap
-	call LoadFonts_NoOAMUpdate ; load font
+	call LoadFont_NoOAMUpdate ; load 1bpp font and frame, hide window
 	pop af
 	rst Bankswitch
 

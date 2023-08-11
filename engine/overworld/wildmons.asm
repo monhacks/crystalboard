@@ -816,7 +816,7 @@ RandomUnseenWildMon:
 	ld [wNamedObjectIndex], a
 	call GetPokemonName
 	ld hl, .JustSawSomeRareMonText
-	call PrintText
+	call PrintText2bpp
 	xor a
 	ld [wScriptVar], a
 	ret

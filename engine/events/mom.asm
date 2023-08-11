@@ -49,11 +49,11 @@ BankOfMom:
 
 .InitializeBank:
 	ld hl, MomLeavingText1
-	call PrintText
+	call PrintText1bpp
 	call YesNoBox
 	jr c, .DontSaveMoney
 	ld hl, MomLeavingText2
-	call PrintText
+	call PrintText1bpp
 	ld a, (1 << MOM_ACTIVE_F) | (1 << MOM_SAVING_SOME_MONEY_F)
 	jr .done_1
 
@@ -63,14 +63,14 @@ BankOfMom:
 .done_1
 	ld [wMomSavingMoney], a
 	ld hl, MomLeavingText3
-	call PrintText
+	call PrintText1bpp
 	ld a, $8
 	ld [wJumptableIndex], a
 	ret
 
 .IsThisAboutYourMoney:
 	ld hl, MomIsThisAboutYourMoneyText
-	call PrintText
+	call PrintText1bpp
 	call YesNoBox
 	jr c, .nope
 	ld a, $3
@@ -85,7 +85,7 @@ BankOfMom:
 
 .AccessBankOfMom:
 	ld hl, MomBankWhatDoYouWantToDoText
-	call PrintText
+	call PrintText1bpp
 	call LoadStandardMenuHeader
 	ld hl, BankOfMom_MenuHeader
 	call CopyMenuHeader
@@ -121,7 +121,7 @@ BankOfMom:
 
 .StoreMoney:
 	ld hl, MomStoreMoneyText
-	call PrintText
+	call PrintText1bpp
 	xor a
 	ld hl, wStringBuffer2
 	ld [hli], a
@@ -164,18 +164,18 @@ BankOfMom:
 	call PlaySFX
 	call WaitSFX
 	ld hl, MomStoredMoneyText
-	call PrintText
+	call PrintText1bpp
 	ld a, $8
 	jr .done_4
 
 .InsufficientFundsInWallet:
 	ld hl, MomInsufficientFundsInWalletText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .NotEnoughRoomInBank:
 	ld hl, MomNotEnoughRoomInBankText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .CancelDeposit:
@@ -187,7 +187,7 @@ BankOfMom:
 
 .TakeMoney:
 	ld hl, MomTakeMoneyText
-	call PrintText
+	call PrintText1bpp
 	xor a
 	ld hl, wStringBuffer2
 	ld [hli], a
@@ -230,18 +230,18 @@ BankOfMom:
 	call PlaySFX
 	call WaitSFX
 	ld hl, MomTakenMoneyText
-	call PrintText
+	call PrintText1bpp
 	ld a, $8
 	jr .done_5
 
 .InsufficientFundsInBank:
 	ld hl, MomHaventSavedThatMuchText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .NotEnoughRoomInWallet:
 	ld hl, MomNotEnoughRoomInWalletText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .CancelWithdraw:
@@ -253,13 +253,13 @@ BankOfMom:
 
 .StopOrStartSavingMoney:
 	ld hl, MomSaveMoneyText
-	call PrintText
+	call PrintText1bpp
 	call YesNoBox
 	jr c, .StopSavingMoney
 	ld a, (1 << MOM_ACTIVE_F) | (1 << MOM_SAVING_SOME_MONEY_F)
 	ld [wMomSavingMoney], a
 	ld hl, MomStartSavingMoneyText
-	call PrintText
+	call PrintText1bpp
 	ld a, $8
 	ld [wJumptableIndex], a
 	ret
@@ -273,7 +273,7 @@ BankOfMom:
 
 .JustDoWhatYouCan:
 	ld hl, MomJustDoWhatYouCanText
-	call PrintText
+	call PrintText1bpp
 
 .AskDST:
 	ld hl, wJumptableIndex
@@ -292,7 +292,7 @@ Mom_ContinueMenuSetup:
 	ldh [hBGMapMode], a
 	hlcoord 0, 0
 	lb bc, 6, 18
-	call Textbox
+	call Textbox1bpp
 	hlcoord 1, 2
 	ld de, Mom_SavedString
 	call PlaceString

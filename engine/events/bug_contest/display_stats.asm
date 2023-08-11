@@ -12,12 +12,12 @@ DisplayCaughtContestMonStats:
 	hlcoord 0, 0
 	ld b, 4
 	ld c, 13
-	call Textbox
+	call Textbox1bpp
 
 	hlcoord 0, 6
 	ld b, 4
 	ld c, 13
-	call Textbox
+	call Textbox1bpp
 
 	hlcoord 2, 0
 	ld de, .Stock
@@ -68,7 +68,7 @@ DisplayCaughtContestMonStats:
 	call PrintNum
 
 	ld hl, ContestAskSwitchText
-	call PrintText
+	call PrintText1bpp
 
 	pop af
 	ld [wOptions], a
@@ -93,7 +93,7 @@ ContestAskSwitchText:
 DisplayAlreadyCaughtText:
 	call GetPokemonName
 	ld hl, .ContestAlreadyCaughtText
-	jp PrintText
+	jp PrintText1bpp
 
 .ContestAlreadyCaughtText:
 	text_far _ContestAlreadyCaughtText

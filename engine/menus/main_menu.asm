@@ -147,7 +147,7 @@ MainMenu_PrintCurrentTimeAndDay:
 	hlcoord 0, 14
 	ld b, 2
 	ld c, 18
-	call Textbox
+	call Textbox1bpp
 	ret
 
 .PlaceTime:
@@ -212,7 +212,7 @@ ClearTilemapEtc:
 	call ClearTilemap
 	call LoadFrame
 	call LoadStandardFont
-	call ClearWindowData
+	call ClearMenuAndWindowData
 	ret
 
 MainMenu_NewGame:

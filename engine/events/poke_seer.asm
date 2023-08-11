@@ -278,7 +278,7 @@ PrintSeerText:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call PrintText
+	call PrintText2bpp
 	ret
 
 SeerTexts:
@@ -346,7 +346,7 @@ SeerAdvice:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call PrintText
+	call PrintText2bpp
 	ret
 
 SeerAdviceTexts:

@@ -60,9 +60,9 @@ AskTeachTMHM:
 	jr c, .TM
 	ld hl, BootedHMText ; Booted up an HM
 .TM:
-	call PrintText
+	call PrintText1bpp
 	ld hl, ContainedMoveText
-	call PrintText
+	call PrintText1bpp
 	call YesNoBox
 .NotTMHM:
 	pop bc
@@ -84,7 +84,7 @@ ChooseMonToLearnTMHM_NoRefresh:
 	ld [wPartyMenuActionText], a
 .loopback
 	farcall WritePartyMenuTilemap
-	farcall PrintPartyMenuText
+	farcall PlacePartyMenuText
 	call WaitBGMap
 	call SetPalettes
 	call DelayFrame
@@ -133,7 +133,7 @@ TeachTMHM:
 	call PlaySFX
 	pop de
 	ld hl, TMHMNotCompatibleText
-	call PrintText
+	call PrintText1bpp
 	jr .nope
 
 .compatible
@@ -242,7 +242,7 @@ TMHM_ShowTMMoveDescription:
 	hlcoord 0, 12
 	ld b, 4
 	ld c, SCREEN_WIDTH - 2
-	call Textbox
+	call Textbox1bpp
 	ld a, [wCurItem]
 	cp NUM_TMS + NUM_HMS + 1
 	jr nc, TMHM_JoypadLoop
@@ -491,7 +491,7 @@ VerboseReceiveTMHM: ; unreferenced
 	jr nc, .print
 	ld hl, .ReceivedTMHMText
 .print
-	jp PrintText
+	jp PrintText1bpp
 
 .NoRoomTMHMText:
 	text_far _NoRoomTMHMText

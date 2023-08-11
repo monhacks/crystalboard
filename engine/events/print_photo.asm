@@ -1,6 +1,6 @@
 PhotoStudio:
 	ld hl, .WhichMonPhotoText
-	call PrintText
+	call PrintText2bpp
 	farcall SelectMonFromParty
 	jr c, .cancel
 	ld a, [wCurPartySpecies]
@@ -8,7 +8,7 @@ PhotoStudio:
 	jr z, .egg
 
 	ld hl, .HoldStillText
-	call PrintText
+	call PrintText2bpp
 	call DisableSpriteUpdates
 	farcall PrintPartymon
 	call ReturnToMapWithSpeechTextbox
@@ -26,7 +26,7 @@ PhotoStudio:
 	ld hl, .EggPhotoText
 
 .print_text
-	call PrintText
+	call PrintText2bpp
 	ret
 
 .WhichMonPhotoText:

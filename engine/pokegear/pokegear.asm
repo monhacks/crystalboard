@@ -274,7 +274,7 @@ InitPokegearTilemap:
 	call PlaceString
 	hlcoord 0, 12
 	lb bc, 4, 18
-	call Textbox
+	call Textbox1bpp
 	ret
 
 .switch
@@ -300,7 +300,7 @@ InitPokegearTilemap:
 	call Pokegear_LoadTilemapRLE
 	hlcoord 0, 12
 	lb bc, 4, 18
-	call Textbox
+	call Textbox1bpp
 	ret
 
 .Phone:
@@ -308,7 +308,7 @@ InitPokegearTilemap:
 	call Pokegear_LoadTilemapRLE
 	hlcoord 0, 12
 	lb bc, 4, 18
-	call Textbox
+	call Textbox1bpp
 	call .PlacePhoneBars
 	call PokegearPhone_UpdateDisplayList
 	ret
@@ -400,7 +400,7 @@ PokegearJumptable:
 PokegearClock_Init:
 	call InitPokegearTilemap
 	ld hl, PokegearPressButtonText
-	call PrintText
+	call PrintText1bpp
 	ld hl, wJumptableIndex
 	inc [hl]
 	call ExitPokegearRadio_HandleMusic
@@ -698,7 +698,7 @@ PokegearPhone_Init:
 	call InitPokegearTilemap
 	call ExitPokegearRadio_HandleMusic
 	ld hl, PokegearAskWhoCallText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 PokegearPhone_Joypad:
@@ -788,12 +788,12 @@ PokegearPhone_MakePhoneCall:
 	ld de, SFX_CALL
 	call PlaySFX
 	ld hl, .GearEllipseText
-	call PrintText
+	call PrintText1bpp
 	call WaitSFX
 	ld de, SFX_CALL
 	call PlaySFX
 	ld hl, .GearEllipseText
-	call PrintText
+	call PrintText1bpp
 	call WaitSFX
 	ld a, [wPokegearPhoneSelectedPerson]
 	ld b, a
@@ -812,11 +812,11 @@ PokegearPhone_MakePhoneCall:
 .no_service
 	farcall Phone_NoSignal
 	ld hl, .GearOutOfServiceText
-	call PrintText
+	call PrintText1bpp
 	ld a, POKEGEARSTATE_PHONEJOYPAD
 	ld [wJumptableIndex], a
 	ld hl, PokegearAskWhoCallText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .GearEllipseText:
@@ -835,7 +835,7 @@ PokegearPhone_FinishPhoneCall:
 	ld a, POKEGEARSTATE_PHONEJOYPAD
 	ld [wJumptableIndex], a
 	ld hl, PokegearAskWhoCallText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 PokegearPhone_GetDPad:
@@ -1017,7 +1017,7 @@ PokegearPhoneContactSubmenu:
 	ld b, a
 	ld c, 8
 	push de
-	call Textbox
+	call Textbox1bpp
 	pop de
 	pop hl
 	inc hl
@@ -1086,7 +1086,7 @@ PokegearPhoneContactSubmenu:
 
 .Cancel:
 	ld hl, PokegearAskWhoCallText
-	call PrintText
+	call PrintText1bpp
 	scf
 	ret
 
@@ -1101,7 +1101,7 @@ PokegearPhoneContactSubmenu:
 	ldh [hBGMapMode], a
 	call PokegearPhone_UpdateDisplayList
 	ld hl, PokegearAskWhoCallText
-	call PrintText
+	call PrintText1bpp
 	call WaitBGMap
 .CancelDelete:
 	scf
@@ -1565,7 +1565,7 @@ NoRadioName:
 	call ClearBox
 	hlcoord 0, 12
 	lb bc, 4, 18
-	call Textbox
+	call Textbox1bpp
 	ret
 
 OaksPKMNTalkName:     db "OAK's <PK><MN> Talk@"
@@ -1775,7 +1775,7 @@ PlayRadio:
 	push de
 	hlcoord 0, 12
 	lb bc, 4, 18
-	call Textbox
+	call Textbox1bpp
 	hlcoord 1, 14
 	ld [hl], "“"
 	pop de

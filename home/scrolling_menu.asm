@@ -38,7 +38,7 @@ InitScrollingMenu::
 	push de
 	call Coord2Tile
 	pop bc
-	jp Textbox
+	jp Textbox1bpp
 
 JoyTextDelay_ForcehJoyDown::
 	call DelayFrame

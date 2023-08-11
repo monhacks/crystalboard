@@ -2716,7 +2716,7 @@ SetUpBattlePartyMenu_Loop: ; switch to fullscreen menu?
 
 JumpToPartyMenuAndPrintText:
 	farcall WritePartyMenuTilemap
-	farcall PrintPartyMenuText
+	farcall PlacePartyMenuText
 	call WaitBGMap
 	call SetPalettes
 	call DelayFrame
@@ -4833,7 +4833,7 @@ BattleMenu_Pack:
 	call UpdateBattleHUDs
 	call WaitBGMap
 	call LoadTilemapToTempTilemap
-	call ClearWindowData
+	call ClearMenuAndWindowData
 	call FinishBattleAnim
 	and a
 	ret
@@ -4844,7 +4844,7 @@ BattleMenu_Pack:
 	ld a, [wBattleResult]
 	and BATTLERESULT_BITMASK
 	ld [wBattleResult], a ; WIN
-	call ClearWindowData
+	call ClearMenuAndWindowData
 	call SetPalettes
 	scf
 	ret
@@ -5144,7 +5144,7 @@ MoveSelectionScreen:
 	ld b, 4
 	ld c, 14
 .got_dims
-	call Textbox
+	call Textbox1bpp
 
 	hlcoord 6, 17 - NUM_MOVES
 	ld a, [wMoveSelectionMenuType]
@@ -5423,7 +5423,7 @@ MoveInfoBox:
 	hlcoord 0, 8
 	ld b, 3
 	ld c, 9
-	call Textbox
+	call Textbox1bpp
 
 	ld a, [wPlayerDisableCount]
 	and a
@@ -7126,7 +7126,7 @@ GiveExperiencePoints:
 	hlcoord 9, 0
 	ld b, 10
 	ld c, 9
-	call Textbox
+	call Textbox1bpp
 	hlcoord 11, 1
 	ld bc, 4
 	predef PrintTempMonStats
@@ -8686,7 +8686,7 @@ InitBattleDisplay:
 	hlcoord 0, 12
 	ld b, 4
 	ld c, 18
-	call Textbox
+	call Textbox1bpp
 	hlcoord 1, 5
 	lb bc, 3, 7
 	call ClearBox

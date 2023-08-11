@@ -572,7 +572,7 @@ GiveItem:
 	farcall InitPartyMenuGFX
 .loop
 	farcall WritePartyMenuTilemap
-	farcall PrintPartyMenuText
+	farcall PlacePartyMenuText
 	call WaitBGMap
 	call SetPalettes
 	call DelayFrame
@@ -582,7 +582,7 @@ GiveItem:
 	cp EGG
 	jr nz, .give
 	ld hl, .AnEggCantHoldAnItemText
-	call PrintText
+	call PrintText1bpp
 	jr .loop
 
 .give
@@ -1200,7 +1200,7 @@ Pack_PrintTextNoScroll:
 	push af
 	set NO_TEXT_SCROLL, a
 	ld [wOptions], a
-	call PrintText
+	call PrintText1bpp
 	pop af
 	ld [wOptions], a
 	ret
@@ -1357,7 +1357,7 @@ Pack_InitGFX:
 ; Place the textbox for displaying the item description
 	hlcoord 0, SCREEN_HEIGHT - 4 - 2
 	lb bc, 4, SCREEN_WIDTH - 2
-	call Textbox
+	call Textbox1bpp
 	call EnableLCD
 	call DrawPackGFX
 	ret

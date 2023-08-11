@@ -927,7 +927,7 @@ TrademonStats_MonTemplate:
 	hlcoord 3, 0
 	ld b, $6
 	ld c, $d
-	call Textbox
+	call Textbox1bpp
 	hlcoord 4, 0
 	ld de, .OTMonData
 	call PlaceString
@@ -947,7 +947,7 @@ TrademonStats_Egg:
 	hlcoord 3, 0
 	ld b, 6
 	ld c, 13
-	call Textbox
+	call Textbox1bpp
 	hlcoord 4, 2
 	ld de, .EggData
 	call PlaceString
@@ -1167,11 +1167,11 @@ TradeAnim_SentToOTText:
 	cp LINK_TIMECAPSULE
 	jr z, .time_capsule
 	ld hl, .MonNameSentToText
-	call PrintText
+	call PrintText1bpp
 	ld c, 189
 	call DelayFrames
 	ld hl, .MonWasSentToText
-	call PrintText
+	call PrintText1bpp
 	call TradeAnim_Wait80Frames
 	ld c, 128
 	call DelayFrames
@@ -1180,7 +1180,7 @@ TradeAnim_SentToOTText:
 
 .time_capsule
 	ld hl, .MonWasSentToText
-	call PrintText
+	call PrintText1bpp
 	call TradeAnim_Wait80Frames
 	call TradeAnim_AdvanceScriptPointer
 	ret
@@ -1195,10 +1195,10 @@ TradeAnim_SentToOTText:
 
 TradeAnim_OTBidsFarewell:
 	ld hl, .BidsFarewellToMonText
-	call PrintText
+	call PrintText1bpp
 	call TradeAnim_Wait80Frames
 	ld hl, .MonNameBidsFarewellText
-	call PrintText
+	call PrintText1bpp
 	call TradeAnim_Wait80Frames
 	call TradeAnim_AdvanceScriptPointer
 	ret
@@ -1219,7 +1219,7 @@ TradeAnim_TakeCareOfText:
 	call ByteFill
 	call WaitBGMap
 	ld hl, .TakeGoodCareOfMonText
-	call PrintText
+	call PrintText1bpp
 	call TradeAnim_Wait80Frames
 	call TradeAnim_AdvanceScriptPointer
 	ret
@@ -1230,10 +1230,10 @@ TradeAnim_TakeCareOfText:
 
 TradeAnim_OTSendsText1:
 	ld hl, .ForYourMonSendsText
-	call PrintText
+	call PrintText1bpp
 	call TradeAnim_Wait80Frames
 	ld hl, .OTSendsText
-	call PrintText
+	call PrintText1bpp
 	call TradeAnim_Wait80Frames
 	ld c, 14
 	call DelayFrames
@@ -1250,10 +1250,10 @@ TradeAnim_OTSendsText1:
 
 TradeAnim_OTSendsText2:
 	ld hl, .WillTradeText
-	call PrintText
+	call PrintText1bpp
 	call TradeAnim_Wait80Frames
 	ld hl, .ForYourMonWillTradeText
-	call PrintText
+	call PrintText1bpp
 	call TradeAnim_Wait80Frames
 	ld c, 14
 	call DelayFrames

@@ -3,6 +3,7 @@
 	const PLAYERSHOUSE2F_DOLL_1
 	const PLAYERSHOUSE2F_DOLL_2
 	const PLAYERSHOUSE2F_BIG_DOLL
+	const PLAYERSHOUSE2F_TRAINER
 
 Level1_Map1_MapScripts:
 	def_scene_scripts
@@ -10,16 +11,26 @@ Level1_Map1_MapScripts:
 	def_callbacks
 
 PlayersHouseDoll1Script::
-	describedecoration DECODESC_LEFT_DOLL
+	opentext
+	pokemart MARTTYPE_STANDARD, MART_AZALEA
+	closetext
+	end
+;	describedecoration DECODESC_LEFT_DOLL
 
 PlayersHouseDoll2Script:
-	describedecoration DECODESC_RIGHT_DOLL
+	jumpstd PokecenterNurseScript
+;	describedecoration DECODESC_RIGHT_DOLL
 
 PlayersHouseBigDollScript:
-	describedecoration DECODESC_BIG_DOLL
+	jumpstd PCScript
+;	describedecoration DECODESC_BIG_DOLL
 
 PlayersHouseGameConsoleScript:
-	describedecoration DECODESC_CONSOLE
+	randomwildmon
+	startbattle
+	reloadmapafterbattle
+	end
+;	describedecoration DECODESC_CONSOLE
 
 PlayersHousePosterScript:
 	describedecoration DECODESC_POSTER
@@ -67,10 +78,46 @@ PlayersRadioText4:
 	line "#MON CHANNEL…"
 	done
 
+TrainerYoungsterMikey:
+	trainer YOUNGSTER, MIKEY, EVENT_DECO_BED_1, YoungsterMikeySeenText, YoungsterMikeyBeatenText, 0, .Script
+
+.Script:
+	endifjustbattled
+	opentext
+	writetext YoungsterMikeyAfterText
+	waitbutton
+	closetext
+	end
+
+
+YoungsterMikeySeenText:
+	text "You're a #MON"
+	line "trainer, right?"
+
+	para "Then you have to"
+	line "battle!"
+	done
+
+YoungsterMikeyBeatenText:
+	text "That's strange."
+	line "I won before."
+	done
+
+YoungsterMikeyAfterText:
+	text "Becoming a good"
+	line "trainer is really"
+	cont "tough."
+
+	para "I'm going to bat-"
+	line "tle other people"
+	cont "to get better."
+	done
+
 Level1_Map1_MapEvents:
 	db 0, 0 ; filler
 
 	def_warp_events
+	warp_event  7,  0, LEVEL_1_MAP_1, 1
 
 	def_coord_events
 
@@ -85,3 +132,4 @@ Level1_Map1_MapEvents:
 	object_event  4,  4, SPRITE_DOLL_1, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, PlayersHouseDoll1Script, -1
 	object_event  5,  4, SPRITE_DOLL_2, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, PlayersHouseDoll2Script, -1
 	object_event  0,  1, SPRITE_BIG_DOLL, SPRITEMOVEDATA_BIGDOLL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, PlayersHouseBigDollScript, -1
+	object_event  6,  6, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 1, TrainerYoungsterMikey, -1

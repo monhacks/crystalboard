@@ -647,7 +647,7 @@ RestoreOverworldMapTiles: ; unreferenced
 
 Error_Cant_ExitMenu:
 	ld hl, .WindowPoppingErrorText
-	call PrintText
+	call PrintText1bpp
 	call WaitBGMap
 .infinite_loop
 	jr .infinite_loop

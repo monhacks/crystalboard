@@ -161,7 +161,7 @@ FarCopyRadioText::
 BattleTextbox::
 ; Open a textbox and print text at hl.
 	push hl
-	call SpeechTextbox
+	call SpeechTextbox1bpp
 	call UpdateSprites
 	call ApplyTilemap
 	pop hl

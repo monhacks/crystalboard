@@ -42,7 +42,7 @@ NewGame_ClearTilemapEtc:
 	call ClearTilemap
 	call LoadFrame
 	call LoadStandardFont
-	call ClearWindowData
+	call ClearMenuAndWindowData
 	ret
 
 Option:
@@ -535,7 +535,7 @@ OakSpeech:
 	call Intro_RotatePalettesLeftFrontpic
 
 	ld hl, OakText1
-	call PrintText
+	call PrintText1bpp
 	call RotateThreePalettesRight
 	call ClearTilemap
 
@@ -556,9 +556,9 @@ OakSpeech:
 	call Intro_WipeInFrontpic
 
 	ld hl, OakText2
-	call PrintText
+	call PrintText1bpp
 	ld hl, OakText4
-	call PrintText
+	call PrintText1bpp
 	call RotateThreePalettesRight
 	call ClearTilemap
 
@@ -573,7 +573,7 @@ OakSpeech:
 	call Intro_RotatePalettesLeftFrontpic
 
 	ld hl, OakText5
-	call PrintText
+	call PrintText1bpp
 	call RotateThreePalettesRight
 	call ClearTilemap
 
@@ -586,10 +586,10 @@ OakSpeech:
 	call Intro_RotatePalettesLeftFrontpic
 
 	ld hl, OakText6
-	call PrintText
+	call PrintText1bpp
 	call NamePlayer
 	ld hl, OakText7
-	call PrintText
+	call PrintText1bpp
 	ret
 
 OakText1:
@@ -1124,7 +1124,7 @@ CopyrightString:
 
 GameInit::
 	farcall TryLoadSaveData
-	call ClearWindowData
+	call ClearMenuAndWindowData
 	call ClearBGPalettes
 	call ClearTilemap
 	ld a, HIGH(vBGMap0)

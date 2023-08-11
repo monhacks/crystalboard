@@ -7,21 +7,21 @@ _BugContestJudging:
 	ld [wNamedObjectIndex], a
 	call GetPokemonName
 	ld hl, ContestJudging_ThirdPlaceText
-	call PrintText
+	call PrintText2bpp
 	ld a, [wBugContestSecondPlaceWinnerID]
 	call LoadContestantName
 	ld a, [wBugContestSecondPlaceMon]
 	ld [wNamedObjectIndex], a
 	call GetPokemonName
 	ld hl, ContestJudging_SecondPlaceText
-	call PrintText
+	call PrintText2bpp
 	ld a, [wBugContestFirstPlaceWinnerID]
 	call LoadContestantName
 	ld a, [wBugContestFirstPlaceMon]
 	ld [wNamedObjectIndex], a
 	call GetPokemonName
 	ld hl, ContestJudging_FirstPlaceText
-	call PrintText
+	call PrintText2bpp
 	jp BugContest_GetPlayersResult
 
 ContestJudging_FirstPlaceText:

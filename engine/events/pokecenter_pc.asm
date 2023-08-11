@@ -174,7 +174,7 @@ HallOfFamePC:
 
 TurnOffPC:
 	ld hl, PokecenterPCOaksClosedText
-	call PrintText
+	call PrintText1bpp
 	scf
 	ret
 
@@ -536,12 +536,12 @@ PlayerDepositItemMenu:
 	call TossItem
 	predef PartyMonItemName
 	ld hl, .PlayersPCDepositItemsText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .NoRoomInPC:
 	ld hl, .PlayersPCNoRoomDepositText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .DeclinedToDeposit:
@@ -578,7 +578,7 @@ PCItemsJoypad:
 	hlcoord 0, 0
 	ld b, 10
 	ld c, 18
-	call Textbox
+	call Textbox1bpp
 	ld a, [wPCItemsCursor]
 	ld [wMenuCursorPosition], a
 	ld a, [wPCItemsScrollPosition]

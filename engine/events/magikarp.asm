@@ -29,7 +29,7 @@ CheckMagikarpLength:
 	call CalcMagikarpLength
 	call PrintMagikarpLength
 	ld hl, .MagikarpGuruMeasureText
-	call PrintText
+	call PrintText2bpp
 
 	; Did we beat the record?
 	ld hl, wMagikarpLength
@@ -294,7 +294,7 @@ MagikarpHouseSign:
 	ld [wMagikarpLength + 1], a
 	call PrintMagikarpLength
 	ld hl, .KarpGuruRecordText
-	call PrintText
+	call PrintText2bpp
 	ret
 
 .KarpGuruRecordText:

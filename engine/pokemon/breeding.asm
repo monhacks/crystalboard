@@ -301,7 +301,7 @@ HatchEggs:
 	ld hl, wPlayerName
 	call CopyBytes
 	ld hl, .Text_HatchEgg
-	call PrintText
+	call PrintText1bpp
 	ld a, [wCurPartyMon]
 	ld hl, wPartyMonNicknames
 	ld bc, MON_NAME_LENGTH
@@ -310,7 +310,7 @@ HatchEggs:
 	ld e, l
 	push de
 	ld hl, .BreedAskNicknameText
-	call PrintText
+	call PrintText1bpp
 	call YesNoBox
 	pop de
 	jr c, .nonickname
@@ -357,7 +357,7 @@ HatchEggs:
 	push af
 	call EggHatch_AnimationSequence
 	ld hl, .BreedClearboxText
-	call PrintText
+	call PrintText1bpp
 	pop af
 	ld [wCurPartySpecies], a
 	pop bc
@@ -854,7 +854,7 @@ Hatch_ShellFragmentLoop:
 
 DayCareMon1:
 	ld hl, LeftWithDayCareManText
-	call PrintText
+	call PrintText1bpp
 	ld a, [wBreedMon1Species]
 	call PlayMonCry
 	ld a, [wDayCareLady]
@@ -863,11 +863,11 @@ DayCareMon1:
 	call PromptButton
 	ld hl, wBreedMon2Nickname
 	call DayCareMonCompatibilityText
-	jp PrintText
+	jp PrintText1bpp
 
 DayCareMon2:
 	ld hl, LeftWithDayCareLadyText
-	call PrintText
+	call PrintText1bpp
 	ld a, [wBreedMon2Species]
 	call PlayMonCry
 	ld a, [wDayCareMan]
@@ -876,7 +876,7 @@ DayCareMon2:
 	call PromptButton
 	ld hl, wBreedMon1Nickname
 	call DayCareMonCompatibilityText
-	jp PrintText
+	jp PrintText1bpp
 
 DayCareMonCursor:
 	jp WaitPressAorB_BlinkCursor

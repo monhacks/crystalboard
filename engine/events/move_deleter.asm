@@ -1,10 +1,10 @@
 MoveDeletion:
 	ld hl, .DeleterIntroText
-	call PrintText
+	call PrintText1bpp
 	call YesNoBox
 	jr c, .declined
 	ld hl, .DeleterAskWhichMonText
-	call PrintText
+	call PrintText1bpp
 	farcall SelectMonFromParty
 	jr c, .declined
 	ld a, [wCurPartySpecies]
@@ -18,7 +18,7 @@ MoveDeletion:
 	and a
 	jr z, .onlyonemove
 	ld hl, .DeleterAskWhichMoveText
-	call PrintText
+	call PrintText1bpp
 	call LoadStandardMenuHeader
 	farcall ChooseMoveToDelete
 	push af
@@ -31,7 +31,7 @@ MoveDeletion:
 	ld [wNamedObjectIndex], a
 	call GetMoveName
 	ld hl, .AskDeleteMoveText
-	call PrintText
+	call PrintText1bpp
 	call YesNoBox
 	pop bc
 	jr c, .declined
@@ -41,22 +41,22 @@ MoveDeletion:
 	call PlaySFX
 	call WaitSFX
 	ld hl, .DeleterForgotMoveText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .egg
 	ld hl, .MailEggText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .declined
 	ld hl, .DeleterNoComeAgainText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .onlyonemove
 	ld hl, .MoveKnowsOneText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .MoveKnowsOneText:

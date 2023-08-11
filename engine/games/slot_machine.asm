@@ -1717,7 +1717,7 @@ Slots_TurnLightsOnOrOff:
 Slots_AskBet:
 .loop
 	ld hl, .SlotsBetHowManyCoinsText
-	call PrintText
+	call PrintText1bpp
 	ld hl, .MenuHeader
 	call LoadMenuHeader
 	call VerticalMenu
@@ -1737,7 +1737,7 @@ Slots_AskBet:
 	cp c
 	jr nc, .Start
 	ld hl, .SlotsNotEnoughCoinsText
-	call PrintText
+	call PrintText1bpp
 	jr .loop
 
 .Start:
@@ -1752,7 +1752,7 @@ Slots_AskBet:
 	ld de, SFX_PAY_DAY
 	call PlaySFX
 	ld hl, .SlotsStartText
-	call PrintText
+	call PrintText1bpp
 	and a
 	ret
 
@@ -1787,14 +1787,14 @@ Slots_AskPlayAgain:
 	or [hl]
 	jr nz, .you_have_coins
 	ld hl, .SlotsRanOutOfCoinsText
-	call PrintText
+	call PrintText1bpp
 	ld c, 60
 	call DelayFrames
 	jr .exit_slots
 
 .you_have_coins
 	ld hl, .SlotsPlayAgainText
-	call PrintText
+	call PrintText1bpp
 	call LoadMenuTextbox
 	lb bc, 14, 12
 	call PlaceYesNoBox
@@ -1857,7 +1857,7 @@ Slots_PayoutText:
 	cp SLOTS_NO_MATCH
 	jr nz, .MatchedSomething
 	ld hl, .SlotsDarnText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .MatchedSomething:
@@ -1880,7 +1880,7 @@ Slots_PayoutText:
 
 .return
 	ld hl, .Text_PrintPayout
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .PayoutStrings:

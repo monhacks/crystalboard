@@ -56,24 +56,20 @@ ReanchorBGMap_NoOAMUpdate::
 	ldh [hBGMapAddress], a
 	ret
 
-LoadFonts_NoOAMUpdate::
+LoadFont_NoOAMUpdate::
 	ldh a, [hOAMUpdate]
 	push af
 	ld a, $1
 	ldh [hOAMUpdate], a
 
-	call .LoadGFX
-
-	pop af
-	ldh [hOAMUpdate], a
-	ret
-
-.LoadGFX:
 	call LoadFrame
 	ld a, $90
 	ldh [hWY], a
 	call SafeUpdateSprites
 	call LoadStandardFont
+
+	pop af
+	ldh [hOAMUpdate], a
 	ret
 
 HDMATransfer_FillBGMap0WithBlack:

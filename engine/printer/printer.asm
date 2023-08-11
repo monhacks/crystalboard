@@ -562,7 +562,7 @@ PlacePrinterStatusString:
 	ldh [hBGMapMode], a
 	hlcoord 0, 5
 	lb bc, 10, 18
-	call Textbox
+	call Textbox1bpp
 	pop af
 	ld e, a
 	ld d, 0

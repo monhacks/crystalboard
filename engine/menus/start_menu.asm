@@ -11,7 +11,7 @@
 	const STARTMENUITEM_QUIT     ; 8
 
 StartMenu::
-	call ClearWindowData
+	call ClearMenuAndWindowData
 
 	ld de, SFX_MENU
 	call PlaySFX
@@ -34,7 +34,7 @@ StartMenu::
 	call .DrawBugContestStatusBox
 	call SafeUpdateSprites
 	call _OpenAndCloseMenu_HDMATransferTilemapAndAttrmap
-	farcall LoadFonts_NoOAMUpdate
+	farcall LoadFont_NoOAMUpdate
 	call .DrawBugContestStatus
 	call UpdateTimePals
 	jr .Select
@@ -151,7 +151,6 @@ StartMenu::
 	call DrawVariableLengthMenuBox
 	call .DrawBugContestStatus
 	call UpdateSprites
-	call GSReloadPalettes
 	call FinishExitMenu
 	ret
 
@@ -512,7 +511,7 @@ StartMenu_Pokemon:
 
 .menunoreload
 	farcall WritePartyMenuTilemap
-	farcall PrintPartyMenuText
+	farcall PlacePartyMenuText
 	call WaitBGMap
 	call SetPalettes ; load regular palettes?
 	call DelayFrame

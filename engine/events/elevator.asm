@@ -117,7 +117,7 @@ Elevator_GoToFloor:
 Elevator_AskWhichFloor:
 	call LoadStandardMenuHeader
 	ld hl, AskFloorElevatorText
-	call PrintText
+	call PrintText1bpp
 	call Elevator_GetCurrentFloorText
 	ld hl, Elevator_MenuHeader
 	call CopyMenuHeader
@@ -150,7 +150,7 @@ Elevator_GetCurrentFloorText:
 	hlcoord 0, 0
 	ld b, 4
 	ld c, 8
-	call Textbox
+	call Textbox1bpp
 	hlcoord 1, 2
 	ld de, Elevator_CurrentFloorText
 	call PlaceString

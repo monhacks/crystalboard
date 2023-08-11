@@ -15,7 +15,7 @@ KnowsMove:
 
 .knows_move
 	ld hl, .KnowsMoveText
-	call PrintText
+	call PrintText1bpp
 	scf
 	ret
 

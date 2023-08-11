@@ -519,7 +519,7 @@ HangUp_ShutDown: ; unreferenced
 
 HangUp_Beep:
 	ld hl, PhoneClickText
-	call PrintText
+	call PrintText2bpp
 	ld de, SFX_HANG_UP
 	call PlaySFX
 	ret
@@ -530,7 +530,7 @@ PhoneClickText:
 
 HangUp_BoopOn:
 	ld hl, PhoneEllipseText
-	call PrintText
+	call PrintText2bpp
 	ret
 
 PhoneEllipseText:
@@ -538,7 +538,7 @@ PhoneEllipseText:
 	text_end
 
 HangUp_BoopOff:
-	call SpeechTextbox
+	call SpeechTextbox2bpp
 	ret
 
 Phone_StartRinging:
@@ -576,7 +576,7 @@ Phone_CallerTextbox:
 	hlcoord 0, 0
 	ld b, 2
 	ld c, SCREEN_WIDTH - 2
-	call Textbox
+	call Textbox1bpp
 	ret
 
 GetCallerClassAndName:

@@ -4,7 +4,7 @@ UpdateItemDescription:
 	hlcoord 0, 12
 	ld b, 4
 	ld c, SCREEN_WIDTH - 2
-	call Textbox
+	call Textbox1bpp
 	ld a, [wMenuSelection]
 	cp -1
 	ret z

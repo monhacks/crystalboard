@@ -96,7 +96,9 @@ MACRO connection
 	endc
 ENDM
 
-	map_attributes Level1_Map1, LEVEL_1_MAP_1, $ff, 0
+	map_attributes Level1_Map1, LEVEL_1_MAP_1, $00, SOUTH | NORTH
+	connection south, Level1_Map1, LEVEL_1_MAP_1, 0
+	connection north, Level1_Map1, LEVEL_1_MAP_1, 0
 
 	; map_attributes NewBarkTown, NEW_BARK_TOWN, $05, WEST | EAST
 	; connection west, Route29, ROUTE_29, 0

@@ -69,7 +69,7 @@ DisplayCoinCaseBalance:
 	hlcoord 11, 0
 	ld b, 1
 	ld c, 7
-	call Textbox
+	call Textbox1bpp
 	hlcoord 12, 0
 	ld de, CoinString
 	call PlaceString
@@ -86,7 +86,7 @@ DisplayMoneyAndCoinBalance:
 	hlcoord 5, 0
 	ld b, 3
 	ld c, 13
-	call Textbox
+	call Textbox1bpp
 	hlcoord 6, 1
 	ld de, MoneyString
 	call PlaceString
@@ -118,7 +118,7 @@ StartMenu_PrintSafariGameStatus: ; unreferenced
 	hlcoord 0, 0
 	ld b, 3
 	ld c, 7
-	call Textbox
+	call Textbox1bpp
 	hlcoord 1, 1
 	ld de, wSafariTimeRemaining
 	lb bc, 2, 3
@@ -146,7 +146,7 @@ StartMenu_DrawBugContestStatusBox:
 	hlcoord 0, 0
 	ld b, 5
 	ld c, 17
-	call Textbox
+	call Textbox1bpp
 	ret
 
 StartMenu_PrintBugContestStatus:

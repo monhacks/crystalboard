@@ -205,7 +205,7 @@ EvolveAfterBattle_MasterLoop:
 	call GetNickname
 	call CopyName1
 	ld hl, EvolvingText
-	call PrintText
+	call PrintText1bpp
 
 	ld c, 50
 	call DelayFrames
@@ -228,7 +228,7 @@ EvolveAfterBattle_MasterLoop:
 	jp c, CancelEvolution
 
 	ld hl, CongratulationsYourPokemonText
-	call PrintText
+	call PrintText1bpp
 
 	pop hl
 
@@ -377,7 +377,7 @@ UpdateSpeciesNameIfNotNicknamed:
 
 CancelEvolution:
 	ld hl, StoppedEvolvingText
-	call PrintText
+	call PrintText1bpp
 	call ClearTilemap
 	pop hl
 	jp EvolveAfterBattle_MasterLoop

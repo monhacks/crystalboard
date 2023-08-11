@@ -1784,7 +1784,7 @@ GivePoke::
 	and a
 	ret z
 	ld hl, WasSentToBillsPCText
-	call PrintText
+	call PrintText1bpp
 	ld a, BANK(sBoxMonNicknames)
 	call OpenSRAM
 	ld hl, wMonOrItemNameBuffer

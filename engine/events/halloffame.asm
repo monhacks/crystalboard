@@ -457,10 +457,10 @@ DisplayHOFMon:
 	call ByteFill
 	hlcoord 0, 0
 	lb bc, 3, SCREEN_WIDTH - 2
-	call Textbox
+	call Textbox1bpp
 	hlcoord 0, 12
 	lb bc, 4, SCREEN_WIDTH - 2
-	call Textbox
+	call Textbox1bpp
 	ld a, [wTempMonSpecies]
 	ld [wCurPartySpecies], a
 	ld [wTextDecimalByte], a
@@ -564,10 +564,10 @@ HOF_AnimatePlayerPic:
 	ldh [hBGMapMode], a
 	hlcoord 0, 2
 	lb bc, 8, 9
-	call Textbox
+	call Textbox1bpp
 	hlcoord 0, 12
 	lb bc, 4, 18
-	call Textbox
+	call Textbox1bpp
 	hlcoord 2, 4
 	ld de, wPlayerName
 	call PlaceString

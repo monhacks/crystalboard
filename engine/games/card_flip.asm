@@ -302,7 +302,7 @@ _CardFlip:
 	ldh [hBGMapMode], a
 	call CardFlip_ShuffleDeck
 	ld hl, .CardFlipShuffledText
-	call PrintText
+	call PrintText1bpp
 	jr .LoopAround
 
 .KeepTheCurrentDeck:
@@ -475,7 +475,7 @@ CardFlip_UpdateCoinBalanceDisplay:
 	hlcoord 0, 12
 	ld b, 4
 	ld c, SCREEN_WIDTH - 2
-	call Textbox
+	call Textbox1bpp
 	pop hl
 	call PrintTextboxText
 	call CardFlip_PrintCoinBalance
@@ -485,7 +485,7 @@ CardFlip_PrintCoinBalance:
 	hlcoord 9, 15
 	ld b, 1
 	ld c, 9
-	call Textbox
+	call Textbox1bpp
 	hlcoord 10, 16
 	ld de, .CoinStr
 	call PlaceString
@@ -511,7 +511,7 @@ CardFlip_InitTilemap:
 	call CardFlip_CopyToBox
 	hlcoord 0, 12
 	lb bc, 4, 18
-	call Textbox
+	call Textbox1bpp
 	ret
 
 CardFlip_FillGreenBox:

@@ -209,7 +209,12 @@ MenuBox::
 	call GetMenuBoxDims
 	dec b
 	dec c
-	jp Textbox
+	ld a, [wMenuBoxUse2bppFrame]
+	and a
+	jp z, Textbox1bpp
+	ld d, h
+	ld e, l
+	jp Textbox2bpp
 
 GetMenuTextStartCoord::
 	ld a, [wMenuBorderTopCoord]
@@ -329,7 +334,7 @@ MenuTextbox::
 	push hl
 	call LoadMenuTextbox
 	pop hl
-	jp PrintText
+	jp PrintText1bpp
 
 LoadMenuTextbox::
 	ld hl, .MenuHeader
@@ -734,7 +739,7 @@ GetMenuDataPointerTableEntry::
 	add hl, de
 	ret
 
-ClearWindowData::
+ClearMenuAndWindowData::
 	ld hl, wMenuMetadata
 	call .ClearMenuData
 	ld hl, wMenuHeader

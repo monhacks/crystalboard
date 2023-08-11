@@ -40,7 +40,13 @@ ClearScreen::
 	call ByteFill
 	jr ClearTilemap
 
-Textbox::
+SpeechTextbox1bpp::
+; Standard 1bpp textbox.
+	hlcoord TEXTBOX_X, TEXTBOX_Y
+	ld b, TEXTBOX_INNERH
+	ld c, TEXTBOX_INNERW
+
+Textbox1bpp::
 ; Draw a text box at hl with room for b lines of c characters each.
 ; Places a border around the textbox, then switches the palette to the
 ; text black-and-white scheme.
@@ -121,20 +127,18 @@ TextboxPalette::
 	jr nz, .col
 	ret
 
-SpeechTextbox::
-; Standard textbox.
-	hlcoord TEXTBOX_X, TEXTBOX_Y
-	ld b, TEXTBOX_INNERH
-	ld c, TEXTBOX_INNERW
-	jp Textbox
-	; decoord TEXTBOX_X, TEXTBOX_Y
-	; lb bc, 4, SCREEN_WIDTH - 2
-	; push bc
-	; push de
-	; farcall OverworldTextbox
-	; pop hl
-	; pop bc
-	; jp TextboxPalette
+SpeechTextbox2bpp::
+; Standard 2bpp textbox (with overworld frame).
+	decoord TEXTBOX_X, TEXTBOX_Y
+	lb bc, 4, SCREEN_WIDTH - 2
+
+Textbox2bpp::
+	push bc
+	push de
+	farcall _OverworldTextbox
+	pop hl
+	pop bc
+	jp TextboxPalette
 
 RadioTerminator::
 	ld hl, .stop
@@ -143,29 +147,35 @@ RadioTerminator::
 .stop:
 	text_end
 
-PrintText::
-	call SetUpTextbox
+ClearTextbox:
+	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
+	lb bc, TEXTBOX_INNERH - 1, TEXTBOX_INNERW
+	jp ClearBox
+
+PrintText1bpp::
+	push hl
+	call SpeechTextbox1bpp
+	jr _PrintText
+
+PrintText2bpp::
+	push hl
+	call SpeechTextbox2bpp
+
+_PrintText:
+	call UpdateSprites
+	call ApplyTilemap
+	pop hl
 	; fallthrough
 
 BuenaPrintText::
 	push hl
-	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
-	lb bc, TEXTBOX_INNERH - 1, TEXTBOX_INNERW
-	call ClearBox
+	call ClearTextbox
 	pop hl
 	; fallthrough
 
 PrintTextboxText::
 	bccoord TEXTBOX_INNERX, TEXTBOX_INNERY
-	call PlaceHLTextAtBC
-	ret
-
-SetUpTextbox::
-	push hl
-	call SpeechTextbox
-	call UpdateSprites
-	call ApplyTilemap
-	pop hl
+	call PrintHLTextAtBC
 	ret
 
 PlaceString::
@@ -415,9 +425,7 @@ Paragraph::
 .linkbattle
 	call Text_WaitBGMap
 	call PromptButton
-	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
-	lb bc, TEXTBOX_INNERH - 1, TEXTBOX_INNERW
-	call ClearBox
+	call ClearTextbox
 	call UnloadBlinkingCursor
 	ld c, 20
 	call DelayFrames
@@ -583,10 +591,10 @@ PokeFluteTerminator::
 .stop:
 	text_end
 
-PlaceHLTextAtBC::
+PrintHLTextAtBC::
 	ld a, [wTextboxFlags]
 	push af
-	set NO_TEXT_DELAY_F, a
+	set TEXT_DELAY_F, a
 	ld [wTextboxFlags], a
 
 	call DoTextUntilTerminator
@@ -738,7 +746,7 @@ TextCommand_BOX::
 	push hl
 	ld h, d
 	ld l, e
-	call Textbox
+	call Textbox1bpp
 	pop hl
 	ret
 

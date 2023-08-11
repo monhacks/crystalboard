@@ -1,7 +1,7 @@
 SaveMenu:
 	call LoadStandardMenuHeader
 	farcall DisplaySaveInfoOnSave
-	call SpeechTextbox
+	call SpeechTextbox2bpp
 	call UpdateSprites
 	farcall SaveMenu_CopyTilemapAtOnce
 	ld hl, WouldYouLikeToSaveTheGameText
@@ -18,7 +18,6 @@ SaveMenu:
 
 .refused
 	call ExitMenu
-	call GSReloadPalettes
 	farcall SaveMenu_CopyTilemapAtOnce
 	scf
 	ret
@@ -209,7 +208,6 @@ SaveTheGame_yesorno:
 	dec a
 	call CloseWindow
 	push af
-	call GSReloadPalettes
 	pop af
 	and a
 	ret
@@ -244,7 +242,7 @@ SavedTheGame:
 	ld [wOptions], a
 	; <PLAYER> saved the game!
 	ld hl, SavedTheGameText
-	call PrintText
+	call PrintText1bpp
 	; restore the original text speed setting
 	pop af
 	ld [wOptions], a
@@ -328,7 +326,7 @@ SavingDontTurnOffThePower:
 	ld [wOptions], a
 	; SAVING... DON'T TURN OFF THE POWER.
 	ld hl, SavingDontTurnOffThePowerText
-	call PrintText
+	call PrintText1bpp
 	; Restore the text speed setting
 	pop af
 	ld [wOptions], a
@@ -536,7 +534,7 @@ TryLoadSaveFile:
 	set NO_TEXT_SCROLL, a
 	ld [wOptions], a
 	ld hl, SaveFileCorruptedText
-	call PrintText
+	call PrintText1bpp
 	pop af
 	ld [wOptions], a
 	scf

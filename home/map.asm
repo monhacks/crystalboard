@@ -1012,7 +1012,9 @@ MapTextbox::
 	rst Bankswitch
 
 	push hl
-	call SpeechTextbox
+	call ClearTextbox
+	lda_coord 17, 17
+	ldcoord_a 18, 17
 	call SafeUpdateSprites
 	ld a, 1
 	ldh [hOAMUpdate], a
@@ -1900,7 +1902,6 @@ CloseSubmenu::
 	call ReloadTilesetAndPalettes
 	call UpdateSprites
 	call Call_ExitMenu
-	call GSReloadPalettes
 	jr FinishExitMenu
 
 ExitAllMenus::
@@ -1908,7 +1909,6 @@ ExitAllMenus::
 	call Call_ExitMenu
 	call ReloadTilesetAndPalettes
 	call UpdateSprites
-	call GSReloadPalettes
 FinishExitMenu::
 	ld b, CGB_MAPPALS
 	call GetCGBLayout
@@ -1924,9 +1924,7 @@ ReturnToMapWithSpeechTextbox::
 	call ClearBGPalettes
 	call ClearSprites
 	call ReloadTilesetAndPalettes
-	hlcoord 0, 12
-	lb bc, 4, 18
-	call Textbox
+	call SpeechTextbox1bpp
 	ld hl, wVramState
 	set 0, [hl]
 	call UpdateSprites

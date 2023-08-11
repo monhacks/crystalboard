@@ -522,7 +522,7 @@ LinkTimeout:
 	pop de
 	pop hl
 	bccoord 1, 14
-	call PlaceHLTextAtBC
+	call PrintHLTextAtBC
 	call RotateThreePalettesRight
 	call ClearScreen
 	ld b, CGB_DIPLOMA
@@ -1465,7 +1465,7 @@ LinkTrade_TradeStatsMenu:
 	farcall Link_WaitBGMap
 	ld hl, .LinkTradeCantBattleText
 	bccoord 1, 14
-	call PlaceHLTextAtBC
+	call PrintHLTextAtBC
 	jr .cancel_trade
 
 .abnormal
@@ -1487,7 +1487,7 @@ LinkTrade_TradeStatsMenu:
 	farcall Link_WaitBGMap
 	ld hl, .LinkAbnormalMonText
 	bccoord 1, 14
-	call PlaceHLTextAtBC
+	call PrintHLTextAtBC
 
 .cancel_trade
 	hlcoord 0, 12
@@ -1660,7 +1660,7 @@ LinkTrade:
 	call GetPokemonName
 	ld hl, LinkAskTradeForText
 	bccoord 1, 14
-	call PlaceHLTextAtBC
+	call PrintHLTextAtBC
 	call LoadStandardMenuHeader
 	hlcoord 10, 7
 	ld b, 3

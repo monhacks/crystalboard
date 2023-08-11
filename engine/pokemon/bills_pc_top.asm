@@ -28,7 +28,7 @@ _BillsPC:
 	push af
 	set NO_TEXT_SCROLL, [hl]
 	ld hl, .PCWhatText
-	call PrintText
+	call PrintText1bpp
 	pop af
 	ld [wOptions], a
 	call LoadFontsBattleExtra
@@ -111,7 +111,7 @@ BillsPC_MovePKMNMenu:
 	farcall IsAnyMonHoldingMail
 	jr nc, .no_mail
 	ld hl, .PCMonHoldingMailText
-	call PrintText
+	call PrintText1bpp
 	jr .quit
 
 .no_mail
@@ -240,10 +240,10 @@ ClearPCItemScreen:
 	call ByteFill
 	hlcoord 0, 0
 	lb bc, 10, 18
-	call Textbox
+	call Textbox1bpp
 	hlcoord 0, 12
 	lb bc, 4, 18
-	call Textbox
+	call Textbox1bpp
 	call WaitBGMap2
 	call SetPalettes ; load regular palettes?
 	ret

@@ -167,7 +167,7 @@ ClearBattleRAM:
 
 	callfar ResetEnemyStatLevels
 
-	call ClearWindowData
+	call ClearMenuAndWindowData
 
 	ld hl, hBGMapAddress
 	xor a ; LOW(vBGMap0)

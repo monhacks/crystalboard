@@ -164,7 +164,7 @@ SwitchPartyMons:
 	ld a, PARTYMENUACTION_MOVE
 	ld [wPartyMenuActionText], a
 	farcall WritePartyMenuTilemap
-	farcall PrintPartyMenuText
+	farcall PlacePartyMenuText
 
 	hlcoord 0, 1
 	ld bc, SCREEN_WIDTH * 2
@@ -268,7 +268,7 @@ GiveTakePartyMonItem:
 	ret
 
 TryGiveItemToPartymon:
-	call SpeechTextbox
+	call SpeechTextbox1bpp
 	call PartyMonItemName
 	call GetPartyItemLocation
 	ld a, [hl]
@@ -342,7 +342,7 @@ GivePartyItem:
 	ret
 
 TakePartyItem:
-	call SpeechTextbox
+	call SpeechTextbox1bpp
 	call GetPartyItemLocation
 	ld a, [hl]
 	and a
@@ -728,7 +728,7 @@ MonMenu_Softboiled_MilkDrink:
 
 .NotEnoughHP:
 	ld hl, .PokemonNotEnoughHPText
-	call PrintText
+	call PrintText1bpp
 
 .finish
 	xor a
@@ -1106,11 +1106,11 @@ SetUpMoveScreenBG:
 	hlcoord 0, 1
 	ld b, 9
 	ld c, 18
-	call Textbox
+	call Textbox1bpp
 	hlcoord 0, 11
 	ld b, 5
 	ld c, 18
-	call Textbox
+	call Textbox1bpp
 	hlcoord 2, 0
 	lb bc, 2, 3
 	call ClearBox
@@ -1157,7 +1157,7 @@ SetUpMoveList:
 	hlcoord 0, 11
 	ld b, 5
 	ld c, 18
-	jp Textbox
+	jp Textbox1bpp
 
 PrepareToPlaceMoveData:
 	ld hl, wPartyMon1Moves

@@ -7,7 +7,7 @@ _DeleteSaveData:
 	ld de, MUSIC_MAIN_MENU
 	call PlayMusic
 	ld hl, .ClearAllSaveDataText
-	call PrintText
+	call PrintText1bpp
 	ld hl, .NoYesMenuHeader
 	call CopyMenuHeader
 	call VerticalMenu

@@ -31,7 +31,7 @@ InitPartyMenuLayout:
 	call InitPartyMenuWithCancel
 	call InitPartyMenuGFX
 	call WritePartyMenuTilemap
-	call PrintPartyMenuText
+	call PlacePartyMenuText
 	ret
 
 LoadPartyMenuGFX:
@@ -625,10 +625,10 @@ PartyMenuSelect:
 	scf
 	ret
 
-PrintPartyMenuText:
+PlacePartyMenuText:
 	hlcoord 0, 14
 	lb bc, 2, 18
-	call Textbox
+	call Textbox1bpp
 	ld a, [wPartyCount]
 	and a
 	jr nz, .haspokemon
@@ -769,7 +769,7 @@ PrintPartyMenuActionText:
 	push af
 	set NO_TEXT_SCROLL, a
 	ld [wOptions], a
-	call PrintText
+	call PrintText1bpp
 	pop af
 	ld [wOptions], a
 	ret

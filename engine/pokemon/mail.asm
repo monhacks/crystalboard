@@ -488,7 +488,7 @@ MailboxPC:
 	farcall InitPartyMenuWithCancel
 	farcall InitPartyMenuGFX
 	farcall WritePartyMenuTilemap
-	farcall PrintPartyMenuText
+	farcall PlacePartyMenuText
 	call WaitBGMap
 	call SetPalettes
 	call DelayFrame
@@ -503,12 +503,12 @@ MailboxPC:
 	and a
 	jr z, .attach_mail
 	ld hl, .MailAlreadyHoldingItemText
-	call PrintText
+	call PrintText1bpp
 	jr .try_again
 
 .egg
 	ld hl, .MailEggText
-	call PrintText
+	call PrintText1bpp
 	jr .try_again
 
 .attach_mail
@@ -517,7 +517,7 @@ MailboxPC:
 	ld b, a
 	call MoveMailFromPCToParty
 	ld hl, .MailMovedFromBoxText
-	call PrintText
+	call PrintText1bpp
 
 .exit2
 	jp CloseSubmenu

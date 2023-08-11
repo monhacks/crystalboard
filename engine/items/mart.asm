@@ -163,7 +163,7 @@ StandardMart:
 .HowMayIHelpYou:
 	call LoadStandardMenuHeader
 	ld hl, MartWelcomeText
-	call PrintText
+	call PrintText1bpp
 	ld a, STANDARDMART_TOPMENU
 	ret
 
@@ -211,7 +211,7 @@ StandardMart:
 .AnythingElse:
 	call LoadStandardMenuHeader
 	ld hl, MartAskMoreText
-	call PrintText
+	call PrintText1bpp
 	ld a, STANDARDMART_TOPMENU
 	ret
 
@@ -364,7 +364,7 @@ LoadBuyMenuText:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	call PrintText
+	call PrintText1bpp
 	ret
 
 MartAskPurchaseQuantity:
@@ -441,7 +441,7 @@ BuyMenuLoop:
 	ld [wMenuScrollPositionBackup], a
 	ld a, [wMenuCursorY]
 	ld [wMenuCursorPositionBackup], a
-	call SpeechTextbox
+	call SpeechTextbox1bpp
 	ld a, [wMenuJoypad]
 	cp B_BUTTON
 	jr z, .set_carry
@@ -476,7 +476,7 @@ BuyMenuLoop:
 	call JoyWaitAorB
 
 .cancel
-	call SpeechTextbox
+	call SpeechTextbox1bpp
 	and a
 	ret
 
@@ -758,13 +758,13 @@ SellMenu:
 	and a
 	jr z, .okay_to_sell
 	ld hl, MartCantBuyText
-	call PrintText
+	call PrintText1bpp
 	and a
 	ret
 
 .okay_to_sell
 	ld hl, MartSellHowManyText
-	call PrintText
+	call PrintText1bpp
 	farcall PlaceMoneyAtTopLeftOfTextbox
 	farcall SelectQuantityToSell
 	call ExitMenu

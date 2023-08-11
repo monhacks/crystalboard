@@ -72,7 +72,7 @@ CheckCanLearnMoveTutorMove:
 	pop de
 	ld a, BANK(TMHMNotCompatibleText)
 	ld hl, TMHMNotCompatibleText
-	call FarPrintText
+	call FarPrintText1bpp
 	jr .didnt_learn
 
 .can_learn

@@ -697,7 +697,7 @@ AI_Switch:
 
 	jr c, .skiptext
 	ld hl, EnemyWithdrewText
-	call PrintText
+	call PrintText1bpp
 
 .skiptext
 	ld a, 1
@@ -838,7 +838,7 @@ PrintText_UsedItemOn:
 	ld bc, ITEM_NAME_LENGTH
 	call CopyBytes
 	ld hl, EnemyUsedOnText
-	jp PrintText
+	jp PrintText1bpp
 
 EnemyUsedOnText:
 	text_far _EnemyUsedOnText

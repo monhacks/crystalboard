@@ -15,7 +15,7 @@ BugContest_SetCaughtContestMon:
 	ld [wNamedObjectIndex], a
 	call GetPokemonName
 	ld hl, .ContestCaughtMonText
-	call PrintText
+	call PrintText1bpp
 	ret
 
 .generatestats

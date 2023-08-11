@@ -237,7 +237,7 @@ PokeBallEffect:
 	ld hl, wOptions
 	res NO_TEXT_SCROLL, [hl]
 	ld hl, ItemUsedText
-	call PrintText
+	call PrintText1bpp
 
 	ld a, [wEnemyMonCatchRate]
 	ld b, a
@@ -503,7 +503,7 @@ PokeBallEffect:
 	jp z, .FinishTutorial
 
 	ld hl, Text_GotchaMonWasCaught
-	call PrintText
+	call PrintText1bpp
 
 	call ClearSprites
 
@@ -524,7 +524,7 @@ PokeBallEffect:
 	jr z, .skip_pokedex
 
 	ld hl, NewDexDataText
-	call PrintText
+	call PrintText1bpp
 
 	call ClearSprites
 
@@ -569,7 +569,7 @@ PokeBallEffect:
 
 .SkipPartyMonFriendBall:
 	ld hl, AskGiveNicknameText
-	call PrintText
+	call PrintText1bpp
 
 	ld a, [wCurPartySpecies]
 	ld [wNamedObjectIndex], a
@@ -629,7 +629,7 @@ PokeBallEffect:
 	call CloseSRAM
 
 	ld hl, AskGiveNicknameText
-	call PrintText
+	call PrintText1bpp
 
 	ld a, [wCurPartySpecies]
 	ld [wNamedObjectIndex], a
@@ -672,7 +672,7 @@ PokeBallEffect:
 	call CloseSRAM
 
 	ld hl, BallSentToPCText
-	call PrintText
+	call PrintText1bpp
 
 	call RotateThreePalettesRight
 	call LoadStandardFont
@@ -686,7 +686,7 @@ PokeBallEffect:
 	ld hl, Text_GotchaMonWasCaught
 
 .shake_and_break_free
-	call PrintText
+	call PrintText1bpp
 	call ClearSprites
 
 .return_from_capture
@@ -1190,7 +1190,7 @@ VitaminEffect:
 	call Play_SFX_FULL_HEAL
 
 	ld hl, ItemStatRoseText
-	call PrintText
+	call PrintText1bpp
 
 	ld c, HAPPINESS_USEDITEM
 	farcall ChangeHappiness
@@ -1199,7 +1199,7 @@ VitaminEffect:
 
 NoEffectMessage:
 	ld hl, ItemWontHaveEffectText
-	call PrintText
+	call PrintText1bpp
 	jp ClearPalettes
 
 UpdateStatsAfterItem:
@@ -1341,7 +1341,7 @@ RareCandyEffect:
 	hlcoord 9, 0
 	ld b, 10
 	ld c, 9
-	call Textbox
+	call Textbox1bpp
 
 	hlcoord 11, 1
 	ld bc, 4
@@ -1722,7 +1722,7 @@ ChooseMonToUseItemOn:
 	farcall InitPartyMenuWithCancel
 	farcall InitPartyMenuGFX
 	farcall WritePartyMenuTilemap
-	farcall PrintPartyMenuText
+	farcall PlacePartyMenuText
 	call WaitBGMap
 	call SetPalettes
 	call DelayFrame
@@ -2073,7 +2073,7 @@ UseRepel:
 	ld a, [wRepelEffect]
 	and a
 	ld hl, RepelUsedEarlierIsStillInEffectText
-	jp nz, PrintText
+	jp nz, PrintText1bpp
 
 	ld a, b
 	ld [wRepelEffect], a
@@ -2189,9 +2189,9 @@ PokeFluteEffect:
 	ld a, [wPokeFluteCuredSleep]
 	and a
 	ld hl, .PlayedFluteText
-	jp z, PrintText
+	jp z, PrintText1bpp
 	ld hl, .PlayedTheFlute
-	call PrintText
+	call PrintText1bpp
 
 	ld a, [wLowHealthAlarm]
 	and 1 << DANGER_ON_F
@@ -2199,7 +2199,7 @@ PokeFluteEffect:
 	; more code was dummied out here
 .dummy
 	ld hl, .FluteWakeUpText
-	jp PrintText
+	jp PrintText1bpp
 
 .CureSleep:
 	ld de, PARTYMON_STRUCT_LENGTH
@@ -2305,7 +2305,7 @@ RestorePPEffect:
 	ld hl, RestoreThePPOfWhichMoveText
 
 .ppup
-	call PrintText
+	call PrintText1bpp
 
 	ld a, [wCurMoveNum]
 	push af
@@ -2346,7 +2346,7 @@ RestorePPEffect:
 
 .CantUsePPUpOnSketch:
 	ld hl, PPIsMaxedOutText
-	call PrintText
+	call PrintText1bpp
 	jr .loop2
 
 .do_ppup
@@ -2359,7 +2359,7 @@ RestorePPEffect:
 	call Play_SFX_FULL_HEAL
 
 	ld hl, PPsIncreasedText
-	call PrintText
+	call PrintText1bpp
 
 FinishPPRestore:
 	call ClearPalettes
@@ -2382,7 +2382,7 @@ BattleRestorePP:
 .not_in_battle
 	call Play_SFX_FULL_HEAL
 	ld hl, PPRestoredText
-	call PrintText
+	call PrintText1bpp
 	jr FinishPPRestore
 
 .UpdateBattleMonPP:
@@ -2557,7 +2557,7 @@ OpenBox:
 	farcall SetSpecificDecorationFlag
 
 	ld hl, .SentTrophyHomeText
-	call PrintText
+	call PrintText1bpp
 
 	jp UseDisposableItem
 
@@ -2577,7 +2577,7 @@ Play_SFX_FULL_HEAL:
 
 UseItemText:
 	ld hl, ItemUsedText
-	call PrintText
+	call PrintText1bpp
 	call Play_SFX_FULL_HEAL
 	call WaitPressAorB_BlinkCursor
 UseDisposableItem:
@@ -2599,14 +2599,14 @@ UseBallInTrainerBattle:
 	ld [wNumHits], a
 	predef PlayBattleAnim
 	ld hl, BallBlockedText
-	call PrintText
+	call PrintText1bpp
 	ld hl, BallDontBeAThiefText
-	call PrintText
+	call PrintText1bpp
 	jr UseDisposableItem
 
 WontHaveAnyEffect_NotUsedMessage:
 	ld hl, ItemWontHaveEffectText
-	call PrintText
+	call PrintText1bpp
 
 	; Item wasn't used.
 	ld a, $2
@@ -2615,11 +2615,11 @@ WontHaveAnyEffect_NotUsedMessage:
 
 LooksBitterMessage:
 	ld hl, ItemLooksBitterText
-	jp PrintText
+	jp PrintText1bpp
 
 Ball_BoxIsFullMessage:
 	ld hl, BallBoxFullText
-	call PrintText
+	call PrintText1bpp
 
 	; Item wasn't used.
 	ld a, $2
@@ -2654,7 +2654,7 @@ CantUseItemMessage:
 ; Item couldn't be used.
 	xor a
 	ld [wItemEffectSucceeded], a
-	jp PrintText
+	jp PrintText1bpp
 
 ItemLooksBitterText:
 	text_far _ItemLooksBitterText

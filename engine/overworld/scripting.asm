@@ -383,6 +383,8 @@ Script_promptbutton:
 	ret
 
 Script_yesorno:
+	ld a, TRUE
+	ld [wMenuBoxUse2bppFrame], a
 	call YesNoBox
 	ld a, FALSE
 	jr c, .no
@@ -423,6 +425,8 @@ Script_closepokepic:
 	ret
 
 Script_verticalmenu:
+	ld a, TRUE
+	ld [wMenuBoxUse2bppFrame], a
 	ld a, [wScriptBank]
 	ld hl, VerticalMenu
 	rst FarCall
@@ -434,6 +438,8 @@ Script_verticalmenu:
 	ret
 
 Script__2dmenu:
+	ld a, TRUE
+	ld [wMenuBoxUse2bppFrame], a
 	ld a, [wScriptBank]
 	ld hl, _2DMenu
 	rst FarCall
@@ -445,7 +451,11 @@ Script__2dmenu:
 	ret
 
 Script_battletowertext:
-	call SetUpTextbox
+	push hl
+	call SpeechTextbox2bpp
+	call UpdateSprites
+	call ApplyTilemap
+	pop hl
 	call GetScriptByte
 	ret
 
@@ -2188,7 +2198,7 @@ Script_reloadend:
 	jp Script_end
 
 Script_opentext:
-	call OpenText
+	call OpenText2bpp
 	ret
 
 Script_refreshscreen:

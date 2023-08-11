@@ -960,7 +960,7 @@ BillsPC_PlaceString:
 	push de
 	hlcoord 0, 15
 	lb bc, 1, 18
-	call Textbox
+	call Textbox1bpp
 	pop de
 	hlcoord 1, 16
 	call PlaceString
@@ -977,7 +977,7 @@ BillsPC_MoveMonWOMail_BoxNameAndArrows:
 BillsPC_BoxName:
 	hlcoord 8, 0
 	lb bc, 1, 10
-	call Textbox
+	call Textbox1bpp
 
 	ld a, [wBillsPC_LoadedBox]
 	and a
@@ -1216,7 +1216,7 @@ BillsPC_LoadMonStats:
 BillsPC_RefreshTextboxes:
 	hlcoord 8, 2
 	lb bc, 10, 10
-	call Textbox
+	call Textbox1bpp
 
 	hlcoord 8, 2
 	ld [hl], "└"
@@ -1771,7 +1771,7 @@ DepositPokemon:
 	call ClearBox
 	hlcoord 0, 15
 	lb bc, 1, 18
-	call Textbox
+	call Textbox1bpp
 	call WaitBGMap
 	hlcoord 1, 16
 	ld de, PCString_Stored
@@ -1826,7 +1826,7 @@ TryWithdrawPokemon:
 	call ClearBox
 	hlcoord 0, 15
 	lb bc, 1, 18
-	call Textbox
+	call Textbox1bpp
 	call WaitBGMap
 	hlcoord 1, 16
 	ld de, PCString_Got
@@ -1862,7 +1862,7 @@ ReleasePKMN_ByePKMN:
 	call ClearBox
 	hlcoord 0, 15
 	lb bc, 1, 18
-	call Textbox
+	call Textbox1bpp
 
 	call WaitBGMap
 	ld a, [wCurPartySpecies]
@@ -1883,7 +1883,7 @@ ReleasePKMN_ByePKMN:
 	call DelayFrames
 	hlcoord 0, 15
 	lb bc, 1, 18
-	call Textbox
+	call Textbox1bpp
 	hlcoord 1, 16
 	ld de, PCString_Bye
 	call PlaceString
@@ -1906,7 +1906,7 @@ MovePKMNWithoutMail_InsertMon:
 	push af
 	hlcoord 0, 15
 	lb bc, 1, 18
-	call Textbox
+	call Textbox1bpp
 	hlcoord 1, 16
 	ld de, .Saving_LeaveOn
 	call PlaceString
@@ -2212,7 +2212,7 @@ _ChangeBox:
 	ld [wMenuScrollPosition], a
 	hlcoord 0, 4
 	lb bc, 8, 9
-	call Textbox
+	call Textbox1bpp
 	call ScrollingMenu
 	ld a, [wMenuJoypad]
 	cp B_BUTTON
@@ -2275,7 +2275,7 @@ GetBoxName:
 BillsPC_PrintBoxCountAndCapacity:
 	hlcoord 11, 7
 	lb bc, 5, 7
-	call Textbox
+	call Textbox1bpp
 	ld a, [wMenuSelection]
 	cp -1
 	ret z
@@ -2350,7 +2350,7 @@ BillsPC_PrintBoxName:
 	hlcoord 0, 0
 	ld b, 2
 	ld c, 18
-	call Textbox
+	call Textbox1bpp
 	hlcoord 1, 2
 	ld de, .Current
 	call PlaceString
@@ -2478,7 +2478,7 @@ BillsPC_PlaceChangeBoxString:
 	push de
 	hlcoord 0, 14
 	lb bc, 2, 18
-	call Textbox
+	call Textbox1bpp
 	pop de
 	hlcoord 1, 16
 	call PlaceString
