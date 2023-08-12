@@ -88,32 +88,6 @@ OpenAndCloseMenu_HDMATransferTilemapAndAttrmap::
 	ei
 	ret
 
-Mobile_OpenAndCloseMenu_HDMATransferTilemapAndAttrmap:
-	ld hl, .Function
-	jp CallInSafeGFXMode
-
-.Function:
-	; Transfer wAttrmap and Tilemap to BGMap
-	; Fill vBGAttrs with $00
-	; Fill vBGTiles with $ff
-	decoord 0, 0, wAttrmap
-	ld hl, wScratchAttrmap
-	call PadAttrmapForHDMATransfer
-	ld c, $ff
-	decoord 0, 0
-	ld hl, wScratchTilemap
-	call PadMapForHDMATransfer
-
-	ld a, $1
-	ldh [rVBK], a
-	ld hl, wScratchAttrmap
-	call HDMATransfer_Wait127Scanlines_toBGMap
-	ld a, $0
-	ldh [rVBK], a
-	ld hl, wScratchTilemap
-	call HDMATransfer_Wait127Scanlines_toBGMap
-	ret
-
 CallInSafeGFXMode:
 	ldh a, [hBGMapMode]
 	push af

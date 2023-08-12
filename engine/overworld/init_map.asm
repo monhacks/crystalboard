@@ -72,6 +72,21 @@ LoadFont_NoOAMUpdate::
 	ldh [hOAMUpdate], a
 	ret
 
+LoadOverworldFont_NoOAMUpdate::
+	ldh a, [hOAMUpdate]
+	push af
+	ld a, $1
+	ldh [hOAMUpdate], a
+
+	call LoadOverworldFontAndFrame
+	ld a, $90
+	ldh [hWY], a
+	call SafeUpdateSprites
+
+	pop af
+	ldh [hOAMUpdate], a
+	ret
+
 HDMATransfer_FillBGMap0WithBlack:
 	ldh a, [rSVBK]
 	push af

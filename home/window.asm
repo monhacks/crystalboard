@@ -70,6 +70,7 @@ OpenText1bpp::
 	call SpeechTextbox1bpp
 	call _OpenAndCloseMenu_HDMATransferTilemapAndAttrmap ; anchor bgmap
 	call LoadFont_NoOAMUpdate ; load 1bpp font and frame, hide window
+
 	pop af
 	rst Bankswitch
 

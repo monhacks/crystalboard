@@ -1,12 +1,16 @@
 _LoadOverworldFontAndFrame::
 	ld de, .OverworldFontGFX
 	ld hl, vTiles1
-	lb bc, BANK(.OverworldFontGFX), 112
-	call Get2bpp
+	lb bc, BANK(.OverworldFontGFX), 64
+	call Get2bppViaHDMA
+	ld de, .OverworldFontGFX + 64 * LEN_2BPP_TILE
+	ld hl, vTiles1 tile $40
+	lb bc, BANK(.OverworldFontGFX), 56
+	call Get2bppViaHDMA
 	ld de, .OverworldFontSpaceGFX
 	ld hl, vTiles2 tile " "
 	lb bc, BANK(.OverworldFontSpaceGFX), 1
-	call Get2bpp
+	call Get2bppViaHDMA
 	ld a, [wEnvironment]
 	maskbits NUM_ENVIRONMENTS
 	ld bc, OW_TEXTBOX_FRAME_TILES * LEN_2BPP_TILE
@@ -16,7 +20,7 @@ _LoadOverworldFontAndFrame::
 	ld e, l
 	ld hl, vTiles0 tile "┌" ; $f0
 	lb bc, BANK(.OverworldFrames), OW_TEXTBOX_FRAME_TILES
-	call Get2bpp
+	call Get2bppViaHDMA
 	ret
 
 .OverworldFontGFX:
