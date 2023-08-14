@@ -111,3 +111,12 @@ DEF NUM_PARTYMENUACTIONS EQU const_value
 	const NAME_6 ; duplicate of NAME_MON
 	const NAME_7 ; duplicate of NAME_MON
 DEF NUM_NAME_TYPES EQU const_value
+
+; Board menu items (see engine/board/menu.asm)
+	const_def
+	const BOARDMENUITEM_DIE
+	const BOARDMENUITEM_POKEMON
+	const BOARDMENUITEM_BAG
+	const BOARDMENUITEM_POKEGEAR
+	const BOARDMENUITEM_EXIT
+DEF NUM_BOARD_MENU_ITEMS EQU const_value

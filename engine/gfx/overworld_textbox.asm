@@ -14,8 +14,8 @@
 	const OW_TEXTBOX_FRAME_RIGHT_2
 	const OW_TEXTBOX_FRAME_BACKGROUND
 
-OW_TEXTBOX_FRAME_MIN_HEIGHT EQU 4
-OW_TEXTBOX_FRAME_MIN_WIDTH  EQU 6
+DEF OW_TEXTBOX_FRAME_MIN_HEIGHT EQU 4
+DEF OW_TEXTBOX_FRAME_MIN_WIDTH  EQU 6
 
 _OverworldTextbox::
 ; Draw a textbox at de with room for b rows and c columns using the 2bpp overworld frame tiles.

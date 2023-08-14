@@ -79,6 +79,8 @@ ROMX $14
 	"Unused Egg Pic"
 ROMX $15
 	"Map Scripts 1"
+ROMX $1e
+	"Board 1"
 ROMX $20
 	"bank20"
 ROMX $21

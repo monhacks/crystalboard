@@ -1160,6 +1160,11 @@ wMenuData_ItemsPointerAddr:: dw
 wMenuData_ScrollingMenuFunction1:: ds 3
 wMenuData_ScrollingMenuFunction2:: ds 3
 wMenuData_ScrollingMenuFunction3:: ds 3
+
+NEXTU
+; Board Menu
+wBoardMenuCursorPosition:: db
+
 ENDU
 wMenuDataEnd::
 
@@ -1663,7 +1668,10 @@ wStringBuffer3:: ds STRING_BUFFER_LENGTH
 wStringBuffer4:: ds STRING_BUFFER_LENGTH
 wStringBuffer5:: ds STRING_BUFFER_LENGTH
 
-wBattleMenuCursorPosition:: db
+wBattleMenuCursorPosition::
+wStartMenuLastCursorPosition::
+wBoardMenuLastCursorPosition::
+	db
 
 wCurBattleMon::
 ; index of the player's mon currently in battle (0-5)

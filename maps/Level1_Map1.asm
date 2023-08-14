@@ -12,9 +12,14 @@ Level1_Map1_MapScripts:
 
 PlayersHouseDoll1Script::
 	opentext
+	callasm .BoardMenu
+	waitbutton
 	pokemart MARTTYPE_STANDARD, MART_AZALEA
 	closetext
 	end
+.BoardMenu:
+	farcall BoardMenu
+	ret
 ;	describedecoration DECODESC_LEFT_DOLL
 
 PlayersHouseDoll2Script:

@@ -19,6 +19,23 @@ FillBoxWithByte::
 	jr nz, .row
 	ret
 
+FillBoxWithConsecutiveBytes::
+.row
+	push bc
+	push hl
+.col
+	ld [hli], a
+	inc a
+	dec c
+	jr nz, .col
+	pop hl
+	ld bc, SCREEN_WIDTH
+	add hl, bc
+	pop bc
+	dec b
+	jr nz, .row
+	ret
+
 ClearTilemap::
 ; Fill wTilemap with blank tiles.
 

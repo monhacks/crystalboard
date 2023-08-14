@@ -232,6 +232,10 @@ INCLUDE "data/pokemon/base_stats.asm"
 INCLUDE "data/pokemon/names.asm"
 INCLUDE "data/pokemon/unused_pic_banks.asm"
 
+SECTION "Board 1", ROMX
+
+INCLUDE "engine/board/menu.asm"
+
 
 SECTION "bank20", ROMX
 
@@ -386,6 +390,7 @@ INCLUDE "engine/overworld/warp_connection.asm"
 INCLUDE "engine/battle/used_move_text.asm"
 INCLUDE "engine/gfx/load_overworld_font.asm"
 INCLUDE "engine/gfx/overworld_textbox.asm"
+INCLUDE "engine/gfx/load_board_gfx.asm"
 
 
 SECTION "Title", ROMX
