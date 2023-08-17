@@ -1,16 +1,23 @@
-DEF BOARD_MENU_BG_FIRST_TILE EQU "A"
-DEF BOARD_MENU_OAM_FIRST_TILE EQU BOARD_MENU_BG_FIRST_TILE + 18 * 3
-
 BoardMenu::
 ; returns the selected menu item (BOARDMENUITEM_*) in wScriptVar upon exit
 	ld a, [wBoardMenuLastCursorPosition]
+	cp NUM_BOARD_MENU_ITEMS
+	jr c, .ok
+	ld a, BOARDMENUITEM_DIE
+.ok
 	ld [wBoardMenuCursorPosition], a
+; refresh overworld sprites to hide those behind textbox before drawing new graphics
+	call UpdateSprites
 	farcall LoadBoardMenuGFX
 	call DrawBoardMenuTiles
+	call ApplyBoardMenuSpritePalette
+; allow Pal update to complete, then apply the tilemap
+	call DelayFrame
 	call ApplyTilemap
+; update sprites again to display the sprites of the selected menu item
+	ld hl, wDisplaySecondarySprites
+	set SECONDARYSPRITES_BOARD_MENU_F, [hl]
 	call UpdateSprites
-; draw board menu OAM after overworld sprites
-	call DrawBoardMenuOAM
 
 .loop
 	call GetBoardMenuSelection
@@ -21,12 +28,15 @@ BoardMenu::
 	jr z, .loop
 
 ; menu item change: refresh board menu OAM and save cursor position
-	call DrawBoardMenuOAM
+	call ApplyBoardMenuSpritePalette
+	call UpdateSprites
 	ld a, [wBoardMenuCursorPosition]
 	ld [wBoardMenuLastCursorPosition], a
 	jr .loop
 
 .done
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_BOARD_MENU_F, [hl]
 	ld a, [wBoardMenuCursorPosition]
 	ld [wScriptVar], a
 	ret
@@ -37,9 +47,9 @@ DrawBoardMenuTiles:
 	lb bc, 3, 18
 	jp FillBoxWithConsecutiveBytes
 
-DrawBoardMenuOAM:
+ApplyBoardMenuSpritePalette:
 	ld hl, BoardMenuItemPals
-	ld a, [wBoardMenuLastCursorPosition]
+	ld a, [wBoardMenuCursorPosition]
 	ld bc, PALETTE_SIZE
 	call AddNTimes
  ; set wOBPals2 directly rather than wOBPals1 to avoid calling ApplyPals and overwriting other overworld pals
@@ -47,28 +57,51 @@ DrawBoardMenuOAM:
 	ld bc, PALETTE_SIZE
 	ld a, BANK(wOBPals2)
 	call FarCopyWRAM
-
-	ld hl, .OAM
-	ld a, [wBoardMenuCursorPosition]
-	ld bc, 3 * 3 * SPRITEOAMSTRUCT_LENGTH
-	call AddNTimes
-; find the beginning of free space in OAM, and assure there's space for 3 * 3 objects
-	ldh a, [hUsedSpriteIndex]
-	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (3 * 3 * SPRITEOAMSTRUCT_LENGTH)
-	jr nc, .oam_full
-; copy the sprite data (3 * 3 objects) of that item to the available space in OAM
-	ld e, a
-	ld d, HIGH(wShadowOAM)
-	ld bc, 3 * 3 * SPRITEOAMSTRUCT_LENGTH
-	call CopyBytes
-.oam_full
+	ld a, TRUE
+	ldh [hCGBPalUpdate], a
 	ret
-
-.OAM:
 
 GetBoardMenuSelection:
+	call JoyTextDelay
+	call GetMenuJoypad
+	bit A_BUTTON_F, a
+	jr nz, .a_button
+	bit D_RIGHT_F, a
+	jr nz, .d_right
+	bit D_LEFT_F, a
+	jr nz, .d_left
+	xor a
+	ret ; nc
+
+.a_button
+	call PlayClickSFX
+	call WaitSFX
 	scf
 	ret
+
+.d_right
+	call PlayClickSFX
+	ld a, [wBoardMenuCursorPosition]
+	inc a
+	cp NUM_BOARD_MENU_ITEMS
+	jr c, .right_dont_wrap_around
+	ld a, BOARDMENUITEM_DIE
+.right_dont_wrap_around
+	ld [wBoardMenuCursorPosition], a
+	xor a
+	ret ; nc
+
+.d_left
+	call PlayClickSFX
+	ld a, [wBoardMenuCursorPosition]
+	dec a
+	cp -1
+	jr nz, .left_dont_wrap_around
+	ld a, NUM_BOARD_MENU_ITEMS - 1 ; BOARDMENUITEM_EXIT
+.left_dont_wrap_around
+	ld [wBoardMenuCursorPosition], a
+	xor a
+	ret ; nc
 
 BoardMenuItemPals:
 INCLUDE "gfx/board/menu.pal"

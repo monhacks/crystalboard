@@ -6,6 +6,10 @@ DEF AUTO_INPUT EQU $ff
 	const DEBUG_BATTLE_F
 	const DEBUG_FIELD_F
 
+; wDisplaySecondarySprites
+	const_def
+	const SECONDARYSPRITES_BOARD_MENU_F	; 0
+
 ; wCurDexMode::
 	const_def
 	const DEXMODE_NEW

@@ -125,7 +125,7 @@ wDebugFlags:: db
 wGameLogicPaused:: db
 wSpriteUpdatesEnabled:: db
 
-wUnusedScriptByte:: db
+wDisplaySecondarySprites:: db
 
 wMapTimeOfDay:: db
 

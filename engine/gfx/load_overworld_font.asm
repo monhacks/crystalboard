@@ -18,7 +18,7 @@ _LoadOverworldFontAndFrame::
 	call AddNTimes
 	ld d, h
 	ld e, l
-	ld hl, vTiles0 tile "┌" ; $f0
+	ld hl, vTiles0 tile OVERWORLD_FRAME_FIRST_TILE ; $f0
 	lb bc, BANK(.OverworldFrames), OW_TEXTBOX_FRAME_TILES
 	call Get2bppViaHDMA
 	ret

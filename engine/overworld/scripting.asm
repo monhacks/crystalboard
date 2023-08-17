@@ -2208,7 +2208,6 @@ Script_refreshscreen:
 
 Script_writeunusedbyte:
 	call GetScriptByte
-	ld [wUnusedScriptByte], a
 	ret
 
 Script_closetext:

@@ -2810,6 +2810,7 @@ DEF PRIORITY_NORM EQU $20
 DEF PRIORITY_HIGH EQU $30
 
 InitSprites:
+	call InitSecondarySprites
 	call .DeterminePriorities
 	ld c, PRIORITY_HIGH
 	call .InitSpritesByPriority
@@ -3042,3 +3043,36 @@ InitSprites:
 	dw wObject10Struct
 	dw wObject11Struct
 	dw wObject12Struct
+
+InitSecondarySprites:
+	ld a, [wDisplaySecondarySprites]
+	bit SECONDARYSPRITES_BOARD_MENU_F, a
+	call nz, .InitBoardMenuSprites
+	ret
+
+.InitBoardMenuSprites:
+	push af
+
+	ld hl, BoardMenuOAM
+	ld a, [wBoardMenuCursorPosition]
+	ld bc, 3 * 3 * SPRITEOAMSTRUCT_LENGTH
+	call AddNTimes
+; find the beginning of free space in OAM, and assure there's space for 3 * 3 objects
+	ldh a, [hUsedSpriteIndex]
+	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (3 * 3 * SPRITEOAMSTRUCT_LENGTH) + 1
+	jr nc, .oam_full
+; copy the sprite data (3 * 3 objects) of that item to the available space in OAM
+	ld e, a
+	ld d, HIGH(wShadowOAM)
+	ld bc, 3 * 3 * SPRITEOAMSTRUCT_LENGTH
+	call CopyBytes
+
+	ldh a, [hUsedSpriteIndex]
+	add (3 * 3 * SPRITEOAMSTRUCT_LENGTH)
+	ldh [hUsedSpriteIndex], a
+
+.oam_full
+	pop af
+	ret
+
+INCLUDE "data/sprites/secondary_sprites.asm"

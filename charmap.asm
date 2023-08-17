@@ -180,3 +180,8 @@ pushc
 	charmap "\n", $0a
 	charmap "\r", $0d
 popc
+
+; Special tiles
+DEF OVERWORLD_FRAME_FIRST_TILE EQU "┌"
+DEF BOARD_MENU_BG_FIRST_TILE EQU "A"
+DEF BOARD_MENU_OAM_FIRST_TILE EQU BOARD_MENU_BG_FIRST_TILE + 18 * 3

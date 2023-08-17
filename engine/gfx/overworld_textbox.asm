@@ -1,4 +1,4 @@
-	const_def "┌" ; $f0
+	const_def OVERWORLD_FRAME_FIRST_TILE ; $f0
 	const OW_TEXTBOX_FRAME_WHITE
 	const OW_TEXTBOX_FRAME_TOP_LEFT_CORNER
 	const OW_TEXTBOX_FRAME_TOP_2
