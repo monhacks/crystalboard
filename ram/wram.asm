@@ -2243,6 +2243,7 @@ wPlayerGender::
 	db
 
 wSavedAtLeastOnce:: db
+wSaveFileInOverworld:: db
 wSpawnAfterChampion:: db
 
 ; init time set at newgame
@@ -2285,8 +2286,6 @@ endr
 wObjectMasks:: ds NUM_OBJECTS
 
 wVariableSprites:: ds $100 - SPRITE_VARS
-
-wEnteredMapFromContinue:: db
 
 wTimeOfDayPal:: db
 wTimeOfDayPalFlags:: db

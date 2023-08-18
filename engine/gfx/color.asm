@@ -811,3 +811,16 @@ INCLUDE "gfx/beta_poker/beta_poker.pal"
 
 SlotMachinePals:
 INCLUDE "gfx/slots/slots.pal"
+
+LevelSelectionMenuMalePals:
+	table_width PAL_COLOR_SIZE * 4 * 6, LevelSelectionMenuMalePals
+INCLUDE "gfx/level_selection_menu/background_male.pal"
+	assert_table_length NUM_DAYTIMES
+
+LevelSelectionMenuFemalePals:
+	table_width PAL_COLOR_SIZE * 4 * 6, LevelSelectionMenuFemalePals
+INCLUDE "gfx/level_selection_menu/background_female.pal"
+	assert_table_length NUM_DAYTIMES
+
+LevelSelectionMenuAttrmap:
+INCLUDE "gfx/level_selection_menu/attrmap.asm"

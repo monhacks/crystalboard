@@ -38,7 +38,7 @@ CGBLayoutJumptable:
 	dw _CGB_PartyMenu
 	dw _CGB_Evolution
 	dw _CGB_GSTitleScreen
-	dw _CGB_Unused0D
+	dw _CGB_LevelSelectionMenu
 	dw _CGB_MoveList
 	dw _CGB_BetaPikachuMinigame
 	dw _CGB_PokedexSearchOption
@@ -570,11 +570,61 @@ _CGB_GSTitleScreen:
 	ldh [hCGBPalUpdate], a
 	ret
 
-_CGB_Unused0D:
-	ld hl, FourPals_Diploma
-	call CopyFourPalettes
-	call WipeAttrmap
+_CGB_LevelSelectionMenu:
+; load daytime-based player sprite pals (male and female)
+	ld a, [wTimeOfDay]
+	maskbits NUM_DAYTIMES
+	ld bc, 8 palettes
+	ld hl, MapObjectPals
+	call AddNTimes
+	ld de, wOBPals1
+	ld bc, 2 palettes
+	ld a, BANK(wOBPals1)
+	call FarCopyWRAM
+; load daytime and gender-based background pals
+	ld a, [wPlayerGender]
+	bit PLAYERGENDER_FEMALE_F, a
+	jr z, .male
+	ld hl, LevelSelectionMenuFemalePals
+	jr .got_pals
+.male
+	ld hl, LevelSelectionMenuMalePals
+.got_pals
+	ld a, [wTimeOfDay]
+	maskbits NUM_DAYTIMES
+	ld bc, 6 palettes
+	call AddNTimes
+	ld de, wBGPals1
+	ld bc, 6 palettes
+	ld a, BANK(wBGPals1)
+	call FarCopyWRAM
+; assign attrs based on tile ids according to LevelSelectionMenuAttrmap
+	hlcoord 0, 0
+	decoord 0, 0, wAttrmap
+	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
+.loop
+	push hl
+	ld a, [hl] ; tile id
+	ld hl, LevelSelectionMenuAttrmap
+	add l
+	ld l, a
+	ld a, h
+	adc 0
+	ld h, a
+	ld a, [hl] ; attr value
+	ld [de], a
+	pop hl
+	inc hl
+	inc de
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+; apply pals and attrmap
 	call ApplyAttrmap
+	call ApplyPals
+	ld a, TRUE
+	ldh [hCGBPalUpdate], a
 	ret
 
 _CGB_UnownPuzzle:

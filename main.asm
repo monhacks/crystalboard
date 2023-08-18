@@ -232,6 +232,12 @@ INCLUDE "data/pokemon/base_stats.asm"
 INCLUDE "data/pokemon/names.asm"
 INCLUDE "data/pokemon/unused_pic_banks.asm"
 
+
+SECTION "Level Selection Menu", ROMX
+
+INCLUDE "engine/menus/level_selection_menu.asm"
+
+
 SECTION "Board 1", ROMX
 
 INCLUDE "engine/board/menu.asm"

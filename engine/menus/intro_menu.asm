@@ -376,8 +376,6 @@ FinishContinueFunction:
 	ld hl, wGameTimerPaused
 	set GAME_TIMER_PAUSED_F, [hl]
 	res GAME_TIMER_MOBILE_F, [hl]
-	ld hl, wEnteredMapFromContinue
-	set 1, [hl]
 	farcall OverworldLoop
 	ld a, [wSpawnAfterChampion]
 	cp SPAWN_LEVEL_1
