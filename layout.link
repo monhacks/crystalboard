@@ -284,7 +284,6 @@ SRAM $01
 	"Active Box"
 	"Link Battle Data"
 	"SRAM Hall of Fame"
-	"SRAM Crystal Data"
 SRAM $02
 	"Boxes 1-7"
 SRAM $03

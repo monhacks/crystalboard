@@ -112,11 +112,6 @@ endr
 sHallOfFameEnd::
 
 
-SECTION "SRAM Crystal Data", SRAM
-
-sCrystalData:: ds wCrystalDataEnd - wCrystalData
-
-
 ; The PC boxes will not fit into one SRAM bank,
 ; so they use multiple SECTIONs
 DEF box_n = 0

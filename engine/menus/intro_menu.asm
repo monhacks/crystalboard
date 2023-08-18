@@ -302,7 +302,6 @@ LoadOrRegenerateLuckyIDNumber:
 Continue:
 	farcall TryLoadSaveFile
 	jr c, .FailToLoad
-	farcall _LoadData
 	call LoadStandardMenuHeader
 	call DisplaySaveInfoOnContinue
 	ld a, $1

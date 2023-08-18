@@ -411,12 +411,12 @@ DebugRoom_PrintBattleSkip:
 	db "SKIP@"
 
 DebugRoomMenu_ChangeSex:
-	ld a, BANK(sCrystalData)
+	ld a, BANK(sGameData)
 	call OpenSRAM
-	ld a, [sCrystalData + (wPlayerGender - wCrystalData)]
+	ld a, [sGameData + (wPlayerGender - wGameData)]
 	inc a
 	and 1
-	ld [sCrystalData + (wPlayerGender - wCrystalData)], a
+	ld [sGameData + (wPlayerGender - wGameData)], a
 	call CloseSRAM
 	ret
 
@@ -424,9 +424,9 @@ DebugRoom_PrintGender:
 	hlcoord 16, 0
 	ld de, .SexString
 	call PlaceString
-	ld a, BANK(sCrystalData)
+	ld a, BANK(sGameData)
 	call OpenSRAM
-	ld a, [sCrystalData + (wPlayerGender - wCrystalData)]
+	ld a, [sGameData + (wPlayerGender - wGameData)]
 	call CloseSRAM
 	or a
 	ld a, "♂"

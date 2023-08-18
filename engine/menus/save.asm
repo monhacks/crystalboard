@@ -339,7 +339,6 @@ ErasePreviousSave:
 	call EraseBoxes
 	call EraseHallOfFame
 	call EraseLinkBattleStats
-	call SaveData
 	ld a, BANK(sStackTop)
 	call OpenSRAM
 	xor a
@@ -367,10 +366,6 @@ EraseHallOfFame:
 	xor a
 	call ByteFill
 	jp CloseSRAM
-
-SaveData:
-	call _SaveData
-	ret
 
 HallOfFame_InitSaveIfNeeded:
 	ld a, [wSavedAtLeastOnce]
@@ -716,31 +711,6 @@ VerifyBackupChecksum:
 	call CloseSRAM
 	pop af
 	ret
-
-_SaveData:
-	; This is called within two scenarios:
-	;   a) ErasePreviousSave (the process of erasing the save from a previous game file)
-	;   b) unused mobile functionality
-	; It is not part of a regular save.
-
-	ld a, BANK(sCrystalData)
-	call OpenSRAM
-	ld hl, wCrystalData
-	ld de, sCrystalData
-	ld bc, wCrystalDataEnd - wCrystalData
-	call CopyBytes
-
-	jp CloseSRAM
-
-_LoadData:
-	ld a, BANK(sCrystalData)
-	call OpenSRAM
-	ld hl, sCrystalData
-	ld de, wCrystalData
-	ld bc, wCrystalDataEnd - wCrystalData
-	call CopyBytes
-
-	jp CloseSRAM
 
 GetBoxAddress:
 	ld a, [wCurBox]

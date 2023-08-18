@@ -2226,22 +2226,6 @@ wBugContestSecsRemaining:: db
 
 wMapStatusEnd::
 
-wCrystalData::
-wPlayerGender::
-; bit 0:
-;	0 male
-;	1 female
-	db
-wd473:: ds 1
-wd474:: ds 1
-wd475:: ds 1
-wd476:: ds 1
-wd477:: ds 1
-wd478:: ds 1
-wCrystalDataEnd::
-
-wd479:: ds 2
-
 wGameData::
 wPlayerData::
 wPlayerID:: dw
@@ -2251,6 +2235,12 @@ wMomsName::   ds NAME_LENGTH
 wRivalName::  ds NAME_LENGTH
 wRedsName::   ds NAME_LENGTH
 wGreensName:: ds NAME_LENGTH
+
+wPlayerGender::
+; bit 0:
+;	0 male
+;	1 female
+	db
 
 wSavedAtLeastOnce:: db
 wSpawnAfterChampion:: db
