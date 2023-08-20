@@ -2376,6 +2376,8 @@ wMooMooBerries:: db
 wUndergroundSwitchPositions:: db
 wFarfetchdPosition:: db
 
+wUnlockedLevels:: flag_array NUM_LANDMARKS
+
 ; map scene ids (data/maps/scenes.asm:MapScenes)
 ; wPokecenter2FSceneID::                            db
 

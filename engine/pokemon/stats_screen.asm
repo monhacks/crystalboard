@@ -7,7 +7,7 @@ DEF NUM_STAT_PAGES EQU const_value - 1
 DEF STAT_PAGE_MASK EQU %00000011
 
 BattleStatsScreenInit:
-;	fallthrough
+	; fallthrough
 
 StatsScreenInit:
 	ld hl, StatsScreenMain

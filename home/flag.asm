@@ -21,10 +21,13 @@ ResetFlashIfOutOfCave::
 	res STATUSFLAGS_FLASH_F, [hl]
 	ret
 
+UnlockedLevelsFlagAction::
+	ld hl, wUnlockedLevels
+	jr FlagAction
+
 EventFlagAction::
 	ld hl, wEventFlags
-	call FlagAction
-	ret
+	; fallthrough
 
 FlagAction::
 ; Perform action b on bit de in flag array hl.

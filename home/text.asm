@@ -177,6 +177,7 @@ PrintText1bpp::
 PrintText2bpp::
 	push hl
 	call SpeechTextbox2bpp
+	; fallthrough
 
 _PrintText:
 	call UpdateSprites
