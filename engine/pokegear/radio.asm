@@ -266,7 +266,7 @@ endr
 	pop bc
 	call GetWorldMapLocation
 	ld e, a
-	farcall GetLandmarkName
+	farcall LevelSelectionMenu_GetLandmarkName
 	ld hl, OPT_OakText1
 	call CopyRadioTextToRAM
 	ld a, OAKS_POKEMON_TALK_5
@@ -1249,7 +1249,7 @@ PeoplePlaces6: ; Places
 	ld c, [hl]
 	call GetWorldMapLocation
 	ld e, a
-	farcall GetLandmarkName
+	farcall LevelSelectionMenu_GetLandmarkName
 	ld hl, PnP_Text5
 	ld a, PLACES_AND_PEOPLE_7
 	jp NextRadioLine

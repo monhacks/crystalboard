@@ -218,7 +218,7 @@ GetCaughtLocation:
 	cp LANDMARK_GIFT
 	jr z, .fail
 	ld e, a
-	farcall GetLandmarkName
+	farcall LevelSelectionMenu_GetLandmarkName
 	ld hl, wStringBuffer1
 	ld de, wSeerCaughtLocation
 	ld bc, 17

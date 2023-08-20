@@ -574,7 +574,7 @@ PokegearMap_InitPlayerIcon:
 	pop af
 	ld e, a
 	push bc
-	farcall GetLandmarkCoords
+	farcall LevelSelectionMenu_GetLandmarkCoords
 	pop bc
 	ld hl, SPRITEANIMSTRUCT_XCOORD
 	add hl, bc
@@ -609,7 +609,7 @@ PokegearMap_UpdateLandmarkName:
 	pop af
 	ld e, a
 	push de
-	farcall GetLandmarkName
+	farcall LevelSelectionMenu_GetLandmarkName
 	pop de
 	farcall TownMap_ConvertLineBreakCharacters
 	hlcoord 8, 0
@@ -619,7 +619,7 @@ PokegearMap_UpdateLandmarkName:
 PokegearMap_UpdateCursorPosition:
 	push bc
 	ld e, a
-	farcall GetLandmarkCoords
+	farcall LevelSelectionMenu_GetLandmarkCoords
 	pop bc
 	ld hl, SPRITEANIMSTRUCT_XCOORD
 	add hl, bc
@@ -1986,7 +1986,7 @@ TownMapBubble:
 	ld de, Flypoints
 	add hl, de
 	ld e, [hl]
-	farcall GetLandmarkName
+	farcall LevelSelectionMenu_GetLandmarkName
 	hlcoord 2, 1
 	ld de, wStringBuffer1
 	call PlaceString
@@ -2000,7 +2000,7 @@ GetMapCursorCoordinates:
 	ld de, Flypoints
 	add hl, de
 	ld e, [hl]
-	farcall GetLandmarkCoords
+	farcall LevelSelectionMenu_GetLandmarkCoords
 	ld a, [wTownMapCursorCoordinates]
 	ld c, a
 	ld a, [wTownMapCursorCoordinates + 1]
@@ -2231,7 +2231,7 @@ Pokedex_GetArea:
 	push de
 	ld e, a
 	push hl
-	farcall GetLandmarkCoords
+	farcall LevelSelectionMenu_GetLandmarkCoords
 	pop hl
 	; load into OAM
 	ld a, d
@@ -2261,7 +2261,7 @@ Pokedex_GetArea:
 	ret c
 	ld a, [wTownMapPlayerIconLandmark]
 	ld e, a
-	farcall GetLandmarkCoords
+	farcall LevelSelectionMenu_GetLandmarkCoords
 	ld c, e
 	ld b, d
 	ld de, .PlayerOAM
@@ -2472,7 +2472,7 @@ TownMapPlayerIcon:
 	pop af
 	ld e, a
 	push bc
-	farcall GetLandmarkCoords
+	farcall LevelSelectionMenu_GetLandmarkCoords
 	pop bc
 	ld hl, SPRITEANIMSTRUCT_XCOORD
 	add hl, bc

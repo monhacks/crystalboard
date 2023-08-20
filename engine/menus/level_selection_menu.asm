@@ -86,7 +86,7 @@ LevelSelectionMenu_GetLandmarkPage:
 	pop hl
 	ret
 
-LevelSelectionMenu_GetLandmarkCoords:
+LevelSelectionMenu_GetLandmarkCoords::
 ; Return coordinates (d, e) of landmark e.
 	push hl
 	push bc
@@ -100,6 +100,35 @@ LevelSelectionMenu_GetLandmarkCoords:
 	pop bc
 	pop hl
 	ret
+
+LevelSelectionMenu_GetLandmarkName::
+; Copy the name of landmark e to wStringBuffer1.
+	push hl
+	push de
+	push bc
+
+	ld hl, LevelSelectionMenu_Landmarks + $3
+	ld bc, LevelSelectionMenu_Landmarks.landmark2 - LevelSelectionMenu_Landmarks.landmark1
+	ld a, e
+	call AddNTimes
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+
+	ld de, wStringBuffer1
+	ld c, 18
+.copy
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .copy
+
+	pop bc
+	pop de
+	pop hl
+	ret
+
 
 INCLUDE "data/level_selection_menu.asm"
 

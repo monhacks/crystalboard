@@ -1623,7 +1623,7 @@ Script_getcurlandmarkname:
 
 ConvertLandmarkToText:
 	ld e, a
-	farcall GetLandmarkName
+	farcall LevelSelectionMenu_GetLandmarkName
 	ld de, wStringBuffer1
 	jp GetStringBuffer
 

@@ -679,7 +679,7 @@ GetCallerLocation:
 	push bc
 	call GetWorldMapLocation
 	ld e, a
-	farcall GetLandmarkName
+	farcall LevelSelectionMenu_GetLandmarkName
 	pop bc
 	pop de
 	ret
