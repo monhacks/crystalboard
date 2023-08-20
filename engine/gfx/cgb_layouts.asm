@@ -620,7 +620,7 @@ _CGB_LevelSelectionMenu:
 	ld a, b
 	or c
 	jr nz, .loop
-; apply pals and attrmap
+; apply and commit pals and attrmap
 	call ApplyAttrmap
 	call ApplyPals
 	ld a, TRUE

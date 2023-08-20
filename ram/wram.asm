@@ -1536,6 +1536,7 @@ SECTION UNION "Miscellaneous WRAM 1", WRAMX
 ; level selection menu
 wLevelSelectionMenuCurrentPage:: db
 wLevelSelectionMenuCurrentLandmark:: db
+wLevelSelectionMenuStandingStill:: db
 
 
 SECTION UNION "Miscellaneous WRAM 1", WRAMX

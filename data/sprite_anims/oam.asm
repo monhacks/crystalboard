@@ -147,6 +147,23 @@ SpriteAnimOAMData:
 	spriteanimoam $08, .OAMData_GameFreakLogo4_11        ; SPRITE_ANIM_OAMSET_GAMEFREAK_LOGO_9
 	spriteanimoam $04, .OAMData_GameFreakLogo4_11        ; SPRITE_ANIM_OAMSET_GAMEFREAK_LOGO_10
 	spriteanimoam $00, .OAMData_GameFreakLogo4_11        ; SPRITE_ANIM_OAMSET_GAMEFREAK_LOGO_11
+	spriteanimoam $00, .OAMData_RedWalk                  ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_MALE_DOWN_1
+	spriteanimoam $0c, .OAMData_RedWalk                  ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_MALE_DOWN_2
+	spriteanimoam $00, .OAMData_BlueWalk                 ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_DOWN_1
+	spriteanimoam $0c, .OAMData_BlueWalk                 ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_DOWN_2
+	spriteanimoam $04, .OAMData_RedWalkUp                ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_MALE_UP_1
+	spriteanimoam $10, .OAMData_RedWalkUp                ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_MALE_UP_2
+	spriteanimoam $04, .OAMData_BlueWalkUp               ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_UP_1
+	spriteanimoam $10, .OAMData_BlueWalkUp               ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_UP_2
+	spriteanimoam $08, .OAMData_RedWalkLeft              ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_MALE_LEFT_1
+	spriteanimoam $14, .OAMData_RedWalkLeft              ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_MALE_LEFT_2
+	spriteanimoam $08, .OAMData_BlueWalkLeft             ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_LEFT_1
+	spriteanimoam $14, .OAMData_BlueWalkLeft             ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_LEFT_2
+	spriteanimoam $08, .OAMData_RedWalkRight             ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_MALE_RIGHT_1
+	spriteanimoam $14, .OAMData_RedWalkRight             ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_MALE_RIGHT_2
+	spriteanimoam $08, .OAMData_BlueWalkRight            ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_RIGHT_1
+	spriteanimoam $14, .OAMData_BlueWalkRight            ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_RIGHT_2
+
 	assert_table_length NUM_SPRITE_ANIM_OAMSETS
 
 .OAMData_1x1_Palette0:
@@ -357,6 +374,27 @@ SpriteAnimOAMData:
 	dbsprite  0, -1,  0,  0, $01, PAL_OW_RED
 	dbsprite -1,  0,  0,  0, $02, PAL_OW_RED
 	dbsprite  0,  0,  0,  0, $03, PAL_OW_RED
+
+.OAMData_RedWalkUp:
+	db 4
+	dsprite -1,  0, -1,  0, $00, PAL_OW_RED
+	dsprite -1,  0,  0,  0, $01, PAL_OW_RED
+	dsprite  0,  0, -1,  0, $02, PAL_OW_RED
+	dsprite  0,  0,  0,  0, $03, PAL_OW_RED
+
+.OAMData_RedWalkLeft:
+	db 4
+	dsprite -1,  0, -1,  0, $00, PAL_OW_RED
+	dsprite -1,  0,  0,  0, $01, PAL_OW_RED
+	dsprite  0,  0, -1,  0, $02, PAL_OW_RED
+	dsprite  0,  0,  0,  0, $03, PAL_OW_RED
+
+.OAMData_RedWalkRight:
+	db 4
+	dsprite -1,  0, -1,  0, $00, PAL_OW_RED
+	dsprite -1,  0,  0,  0, $01, PAL_OW_RED
+	dsprite  0,  0, -1,  0, $02, PAL_OW_RED
+	dsprite  0,  0,  0,  0, $03, PAL_OW_RED
 
 .OAMData_MagnetTrainRed:
 	db 4
@@ -753,6 +791,27 @@ SpriteAnimOAMData:
 	dbsprite  0, -1,  0,  0, $01, PAL_OW_BLUE
 	dbsprite -1,  0,  0,  0, $02, PAL_OW_BLUE
 	dbsprite  0,  0,  0,  0, $03, PAL_OW_BLUE
+
+.OAMData_BlueWalkUp:
+	db 4
+	dsprite -1,  0, -1,  0, $00, PAL_OW_BLUE
+	dsprite -1,  0,  0,  0, $01, PAL_OW_BLUE
+	dsprite  0,  0, -1,  0, $02, PAL_OW_BLUE
+	dsprite  0,  0,  0,  0, $03, PAL_OW_BLUE
+
+.OAMData_BlueWalkLeft:
+	db 4
+	dsprite -1,  0, -1,  0, $00, PAL_OW_BLUE
+	dsprite -1,  0,  0,  0, $01, PAL_OW_BLUE
+	dsprite  0,  0, -1,  0, $02, PAL_OW_BLUE
+	dsprite  0,  0,  0,  0, $03, PAL_OW_BLUE
+
+.OAMData_BlueWalkRight:
+	db 4
+	dsprite -1,  0, -1,  0, $00, PAL_OW_BLUE
+	dsprite -1,  0,  0,  0, $01, PAL_OW_BLUE
+	dsprite  0,  0, -1,  0, $02, PAL_OW_BLUE
+	dsprite  0,  0,  0,  0, $03, PAL_OW_BLUE
 
 .OAMData_MagnetTrainBlue:
 	db 4

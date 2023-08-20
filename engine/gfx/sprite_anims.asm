@@ -49,6 +49,10 @@ DoAnimFrame:
 	dw AnimSeq_IntroUnown
 	dw AnimSeq_IntroUnownF
 	dw AnimSeq_IntroSuicuneAway
+	dw AnimSeq_LevelSelectionMenuWalkDown
+	dw AnimSeq_LevelSelectionMenuWalkUp
+	dw AnimSeq_LevelSelectionMenuWalkLeft
+	dw AnimSeq_LevelSelectionMenuWalkRight
 	assert_table_length NUM_SPRITE_ANIM_SEQS
 
 AnimSeq_Null:
@@ -840,6 +844,45 @@ AnimSeq_EZChatCursor:
 AnimSeq_Celebi:
 	farcall UpdateCelebiPosition
 	ret
+
+AnimSeq_LevelSelectionMenuWalkDown:
+	call LevelSelectionMenuHandleMovement
+	ret nc
+	ld hl, SPRITEANIMSTRUCT_YCOORD
+	add hl, bc
+	inc [hl]
+	ret
+
+AnimSeq_LevelSelectionMenuWalkUp:
+	call LevelSelectionMenuHandleMovement
+	ret nc
+	ld hl, SPRITEANIMSTRUCT_YCOORD
+	add hl, bc
+	dec [hl]
+	ret
+
+AnimSeq_LevelSelectionMenuWalkLeft:
+	call LevelSelectionMenuHandleMovement
+	ret nc
+	ld hl, SPRITEANIMSTRUCT_XCOORD
+	add hl, bc
+	dec [hl]
+	ret
+
+AnimSeq_LevelSelectionMenuWalkRight:
+	call LevelSelectionMenuHandleMovement
+	ret nc
+	ld hl, SPRITEANIMSTRUCT_XCOORD
+	add hl, bc
+	inc [hl]
+	ret
+
+LevelSelectionMenuHandleMovement:
+	ld a, [wLevelSelectionMenuStandingStill]
+	and a
+	ret nz ; nc
+	scf
+	ret ; c
 
 AnimSeqs_AnonJumptable:
 	ld hl, sp+0

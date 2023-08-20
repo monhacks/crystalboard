@@ -22,11 +22,14 @@ LevelSelectionMenu::
 	ld [wLevelSelectionMenuCurrentLandmark], a
 	call LevelSelectionMenu_GetLandmarkPage
 	ld [wLevelSelectionMenuCurrentPage], a
+	ld a, TRUE
+	ld [wLevelSelectionMenuStandingStill], a
 
 	call LevelSelectionMenu_InitTilemap
 	ld b, CGB_LEVEL_SELECTION_MENU
-	call GetCGBLayout
+	call GetCGBLayout ; apply and commit attrmap (takes 4 frames) and pals
 	call SetPalettes
+	call LevelSelectionMenu_InitPlayerSprite
 
 	ld de, MUSIC_GAME_CORNER
 	call PlayMusic
@@ -64,7 +67,7 @@ LevelSelectionMenu_InitTilemap:
 .loop
 	ld a, [de]
 	cp $ff ; tilemaps are $ff-terminated
-	jp z, WaitBGMap2 ; takes 8 frames to commit tilemap and attrmap
+	jp z, WaitBGMap ; commit tilemap (4 frames)
 	ld a, [de]
 	ld [hli], a
 	inc de
@@ -75,6 +78,9 @@ LevelSelectionMenu_InitTilemap:
 	dw LevelSelectionMenuPage2Tilemap
 	dw LevelSelectionMenuPage3Tilemap
 	dw LevelSelectionMenuPage4Tilemap
+
+LevelSelectionMenu_InitPlayerSprite:
+	ret
 
 LevelSelectionMenu_GetLandmarkPage:
 ; Return page number (a) of landmark a.
