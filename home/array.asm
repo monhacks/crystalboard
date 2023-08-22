@@ -42,3 +42,16 @@ AddNTimes::
 	dec a
 	jr nz, .loop
 	ret
+
+; advance c [b]-terminated table entries in hl
+AdvanceNEntries::
+	ld a, c
+	and a
+	ret z
+.loop
+	ld a, [hli]
+	cp b
+	jr nz, .loop
+	dec c
+	jr nz, .loop
+	ret

@@ -1536,6 +1536,7 @@ SECTION UNION "Miscellaneous WRAM 1", WRAMX
 ; level selection menu
 wLevelSelectionMenuCurrentPage:: db
 wLevelSelectionMenuCurrentLandmark:: db
+wLevelSelectionMenuCurrentLandmarkTransitionsPointer:: dw
 wLevelSelectionMenuStandingStill:: db
 
 
@@ -1726,6 +1727,7 @@ wSolvedUnownPuzzle::
 wVramState::
 ; bit 0: overworld sprite updating on/off
 ; bit 1: something to do with sprite updates
+; bit 2: do not clear wShadowOAM during DoNextFrameForAllSprites
 ; bit 6: something to do with text
 ; bit 7: on when surf initiates
 ;        flickers when climbing waterfall

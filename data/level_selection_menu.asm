@@ -28,6 +28,7 @@ LevelSelectionMenu_Landmarks:
 
 MACRO level_selection_menu_landmark_transition
 ; any number of (direction, num_steps (in tiles)) pairs
+	const_skip
 
 if (\2 != FALSE)
 rept ((_NARG + -1) / 2) ; repeat once for each (direction, num_steps) pair
@@ -41,6 +42,9 @@ endc
 ENDM
 
 LevelSelectionMenu_LandmarkTransitions:
+; the transitions are arranged by direction according to wWalkingDirection constants
+	const_def
+
 ; LANDMARK_LEVEL_1
 	level_selection_menu_landmark_transition DOWN, FALSE
 	level_selection_menu_landmark_transition UP, FALSE
@@ -70,6 +74,8 @@ LevelSelectionMenu_LandmarkTransitions:
 	level_selection_menu_landmark_transition UP, 6, LANDMARK_LEVEL_3
 	level_selection_menu_landmark_transition LEFT, FALSE
 	level_selection_menu_landmark_transition RIGHT, FALSE
+
+assert const_value == NUM_LANDMARKS * NUM_DIRECTIONS
 
 LevelSelectionMenu_PageGrid:
 	db -1, -1, -1, -1

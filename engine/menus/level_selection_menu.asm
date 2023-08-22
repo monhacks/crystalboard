@@ -1,6 +1,7 @@
 LevelSelectionMenu::
 	xor a
 	ldh [hInMenu], a
+	ld a, 1 << 2 ; do not clear wShadowOAM during DoNextFrameForAllSprites
 	ld [wVramState], a
 
 	call ClearBGPalettes
@@ -33,13 +34,17 @@ LevelSelectionMenu::
 
 	ld a, [wLevelSelectionMenuCurrentLandmark]
 	call LevelSelectionMenu_InitPlayerSprite
+	call LevelSelectionMenu_InitLandmark
+	call LevelSelectionMenu_DrawDirectionalArrows
 
 .main_loop
 	farcall PlaySpriteAnimations
 	call DelayFrame
 	call JoyTextDelay
+	call LevelSelectionMenu_GetValidKeys
 	ld hl, hJoyPressed
 	ld a, [hl]
+	and c
 	bit A_BUTTON_F, a
 	jp nz, .enter_level
 	bit B_BUTTON_F, a
@@ -79,6 +84,8 @@ LevelSelectionMenu::
 	call ClearBGPalettes
 	call ClearTilemap
 	call ClearSprites
+	xor a
+	ld [wVramState], a
 	ld c, 20
 	call DelayFrames
 
@@ -105,9 +112,12 @@ LevelSelectionMenu::
 	call ClearBGPalettes
 	call ClearTilemap
 	call ClearSprites
+	xor a
+	ld [wVramState], a
 	ret
 
 LevelSelectionMenu_LoadGFX:
+; load gfx for the background tiles, and for the player and directional arrow sprites
 	ld hl, LevelSelectionMenuGFX
 	ld de, vTiles2
 	call Decompress
@@ -117,6 +127,10 @@ LevelSelectionMenu_LoadGFX:
 	ld a, b
 	ld de, vTiles0
 	ld bc, 24 tiles
+	call FarCopyBytes
+	ld hl, LevelSelectionMenuDirectionalArrowsGFX
+;	ld de, vTiles0 + 24 tiles
+	ld bc, 4 tiles
 	call FarCopyBytes
 	ret
 
@@ -169,6 +183,78 @@ LevelSelectionMenu_InitPlayerSprite:
 	add hl, bc
 	ld [hl], d
 	ret
+
+LevelSelectionMenu_InitLandmark:
+; make wLevelSelectionMenuCurrentLandmarkTransitionsPointer point
+; to the start of the transition data of the current landmark.
+	ld a, [wLevelSelectionMenuCurrentLandmark]
+	ld e, a
+	ld hl, LevelSelectionMenu_LandmarkTransitions
+	ld b, -1
+rept NUM_DIRECTIONS
+	ld c, e
+	call AdvanceNEntries
+endr
+	ld de, wLevelSelectionMenuCurrentLandmarkTransitionsPointer
+	ld a, l
+	ld [de], a
+	inc de
+	ld a, h
+	ld [de], a
+	ret
+
+LevelSelectionMenu_DrawDirectionalArrows:
+; Draw directional arrows OAM around player sprite for the valid directions.
+; Objects are drawn in OAM after player sprite objects in wWalkingDirection order.
+; Depends on wLevelSelectionMenuCurrentLandmarkTransitionsPointer being initialized.
+	call LevelSelectionMenu_GetValidDirections
+	ld hl, .OAM
+	ld de, wShadowOAM + 4 * SPRITEOAMSTRUCT_LENGTH ; always goes after player sprite
+	bit D_DOWN_F, c
+	jr z, .next1
+	call .DrawArrow
+.next1
+	ld hl, .OAM + $3
+	bit D_UP_F, c
+	jr z, .next2
+	call .DrawArrow
+.next2
+	ld hl, .OAM + $6
+	bit D_LEFT_F, c
+	jr z, .next3
+	call .DrawArrow
+.next3
+	ld hl, .OAM + $9
+	bit D_RIGHT_F, c
+	call nz, .DrawArrow
+	ret
+
+.DrawArrow:
+	ld a, [wSpriteAnim1YCoord]
+	add [hl]
+	ld [de], a ; y coord
+	inc hl
+	inc de
+	ld a, [wSpriteAnim1XCoord]
+	add [hl]
+	ld [de], a ; x coord
+	inc hl
+	inc de
+	ld a, [hli]
+	ld [de], a ; tile id
+	inc de
+	gender_to_pal
+	ld [de], a ; attr (use the same pal as player sprite)
+	inc de
+	ret
+
+.OAM:
+; y offset against wSpriteAnim1YCoord, x offset against wSpriteAnim1XCoord, tile id
+; tiles have been loaded to vTiles0 after the player sprites
+	db   8,  -4, 24 + DOWN
+	db -16,  -4, 24 + UP
+	db  -4, -16, 24 + LEFT
+	db  -4,   8, 24 + RIGHT
 
 LevelSelectionMenu_GetLandmarkPage:
 ; Return page number (a) of landmark a.
@@ -233,6 +319,80 @@ LevelSelectionMenu_GetLandmarkSpawnPoint:
 	pop hl
 	ret
 
+LevelSelectionMenu_GetValidKeys:
+	call LevelSelectionMenu_GetValidDirections
+	ld a, c
+	or A_BUTTON | B_BUTTON | SELECT | START
+	ld c, a
+	ret
+
+LevelSelectionMenu_GetValidDirections:
+; Return the valid directions according to landmark transitions and unlocked levels.
+; Depends on wLevelSelectionMenuCurrentLandmarkTransitionsPointer being initialized.
+; Return the result in c as a mask of D_<DIR>_F.
+	ld hl, wLevelSelectionMenuCurrentLandmarkTransitionsPointer
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld c, 0
+	ld a, [hli]
+	inc a
+	jr z, .next1
+.loop1
+	ld a, [hli]
+	inc a
+	jr nz, .loop1
+	call .IsLevelUnlocked
+	jr z, .next1
+	set D_DOWN_F, c
+.next1
+	ld a, [hli]
+	inc a
+	jr z, .next2
+.loop2
+	ld a, [hli]
+	inc a
+	jr nz, .loop2
+	call .IsLevelUnlocked
+	jr z, .next2
+	set D_UP_F, c
+.next2
+	ld a, [hli]
+	inc a
+	jr z, .next3
+.loop3
+	ld a, [hli]
+	inc a
+	jr nz, .loop3
+	call .IsLevelUnlocked
+	jr z, .next3
+	set D_LEFT_F, c
+.next3
+	ld a, [hli]
+	inc a
+	ret z
+.loop4
+	ld a, [hli]
+	inc a
+	jr nz, .loop4
+	call .IsLevelUnlocked
+	ret z
+	set D_RIGHT_F, c
+	ret
+
+.IsLevelUnlocked:
+	push hl
+	push bc
+; the landmark byte of this transition is two bytes back
+	dec hl
+	dec hl
+	ld e, [hl]
+	ld b, CHECK_FLAG
+	call UnlockedLevelsFlagAction
+	pop bc
+	pop hl
+	ret
+
 LevelSelectionMenu_Delay10Frames:
 ; Delay 10 frames while playing sprite anims
 	ld a, 10
@@ -261,3 +421,6 @@ INCBIN "gfx/level_selection_menu/page_3.tilemap"
 
 LevelSelectionMenuPage4Tilemap:
 INCBIN "gfx/level_selection_menu/page_4.tilemap"
+
+LevelSelectionMenuDirectionalArrowsGFX:
+INCBIN "gfx/level_selection_menu/directional_arrows.2bpp"

@@ -55,11 +55,16 @@ DoNextFrameForAllSprites:
 	dec e
 	jr nz, .loop
 
+	ld a, [wVramState]
+	bit 2, a
+	ret nz
+
+; Clear (wShadowOAM + [wCurSpriteOAMAddr] --> wShadowOAMEnd)
 	ld a, [wCurSpriteOAMAddr]
 	ld l, a
 	ld h, HIGH(wShadowOAM)
 
-.loop2 ; Clear (wShadowOAM + [wCurSpriteOAMAddr] --> wShadowOAMEnd)
+.loop2
 	ld a, l
 	cp LOW(wShadowOAMEnd)
 	jr nc, .done

@@ -94,3 +94,10 @@ if _NARG == 0
 	sine_table 32
 endc
 ENDM
+
+; Abstractions
+
+MACRO gender_to_pal
+; preserve all registers but a
+	ld a, [wPlayerGender]
+ENDM
