@@ -22,7 +22,9 @@ ResetFlashIfOutOfCave::
 	ret
 
 UnlockedLevelsFlagAction::
+; Perform action b on bit e in flag array wUnlockedLevels.
 	ld hl, wUnlockedLevels
+	ld d, 0
 	jr FlagAction
 
 EventFlagAction::
