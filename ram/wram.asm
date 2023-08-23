@@ -1536,7 +1536,8 @@ SECTION UNION "Miscellaneous WRAM 1", WRAMX
 ; level selection menu
 wLevelSelectionMenuCurrentPage:: db
 wLevelSelectionMenuCurrentLandmark:: db
-wLevelSelectionMenuCurrentLandmarkTransitionsPointer:: dw
+wLevelSelectionMenuLandmarkTransitionsPointer:: dw
+wLevelSelectionMenuMovementStepsLeft:: db
 wLevelSelectionMenuStandingStill:: db
 
 

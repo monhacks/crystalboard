@@ -3,6 +3,8 @@ LevelSelectionMenu::
 	ldh [hInMenu], a
 	ld a, 1 << 2 ; do not clear wShadowOAM during DoNextFrameForAllSprites
 	ld [wVramState], a
+	ld a, -1
+	ld [wUnlockedLevels], a ; debug
 
 	call ClearBGPalettes
 	call ClearTilemap
@@ -40,7 +42,7 @@ LevelSelectionMenu::
 .main_loop
 	farcall PlaySpriteAnimations
 	call DelayFrame
-	call JoyTextDelay
+	call GetJoypad
 	call LevelSelectionMenu_GetValidKeys
 	ld hl, hJoyPressed
 	ld a, [hl]
@@ -49,8 +51,6 @@ LevelSelectionMenu::
 	jp nz, .enter_level
 	bit B_BUTTON_F, a
 	jp nz, .exit
-	ld hl, hJoyLast
-	ld a, [hl]
 	bit D_DOWN_F, a
 	jr nz, .pressed_down
 	bit D_UP_F, a
@@ -62,9 +62,55 @@ LevelSelectionMenu::
 	jr .main_loop
 
 .pressed_down
+	ld c, DOWN
+	jr .start_movement
 .pressed_up
+	ld c, UP
+	jr .start_movement
 .pressed_left
+	ld c, LEFT
+	jr .start_movement
 .pressed_right
+	ld c, RIGHT
+	jr .start_movement
+
+.start_movement
+; make hl point to the beginning of the transition data for the chosen direction at c
+	ld e, c ; also copy direction to e for later
+	ld hl, wLevelSelectionMenuLandmarkTransitionsPointer
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld b, -1
+	call AdvanceNEntries
+	ld bc, wLevelSelectionMenuLandmarkTransitionsPointer
+	ld a, l
+	ld [bc], a
+	inc bc
+	ld a, h
+	ld [bc], a
+
+; begin transition
+	call LevelSelectionMenu_Delay10Frames
+	xor a ; FALSE
+	ld [wLevelSelectionMenuStandingStill], a
+	ld a, 1 << 7 ; "first step of movement" flag
+	ld [wLevelSelectionMenuMovementStepsLeft], a
+	call LevelSelectionMenu_SetAnimSeqAndFrameset
+	call LevelSelectionMenu_ClearNonPlayerSpriteOAM
+
+; perform all movements to transition to the new landmark
+.wait_transition_loop
+; wait until the sprite anim has signaled end of all movements
+; by setting wLevelSelectionMenuStandingStill to TRUE
+	farcall PlaySpriteAnimations
+	call DelayFrame
+	ld a, [wLevelSelectionMenuStandingStill]
+	and a
+	jr z, .wait_transition_loop
+
+	call LevelSelectionMenu_InitLandmark
+	call LevelSelectionMenu_DrawDirectionalArrows
 	jr .main_loop
 
 .enter_level
@@ -160,6 +206,8 @@ LevelSelectionMenu_InitTilemap:
 	dw LevelSelectionMenuPage4Tilemap
 
 LevelSelectionMenu_InitPlayerSprite:
+; initialize the anim struct of the player's sprite.
+; because ClearSpriteAnims was called before, it's always loaded to wSpriteAnim1
 	push af
 	depixel 0, 0
 	ld b, SPRITE_ANIM_INDEX_LEVEL_SELECTION_MENU_MALE_WALK_DOWN
@@ -185,7 +233,7 @@ LevelSelectionMenu_InitPlayerSprite:
 	ret
 
 LevelSelectionMenu_InitLandmark:
-; make wLevelSelectionMenuCurrentLandmarkTransitionsPointer point
+; make wLevelSelectionMenuLandmarkTransitionsPointer point
 ; to the start of the transition data of the current landmark.
 	ld a, [wLevelSelectionMenuCurrentLandmark]
 	ld e, a
@@ -195,7 +243,7 @@ rept NUM_DIRECTIONS
 	ld c, e
 	call AdvanceNEntries
 endr
-	ld de, wLevelSelectionMenuCurrentLandmarkTransitionsPointer
+	ld de, wLevelSelectionMenuLandmarkTransitionsPointer
 	ld a, l
 	ld [de], a
 	inc de
@@ -206,10 +254,10 @@ endr
 LevelSelectionMenu_DrawDirectionalArrows:
 ; Draw directional arrows OAM around player sprite for the valid directions.
 ; Objects are drawn in OAM after player sprite objects in wWalkingDirection order.
-; Depends on wLevelSelectionMenuCurrentLandmarkTransitionsPointer being initialized.
+; Depends on wLevelSelectionMenuLandmarkTransitionsPointer being initialized.
 	call LevelSelectionMenu_GetValidDirections
 	ld hl, .OAM
-	ld de, wShadowOAM + 4 * SPRITEOAMSTRUCT_LENGTH ; always goes after player sprite
+	ld de, wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH ; always goes after player sprite
 	bit D_DOWN_F, c
 	jr z, .next1
 	call .DrawArrow
@@ -255,6 +303,32 @@ LevelSelectionMenu_DrawDirectionalArrows:
 	db -16,  -4, 24 + UP
 	db  -4, -16, 24 + LEFT
 	db  -4,   8, 24 + RIGHT
+
+LevelSelectionMenu_ClearNonPlayerSpriteOAM:
+	ld hl, wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH
+	ld bc, wShadowOAMEnd - (wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH)
+	xor a
+	jp ByteFill
+
+LevelSelectionMenu_SetAnimSeqAndFrameset:
+; Set the animation sequence and frameset for this movement.
+; direction (in wWalkingDirection order) is provided in e.
+	ld bc, wSpriteAnim1
+	ld hl, SPRITEANIMSTRUCT_ANIM_SEQ_ID
+	add hl, bc
+	ld a, SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_DOWN
+	add e ; add direction
+	ld [hl], a
+	ld hl, SPRITEANIMSTRUCT_FRAMESET_ID
+	add hl, bc
+	ld a, [wPlayerGender]
+	ld d, a
+	ld a, SPRITE_ANIM_FRAMESET_LEVEL_SELECTION_MENU_MALE_WALK_DOWN
+	add e
+	add e ; add direction
+	add d ; add gender
+	ld [hl], a
+	ret
 
 LevelSelectionMenu_GetLandmarkPage:
 ; Return page number (a) of landmark a.
@@ -328,9 +402,9 @@ LevelSelectionMenu_GetValidKeys:
 
 LevelSelectionMenu_GetValidDirections:
 ; Return the valid directions according to landmark transitions and unlocked levels.
-; Depends on wLevelSelectionMenuCurrentLandmarkTransitionsPointer being initialized.
+; Depends on wLevelSelectionMenuLandmarkTransitionsPointer being initialized.
 ; Return the result in c as a mask of D_<DIR>_F.
-	ld hl, wLevelSelectionMenuCurrentLandmarkTransitionsPointer
+	ld hl, wLevelSelectionMenuLandmarkTransitionsPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -403,6 +477,91 @@ LevelSelectionMenu_Delay10Frames:
 	pop af
 	dec a
 	jr nz, .loop
+	ret
+
+_LevelSelectionMenuHandleTransition:
+; Called from the corresponding SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_* animation sequence.
+; This function is here because LevelSelectionMenu_LandmarkTransitions is in this bank.
+; Applies the animation to the player sprite for the current frame.
+	ld hl, wLevelSelectionMenuLandmarkTransitionsPointer
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+; hl is now somewhere in LevelSelectionMenu_LandmarkTransitions	for this transition
+	ld de, wLevelSelectionMenuMovementStepsLeft
+	ld a, [de]
+	bit 7, a
+	jr z, .not_first_step
+; if first step of movement, extract the number of steps left of the current movement
+; of the transition, and copy it to wLevelSelectionMenuMovementStepsLeft (clearing bit 7)
+	ld a, [hl]
+	and %00111111
+	ld [de], a
+.not_first_step
+	and a
+	jr z, .movement_over
+ ; one less step left to finish this movement
+	dec a
+	ld [de], a
+; return carry to signal back to apply a displacement during this frame
+	scf
+	ret
+
+.movement_over
+; advance pointer to the next movement
+	ld hl, wLevelSelectionMenuLandmarkTransitionsPointer
+	ld a, [hli]
+	ld d, [hl]
+	ld e, a
+	inc de
+	dec hl
+	ld [hl], e
+	inc hl
+	ld [hl], d
+; check if we just ran the last movement of the transition
+; that would be the case if the next byte is the landmark, and the one after it is -1
+	inc de
+	ld a, [de]
+	dec de
+	inc a
+	jr z, .all_movements_over
+; more movements left. which direction is the next movement?
+	ld a, [de]
+	and %11000000
+	swap a
+	srl a
+	srl a
+	ld e, a ; DOWN / UP / LEFT / RIGHT
+	call LevelSelectionMenu_SetAnimSeqAndFrameset
+	ld a, 1 << 7 ; "first step of movement" flag
+	ld [wLevelSelectionMenuMovementStepsLeft], a
+; return nc to signal back not to apply a displacement during this frame
+	xor a
+	ret
+
+.all_movements_over
+; all movements of this transition are over
+; hl is now pointing to the destination landmark byte of this tranisiton
+; end the movement state
+	ld a, TRUE
+	ld [wLevelSelectionMenuStandingStill], a
+; set new landmark
+	ld a, [de]
+	ld [wLevelSelectionMenuCurrentLandmark], a
+; make the player sprite face down as the default state
+	ld hl, SPRITEANIMSTRUCT_ANIM_SEQ_ID
+	add hl, bc
+	ld a, SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_DOWN
+	ld [hl], a
+	ld hl, SPRITEANIMSTRUCT_FRAMESET_ID
+	add hl, bc
+	ld a, [wPlayerGender]
+	ld d, a
+	ld a, SPRITE_ANIM_FRAMESET_LEVEL_SELECTION_MENU_MALE_WALK_DOWN
+	add d
+	ld [hl], a
+; return nc to signal back not to apply a displacement during this frame
+	xor a
 	ret
 
 INCLUDE "data/level_selection_menu.asm"

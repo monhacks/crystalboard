@@ -846,7 +846,7 @@ AnimSeq_Celebi:
 	ret
 
 AnimSeq_LevelSelectionMenuWalkDown:
-	call LevelSelectionMenuHandleMovement
+	call LevelSelectionMenuHandleTransition
 	ret nc
 	ld hl, SPRITEANIMSTRUCT_YCOORD
 	add hl, bc
@@ -854,7 +854,7 @@ AnimSeq_LevelSelectionMenuWalkDown:
 	ret
 
 AnimSeq_LevelSelectionMenuWalkUp:
-	call LevelSelectionMenuHandleMovement
+	call LevelSelectionMenuHandleTransition
 	ret nc
 	ld hl, SPRITEANIMSTRUCT_YCOORD
 	add hl, bc
@@ -862,7 +862,7 @@ AnimSeq_LevelSelectionMenuWalkUp:
 	ret
 
 AnimSeq_LevelSelectionMenuWalkLeft:
-	call LevelSelectionMenuHandleMovement
+	call LevelSelectionMenuHandleTransition
 	ret nc
 	ld hl, SPRITEANIMSTRUCT_XCOORD
 	add hl, bc
@@ -870,19 +870,20 @@ AnimSeq_LevelSelectionMenuWalkLeft:
 	ret
 
 AnimSeq_LevelSelectionMenuWalkRight:
-	call LevelSelectionMenuHandleMovement
+	call LevelSelectionMenuHandleTransition
 	ret nc
 	ld hl, SPRITEANIMSTRUCT_XCOORD
 	add hl, bc
 	inc [hl]
 	ret
 
-LevelSelectionMenuHandleMovement:
+LevelSelectionMenuHandleTransition:
+; return carry if apply x/y displacement during this frame
 	ld a, [wLevelSelectionMenuStandingStill]
 	and a
 	ret nz ; nc
-	scf
-	ret ; c
+	farcall _LevelSelectionMenuHandleTransition
+	ret
 
 AnimSeqs_AnonJumptable:
 	ld hl, sp+0
