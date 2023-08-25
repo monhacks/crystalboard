@@ -65,6 +65,18 @@ hMathBuffer:: ds 5
 NEXTU
 ; PrintNum scratch space
 hPrintNumBuffer:: ds 10
+
+NEXTU
+; engine/gfx/rgb_fade.asm
+hRGBFadeSourceChannels::
+hRGBFadeSourceRChannel:: db
+hRGBFadeSourceGChannel:: db
+hRGBFadeSourceBChannel:: db
+hRGBFadeCapChannels::
+hRGBFadeCapRChannel:: db
+hRGBFadeCapGChannel:: db
+hRGBFadeCapBChannel:: db
+
 ENDU
 
 UNION
