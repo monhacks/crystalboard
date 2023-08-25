@@ -29,6 +29,8 @@ LevelSelectionMenu::
 	ld b, CGB_LEVEL_SELECTION_MENU
 	call GetCGBLayout ; apply and commit attrmap (takes 4 frames) and pals
 	call SetPalettes
+	xor a
+	ldh [hBGMapMode], a
 
 	ld de, MUSIC_GAME_CORNER
 	call PlayMusic
@@ -105,6 +107,7 @@ LevelSelectionMenu::
 ; by setting wLevelSelectionMenuStandingStill to TRUE
 	farcall PlaySpriteAnimations
 	call DelayFrame
+	call LevelSelectionMenu_DoPageChangeEvent
 	ld a, [wLevelSelectionMenuStandingStill]
 	and a
 	jr z, .wait_transition_loop
@@ -136,8 +139,8 @@ LevelSelectionMenu::
 	call DelayFrames
 
 	ld a, [wLevelSelectionMenuCurrentLandmark]
-	ld [wDefaultSpawnpoint], a
 	call LevelSelectionMenu_GetLandmarkSpawnPoint
+	ld [wDefaultSpawnpoint], a
 	ld a, MAPSETUP_WARP
 	ld [hMapEntryMethod], a
 	xor a
@@ -210,13 +213,10 @@ LevelSelectionMenu_InitPlayerSprite:
 ; because ClearSpriteAnims was called before, it's always loaded to wSpriteAnim1
 	push af
 	depixel 0, 0
+; all the SPRITE_ANIM_* related to the level selection menu are sorted by direction, then by gender
 	ld b, SPRITE_ANIM_INDEX_LEVEL_SELECTION_MENU_MALE_WALK_DOWN
 	ld a, [wPlayerGender]
-	bit PLAYERGENDER_FEMALE_F, a
-	jr z, .got_gender
-	ld b, SPRITE_ANIM_INDEX_LEVEL_SELECTION_MENU_FEMALE_WALK_DOWN
-.got_gender
-	ld a, b
+	add b
 	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
@@ -224,6 +224,7 @@ LevelSelectionMenu_InitPlayerSprite:
 	pop af
 	ld e, a
 	call LevelSelectionMenu_GetLandmarkCoords
+; wSpriteAnim1*Coord contain the coord of the bottom right object of the player sprite
 	ld hl, SPRITEANIMSTRUCT_XCOORD
 	add hl, bc
 	ld [hl], e
@@ -328,6 +329,146 @@ LevelSelectionMenu_SetAnimSeqAndFrameset:
 	add e ; add direction
 	add d ; add gender
 	ld [hl], a
+	ret
+
+LevelSelectionMenu_DoPageChangeEvent:
+	ld de, .Events
+	ld bc, wSpriteAnim1
+.loop
+	ld a, [de] ; SPRITE_ANIM_SEQ_* or $00 table terminator
+	and a
+	ret z
+	inc de
+	ld hl, SPRITEANIMSTRUCT_ANIM_SEQ_ID
+	add hl, bc
+	cp [hl]
+	jr nz, .next1
+	ld a, [de] ; SPRITEANIMSTRUCT_YCOORD or SPRITEANIMSTRUCT_XCOORD
+	ld l, a
+	ld h, 0
+	add hl, bc
+	inc de
+	ld a, [de] ; X/Y coordinate
+	cp [hl]
+	jr nz, .next2
+
+; this entry matches
+	inc de
+	ld a, [de]
+	ld l, a
+	inc de
+	ld a, [de]
+	ld h, a
+	jp hl
+
+.next1
+	inc de
+.next2
+	inc de
+	inc de
+	inc de
+	jr .loop
+
+; LEVELSELECTIONMENU_PAGE_EDGE_* represent values when the player sprite is at:
+;          UU
+; =========UU=========
+; =------------------=
+; =------------------=
+; =------------------=
+; =------------------=
+; =------------------=
+; =------------------=
+; =------------------=
+;LL------------------RR
+;LL------------------RR
+; =------------------=
+; =------------------=
+; =------------------=
+; =------------------=
+; =------------------=
+; =========DD=========
+; =========DD=========
+; ====================
+; for movements spanning two pages, when one edge is reached, the page change occurs
+; and the player appears in the other page at the coordinate of the new edge.
+; hence, for calculating movement length, it's as if both pages were adjacent without the border frame.
+DEF PAGE_EDGE_DOWN  EQU $90
+DEF PAGE_EDGE_UP    EQU $10
+DEF PAGE_EDGE_LEFT  EQU $08
+DEF PAGE_EDGE_RIGHT EQU $a8
+
+DEF PAGE_CHANGE_FADE_FRAMES     EQU 16
+DEF PAGE_CHANGE_NON_FADE_FRAMES EQU 13
+; total frame delay of page change is 16 + 13 + 16 = 45 frames
+
+MACRO page_change_event
+; SPRITE_ANIM_SEQ_* to match, Match object's X or Y, X/Y coordinate, Action if both SPRITE_ANIM_SEQ_* and X/Y match
+	db \1, \2, \3
+	dw \4
+ENDM
+
+.Events:
+	page_change_event SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_DOWN,  SPRITEANIMSTRUCT_YCOORD, PAGE_EDGE_DOWN,  .PageChangeDown
+	page_change_event SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_UP,    SPRITEANIMSTRUCT_YCOORD, PAGE_EDGE_UP,    .PageChangeUp
+	page_change_event SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_LEFT,  SPRITEANIMSTRUCT_XCOORD, PAGE_EDGE_LEFT,  .PageChangeLeft
+	page_change_event SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_RIGHT, SPRITEANIMSTRUCT_XCOORD, PAGE_EDGE_RIGHT, .PageChangeRight
+	db $0
+
+.PageChangeDown:
+	call .PageChangeFadeOut
+	ld a, PAGE_EDGE_UP
+	ld [wSpriteAnim1YCoord], a ; respawn in opposite edge
+	ld e, DOWN
+	jr .PageChange_Common
+
+.PageChangeUp:
+	call .PageChangeFadeOut
+	ld a, PAGE_EDGE_DOWN
+	ld [wSpriteAnim1YCoord], a ; respawn in opposite edge
+	ld e, UP
+	jr .PageChange_Common
+
+.PageChangeLeft:
+	call .PageChangeFadeOut
+	ld a, PAGE_EDGE_RIGHT
+	ld [wSpriteAnim1XCoord], a ; respawn in opposite edge
+	ld e, LEFT
+	jr .PageChange_Common
+
+.PageChangeRight:
+	call .PageChangeFadeOut
+	ld a, PAGE_EDGE_LEFT
+	ld [wSpriteAnim1XCoord], a ; respawn in opposite edge
+	ld e, RIGHT
+	jr .PageChange_Common
+
+.PageChange_Common:
+; set new page and redraw screen
+	call LevelSelectionMenu_GetNewPage
+	ld [wLevelSelectionMenuCurrentPage], a
+	call LevelSelectionMenu_InitTilemap
+	ld b, CGB_LEVEL_SELECTION_MENU
+	call GetCGBLayout
+	xor a
+	ldh [hBGMapMode], a
+	ld c, PAGE_CHANGE_NON_FADE_FRAMES
+	call DelayFrames
+	call .PageChangeFadeIn
+; adjust steps left for the "duplicate" movement of the player leaving and entering a page
+	ld hl, wLevelSelectionMenuMovementStepsLeft
+	ld a, [hl]
+	add 2 * TILE_WIDTH
+	ld [hl], a
+	ret
+
+.PageChangeFadeOut:
+	ld c, PAGE_CHANGE_FADE_FRAMES
+	call DelayFrames
+	ret
+
+.PageChangeFadeIn:
+	ld c, PAGE_CHANGE_FADE_FRAMES
+	call DelayFrames
 	ret
 
 LevelSelectionMenu_GetLandmarkPage:
@@ -467,6 +608,42 @@ LevelSelectionMenu_GetValidDirections:
 	pop hl
 	ret
 
+LevelSelectionMenu_GetNewPage:
+; return in a the new page that the player is ending up at during this movement involving page change.
+; direction (in wWalkingDirection order) is provided in e.
+	ld hl, LevelSelectionMenu_PageGrid - 1
+	ld c, LEVELSELECTIONMENU_PAGE_GRID_WIDTH * LEVELSELECTIONMENU_PAGE_GRID_HEIGHT + 1
+.loop
+	inc hl
+	dec c
+	jr z, .out_of_bounds
+	ld a, [wLevelSelectionMenuCurrentPage]
+	cp [hl]
+	jr nz, .loop
+
+; find the next page in the grid according to movement direction
+	ld a, e
+	ld bc, LEVELSELECTIONMENU_PAGE_GRID_WIDTH
+	cp DOWN
+	jr z, .ok
+	ld bc, -LEVELSELECTIONMENU_PAGE_GRID_WIDTH
+	cp UP
+	jr z, .ok
+	ld bc, -1
+	cp LEFT
+	jr z, .ok
+	ld bc, 1
+.ok
+	add hl, bc
+	ld a, [hl]
+	cp -1
+	jr z, .out_of_bounds
+	ret
+
+.out_of_bounds
+	ld a, 1
+	ret
+
 LevelSelectionMenu_Delay10Frames:
 ; Delay 10 frames while playing sprite anims
 	ld a, 10
@@ -500,9 +677,11 @@ _LevelSelectionMenuHandleTransition:
 .not_first_step
 	and a
 	jr z, .movement_over
- ; one less step left to finish this movement
+
+; one less step left to finish this movement
 	dec a
 	ld [de], a
+.done
 ; return carry to signal back to apply a displacement during this frame
 	scf
 	ret

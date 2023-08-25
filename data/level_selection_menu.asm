@@ -1,9 +1,14 @@
-; TILE_WIDTH represents the top/left border tile, $8/$10 represent the OAM screen position offsets, and 4 are custom offsets
+; TILE_WIDTH represents the top/left border tile, $8/$10 represent the OAM screen position offsets,
+; and 4 are custom offsets to make the player sprite centered in a 8x8 tile rather than in a 16x16 square.
 DEF LEVELSELECTIONMENU_LANDMARK_OFFSET_X EQU TILE_WIDTH +  $8 + 4
 DEF LEVELSELECTIONMENU_LANDMARK_OFFSET_Y EQU TILE_WIDTH + $10 + 4
 
 MACRO level_selection_menu_landmark
 ; page number, xcoord (in tiles), ycoord (in tiles), ptr to name, spawn point (SPAWN_*)
+; xcoord ranges between 0 and 17 (SCREEN_WIDTH points minus two)
+;  when crossing pages, x=17 and x=0 are adjacent (one tile apart)
+; ycoord ranges between 0 and 13 (SCREEN_HEIGH points minus four)
+;  when crossing pages, y=13 and y=0 are adjacent (one tile apart)
 	db \1
 	db LEVELSELECTIONMENU_LANDMARK_OFFSET_X + \2 * TILE_WIDTH
 	db LEVELSELECTIONMENU_LANDMARK_OFFSET_Y + \3 * TILE_WIDTH
@@ -58,20 +63,20 @@ LevelSelectionMenu_LandmarkTransitions:
 	level_selection_menu_landmark_transition RIGHT, FALSE
 
 ; LANDMARK_LEVEL_3
-	level_selection_menu_landmark_transition DOWN, 6, LANDMARK_LEVEL_5
+	level_selection_menu_landmark_transition DOWN, 7, DOWN, 1, LANDMARK_LEVEL_5
 	level_selection_menu_landmark_transition UP, 5, RIGHT, 2, DOWN, 3, LANDMARK_LEVEL_2
-	level_selection_menu_landmark_transition LEFT, 7, LEFT, 2, LANDMARK_LEVEL_4
+	level_selection_menu_landmark_transition LEFT, 7, LEFT, 4, LANDMARK_LEVEL_4
 	level_selection_menu_landmark_transition RIGHT, 7, LANDMARK_LEVEL_1
 
 ; LANDMARK_LEVEL_4
 	level_selection_menu_landmark_transition DOWN, FALSE
 	level_selection_menu_landmark_transition UP, FALSE
 	level_selection_menu_landmark_transition LEFT, FALSE
-	level_selection_menu_landmark_transition RIGHT, 7, RIGHT, 2, LANDMARK_LEVEL_3
+	level_selection_menu_landmark_transition RIGHT, 7, RIGHT, 4, LANDMARK_LEVEL_3
 
 ; LANDMARK_LEVEL_5
 	level_selection_menu_landmark_transition DOWN, FALSE
-	level_selection_menu_landmark_transition UP, 6, LANDMARK_LEVEL_3
+	level_selection_menu_landmark_transition UP, 7, UP, 1, LANDMARK_LEVEL_3
 	level_selection_menu_landmark_transition LEFT, FALSE
 	level_selection_menu_landmark_transition RIGHT, FALSE
 
@@ -79,8 +84,9 @@ assert const_value == NUM_LANDMARKS * NUM_DIRECTIONS
 
 LevelSelectionMenu_PageGrid:
 	db -1, -1, -1, -1
-	db -1,  2,  3, -1
-	db -1,  0,  1, -1
+	db -1,  1,  0, -1
+	db -1,  3,  2, -1
 	db -1, -1, -1, -1
 
-DEF LEVELSELECTIONMENU_PAGE_GRID_WIDTH EQU 4
+DEF LEVELSELECTIONMENU_PAGE_GRID_WIDTH  EQU 4
+DEF LEVELSELECTIONMENU_PAGE_GRID_HEIGHT EQU 4
