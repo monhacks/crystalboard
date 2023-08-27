@@ -108,3 +108,36 @@ SafeUpdateSprites::
 	pop af
 	ldh [hOAMUpdate], a
 	ret
+
+OVERWORLD_HUD_HEIGHT EQU 8
+
+EnableOverworldWindowHUD::
+	ld a, OVERWORLD_HUD_HEIGHT - 1
+	; fallthrough
+
+EnableWindowHUD:
+	ldh [hWindowHUD], a
+	; configure LCD interrupt
+	ldh [rLYC], a
+	ld a, 1 << rSTAT_INT_LYC ; LYC=LC
+	ldh [rSTAT], a
+	; make window hidden this frame to prevent graphical glitches
+	ld a, $90
+	ldh [hWY], a
+	ret
+
+DisableWindowHUD::
+	xor a
+	ldh [hWindowHUD], a
+	; configure LCD interrupt
+	xor a
+	ldh [rLYC], a
+	ld a, 1 << rSTAT_INT_HBLANK ; hblank (default)
+	ldh [rSTAT], a
+	; leave window in default state (enabled and hidden)
+	ld a, $90
+	ldh [hWY], a
+	ldh a, [rLCDC]
+	set rLCDC_WINDOW_ENABLE, a
+	ldh [rLCDC], a
+	ret

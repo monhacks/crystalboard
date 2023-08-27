@@ -2,9 +2,12 @@
 
 LCD::
 	push af
+
+; hLCDCPointer is used in battle transition, battle anims, and movies (crystal intro, credits, etc.)
+; uses rSTAT_INT_HBLANK and doesn't overlap with hWindowHUD.
 	ldh a, [hLCDCPointer]
 	and a
-	jr z, .done
+	jr z, .next
 
 ; At this point it's assumed we're in BANK(wLYOverrides)!
 	push bc
@@ -18,6 +21,21 @@ LCD::
 	ld a, b
 	ldh [c], a
 	pop bc
+
+.next
+; hWindowHUD uses rSTAT_INT_LYC
+	ldh a, [hWindowHUD]
+	and a
+	jr z, .done
+
+; disable window for the remainder of the frame
+.wait_hblank
+	ldh a, [rSTAT]
+	and rSTAT_STATUS_FLAGS
+	jr nz, .wait_hblank
+	ldh a, [rLCDC]
+	res rLCDC_WINDOW_ENABLE, a
+	ldh [rLCDC], a
 
 .done
 	pop af

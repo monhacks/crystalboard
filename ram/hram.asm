@@ -145,5 +145,10 @@ hDMATransfer:: db
 hSystemBooted:: db
 
 if DEF(_DEBUG)
-hDebugRoomMenuPage::
+hDebugRoomMenuPage:: db
 endc
+
+hWindowHUD::
+; Window HUD is enabled when non-0.
+; Its value indicates the last scanline that the window spans from the top.
+	db

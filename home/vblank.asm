@@ -62,22 +62,22 @@ VBlank0::
 	ld hl, hVBlankCounter
 	inc [hl]
 
-	; advance random variables
-	ldh a, [rDIV]
-	ld b, a
-	ldh a, [hRandomAdd]
-	adc b
-	ldh [hRandomAdd], a
-
-	ldh a, [rDIV]
-	ld b, a
-	ldh a, [hRandomSub]
-	sbc b
-	ldh [hRandomSub], a
-
 	ldh a, [hROMBank]
 	ldh [hROMBankBackup], a
 
+	; enable window back in case LCD interrupt disabled it mid-frame due to hWindowHUD
+	ldh a, [rLCDC]
+	set rLCDC_WINDOW_ENABLE, a
+	ldh [rLCDC], a
+
+	ld a, [hWindowHUD]
+	and a
+	jr z, .next
+
+	xor a
+	ldh [hWY], a
+
+.next
 	ldh a, [hSCX]
 	ldh [rSCX], a
 	ldh a, [hSCY]
@@ -117,6 +117,30 @@ VBlank0::
 	xor a
 	ld [wVBlankOccurred], a
 
+	; if hWindowHUD is active, enable interrupts so the LCD interrupt can trigger
+	ldh a, [hWindowHUD]
+	and a
+	jr z, .next2
+
+	; enable lcd stat
+	ld a, 1 << LCD_STAT
+	ldh [rIE], a
+	ei
+
+.next2
+	; advance random variables
+	ldh a, [rDIV]
+	ld b, a
+	ldh a, [hRandomAdd]
+	adc b
+	ldh [hRandomAdd], a
+
+	ldh a, [rDIV]
+	ld b, a
+	ldh a, [hRandomSub]
+	sbc b
+	ldh [hRandomSub], a
+
 	ld a, [wOverworldDelay]
 	and a
 	jr z, .ok
@@ -138,6 +162,26 @@ VBlank0::
 	call _UpdateSound
 	ldh a, [hROMBankBackup]
 	rst Bankswitch
+
+	; if hWindowHUD is not active, we're done
+	ldh a, [hWindowHUD]
+	and a
+	ret z
+
+	; interrupts must be enabled in the cycle that rLY becomes [hWindowHUD] to prevent flickering
+	; wait until [hWindowHUD] - [rLY] is NOT between 0 and 2 before disabling interrupts
+.wait_loop
+	ldh a, [rLY]
+	ld b, a
+	ldh a, [hWindowHUD]
+	sub b
+	cp 2 + 1
+	jr c, .wait_loop
+
+	; restore normal interrupts: enable ints besides joypad and let vblank finish
+	di
+	ld a, IE_DEFAULT
+	ldh [rIE], a
 
 	ret
 

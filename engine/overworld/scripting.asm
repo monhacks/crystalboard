@@ -1165,6 +1165,7 @@ Script_loadtrainer:
 	ret
 
 Script_startbattle:
+	call DisableWindowHUD
 	call BufferScreen
 	predef StartBattle
 	ld a, [wBattleResult]
