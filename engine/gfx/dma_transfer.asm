@@ -194,7 +194,7 @@ HDMATransfer_NoDI:
 	; while not [rSTAT] & 3: pass
 .loop2
 	ldh a, [rSTAT]
-	and $3
+	and rSTAT_STATUS_FLAGS
 	jr z, .loop2
 	; load the 5th byte of HDMA
 	ld a, b
@@ -253,12 +253,12 @@ _continue_HDMATransfer:
 	; while [rSTAT] & 3: pass
 .rstat_loop_1
 	ldh a, [rSTAT]
-	and $3
+	and rSTAT_STATUS_FLAGS
 	jr nz, .rstat_loop_1
 	; while not [rSTAT] & 3: pass
 .rstat_loop_2
 	ldh a, [rSTAT]
-	and $3
+	and rSTAT_STATUS_FLAGS
 	jr z, .rstat_loop_2
 	; load the 5th byte of HDMA
 	ld a, e

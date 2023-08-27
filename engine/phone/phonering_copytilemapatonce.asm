@@ -51,7 +51,7 @@ PhoneRing_CopyTilemapAtOnce:
 	ld l, 0
 	ld a, SCREEN_HEIGHT
 	ldh [hTilesPerCycle], a
-	ld b, 1 << 1 ; not in v/hblank
+	ld b, 1 << rSTAT_BUSY ; not in v/hblank
 	ld c, LOW(rSTAT)
 
 .loop
