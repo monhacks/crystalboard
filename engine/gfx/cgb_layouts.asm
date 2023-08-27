@@ -4,7 +4,7 @@ LoadCGBLayout:
 	ld a, b
 	cp CGB_DEFAULT
 	jr nz, .not_default
-	ld a, [wDefaultSGBLayout]
+	ld a, [wDefaultCGBLayout]
 .not_default
 	cp CGB_PARTY_MENU_HP_BARS
 	jp z, CGB_ApplyPartyMenuHPPals
@@ -24,6 +24,7 @@ LoadCGBLayout:
 	ret
 
 CGBLayoutJumptable:
+; entries correspond to CGB_* constants (see constants/cgb_pal_constants.asm)
 	table_width 2, CGBLayoutJumptable
 	dw _CGB_BattleGrayscale
 	dw _CGB_BattleColors
@@ -104,7 +105,7 @@ _CGB_BattleColors:
 	pop hl
 	call LoadPalette_White_Col1_Col2_Black ; PAL_BATTLE_OB_PLAYER
 	ld a, CGB_BATTLE_COLORS
-	ld [wDefaultSGBLayout], a
+	ld [wDefaultCGBLayout], a
 	call ApplyPals
 _CGB_FinishBattleScreenLayout:
 	call InitPartyMenuBGPal7
@@ -506,7 +507,7 @@ _CGB_Diploma:
 _CGB_MapPals:
 	call LoadMapPals
 	ld a, CGB_MAPPALS
-	ld [wDefaultSGBLayout], a
+	ld [wDefaultCGBLayout], a
 	ret
 
 _CGB_PartyMenu:
@@ -564,7 +565,7 @@ _CGB_GSTitleScreen:
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
 	ld a, CGB_DIPLOMA
-	ld [wDefaultSGBLayout], a
+	ld [wDefaultCGBLayout], a
 	call ApplyPals
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a
@@ -581,6 +582,7 @@ _CGB_LevelSelectionMenu:
 	ld bc, 2 palettes
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
+
 ; load daytime and gender-based background pals
 	ld a, [wPlayerGender]
 	bit PLAYERGENDER_FEMALE_F, a
@@ -598,30 +600,8 @@ _CGB_LevelSelectionMenu:
 	ld bc, 6 palettes
 	ld a, BANK(wBGPals1)
 	call FarCopyWRAM
-; assign attrs based on tile ids according to LevelSelectionMenuAttrmap
-	hlcoord 0, 0
-	decoord 0, 0, wAttrmap
-	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-.loop
-	push hl
-	ld a, [hl] ; tile id
-	ld hl, LevelSelectionMenuAttrmap
-	add l
-	ld l, a
-	ld a, h
-	adc 0
-	ld h, a
-	ld a, [hl] ; attr value
-	ld [de], a
-	pop hl
-	inc hl
-	inc de
-	dec bc
-	ld a, b
-	or c
-	jr nz, .loop
-; apply and commit pals and attrmap
-	call ApplyAttrmap
+
+; apply and commit pals
 	call ApplyPals
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a

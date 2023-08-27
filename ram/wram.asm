@@ -944,7 +944,7 @@ wCreditsPos:: dw
 wCreditsTimer:: db
 ENDU
 
-wDefaultSGBLayout:: db
+wDefaultCGBLayout:: db
 
 wPlayerHPPal:: db
 wEnemyHPPal:: db

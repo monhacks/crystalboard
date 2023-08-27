@@ -300,7 +300,6 @@ LoadOrRegenerateLuckyIDNumber:
 	jp CloseSRAM
 
 Continue:
-	farcall LevelSelectionMenu
 	farcall TryLoadSaveFile
 	jr c, .FailToLoad
 	call LoadStandardMenuHeader

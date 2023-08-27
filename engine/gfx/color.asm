@@ -822,5 +822,4 @@ LevelSelectionMenuFemalePals:
 INCLUDE "gfx/level_selection_menu/background_female.pal"
 	assert_table_length NUM_DAYTIMES
 
-LevelSelectionMenuAttrmap:
-INCLUDE "gfx/level_selection_menu/attrmap.asm"
+INCLUDE "engine/gfx/rgb_fade.asm"

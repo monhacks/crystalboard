@@ -124,3 +124,10 @@ DEF CGB_DEFAULT EQU $ff
 	const PREDEFPAL_GAMEFREAK_LOGO_OB
 	const PREDEFPAL_GAMEFREAK_LOGO_BG
 DEF NUM_PREDEF_PALS EQU const_value
+
+; RGBFadeEffectJumptable indexes (see engine/gfx/rgb_fade.asm:DoRGBFadeEffect)
+	const_def
+	const RGBFADE_TO_BLACK_6BGP
+	const RGBFADE_TO_LIGHTER_6BGP
+	const RGBFADE_TO_WHITE_6BGP_2OBP
+DEF NUM_RGB_FADE_EFFECTS EQU const_value

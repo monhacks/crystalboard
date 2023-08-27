@@ -26,11 +26,13 @@ LevelSelectionMenu::
 	ld [wLevelSelectionMenuStandingStill], a
 
 	call LevelSelectionMenu_InitTilemap
-	ld b, CGB_LEVEL_SELECTION_MENU
-	call GetCGBLayout ; apply and commit attrmap (takes 4 frames) and pals
-	call SetPalettes
+	call LevelSelectionMenu_InitAttrmap
+	call WaitBGMap2
 	xor a
 	ldh [hBGMapMode], a
+	ld b, CGB_LEVEL_SELECTION_MENU
+	call GetCGBLayout ; apply and commit pals
+	call SetPalettes
 
 	ld de, MUSIC_GAME_CORNER
 	call PlayMusic
@@ -122,8 +124,6 @@ LevelSelectionMenu::
 	call PlaySFX
 	call LevelSelectionMenu_Delay10Frames
 	call .EnterLevelFadeOut
-	ld c, 10
-	call DelayFrames
 	ld a, $8
 	ld [wMusicFade], a
 	ld a, LOW(MUSIC_NONE)
@@ -154,7 +154,8 @@ LevelSelectionMenu::
 	ret
 
 .EnterLevelFadeOut:
-	ret
+	ld b, RGBFADE_TO_WHITE_6BGP_2OBP
+	jp DoRGBFadeEffect
 
 .exit
 	call LevelSelectionMenu_Delay10Frames
@@ -196,7 +197,7 @@ LevelSelectionMenu_InitTilemap:
 .loop
 	ld a, [de]
 	cp $ff ; tilemaps are $ff-terminated
-	jp z, WaitBGMap ; commit tilemap (4 frames)
+	ret z
 	ld a, [de]
 	ld [hli], a
 	inc de
@@ -207,6 +208,31 @@ LevelSelectionMenu_InitTilemap:
 	dw LevelSelectionMenuPage2Tilemap
 	dw LevelSelectionMenuPage3Tilemap
 	dw LevelSelectionMenuPage4Tilemap
+
+LevelSelectionMenu_InitAttrmap:
+; assign attrs based on tile ids according to LevelSelectionMenuAttrmap
+	hlcoord 0, 0
+	decoord 0, 0, wAttrmap
+	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
+.loop
+	push hl
+	ld a, [hl] ; tile id
+	ld hl, LevelSelectionMenuAttrmap
+	add l
+	ld l, a
+	ld a, h
+	adc 0
+	ld h, a
+	ld a, [hl] ; attr value
+	ld [de], a
+	pop hl
+	inc hl
+	inc de
+	dec bc
+	ld a, b
+	or c
+	jr nz, .loop
+	ret
 
 LevelSelectionMenu_InitPlayerSprite:
 ; initialize the anim struct of the player's sprite.
@@ -397,10 +423,6 @@ DEF PAGE_EDGE_UP    EQU $10
 DEF PAGE_EDGE_LEFT  EQU $08
 DEF PAGE_EDGE_RIGHT EQU $a8
 
-DEF PAGE_CHANGE_FADE_FRAMES     EQU 16
-DEF PAGE_CHANGE_NON_FADE_FRAMES EQU 13
-; total frame delay of page change is 16 + 13 + 16 = 45 frames
-
 MACRO page_change_event
 ; SPRITE_ANIM_SEQ_* to match, Match object's X or Y, X/Y coordinate, Action if both SPRITE_ANIM_SEQ_* and X/Y match
 	db \1, \2, \3
@@ -447,12 +469,10 @@ ENDM
 	call LevelSelectionMenu_GetNewPage
 	ld [wLevelSelectionMenuCurrentPage], a
 	call LevelSelectionMenu_InitTilemap
-	ld b, CGB_LEVEL_SELECTION_MENU
-	call GetCGBLayout
+	call LevelSelectionMenu_InitAttrmap
+	call WaitBGMap2
 	xor a
 	ldh [hBGMapMode], a
-	ld c, PAGE_CHANGE_NON_FADE_FRAMES
-	call DelayFrames
 	call .PageChangeFadeIn
 ; adjust steps left for the "duplicate" movement of the player leaving and entering a page
 	ld hl, wLevelSelectionMenuMovementStepsLeft
@@ -462,14 +482,12 @@ ENDM
 	ret
 
 .PageChangeFadeOut:
-	ld c, PAGE_CHANGE_FADE_FRAMES
-	call DelayFrames
-	ret
+	ld b, RGBFADE_TO_BLACK_6BGP
+	jp DoRGBFadeEffect
 
 .PageChangeFadeIn:
-	ld c, PAGE_CHANGE_FADE_FRAMES
-	call DelayFrames
-	ret
+	ld b, RGBFADE_TO_LIGHTER_6BGP
+	jp DoRGBFadeEffect
 
 LevelSelectionMenu_GetLandmarkPage:
 ; Return page number (a) of landmark a.
@@ -759,6 +777,9 @@ INCBIN "gfx/level_selection_menu/page_3.tilemap"
 
 LevelSelectionMenuPage4Tilemap:
 INCBIN "gfx/level_selection_menu/page_4.tilemap"
+
+LevelSelectionMenuAttrmap:
+INCLUDE "gfx/level_selection_menu/attrmap.asm"
 
 LevelSelectionMenuDirectionalArrowsGFX:
 INCBIN "gfx/level_selection_menu/directional_arrows.2bpp"

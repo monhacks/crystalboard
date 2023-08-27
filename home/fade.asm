@@ -62,3 +62,7 @@ IncGradGBPalTable_05:: dc 2,1,0,0, 2,1,0,0, 2,1,0,0
 IncGradGBPalTable_06:: dc 1,0,0,0, 1,0,0,0, 1,0,0,0
 
 IncGradGBPalTable_07:: dc 0,0,0,0, 0,0,0,0, 0,0,0,0
+
+DoRGBFadeEffect::
+	farcall _DoRGBFadeEffect
+	ret
