@@ -947,7 +947,7 @@ ApplyObjectFacing:
 	ret
 
 .DisableTextTiles:
-	call LoadMapPart
+	call LoadScreenTilemap
 	hlcoord 0, 0
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 .loop
@@ -2170,9 +2170,9 @@ Script_changeblock:
 Script_reloadmappart::
 	xor a
 	ldh [hBGMapMode], a
-	call OverworldTextModeSwitch
+	call LoadScreenTilemapAndAttrmapPals
 	call GetMovementPermissions
-	farcall ReloadMapPart
+	farcall HDMATransferTilemapAndAttrmap_OverworldEffect
 	call UpdateSprites
 	ret
 
@@ -2212,7 +2212,7 @@ Script_writeunusedbyte:
 	ret
 
 Script_closetext:
-	call _OpenAndCloseMenu_HDMATransferTilemapAndAttrmap
+	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu
 	call CloseText
 	ret
 

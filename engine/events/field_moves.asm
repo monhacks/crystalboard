@@ -58,7 +58,7 @@ ShakeHeadbuttTree:
 	jr .loop
 
 .done
-	call OverworldTextModeSwitch
+	call LoadScreenTilemapAndAttrmapPals
 	call WaitBGMap
 	xor a
 	ldh [hBGMapMode], a

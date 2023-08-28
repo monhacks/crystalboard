@@ -1,4 +1,4 @@
-_SwapTextboxPalettes::
+_LoadScreenAttrmapPals::
 	hlcoord 0, 0
 	decoord 0, 0, wAttrmap
 	ld b, SCREEN_HEIGHT

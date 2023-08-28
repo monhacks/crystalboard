@@ -288,8 +288,8 @@ ReloadSpritesNoPalettes::
 	call DelayFrame
 	ret
 
-SwapTextboxPalettes::
-	homecall _SwapTextboxPalettes
+LoadScreenAttrmapPals::
+	homecall _LoadScreenAttrmapPals
 	ret
 
 ScrollBGMapPalettes::

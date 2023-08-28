@@ -91,12 +91,12 @@ GetMapSceneID::
 	pop bc
 	ret
 
-OverworldTextModeSwitch::
-	call LoadMapPart
-	call SwapTextboxPalettes
+LoadScreenTilemapAndAttrmapPals::
+	call LoadScreenTilemap
+	call LoadScreenAttrmapPals
 	ret
 
-LoadMapPart::
+LoadScreenTilemap::
 	ldh a, [hROMBank]
 	push af
 
@@ -109,9 +109,9 @@ LoadMapPart::
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call ByteFill
 
-	ld a, BANK(_LoadMapPart)
+	ld a, BANK(_LoadScreenTilemap)
 	rst Bankswitch
-	call _LoadMapPart
+	call _LoadScreenTilemap
 
 	pop af
 	rst Bankswitch
@@ -1952,7 +1952,7 @@ ReloadTilesetAndPalettes::
 	ld c, a
 	call SwitchToAnyMapAttributesBank
 	farcall UpdateTimeOfDayPal
-	call OverworldTextModeSwitch
+	call LoadScreenTilemapAndAttrmapPals
 	call LoadTilesetGFX
 	ld a, 9
 	call SkipMusic

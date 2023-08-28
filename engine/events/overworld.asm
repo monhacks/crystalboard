@@ -220,7 +220,7 @@ CutDownTreeOrGrass:
 	ld [hl], a
 	xor a
 	ldh [hBGMapMode], a
-	call OverworldTextModeSwitch
+	call LoadScreenTilemapAndAttrmapPals
 	call UpdateSprites
 	call DelayFrame
 	ld a, [wCutWhirlpoolAnimationType]
@@ -1171,7 +1171,7 @@ DisappearWhirlpool:
 	ld [hl], a
 	xor a
 	ldh [hBGMapMode], a
-	call OverworldTextModeSwitch
+	call LoadScreenTilemapAndAttrmapPals
 	ld a, [wCutWhirlpoolAnimationType]
 	ld e, a
 	farcall PlayWhirlpoolSound
