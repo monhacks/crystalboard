@@ -188,7 +188,7 @@ INCLUDE "data/collision/collision_permissions.asm"
 INCLUDE "engine/menus/empty_sram.asm"
 INCLUDE "engine/events/checksave.asm"
 INCLUDE "data/maps/scenes.asm"
-INCLUDE "engine/overworld/load_map_part.asm"
+INCLUDE "engine/overworld/load_screen_tilemap.asm"
 
 
 SECTION "bank13_2", ROMX
