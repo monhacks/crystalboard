@@ -7,8 +7,7 @@ RefreshScreen::
 
 	call ReanchorBGMap_NoOAMUpdate
 	call _OpenAndCloseMenu_HDMATransferTilemapAndAttrmap
-	ld a, $90
-	ldh [hWY], a
+	call HideWindow_EnableLCDInt
 
 	pop af
 	rst Bankswitch
@@ -51,8 +50,7 @@ OpenText2bpp::
 	call ReanchorBGMap_NoOAMUpdate ; clear bgmap
 	call SpeechTextbox2bpp
 	call _OpenAndCloseMenu_HDMATransferTilemapAndAttrmap ; anchor bgmap
-	ld a, $90
-	ldh [hWY], a
+	call HideWindow_EnableLCDInt
 
 	pop af
 	rst Bankswitch
@@ -109,6 +107,18 @@ SafeUpdateSprites::
 	ldh [hOAMUpdate], a
 	ret
 
+HideWindow_EnableLCDInt::
+	ld a, $90
+	ldh [hWY], a
+	ldh a, [hWindowHUD]
+	and a
+	ld a, 1 << rSTAT_INT_HBLANK
+	jr z, .ok
+	ld a, 1 << rSTAT_INT_LYC
+.ok
+	ldh [rSTAT], a
+	ret
+
 OVERWORLD_HUD_HEIGHT EQU 8
 
 EnableOverworldWindowHUD::
@@ -119,11 +129,12 @@ EnableWindowHUD:
 	ldh [hWindowHUD], a
 	; configure LCD interrupt
 	ldh [rLYC], a
-	ld a, 1 << rSTAT_INT_LYC ; LYC=LC
-	ldh [rSTAT], a
 	; make window hidden this frame to prevent graphical glitches
 	ld a, $90
 	ldh [hWY], a
+	; configure LCD interrupt
+	ld a, 1 << rSTAT_INT_LYC ; LYC=LC
+	ldh [rSTAT], a
 	ret
 
 DisableWindowHUD::

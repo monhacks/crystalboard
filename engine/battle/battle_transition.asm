@@ -70,8 +70,7 @@ DoBattleTransition:
 	call DelayFrame
 	call .LoadPokeballTiles
 	call CopyTilemapAtOnce
-	ld a, SCREEN_HEIGHT_PX
-	ldh [hWY], a
+	call HideWindow_EnableLCDInt
 	call DelayFrame
 	xor a
 	ldh [hBGMapMode], a

@@ -34,7 +34,11 @@ ReanchorBGMap_NoOAMUpdate::
 	farcall ApplyPals
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a
+	; display window while BG map is reanchored.
+	; disable LCD interrupt to prevent cropping the window due to hWindowHUD
+	; (caller must re-enable when window is hidden again).
 	xor a
+	ldh [rSTAT], a
 	ldh [hBGMapMode], a
 	ldh [hWY], a
 	farcall HDMATransfer_FillBGMap0WithBlack ; no need to farcall
@@ -63,8 +67,7 @@ LoadFont_NoOAMUpdate::
 	ldh [hOAMUpdate], a
 
 	call LoadFrame
-	ld a, $90
-	ldh [hWY], a
+	call HideWindow_EnableLCDInt
 	call SafeUpdateSprites
 	call LoadStandardFont
 
