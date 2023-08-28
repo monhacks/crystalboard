@@ -145,10 +145,8 @@ DisableWindowHUD::
 	ldh [rLYC], a
 	ld a, 1 << rSTAT_INT_HBLANK ; hblank (default)
 	ldh [rSTAT], a
-	; leave window in default state (enabled and hidden)
+	; leave window in default state (hidden with WY=$90)
+	; rLCDC[rLCDC_WINDOW_ENABLE] will be set during next vblank
 	ld a, $90
 	ldh [hWY], a
-	ldh a, [rLCDC]
-	set rLCDC_WINDOW_ENABLE, a
-	ldh [rLCDC], a
 	ret

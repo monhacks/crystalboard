@@ -41,6 +41,18 @@ HDMATransferTilemapAndAttrmap_OverworldEffect::
 	call PadTilemapForHDMATransfer
 	call DelayFrame
 
+	ldh a, [hWindowHUD]
+	and a
+	jr z, .go
+	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUD] >= 0)
+.wait_lcd
+;	ldh a, [hWindowHUD]
+	ld b, a
+	ldh a, [rLY]
+	sub b
+	jr c, .wait_lcd
+
+.go
 	; Transfer Attrmap and Tilemap to BG map
 	di
 	ldh a, [rVBK]
@@ -74,6 +86,18 @@ _HDMATransferTilemapAndAttrmap_OpenAndCloseMenu::
 	call PadTilemapForHDMATransfer
 	call DelayFrame
 
+	ldh a, [hWindowHUD]
+	and a
+	jr z, .go
+	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUD] >= 0)
+.wait_lcd
+;	ldh a, [hWindowHUD]
+	ld b, a
+	ldh a, [rLY]
+	sub b
+	jr c, .wait_lcd
+
+.go
 	; Transfer Attrmap and Tilemap to BG map
 	di
 	ldh a, [rVBK]
@@ -252,6 +276,18 @@ _continue_HDMATransfer:
 	cp d
 	jr nc, .ly_loop
 
+	ldh a, [hWindowHUD]
+	and a
+	jr z, .go
+	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUD] >= 0)
+.wait_lcd
+;	ldh a, [hWindowHUD]
+	ld b, a
+	ldh a, [rLY]
+	sub b
+	jr c, .wait_lcd
+
+.go
 	di
 	; while [rSTAT] & 3: pass
 .rstat_loop_1

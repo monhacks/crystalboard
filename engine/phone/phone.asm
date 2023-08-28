@@ -559,6 +559,12 @@ Phone_Wait20Frames:
 	farcall PhoneRing_CopyTilemapAtOnce
 	ret
 
+PhoneRing_CopyTilemapAtOnce:
+	ld a, [wSpriteUpdatesEnabled]
+	and a
+	jp z, WaitBGMap
+	jp CopyTilemapAtOnce
+
 Phone_TextboxWithName:
 	push bc
 	call Phone_CallerTextbox

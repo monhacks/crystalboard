@@ -39,9 +39,6 @@ ApplyTilemap::
 	ret
 
 CopyTilemapAtOnce::
-	jr _CopyTilemapAtOnce
-
-_CopyTilemapAtOnce:
 	ldh a, [hBGMapMode]
 	push af
 	xor a
@@ -52,11 +49,26 @@ _CopyTilemapAtOnce:
 	xor a
 	ldh [hMapAnims], a
 
-.wait
-	ldh a, [rLY]
-	cp $80 - 1
-	jr c, .wait
+; .wait
+; 	ldh a, [rLY]
+; 	cp $80 - 1
+; 	jr c, .wait
 
+	call DelayFrame
+
+	ldh a, [hWindowHUD]
+	and a
+	jr z, .go
+
+	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUD] >= 0)
+.wait_lcd
+;	ldh a, [hWindowHUD]
+	ld b, a
+	ldh a, [rLY]
+	sub b
+	jr c, .wait_lcd
+
+.go
 	di
 	ld a, BANK(vBGMap2)
 	ldh [rVBK], a
@@ -67,10 +79,10 @@ _CopyTilemapAtOnce:
 	hlcoord 0, 0
 	call .CopyBGMapViaStack
 
-.wait2
-	ldh a, [rLY]
-	cp $80 - 1
-	jr c, .wait2
+; .wait2
+; 	ldh a, [rLY]
+; 	cp $80 - 1
+; 	jr c, .wait2
 	ei
 
 	pop af
@@ -88,13 +100,13 @@ _CopyTilemapAtOnce:
 	ld l, 0
 	ld a, SCREEN_HEIGHT
 	ldh [hTilesPerCycle], a
-	ld b, 1 << 1 ; not in v/hblank
+	ld b, 1 << rSTAT_BUSY ; not in v/hblank
 	ld c, LOW(rSTAT)
 
 .loop
 rept SCREEN_WIDTH / 2
 	pop de
-; if in v/hblank, wait until not in v/hblank
+; if not in v/hblank, wait until in v/hblank
 .loop\@
 	ldh a, [c]
 	and b
