@@ -14,7 +14,7 @@ EnableWindowHUD:
 	ld a, $90
 	ldh [hWY], a
 	; configure LCD interrupt
-	ld a, 1 << rSTAT_INT_LYC ; LYC=LC
+	ld a, 1 << rSTAT_INT_LYC ; LYC=LY
 	ldh [rSTAT], a
 	ret
 
