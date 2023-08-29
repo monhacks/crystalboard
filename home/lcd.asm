@@ -4,7 +4,7 @@ LCD::
 	push af
 
 ; hLCDCPointer is used in battle transition, battle anims, and movies (crystal intro, credits, etc.)
-; uses rSTAT_INT_HBLANK and doesn't overlap with hWindowHUD.
+; uses rSTAT_INT_HBLANK and doesn't overlap with hWindowHUDLY.
 	ldh a, [hLCDCPointer]
 	and a
 	jr z, .next
@@ -23,8 +23,8 @@ LCD::
 	pop bc
 
 .next
-; hWindowHUD uses rSTAT_INT_LYC
-	ldh a, [hWindowHUD]
+; hWindowHUDLY uses rSTAT_INT_LYC
+	ldh a, [hWindowHUDLY]
 	and a
 	jr z, .done
 

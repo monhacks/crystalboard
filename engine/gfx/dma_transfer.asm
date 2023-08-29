@@ -41,12 +41,12 @@ HDMATransferTilemapAndAttrmap_OverworldEffect::
 	call PadTilemapForHDMATransfer
 	call DelayFrame
 
-	ldh a, [hWindowHUD]
+	ldh a, [hWindowHUDLY]
 	and a
 	jr z, .go
-	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUD] >= 0)
+	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUDLY] >= 0)
 .wait_lcd
-;	ldh a, [hWindowHUD]
+;	ldh a, [hWindowHUDLY]
 	ld b, a
 	ldh a, [rLY]
 	sub b
@@ -86,12 +86,12 @@ _HDMATransferTilemapAndAttrmap_OpenAndCloseMenu::
 	call PadTilemapForHDMATransfer
 	call DelayFrame
 
-	ldh a, [hWindowHUD]
+	ldh a, [hWindowHUDLY]
 	and a
 	jr z, .go
-	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUD] >= 0)
+	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUDLY] >= 0)
 .wait_lcd
-;	ldh a, [hWindowHUD]
+;	ldh a, [hWindowHUDLY]
 	ld b, a
 	ldh a, [rLY]
 	sub b
@@ -276,12 +276,12 @@ _continue_HDMATransfer:
 	cp d
 	jr nc, .ly_loop
 
-	ldh a, [hWindowHUD]
+	ldh a, [hWindowHUDLY]
 	and a
 	jr z, .go
-	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUD] >= 0)
+	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUDLY] >= 0)
 .wait_lcd
-;	ldh a, [hWindowHUD]
+;	ldh a, [hWindowHUDLY]
 	ld b, a
 	ldh a, [rLY]
 	sub b

@@ -249,7 +249,7 @@ WRAM0
 	"Sprites"
 	"Tilemap"
 	"Miscellaneous"
-	"Unused Map Buffer"
+	"Overworld HUD"
 	align 8
 	"Overworld Map"
 	align 4

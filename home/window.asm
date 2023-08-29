@@ -110,43 +110,11 @@ SafeUpdateSprites::
 HideWindow_EnableLCDInt::
 	ld a, $90
 	ldh [hWY], a
-	ldh a, [hWindowHUD]
+	ldh a, [hWindowHUDLY]
 	and a
 	ld a, 1 << rSTAT_INT_HBLANK
 	jr z, .ok
 	ld a, 1 << rSTAT_INT_LYC
 .ok
 	ldh [rSTAT], a
-	ret
-
-OVERWORLD_HUD_HEIGHT EQU 8
-
-EnableOverworldWindowHUD::
-	ld a, OVERWORLD_HUD_HEIGHT - 1
-	; fallthrough
-
-EnableWindowHUD:
-	ldh [hWindowHUD], a
-	; configure LCD interrupt
-	ldh [rLYC], a
-	; make window hidden this frame to prevent graphical glitches
-	ld a, $90
-	ldh [hWY], a
-	; configure LCD interrupt
-	ld a, 1 << rSTAT_INT_LYC ; LYC=LC
-	ldh [rSTAT], a
-	ret
-
-DisableWindowHUD::
-	xor a
-	ldh [hWindowHUD], a
-	; configure LCD interrupt
-	xor a
-	ldh [rLYC], a
-	ld a, 1 << rSTAT_INT_HBLANK ; hblank (default)
-	ldh [rSTAT], a
-	; leave window in default state (hidden with WY=$90)
-	; rLCDC[rLCDC_WINDOW_ENABLE] will be set during next vblank
-	ld a, $90
-	ldh [hWY], a
 	ret

@@ -33,4 +33,5 @@ _LoadScreenTilemap::
 .carry
 	dec b
 	jr nz, .loop
+
 	ret

@@ -1,12 +1,5 @@
 ; Functions dealing with rendering and interacting with maps.
 
-ClearUnusedMapBuffer::
-	ld hl, wUnusedMapBuffer
-	ld bc, wUnusedMapBufferEnd - wUnusedMapBuffer
-	ld a, 0
-	call ByteFill
-	ret
-
 CheckScenes::
 ; Checks wCurMapSceneScriptPointer.  If it's empty, returns -1 in a.  Otherwise, returns the active scene ID in a.
 	push hl
@@ -146,7 +139,6 @@ LoadMetatiles::
 	ld e, l
 	ld d, h
 	; Set hl to the address of the current metatile data ([wTilesetBlocksAddress] + (a) tiles).
-; BUG: LoadMetatiles wraps around past 128 blocks (see docs/bugs_and_glitches.md)
 	ld l, a
 	ld h, 0
 	add hl, hl

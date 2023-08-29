@@ -49,20 +49,15 @@ CopyTilemapAtOnce::
 	xor a
 	ldh [hMapAnims], a
 
-; .wait
-; 	ldh a, [rLY]
-; 	cp $80 - 1
-; 	jr c, .wait
-
 	call DelayFrame
 
-	ldh a, [hWindowHUD]
+	ldh a, [hWindowHUDLY]
 	and a
 	jr z, .go
 
-	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUD] >= 0)
+	; wait until LCD interrupt has ocurred this frame ([rLY] - [hWindowHUDLY] >= 0)
 .wait_lcd
-;	ldh a, [hWindowHUD]
+;	ldh a, [hWindowHUDLY]
 	ld b, a
 	ldh a, [rLY]
 	sub b
@@ -78,11 +73,6 @@ CopyTilemapAtOnce::
 	ldh [rVBK], a
 	hlcoord 0, 0
 	call .CopyBGMapViaStack
-
-; .wait2
-; 	ldh a, [rLY]
-; 	cp $80 - 1
-; 	jr c, .wait2
 	ei
 
 	pop af

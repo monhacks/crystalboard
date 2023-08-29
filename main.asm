@@ -189,6 +189,7 @@ INCLUDE "engine/menus/empty_sram.asm"
 INCLUDE "engine/events/checksave.asm"
 INCLUDE "data/maps/scenes.asm"
 INCLUDE "engine/overworld/load_screen_tilemap.asm"
+INCLUDE "engine/gfx/hud.asm"
 
 
 SECTION "bank13_2", ROMX

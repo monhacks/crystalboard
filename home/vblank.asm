@@ -65,12 +65,12 @@ VBlank0::
 	ldh a, [hROMBank]
 	ldh [hROMBankBackup], a
 
-	; enable window back in case LCD interrupt disabled it mid-frame due to hWindowHUD
+	; enable window back in case LCD interrupt disabled it mid-frame due to hWindowHUDLY
 	ldh a, [rLCDC]
 	set rLCDC_WINDOW_ENABLE, a
 	ldh [rLCDC], a
 
-	ld a, [hWindowHUD]
+	ld a, [hWindowHUDLY]
 	and a
 	jr z, .next
 
@@ -117,8 +117,8 @@ VBlank0::
 	xor a
 	ld [wVBlankOccurred], a
 
-	; if hWindowHUD is active, enable interrupts so the LCD interrupt can trigger
-	ldh a, [hWindowHUD]
+	; if hWindowHUDLY is active, enable interrupts so the LCD interrupt can trigger
+	ldh a, [hWindowHUDLY]
 	and a
 	jr z, .next2
 
@@ -163,17 +163,17 @@ VBlank0::
 	ldh a, [hROMBankBackup]
 	rst Bankswitch
 
-	; if hWindowHUD is not active, we're done
-	ldh a, [hWindowHUD]
+	; if hWindowHUDLY is not active, we're done
+	ldh a, [hWindowHUDLY]
 	and a
 	ret z
 
-	; interrupts must be enabled in the cycle that rLY becomes [hWindowHUD] to prevent flickering
-	; wait until [hWindowHUD] - [rLY] is NOT between 0 and 2 before disabling interrupts
+	; interrupts must be enabled in the cycle that rLY becomes [hWindowHUDLY] to prevent flickering
+	; wait until [hWindowHUDLY] - [rLY] is NOT between 0 and 2 before disabling interrupts
 .wait_loop
 	ldh a, [rLY]
 	ld b, a
-	ldh a, [hWindowHUD]
+	ldh a, [hWindowHUDLY]
 	sub b
 	cp 2 + 1
 	jr c, .wait_loop

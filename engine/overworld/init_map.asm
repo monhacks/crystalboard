@@ -25,17 +25,20 @@ ReanchorBGMap_NoOAMUpdate::
 	xor a
 	ldh [hLCDCPointer], a
 	ldh [hBGMapMode], a
+	; prepare vBGMap1/vBGMap3 to be displayed while vBGMap0/vBGMap2 is reanchored.
+	; draw screen at wTilemap and wAttrmap and then transfer it.
 	ld a, $90
 	ldh [hWY], a
 	call LoadScreenTilemapAndAttrmapPals
+	call LoadWindowHUD
 	ld a, HIGH(vBGMap1)
 	call .LoadBGMapAddrIntoHRAM
 	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu
 	farcall ApplyPals
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a
-	; display window while BG map is reanchored.
-	; disable LCD interrupt to prevent cropping the window due to hWindowHUD
+	; display window using vBGMap1/vBGMap3 while vBGMap0/vBGMap2 is reanchored.
+	; disable LCD interrupt to prevent cropping the window if window HUD is active
 	; (caller must re-enable when window is hidden again).
 	xor a
 	ldh [rSTAT], a

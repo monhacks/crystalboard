@@ -126,7 +126,9 @@ EnterMap:
 	ld [wPoisonStepCount], a
 .dontresetpoison
 
-	call EnableOverworldWindowHUD
+	call ConstructOverworldHUDTilemap
+	call TransferOverworldHUDToBGMap
+	call EnableOverworldHUD
 
 	xor a ; end map entry
 	ldh [hMapEntryMethod], a

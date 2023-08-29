@@ -55,3 +55,8 @@ DEF SPRITE_GFX_LIST_CAPACITY EQU 32 ; see wUsedSprites
 	const ANIM_MON_HOF
 	const ANIM_MON_EGG1
 	const ANIM_MON_EGG2
+
+; LoadHUD indexes (see engine/gfx/hud.asm)
+	const_def 1
+	const HUD_OVERWORLD ; 1
+DEF NUM_HUD_TYPES EQU const_value - 1

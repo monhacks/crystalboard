@@ -697,12 +697,11 @@ wPuzzlePieces:: ds 6 * 6
 ENDU
 
 
-SECTION "Unused Map Buffer", WRAM0
+SECTION "Overworld HUD", WRAM0
 
-; This was a buffer for map-related pointers in the 1997 G/S prototype.
-; See wMapBuffer in pokegold-spaceworld's wram.asm.
-wUnusedMapBuffer:: ds 24
-wUnusedMapBufferEnd::
+wOverworldHUDTiles:: ds SCREEN_WIDTH
+wOverworldHUDTilesEnd::
+	ds 4
 
 
 SECTION UNION "Overworld Map", WRAM0
@@ -933,8 +932,8 @@ SECTION "Video", WRAM0
 
 UNION
 ; bg map
-wBGMapBuffer::    ds 40
-wBGMapPalBuffer:: ds 40
+wBGMapBuffer::    ds 2 * SCREEN_WIDTH
+wBGMapPalBuffer:: ds 2 * SCREEN_WIDTH
 wBGMapBufferPointers:: ds 20 * 2
 wBGMapBufferEnd::
 
@@ -1275,6 +1274,10 @@ wSecondsSince:: db
 wMinutesSince:: db
 wHoursSince:: db
 wDaysSince:: db
+
+wWhichHUD::
+; index to LoadHUD
+	db
 
 
 SECTION "WRAM 1", WRAMX
