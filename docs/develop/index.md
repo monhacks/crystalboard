@@ -52,12 +52,13 @@
 
 #### HUD
 
-- **EnableWindowHUD**: Configure LCD interrupt in LYC=LY mode with corresponding LYC
+- **EnableWindowHUD**: Configure LCD interrupt in LYC=LY mode with corresponding LYC.
 - **DisableWindowHUD**: Configure LCD interrupt in hblank mode
 - **LoadHUD**: Load the HUD at wWhichHUD to the top of wTilemap and wAttrmap
 - **LoadWindowHUD**: Like LoadHUD, but for HUDs that require a Window overlay. Only does anything if hWindowHUDLY is non-0
 - **ConstructOverworldHUDTilemap**: Draw the overworld HUD's tilemap into wOverworldHUDTiles
 - **TransferOverworldHUDToBGMap**: Transfer overworld HUD to vBGMap1/vBGMap3 during v/hblank(s). Tilemap is read from wOverworldHUDTiles, attrmap is all PAL_BG_TEXT | PRIORITY.
+- **RefreshOverworldHUD**: ConstructOverworldHUDTilemap + TransferOverworldHUDToBGMap
 
 ### Scripts
 

@@ -127,7 +127,6 @@ EnterMap:
 .dontresetpoison
 
 	call ConstructOverworldHUDTilemap
-	call TransferOverworldHUDToBGMap
 	call EnableOverworldHUD
 
 	xor a ; end map entry

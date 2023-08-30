@@ -3,10 +3,11 @@ OVERWORLD_HUD_HEIGHT EQU 8
 EnableOverworldHUD::
 	ld a, HUD_OVERWORLD
 	ld [wWhichHUD], a
+	call TransferOverworldHUDToBGMap
 	ld a, OVERWORLD_HUD_HEIGHT - 1
 	; fallthrough
 
-EnableWindowHUD:
+EnableWindowHUD::
 	ldh [hWindowHUDLY], a
 	; configure LCD interrupt
 	ldh [rLYC], a
@@ -54,18 +55,14 @@ LoadHUD::
 
 ConstructOverworldHUDTilemap::
 ; draw the overworld HUD's tilemap into wOverworldHUDTiles
-	ld hl, .Tilemap
-	ld de, wOverworldHUDTiles
-	ld bc, .TilemapEnd - .Tilemap ; SCREEN_WIDTH
-	call CopyBytes
+	farcall _ConstructOverworldHUDTilemap
 	ret
 
-.Tilemap:
-	db "▶- ▶-   ▶     ▶     "
-.TilemapEnd:
-	assert .TilemapEnd - .Tilemap == wOverworldHUDTilesEnd - wOverworldHUDTiles
+RefreshOverworldHUD::
+	call ConstructOverworldHUDTilemap
+	; fallthrough
 
-TransferOverworldHUDToBGMap::
+TransferOverworldHUDToBGMap:
 ; transfer overworld HUD to vBGMap1/vBGMap3 during v/hblank(s)
 ; tilemap is read from wOverworldHUDTiles, attrmap is all PAL_BG_TEXT | PRIORITY
 	ldh a, [rVBK]

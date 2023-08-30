@@ -27,3 +27,15 @@ _LoadOverworldHUDAttrmap:
 	ld bc, SCREEN_WIDTH
 	ld a, PAL_BG_TEXT | PRIORITY
 	jp ByteFill
+
+_ConstructOverworldHUDTilemap::
+	ld hl, .Tilemap
+	ld de, wOverworldHUDTiles
+	ld bc, .TilemapEnd - .Tilemap ; SCREEN_WIDTH
+	call CopyBytes
+	ret
+
+.Tilemap:
+	db "▶- ▶-   ▶     ▶     "
+.TilemapEnd:
+	assert .TilemapEnd - .Tilemap == wOverworldHUDTilesEnd - wOverworldHUDTiles
