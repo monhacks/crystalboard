@@ -110,8 +110,6 @@ EnterMap:
 	ld [wXYComparePointer], a
 	ld [wXYComparePointer + 1], a
 	call SetUpFiveStepWildEncounterCooldown
-	ld hl, wTextboxFlags
-	set TEXT_2BPP_F, [hl]
 	farcall RunMapSetupScript
 	call DisableEvents
 
@@ -127,9 +125,6 @@ EnterMap:
 	xor a
 	ld [wPoisonStepCount], a
 .dontresetpoison
-
-	call ConstructOverworldHUDTilemap
-	call EnableOverworldHUD
 
 	xor a ; end map entry
 	ldh [hMapEntryMethod], a

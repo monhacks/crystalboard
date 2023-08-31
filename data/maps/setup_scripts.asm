@@ -13,12 +13,40 @@ MapSetupScripts:
 	dw MapSetupScript_Submenu
 	dw MapSetupScript_BadWarp
 	dw MapSetupScript_Fly
+	dw MapSetupScript_EnterLevel
 	assert_table_length NUM_MAPSETUP_SCRIPTS
 
 ; valid commands are listed in MapSetupCommands (see data/maps/setup_script_pointers.asm)
 MACRO mapsetup
 	db (\1_MapSetupCmd - MapSetupCommands) / 3
 ENDM
+
+MapSetupScript_EnterLevel:
+; same as MapSetupScript_Warp, but includes ConstructAndEnableOverworldHUD
+	mapsetup DisableLCD
+	mapsetup InitSound
+	mapsetup EnterMapSpawnPoint
+	mapsetup LoadMapAttributes
+	mapsetup HandleNewMap
+	mapsetup SpawnPlayer
+	mapsetup RefreshPlayerCoords
+	mapsetup GetMapScreenCoords
+	mapsetup LoadBlockData
+	mapsetup BufferScreen
+	mapsetup LoadMapGraphics
+	mapsetup LoadMapTimeOfDay
+	mapsetup ConstructAndEnableOverworldHUD
+	mapsetup LoadMapObjects
+	mapsetup EnableLCD
+	mapsetup LoadMapPalettes
+	mapsetup SpawnInFacingDown
+	mapsetup RefreshMapSprites
+	mapsetup PlayMapMusicBike
+	mapsetup FadeInToMusic
+	mapsetup FadeInPalettesFromWhite
+	mapsetup ActivateMapAnims
+	mapsetup LoadWildMonData
+	db -1 ; end
 
 MapSetupScript_Teleport:
 	mapsetup ResetPlayerObjectAction
@@ -128,6 +156,7 @@ MapSetupScript_ReloadMap:
 	mapsetup LoadConnectionBlockData
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
+	mapsetup EnableOverworldHUD
 	mapsetup EnableLCD
 	mapsetup LoadMapPalettes
 	mapsetup RefreshMapSprites
@@ -167,6 +196,7 @@ MapSetupScript_Continue:
 	mapsetup BufferScreen
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
+	mapsetup ConstructAndEnableOverworldHUD
 	mapsetup EnableLCD
 	mapsetup LoadMapPalettes
 	mapsetup RefreshMapSprites

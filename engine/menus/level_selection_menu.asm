@@ -141,7 +141,7 @@ LevelSelectionMenu::
 	ld a, [wLevelSelectionMenuCurrentLandmark]
 	call LevelSelectionMenu_GetLandmarkSpawnPoint
 	ld [wDefaultSpawnpoint], a
-	ld a, MAPSETUP_WARP
+	ld a, MAPSETUP_ENTERLEVEL
 	ld [hMapEntryMethod], a
 	xor a
 	ld [wDontPlayMapMusicOnReload], a ; play map music

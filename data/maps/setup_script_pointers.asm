@@ -49,3 +49,5 @@ MapSetupCommands:
 	add_mapsetup SuspendMapAnims ; 2a
 	add_mapsetup ApplyMapPalettes ; 2b
 	add_mapsetup EnableTextAcceleration ; 2c
+	add_mapsetup ConstructAndEnableOverworldHUD ; 2d
+	add_mapsetup EnableOverworldHUD ; 2e

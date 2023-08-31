@@ -327,7 +327,7 @@ Continue:
 	call DelayFrames
 	farcall JumpRoamMons
 	ld a, [wSpawnAfterChampion]
-	cp SPAWN_LEVEL_1
+	cp SPAWN_N_A
 	jr z, .SpawnAfterE4
 	ld a, MAPSETUP_CONTINUE
 	ldh [hMapEntryMethod], a
@@ -378,7 +378,7 @@ FinishContinueFunction:
 	res GAME_TIMER_MOBILE_F, [hl]
 	farcall OverworldLoop
 	ld a, [wSpawnAfterChampion]
-	cp SPAWN_LEVEL_1
+	cp SPAWN_N_A
 	jr z, .AfterRed
 	jp Reset
 

@@ -67,6 +67,7 @@ OpenText1bpp::
 	ld a, BANK(ReanchorBGMap_NoOAMUpdate) ; aka BANK(LoadFont_NoOAMUpdate)
 	rst Bankswitch
 
+	; note: 1bpp text is NOT compatible with the overworld HUD enabled because it uses 2bpp font tiles.
 	ld hl, wTextboxFlags
 	res TEXT_2BPP_F, [hl]
 

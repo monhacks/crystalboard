@@ -117,3 +117,10 @@ endr
 	pop af
 	ld [rVBK], a
 	ret
+
+ConstructAndEnableOverworldHUD::
+; map setup command used by MAPSETUP_ENTERLEVEL and MAPSETUP_CONTINUE
+	ld hl, wTextboxFlags
+	set TEXT_2BPP_F, [hl]
+	call ConstructOverworldHUDTilemap
+	jp EnableOverworldHUD
