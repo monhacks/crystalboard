@@ -2252,14 +2252,14 @@ UpdateObjectFrozen:
 	call CheckObjectOnScreen
 	jr c, SetFacing_Standing
 	call UpdateObjectTile
-	farcall HandleFrozenObjectAction ; no need to farcall
+	call HandleFrozenObjectAction
 	xor a
 	ret
 
 UpdateRespawnedObjectFrozen:
 	call CheckObjectOnScreen
 	jr c, SetFacing_Standing
-	farcall HandleFrozenObjectAction ; no need to farcall
+	call HandleFrozenObjectAction
 	xor a
 	ret
 
@@ -2283,7 +2283,7 @@ UpdateObjectTile:
 	ld hl, OBJECT_TILE
 	add hl, bc
 	ld [hl], a
-	farcall UpdateTallGrassFlags ; no need to farcall
+	call UpdateTallGrassFlags
 	ret
 
 CheckObjectOnScreen:
@@ -2332,7 +2332,7 @@ CheckObjectCoveredByTextbox:
 	cp $f0
 	jr nc, .ok1
 	cp SCREEN_WIDTH_PX
-	jp nc, .nope
+	jp nc, .disappear
 .ok1
 ; Account for objects currently moving left/right.
 	and %00000111
@@ -2365,7 +2365,7 @@ CheckObjectCoveredByTextbox:
 	cp $f0
 	jr nc, .ok4
 	cp SCREEN_HEIGHT_PX
-	jr nc, .nope
+	jr nc, .disappear
 .ok4
 ; Account for objects currently moving up/down.
 	and %00000111
@@ -2419,23 +2419,50 @@ CheckObjectCoveredByTextbox:
 	push bc
 	call Coord2Tile
 	pop bc
-; NPCs disappear if standing on tile $60-$7f (or $e0-$ff),
+; NPCs disappear if standing on tiles FIRST_REGULAR_TEXT_CHAR or above,
 ; since those IDs are for text characters and textbox frames.
+; - if 1bpp text, a single textbox tile overlapping with the sprite makes it disappear.
+; - if 2bpp text, sprite only disappears if ALL overlapping tiles are textbox tiles.
 	ld a, [hl]
 	cp FIRST_REGULAR_TEXT_CHAR
-	jr nc, .nope
+	jr c, .object_not_in_textbox
+
+;.object_in_textbox
+	ld a, [wTextboxFlags]
+	bit TEXT_2BPP_F, a
+	jr z, .disappear
+	jr .ok8
+
+.object_not_in_textbox
+	ld a, [wTextboxFlags]
+	bit TEXT_2BPP_F, a
+	jr nz, .not_disappear
+
 .ok8
 	dec d
 	jr nz, .next
 .ok9
+; while sprites are centered to tiles in the X axis exactly on top of two adjacent horizonal tiles,
+; in the Y axis they occupy 4-8-4 pixels of adjacent vertical tiles instead.
+; this is why we loop here one more time (thrice for regular-sized sprites) than horizontally.
 	dec e
+	ld a, e
+	cp $ff
 	jr nz, .loop
 
-	and a
+; if we managed make it here without returning early, there are only two options:
+; - if 1bpp text, the sprite is wholly outside of a textbox
+; - if 2bpp text, the sprite is wholly inside a textbox
+	ld a, [wTextboxFlags]
+	bit TEXT_2BPP_F, a
+	jr z, .not_disappear
+
+.disappear
+	scf
 	ret
 
-.nope
-	scf
+.not_disappear
+	and a
 	ret
 
 HandleNPCStep::
@@ -2584,7 +2611,7 @@ ResetFollower:
 	cp -1
 	ret z
 	call GetObjectStruct
-	farcall ResetObject ; no need to farcall
+	call ResetObject
 	ld a, -1
 	ld [wObjectFollow_Follower], a
 	ret

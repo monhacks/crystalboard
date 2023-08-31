@@ -15,8 +15,8 @@
 
 #### Textboxes
 
-- **Textbox1bpp**: TextboxBorder + TextboxPalette
-- **Textbox2bpp**: _OverworldTextbox + TextboxPalette
+- **Textbox1bpp**: TextboxBorder + TextboxAttributes1bpp
+- **Textbox2bpp**: _OverworldTextbox + TextboxAttributes2bpp
 - **SpeechTextbox1bpp**: Textbox1bpp with speech location and dimensions
 - **SpeechTextbox2bpp**: Textbox2bpp with speech location and dimensions
 - **ClearTextbox**: Clear the inside of a speech textbox (fill with " ")
@@ -24,7 +24,7 @@
 - **PrintText1bpp**, **FarPrintText1bpp**: SpeechTextbox1bpp + UpdateSprites + ApplyTilemap + ClearTextbox + PrintTextboxText
 - **PrintText2bpp**: SpeechTextbox2bpp + UpdateSprites + ApplyTilemap + ClearTextbox + PrintTextboxText
 - **MapTextbox**: ClearTextbox + redraw tile behind cursor + SafeUpdateSprites + disable OAM update + ApplyTilemap + PrintTextboxText + enable OAM update
-- **MenuBox**: Calls Textbox1bpp or Textbox2bpp, depending on the value at wMenuBoxUse2bppFrame, with menu location and dimensions. wMenuBoxUse2bppFrame, as part of menu data, is cleared (FALSE means 1bpp) by ClearMenuAndWindowData
+- **MenuBox**: Calls Textbox1bpp or Textbox2bpp, depending on the value at wTextboxFlags[TEXT_2BPP_F], with menu location and dimensions.
 
 #### Overworld map scrolling
 

@@ -72,7 +72,7 @@ Textbox1bpp::
 	call TextboxBorder
 	pop hl
 	pop bc
-	jr TextboxPalette
+	jr TextboxAttributes1bpp
 
 TextboxBorder::
 	; Top
@@ -120,15 +120,23 @@ TextboxBorder::
 	jr nz, .loop
 	ret
 
-TextboxPalette::
-; Fill text box width c height b at hl with pal 7
+TextboxAttributes1bpp::
+; Fill text box width c height b at hl with PAL_BG_TEXT
+	ld a, PAL_BG_TEXT
+	jr _TextboxAttributes
+
+TextboxAttributes2bpp::
+; Fill text box width c height b at hl with PAL_BG_TEXT | PRIORITY
+	ld a, PAL_BG_TEXT | PRIORITY
+	; fallthrough
+
+_TextboxAttributes:
 	ld de, wAttrmap - wTilemap
 	add hl, de
 	inc b
 	inc b
 	inc c
 	inc c
-	ld a, PAL_BG_TEXT
 .col
 	push bc
 	push hl
@@ -155,7 +163,7 @@ Textbox2bpp::
 	farcall _OverworldTextbox
 	pop hl
 	pop bc
-	jp TextboxPalette
+	jp TextboxAttributes2bpp
 
 RadioTerminator::
 	ld hl, .stop

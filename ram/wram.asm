@@ -1192,8 +1192,7 @@ wMenuCursorY:: db
 wMenuCursorX:: db
 wCursorOffCharacter:: db
 wCursorCurrentTile:: dw
-wMenuBoxUse2bppFrame:: db
-	ds 2
+	ds 3
 wMoreMenuDataEnd::
 
 wOverworldDelay:: db
@@ -1253,7 +1252,8 @@ wTextboxFrame::
 	db
 wTextboxFlags::
 ; bit 0: 1-frame text delay
-; bit 4: no text delay
+; bit 1: no text delay
+; bit 2: 2bpp textbox (and text)
 	db
 wGBPrinterBrightness::
 ; bit 0-6: brightness

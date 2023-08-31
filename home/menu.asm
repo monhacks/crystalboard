@@ -209,8 +209,8 @@ MenuBox::
 	call GetMenuBoxDims
 	dec b
 	dec c
-	ld a, [wMenuBoxUse2bppFrame]
-	and a
+	ld a, [wTextboxFlags]
+	bit TEXT_2BPP_F, a
 	jp z, Textbox1bpp
 	ld d, h
 	ld e, l

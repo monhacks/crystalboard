@@ -13,6 +13,9 @@
 StartMenu::
 	call ClearMenuAndWindowData
 
+	ld hl, wTextboxFlags
+	res TEXT_2BPP_F, [hl]
+
 	ld de, SFX_MENU
 	call PlaySFX
 
@@ -378,7 +381,7 @@ endr
 	hlcoord 0, 13
 	ld b, 3
 	ld c, 8
-	jp TextboxPalette
+	jp TextboxAttributes1bpp
 
 .IsMenuAccountOn:
 	ld a, [wOptions2]

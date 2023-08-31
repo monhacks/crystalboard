@@ -46,6 +46,9 @@ OpenText2bpp::
 	ld a, BANK(ReanchorBGMap_NoOAMUpdate)
 	rst Bankswitch
 
+	ld hl, wTextboxFlags
+	set TEXT_2BPP_F, [hl]
+
 	; assumes that the overworld 2bpp font and frame are loaded when calling this
 	call ReanchorBGMap_NoOAMUpdate ; anchor bgmap
 	call SpeechTextbox2bpp
@@ -63,6 +66,9 @@ OpenText1bpp::
 	push af
 	ld a, BANK(ReanchorBGMap_NoOAMUpdate) ; aka BANK(LoadFont_NoOAMUpdate)
 	rst Bankswitch
+
+	ld hl, wTextboxFlags
+	res TEXT_2BPP_F, [hl]
 
 	call ReanchorBGMap_NoOAMUpdate ; anchor bgmap
 	call SpeechTextbox1bpp

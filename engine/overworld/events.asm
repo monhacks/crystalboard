@@ -110,6 +110,8 @@ EnterMap:
 	ld [wXYComparePointer], a
 	ld [wXYComparePointer + 1], a
 	call SetUpFiveStepWildEncounterCooldown
+	ld hl, wTextboxFlags
+	set TEXT_2BPP_F, [hl]
 	farcall RunMapSetupScript
 	call DisableEvents
 
