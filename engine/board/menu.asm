@@ -9,7 +9,7 @@ BoardMenu::
 ; refresh overworld sprites to hide those behind textbox before drawing new graphics
 	call UpdateSprites
 	farcall LoadBoardMenuGFX
-	call DrawBoardMenuTiles
+	call DrawBoardMenuTilesAndClearPriorityAttr
 	call ApplyBoardMenuSpritePalette
 ; allow Pal update to complete, then apply the tilemap
 	call DelayFrame
@@ -41,11 +41,15 @@ BoardMenu::
 	ld [wScriptVar], a
 	ret
 
-DrawBoardMenuTiles:
+DrawBoardMenuTilesAndClearPriorityAttr:
 	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
 	ld a, BOARD_MENU_BG_FIRST_TILE
 	lb bc, 3, 18
-	jp FillBoxWithConsecutiveBytes
+	call FillBoxWithConsecutiveBytes
+	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY, wAttrmap
+	ld a, PAL_BG_TEXT
+	lb bc, 3, 18
+	jp FillBoxWithByte
 
 ApplyBoardMenuSpritePalette:
 	ld hl, BoardMenuItemPals
