@@ -19,7 +19,7 @@ _PrintNum::
 	jr z, .main
 
 .moneyflag ; 101xxxxx or 011xxxxx
-	ld a, "¥"
+	ld a, "<COIN>"
 	ld [hli], a
 	res 5, b ; 100xxxxx or 010xxxxx
 
@@ -155,7 +155,7 @@ _PrintNum::
 	jr .money_leading_zero
 
 .money
-	call .PrintYen
+	call .PrintCoin
 	push af
 	ld a, "0"
 	add c
@@ -170,7 +170,7 @@ _PrintNum::
 
 .money_leading_zero
 	call .AdvancePointer
-	call .PrintYen
+	call .PrintCoin
 	ld a, "0"
 	add b
 	ld [hli], a
@@ -179,14 +179,14 @@ _PrintNum::
 	pop bc
 	ret
 
-.PrintYen:
+.PrintCoin:
 	push af
 	ldh a, [hPrintNumBuffer + 0]
 	and a
 	jr nz, .stop
 	bit 5, d
 	jr z, .stop
-	ld a, "¥"
+	ld a, "<COIN>"
 	ld [hli], a
 	res 5, d
 
@@ -264,7 +264,7 @@ _PrintNum::
 	jr nz, .done
 	bit 5, d
 	jr z, .done
-	ld a, "¥"
+	ld a, "<COIN>"
 	ld [hli], a
 	res 5, d
 .done

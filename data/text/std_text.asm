@@ -316,7 +316,7 @@ ChipVendor_IntroText:
 	text "Do you need some"
 	line "game chips?"
 
-	para "It costs ¥1000 for"
+	para "It costs <COIN>1000 for"
 	line "50 chips. Do you"
 	cont "want some?"
 	done

@@ -127,7 +127,7 @@
 	charmap "'v",        $c6
 	charmap "′",         $c7
 	charmap "″",         $c8
-	charmap "¥",         $c9
+	charmap "<COIN>",    $c9
 	charmap "'",         $d0
 	charmap "<PK>",      $d1
 	charmap "<MN>",      $d2
