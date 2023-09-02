@@ -1,10 +1,10 @@
 LoadBoardMenuGFX::
 	ld de, .BoardMenuGFX
-	ld hl, vTiles1
+	ld hl, vTiles0 + BOARD_MENU_BG_FIRST_TILE * LEN_2BPP_TILE
 	lb bc, BANK(.BoardMenuGFX), 18 * 3
 	call Get2bppViaHDMA
 	ld de, .BoardMenuOAMGFX
-	ld hl, vTiles1 + (18 * 3) * LEN_2BPP_TILE
+	ld hl, vTiles0 + BOARD_MENU_OAM_FIRST_TILE * LEN_2BPP_TILE
 	lb bc, BANK(.BoardMenuOAMGFX), 3 * 3 * NUM_BOARD_MENU_ITEMS
 	call Get2bppViaHDMA
 	ret

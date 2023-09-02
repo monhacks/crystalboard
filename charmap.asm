@@ -181,7 +181,9 @@ pushc
 	charmap "\r", $0d
 popc
 
-; Significant tile equivalences
+; Background tile equivalences (vTiles1)
 DEF OVERWORLD_FRAME_FIRST_TILE EQU "┌"
 DEF BOARD_MENU_BG_FIRST_TILE EQU "A"
-DEF BOARD_MENU_OAM_FIRST_TILE EQU BOARD_MENU_BG_FIRST_TILE + 18 * 3
+
+; Object tile locations (vTiles0)
+DEF BOARD_MENU_OAM_FIRST_TILE EQU $20
