@@ -11,12 +11,12 @@ DEF NUM_STRING_BUFFERS EQU const_value
 
 DEF STRING_BUFFER_LENGTH EQU 19
 
-; checkmoney/takemoney accounts
+; checkcoins/takecoins accounts
 	const_def
-	const YOUR_MONEY ; 0
-	const MOMS_MONEY ; 1
+	const YOUR_COINS ; 0
+	const MOMS_COINS ; 1
 
-; checkmoney/checkchips return values
+; checkcoins/checkchips return values
 	const_def
 	const HAVE_MORE   ; 0
 	const HAVE_AMOUNT ; 1

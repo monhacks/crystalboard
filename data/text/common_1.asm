@@ -359,9 +359,9 @@ _MomFoundAnItemText::
 	line "item shopping, so"
 	prompt
 
-_MomBoughtWithYourMoneyText::
+_MomBoughtWithYourCoinsText::
 	text "I bought it with"
-	line "your money. Sorry!"
+	line "your coins. Sorry!"
 	prompt
 
 _MomItsInPCText::
@@ -1553,18 +1553,19 @@ _MomLeavingText1::
 	line "for you?"
 
 	para "I know! I'll save"
-	line "money for you."
+	line "coins for you."
 
 	para "On a long journey,"
-	line "money's important."
+	line "coins are"
+	cont "important."
 
 	para "Do you want me to"
-	line "save your money?"
+	line "save your coins?"
 	done
 
 _MomLeavingText2::
 	text "OK, I'll take care"
-	line "of your money."
+	line "of your coins."
 
 	para "<……><……><……>"
 	prompt
@@ -1579,7 +1580,7 @@ _MomLeavingText3::
 	para "Now, go on!"
 	done
 
-_MomIsThisAboutYourMoneyText::
+_MomIsThisAboutYourCoinsText::
 	text "Hi! Welcome home!"
 	line "You're trying very"
 	cont "hard, I see."
@@ -1588,7 +1589,7 @@ _MomIsThisAboutYourMoneyText::
 	line "room tidy."
 
 	para "Or is this about"
-	line "your money?"
+	line "your coins?"
 	done
 
 _MomBankWhatDoYouWantToDoText::
@@ -1596,19 +1597,19 @@ _MomBankWhatDoYouWantToDoText::
 	line "to do?"
 	done
 
-_MomStoreMoneyText::
+_MomStoreCoinsText::
 	text "How much do you"
 	line "want to save?"
 	done
 
-_MomTakeMoneyText::
+_MomTakeCoinsText::
 	text "How much do you"
 	line "want to take?"
 	done
 
-_MomSaveMoneyText::
+_MomSaveCoinsText::
 	text "Do you want to"
-	line "save some money?"
+	line "save some coins?"
 	done
 
 _MomHaventSavedThatMuchText::
@@ -1631,20 +1632,21 @@ _MomNotEnoughRoomInBankText::
 	line "that much."
 	prompt
 
-_MomStartSavingMoneyText::
+_MomStartSavingCoinsText::
 	text "OK, I'll save your"
-	line "money. Trust me!"
+	line "coins. Trust me!"
 
 	para "<PLAYER>, stick"
 	line "with it!"
 	done
 
-_MomStoredMoneyText::
-	text "Your money's safe"
-	line "here! Get going!"
+_MomStoredCoinsText::
+	text "Your coins are"
+	line "safe here! Get"
+	cont "going!"
 	done
 
-_MomTakenMoneyText::
+_MomTakenCoinsText::
 	text "<PLAYER>, don't"
 	line "give up!"
 	done
@@ -1804,9 +1806,9 @@ _HaveNoRoomText::
 	line "for it."
 	prompt
 
-_NotEnoughMoneyText::
+_NotEnoughCoinsText::
 	text "You don't have"
-	line "enough money."
+	line "enough coins."
 	prompt
 
 _OhFineThenText::

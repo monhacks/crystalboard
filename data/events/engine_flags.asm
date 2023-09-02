@@ -20,8 +20,8 @@ EngineFlags:
 	engine_flag wDayCareMan, DAYCAREMAN_HAS_MON_F
 	engine_flag wDayCareLady, DAYCARELADY_HAS_MON_F
 
-	engine_flag wMomSavingMoney, MOM_SAVING_SOME_MONEY_F
-	engine_flag wMomSavingMoney, MOM_ACTIVE_F
+	engine_flag wMomSavingCoins, MOM_SAVING_SOME_COINS_F
+	engine_flag wMomSavingCoins, MOM_ACTIVE_F
 
 	engine_flag wStatusFlags, STATUSFLAGS_POKEDEX_F
 	engine_flag wStatusFlags, STATUSFLAGS_UNOWN_DEX_F

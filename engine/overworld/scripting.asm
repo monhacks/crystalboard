@@ -98,9 +98,9 @@ ScriptCommandTable:
 	dw Script_giveitem                   ; 1f
 	dw Script_takeitem                   ; 20
 	dw Script_checkitem                  ; 21
-	dw Script_givemoney                  ; 22
-	dw Script_takemoney                  ; 23
-	dw Script_checkmoney                 ; 24
+	dw Script_givecoins                  ; 22
+	dw Script_takecoins                  ; 23
+	dw Script_checkcoins                 ; 24
 	dw Script_givechips                  ; 25
 	dw Script_takechips                  ; 26
 	dw Script_checkchips                 ; 27
@@ -125,7 +125,7 @@ ScriptCommandTable:
 	dw Script_warpmod                    ; 3a
 	dw Script_blackoutmod                ; 3b
 	dw Script_warp                       ; 3c
-	dw Script_getmoney                   ; 3d
+	dw Script_getcoins                   ; 3d
 	dw Script_getchips                   ; 3e
 	dw Script_getnum                     ; 3f
 	dw Script_getmonname                 ; 40
@@ -1650,9 +1650,9 @@ Script_gettrainerclassname:
 	ld [wNamedObjectType], a
 	jr ContinueToGetName
 
-Script_getmoney:
+Script_getcoins:
 	call ResetStringBuffer1
-	call GetMoneyAccount
+	call GetCoinsAccount
 	ld hl, wStringBuffer1
 	lb bc, PRINTNUM_LEFTALIGN | 3, 6
 	call PrintNum
@@ -1771,24 +1771,24 @@ Script_checkitem:
 	ld [wScriptVar], a
 	ret
 
-Script_givemoney:
-	call GetMoneyAccount
-	call LoadMoneyAmountToMem
-	farcall GiveMoney
+Script_givecoins:
+	call GetCoinsAccount
+	call LoadCoinsAmountToMem
+	farcall GiveCoins
 	ret
 
-Script_takemoney:
-	call GetMoneyAccount
-	call LoadMoneyAmountToMem
-	farcall TakeMoney
+Script_takecoins:
+	call GetCoinsAccount
+	call LoadCoinsAmountToMem
+	farcall TakeCoins
 	ret
 
-Script_checkmoney:
-	call GetMoneyAccount
-	call LoadMoneyAmountToMem
-	farcall CompareMoney
+Script_checkcoins:
+	call GetCoinsAccount
+	call LoadCoinsAmountToMem
+	farcall CompareCoins
 
-CompareMoneyAction:
+CompareCoinsAction:
 	jr c, .less
 	jr z, .exact
 	ld a, HAVE_MORE
@@ -1802,16 +1802,16 @@ CompareMoneyAction:
 	ld [wScriptVar], a
 	ret
 
-GetMoneyAccount:
+GetCoinsAccount:
 	call GetScriptByte
 	and a
-	ld de, wMoney ; YOUR_MONEY
+	ld de, wCoins ; YOUR_COINS
 	ret z
-	ld de, wMomsMoney ; MOMS_MONEY
+	ld de, wMomsCoins ; MOMS_COINS
 	ret
 
-LoadMoneyAmountToMem:
-	ld bc, hMoneyTemp
+LoadCoinsAmountToMem:
+	ld bc, hCoinsTemp
 	push bc
 	call GetScriptByte
 	ld [bc], a
@@ -1837,14 +1837,14 @@ Script_takechips:
 Script_checkchips:
 	call LoadChipAmountToMem
 	farcall CheckChips
-	jr CompareMoneyAction
+	jr CompareCoinsAction
 
 LoadChipAmountToMem:
 	call GetScriptByte
-	ldh [hMoneyTemp + 1], a
+	ldh [hCoinsTemp + 1], a
 	call GetScriptByte
-	ldh [hMoneyTemp], a
-	ld bc, hMoneyTemp
+	ldh [hCoinsTemp], a
+	ld bc, hCoinsTemp
 	ret
 
 Script_checktime:

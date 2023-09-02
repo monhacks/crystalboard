@@ -190,8 +190,8 @@ MACRO stringtotext
 	getstring \2, \1
 ENDM
 
-MACRO readmoney
-	getmoney \2, \1
+MACRO readcoins
+	getcoins \2, \1
 ENDM
 
 DEF RAM2MEM               EQUS "getnum"

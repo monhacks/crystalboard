@@ -1,7 +1,7 @@
 	const_def
 	const MARTTEXT_HOW_MANY
 	const MARTTEXT_COSTS_THIS_MUCH
-	const MARTTEXT_NOT_ENOUGH_MONEY
+	const MARTTEXT_NOT_ENOUGH_COINS
 	const MARTTEXT_BAG_FULL
 	const MARTTEXT_HERE_YOU_GO
 	const MARTTEXT_SOLD_OUT
@@ -398,7 +398,7 @@ GetMartDialogGroup:
 .StandardMartPointers:
 	dw MartHowManyText
 	dw MartFinalPriceText
-	dw MartNoMoneyText
+	dw MartNoCoinsText
 	dw MartPackFullText
 	dw MartThanksText
 	dw BuyMenuLoop
@@ -406,7 +406,7 @@ GetMartDialogGroup:
 .HerbShopPointers:
 	dw HerbalLadyHowManyText
 	dw HerbalLadyFinalPriceText
-	dw HerbalLadyNoMoneyText
+	dw HerbalLadyNoCoinsText
 	dw HerbalLadyPackFullText
 	dw HerbalLadyThanksText
 	dw BuyMenuLoop
@@ -422,13 +422,13 @@ GetMartDialogGroup:
 .PharmacyPointers:
 	dw PharmacyHowManyText
 	dw PharmacyFinalPriceText
-	dw PharmacyNoMoneyText
+	dw PharmacyNoCoinsText
 	dw PharmacyPackFullText
 	dw PharmacyThanksText
 	dw BuyMenuLoop
 
 BuyMenuLoop:
-	farcall PlaceMoneyTopRight
+	farcall PlaceCoinsTopRight
 	call UpdateSprites
 	ld hl, MenuHeader_Buy
 	call CopyMenuHeader
@@ -453,10 +453,10 @@ BuyMenuLoop:
 	jr c, .cancel
 	call MartConfirmPurchase
 	jr c, .cancel
-	ld de, wMoney
-	ld bc, hMoneyTemp
+	ld de, wCoins
+	ld bc, hCoinsTemp
 	ld a, 3 ; useless load
-	call CompareMoney
+	call CompareCoins
 	jr c, .insufficient_funds
 	ld hl, wNumItems
 	call ReceiveItem
@@ -468,9 +468,9 @@ BuyMenuLoop:
 	ld hl, wBargainShopFlags
 	call FlagAction
 	call PlayTransactionSound
-	ld de, wMoney
-	ld bc, hMoneyTemp
-	call TakeMoney
+	ld de, wCoins
+	ld bc, hCoinsTemp
+	call TakeCoins
 	ld a, MARTTEXT_HERE_YOU_GO
 	call LoadBuyMenuText
 	call JoyWaitAorB
@@ -492,7 +492,7 @@ BuyMenuLoop:
 	ret
 
 .insufficient_funds
-	ld a, MARTTEXT_NOT_ENOUGH_MONEY
+	ld a, MARTTEXT_NOT_ENOUGH_COINS
 	call LoadBuyMenuText
 	call JoyWaitAorB
 	and a
@@ -539,11 +539,11 @@ BargainShopAskPurchaseQuantity:
 	add hl, de
 	inc hl
 	ld a, [hli]
-	ldh [hMoneyTemp + 2], a
+	ldh [hCoinsTemp + 2], a
 	ld a, [hl]
-	ldh [hMoneyTemp + 1], a
+	ldh [hCoinsTemp + 1], a
 	xor a
-	ldh [hMoneyTemp], a
+	ldh [hCoinsTemp], a
 	and a
 	ret
 
@@ -619,7 +619,7 @@ MenuHeader_Buy:
 	pop hl
 	ld bc, SCREEN_WIDTH
 	add hl, bc
-	ld c, PRINTNUM_LEADINGZEROS | PRINTNUM_MONEY | 3
+	ld c, PRINTNUM_LEADINGZEROS | PRINTNUM_COINS | 3
 	call PrintBCDNumber
 	ret
 
@@ -643,8 +643,8 @@ HerbalLadyPackFullText:
 	text_far _HerbalLadyPackFullText
 	text_end
 
-HerbalLadyNoMoneyText:
-	text_far _HerbalLadyNoMoneyText
+HerbalLadyNoCoinsText:
+	text_far _HerbalLadyNoCoinsText
 	text_end
 
 HerbalLadyComeAgainText:
@@ -699,8 +699,8 @@ PharmacyPackFullText:
 	text_far _PharmacyPackFullText
 	text_end
 
-PharmacyNoMoneyText:
-	text_far _PharmacyNoMoneyText
+PharmacyNoCoinsText:
+	text_far _PharmacyNoCoinsText
 	text_end
 
 PharmacyComeAgainText:
@@ -765,7 +765,7 @@ SellMenu:
 .okay_to_sell
 	ld hl, MartSellHowManyText
 	call PrintText1bpp
-	farcall PlaceMoneyAtTopLeftOfTextbox
+	farcall PlaceCoinsAtTopLeftOfTextbox
 	farcall SelectQuantityToSell
 	call ExitMenu
 	jr c, .declined
@@ -776,9 +776,9 @@ SellMenu:
 	call PrintTextboxText
 	call YesNoBox
 	jr c, .declined
-	ld de, wMoney
-	ld bc, hMoneyTemp
-	call GiveMoney
+	ld de, wCoins
+	ld bc, hCoinsTemp
+	call GiveCoins
 	ld a, [wMartItemID]
 	ld hl, wNumItems
 	call TossItem
@@ -789,7 +789,7 @@ SellMenu:
 	ld hl, MartBoughtText
 	call PrintTextboxText
 	call PlayTransactionSound
-	farcall PlaceMoneyBottomLeft
+	farcall PlaceCoinsBottomLeft
 	call JoyWaitAorB
 
 .declined
@@ -826,8 +826,8 @@ MartThanksText:
 	text_far _MartThanksText
 	text_end
 
-MartNoMoneyText:
-	text_far _MartNoMoneyText
+MartNoCoinsText:
+	text_far _MartNoCoinsText
 	text_end
 
 MartPackFullText:

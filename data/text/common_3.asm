@@ -380,7 +380,7 @@ _MartFinalPriceText::
 	text_ram wStringBuffer2
 	text "(S)"
 	line "will be <COIN>@"
-	text_decimal hMoneyTemp, 3, 6
+	text_decimal hCoinsTemp, 3, 6
 	text "."
 	done
 
@@ -409,7 +409,7 @@ _HerbalLadyFinalPriceText::
 	text_ram wStringBuffer2
 	text "(S)"
 	line "will be <COIN>@"
-	text_decimal hMoneyTemp, 3, 6
+	text_decimal hCoinsTemp, 3, 6
 	text "."
 	done
 
@@ -423,9 +423,9 @@ _HerbalLadyPackFullText::
 	line "full, dear."
 	done
 
-_HerbalLadyNoMoneyText::
+_HerbalLadyNoCoinsText::
 	text "Hehehe… You don't"
-	line "have the money."
+	line "have the coins."
 	done
 
 _HerbalLadyComeAgainText::
@@ -448,7 +448,7 @@ _BargainShopFinalPriceText::
 	text_ram wStringBuffer2
 	text " costs"
 	line "<COIN>@"
-	text_decimal hMoneyTemp, 3, 6
+	text_decimal hCoinsTemp, 3, 6
 	text ". Want it?"
 	done
 
@@ -492,7 +492,7 @@ _PharmacyFinalPriceText::
 	text_ram wStringBuffer2
 	text "(S)"
 	line "will cost <COIN>@"
-	text_decimal hMoneyTemp, 3, 6
+	text_decimal hCoinsTemp, 3, 6
 	text "."
 	done
 
@@ -505,9 +505,9 @@ _PharmacyPackFullText::
 	line "more space."
 	done
 
-_PharmacyNoMoneyText::
+_PharmacyNoCoinsText::
 	text "Huh? That's not"
-	line "enough money."
+	line "enough coins."
 	done
 
 _PharmacyComeAgainText::
@@ -527,7 +527,7 @@ _MartSellHowManyText::
 _MartSellPriceText::
 	text "I can pay you"
 	line "<COIN>@"
-	text_decimal hMoneyTemp, 3, 6
+	text_decimal hCoinsTemp, 3, 6
 	text "."
 
 	para "Is that OK?"
@@ -543,9 +543,9 @@ _MartThanksText::
 	line "Thank you!"
 	done
 
-_MartNoMoneyText::
+_MartNoCoinsText::
 	text "You don't have"
-	line "enough money."
+	line "enough coins."
 	done
 
 _MartPackFullText::
@@ -569,7 +569,7 @@ _MartAskMoreText::
 
 _MartBoughtText::
 	text "Got <COIN>@"
-	text_decimal hMoneyTemp, 3, 6
+	text_decimal hCoinsTemp, 3, 6
 	text " for"
 	line "@"
 	text_ram wStringBuffer2

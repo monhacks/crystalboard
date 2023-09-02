@@ -1,5 +1,5 @@
 MACRO momitem
-; money to trigger, cost, kind, item
+; coins to trigger, cost, kind, item
 	dt \1
 	dt \2
 	db \3, \4

@@ -61,37 +61,37 @@ CheckBalance_MomItem2:
 	jr nc, .nope
 	call GetItemFromMom
 	ld a, [hli]
-	ldh [hMoneyTemp], a
+	ldh [hCoinsTemp], a
 	ld a, [hli]
-	ldh [hMoneyTemp + 1], a
+	ldh [hCoinsTemp + 1], a
 	ld a, [hli]
-	ldh [hMoneyTemp + 2], a
-	ld de, wMomsMoney
-	ld bc, hMoneyTemp
-	farcall CompareMoney
-	jr nc, .have_enough_money
+	ldh [hCoinsTemp + 2], a
+	ld de, wMomsCoins
+	ld bc, hCoinsTemp
+	farcall CompareCoins
+	jr nc, .have_enough_coins
 
 .nope
 	jr .check_have_2300
 
-.have_enough_money
+.have_enough_coins
 	scf
 	ret
 
 .check_have_2300
-	ld hl, hMoneyTemp
-	ld [hl], HIGH(MOM_MONEY >> 8)
+	ld hl, hCoinsTemp
+	ld [hl], HIGH(MOM_COINS >> 8)
 	inc hl
-	ld [hl], HIGH(MOM_MONEY) ; mid
+	ld [hl], HIGH(MOM_COINS) ; mid
 	inc hl
-	ld [hl], LOW(MOM_MONEY)
+	ld [hl], LOW(MOM_COINS)
 .loop
 	ld de, wMomItemTriggerBalance
-	ld bc, wMomsMoney
-	farcall CompareMoney
+	ld bc, wMomsCoins
+	farcall CompareCoins
 	jr z, .exact
 	jr nc, .less_than
-	call .AddMoney
+	call .AddCoins
 	jr .loop
 
 .less_than
@@ -99,7 +99,7 @@ CheckBalance_MomItem2:
 	ret
 
 .exact
-	call .AddMoney
+	call .AddCoins
 	ld a, NUM_MOM_ITEMS_1
 	call RandomRange
 	inc a
@@ -107,10 +107,10 @@ CheckBalance_MomItem2:
 	scf
 	ret
 
-.AddMoney:
+.AddCoins:
 	ld de, wMomItemTriggerBalance
-	ld bc, hMoneyTemp
-	farcall AddMoney
+	ld bc, hCoinsTemp
+	farcall AddCoins
 	ret
 
 MomBuysItem_DeductFunds:
@@ -118,14 +118,14 @@ MomBuysItem_DeductFunds:
 	ld de, 3 ; cost
 	add hl, de
 	ld a, [hli]
-	ldh [hMoneyTemp], a
+	ldh [hCoinsTemp], a
 	ld a, [hli]
-	ldh [hMoneyTemp + 1], a
+	ldh [hCoinsTemp + 1], a
 	ld a, [hli]
-	ldh [hMoneyTemp + 2], a
-	ld de, wMomsMoney
-	ld bc, hMoneyTemp
-	farcall TakeMoney
+	ldh [hCoinsTemp + 2], a
+	ld de, wMomsCoins
+	ld bc, hCoinsTemp
+	farcall TakeCoins
 	ret
 
 Mom_GiveItemOrDoll:
@@ -165,14 +165,14 @@ Mom_GetScriptPointer:
 .ItemScript:
 	writetext MomHiHowAreYouText
 	writetext MomFoundAnItemText
-	writetext MomBoughtWithYourMoneyText
+	writetext MomBoughtWithYourCoinsText
 	writetext MomItsInPCText
 	end
 
 .DollScript:
 	writetext MomHiHowAreYouText
 	writetext MomFoundADollText
-	writetext MomBoughtWithYourMoneyText
+	writetext MomBoughtWithYourCoinsText
 	writetext MomItsInYourRoomText
 	end
 
@@ -212,8 +212,8 @@ MomFoundAnItemText:
 	text_far _MomFoundAnItemText
 	text_end
 
-MomBoughtWithYourMoneyText:
-	text_far _MomBoughtWithYourMoneyText
+MomBoughtWithYourCoinsText:
+	text_far _MomBoughtWithYourCoinsText
 	text_end
 
 MomItsInPCText:

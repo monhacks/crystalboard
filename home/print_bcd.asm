@@ -15,8 +15,8 @@ PrintBCDNumber::
 	ld b, c ; save flags in b
 	res PRINTNUM_LEADINGZEROS_F, c
 	res PRINTNUM_LEFTALIGN_F, c
-	res PRINTNUM_MONEY_F, c ; c now holds the length
-	bit PRINTNUM_MONEY_F, b
+	res PRINTNUM_COINS_F, c ; c now holds the length
+	bit PRINTNUM_COINS_F, b
 	jr z, .loop
 	bit PRINTNUM_LEADINGZEROS_F, b
 	jr nz, .loop ; skip currency symbol
@@ -39,7 +39,7 @@ PrintBCDNumber::
 ; the string is left-aligned; it needs to be moved back one space
 	dec hl
 .skipLeftAlignmentAdjustment
-	bit PRINTNUM_MONEY_F, b
+	bit PRINTNUM_COINS_F, b
 	jr z, .skipCurrencySymbol
 	ld [hl], "<COIN>" ; currency symbol
 	inc hl
@@ -58,11 +58,11 @@ PrintBCDDigit::
 	bit PRINTNUM_LEADINGZEROS_F, b ; have any non-space characters been printed?
 	jr z, .outputDigit
 ; if bit 7 is set, then no numbers have been printed yet
-	bit PRINTNUM_MONEY_F, b
+	bit PRINTNUM_COINS_F, b
 	jr z, .skipCurrencySymbol
 	ld [hl], "<COIN>"
 	inc hl
-	res PRINTNUM_MONEY_F, b
+	res PRINTNUM_COINS_F, b
 .skipCurrencySymbol
 	res PRINTNUM_LEADINGZEROS_F, b ; unset 7 to indicate that a nonzero digit has been reached
 .outputDigit

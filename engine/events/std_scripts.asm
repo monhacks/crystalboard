@@ -779,7 +779,7 @@ ChipVendor_IntroScript:
 	farwritetext ChipVendor_IntroText
 
 .loop
-	special DisplayMoneyAndChipBalance
+	special DisplayCoinsAndChipBalance
 	loadmenu .MenuHeader
 	verticalmenu
 	closewindow
@@ -790,10 +790,10 @@ ChipVendor_IntroScript:
 .Buy50:
 	checkchips MAX_CHIPS - 50
 	ifequal HAVE_MORE, .ChipCaseFull
-	checkmoney YOUR_MONEY, 1000
-	ifequal HAVE_LESS, .NotEnoughMoney
+	checkcoins YOUR_COINS, 1000
+	ifequal HAVE_LESS, .NotEnoughCoins
 	givechips 50
-	takemoney YOUR_MONEY, 1000
+	takecoins YOUR_COINS, 1000
 	waitsfx
 	playsound SFX_TRANSACTION
 	farwritetext ChipVendor_Buy50ChipsText
@@ -803,18 +803,18 @@ ChipVendor_IntroScript:
 .Buy500:
 	checkchips MAX_CHIPS - 500
 	ifequal HAVE_MORE, .ChipCaseFull
-	checkmoney YOUR_MONEY, 10000
-	ifequal HAVE_LESS, .NotEnoughMoney
+	checkcoins YOUR_COINS, 10000
+	ifequal HAVE_LESS, .NotEnoughCoins
 	givechips 500
-	takemoney YOUR_MONEY, 10000
+	takecoins YOUR_COINS, 10000
 	waitsfx
 	playsound SFX_TRANSACTION
 	farwritetext ChipVendor_Buy500ChipsText
 	waitbutton
 	sjump .loop
 
-.NotEnoughMoney:
-	farwritetext ChipVendor_NotEnoughMoneyText
+.NotEnoughCoins:
+	farwritetext ChipVendor_NotEnoughCoinsText
 	waitbutton
 	closetext
 	end

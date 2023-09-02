@@ -225,25 +225,25 @@ MACRO checkitem
 	db \1 ; item
 ENDM
 
-	const givemoney_command ; $22
-MACRO givemoney
-	db givemoney_command
+	const givecoins_command ; $22
+MACRO givecoins
+	db givecoins_command
 	db \1 ; account
-	dt \2 ; money
+	dt \2 ; coins
 ENDM
 
-	const takemoney_command ; $23
-MACRO takemoney
-	db takemoney_command
+	const takecoins_command ; $23
+MACRO takecoins
+	db takecoins_command
 	db \1 ; account
-	dt \2 ; money
+	dt \2 ; coins
 ENDM
 
-	const checkmoney_command ; $24
-MACRO checkmoney
-	db checkmoney_command
+	const checkcoins_command ; $24
+MACRO checkcoins
+	db checkcoins_command
 	db \1 ; account
-	dt \2 ; money
+	dt \2 ; coins
 ENDM
 
 	const givechips_command ; $25
@@ -407,9 +407,9 @@ MACRO warp
 	db \3 ; y
 ENDM
 
-	const getmoney_command ; $3d
-MACRO getmoney
-	db getmoney_command
+	const getcoins_command ; $3d
+MACRO getcoins
+	db getcoins_command
 	db \2 ; account
 	db \1 ; string_buffer
 ENDM

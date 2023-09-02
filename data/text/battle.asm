@@ -1,9 +1,9 @@
 BattleText:: ; used only for BANK(BattleText)
 
-BattleText_PlayerPickedUpPayDayMoney:
+BattleText_PlayerPickedUpPayDayCoins:
 	text "<PLAYER> picked up"
 	line "<COIN>@"
-	text_decimal wPayDayMoney, 3, 6
+	text_decimal wPayDayCoins, 3, 6
 	text "!"
 	prompt
 
@@ -166,7 +166,7 @@ BattleText_EnemyMonFainted:
 	line "fainted!"
 	prompt
 
-GotMoneyForWinningText:
+GotCoinsForWinningText:
 	text "<PLAYER> got <COIN>@"
 	text_decimal wBattleReward, 3, 6
 	text_start

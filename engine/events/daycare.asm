@@ -17,7 +17,7 @@
 	const DAYCARETEXT_GOT_BACK
 	const DAYCARETEXT_TOO_SOON
 	const DAYCARETEXT_PARTY_FULL
-	const DAYCARETEXT_NOT_ENOUGH_MONEY
+	const DAYCARETEXT_NOT_ENOUGH_COINS
 	const DAYCARETEXT_OH_FINE
 	const DAYCARETEXT_COME_AGAIN
 
@@ -45,7 +45,7 @@ DayCareMan:
 	call DayCare_AskWithdrawBreedMon
 	jr c, .print_text
 	farcall RetrieveMonFromDayCareMan
-	call DayCare_GetBackMonForMoney
+	call DayCare_GetBackMonForCoins
 	ld hl, wDayCareMan
 	res DAYCAREMAN_HAS_MON_F, [hl]
 	res DAYCAREMAN_MONS_COMPATIBLE_F, [hl]
@@ -83,7 +83,7 @@ DayCareLady:
 	call DayCare_AskWithdrawBreedMon
 	jr c, .print_text
 	farcall RetrieveMonFromDayCareLady
-	call DayCare_GetBackMonForMoney
+	call DayCare_GetBackMonForCoins
 	ld hl, wDayCareLady
 	res DAYCARELADY_HAS_MON_F, [hl]
 	ld hl, wDayCareMan
@@ -187,7 +187,7 @@ DayCare_AskWithdrawBreedMon:
 	call PrintDayCareText
 	call YesNoBox
 	jr c, .refused
-	jr .check_money
+	jr .check_coins
 
 .grew_at_least_one_level
 	ld a, DAYCARETEXT_GENIUSES
@@ -199,11 +199,11 @@ DayCare_AskWithdrawBreedMon:
 	call YesNoBox
 	jr c, .refused
 
-.check_money
-	ld de, wMoney
+.check_coins
+	ld de, wCoins
 	ld bc, wStringBuffer2 + 2
-	farcall CompareMoney
-	jr c, .not_enough_money
+	farcall CompareCoins
+	jr c, .not_enough_coins
 	ld a, [wPartyCount]
 	cp PARTY_LENGTH
 	jr nc, .party_full
@@ -215,8 +215,8 @@ DayCare_AskWithdrawBreedMon:
 	scf
 	ret
 
-.not_enough_money
-	ld a, DAYCARETEXT_NOT_ENOUGH_MONEY
+.not_enough_coins
+	ld a, DAYCARETEXT_NOT_ENOUGH_COINS
 	scf
 	ret
 
@@ -225,10 +225,10 @@ DayCare_AskWithdrawBreedMon:
 	scf
 	ret
 
-DayCare_GetBackMonForMoney:
+DayCare_GetBackMonForCoins:
 	ld bc, wStringBuffer2 + 2
-	ld de, wMoney
-	farcall TakeMoney
+	ld de, wCoins
+	farcall TakeCoins
 	ld a, DAYCARETEXT_WITHDRAW
 	call PrintDayCareText
 	ld a, [wCurPartySpecies]
@@ -290,7 +290,7 @@ PrintDayCareText:
 	dw .GotBackMonText ; 0e
 	dw .BackAlreadyText ; 0f
 	dw .HaveNoRoomText ; 10
-	dw .NotEnoughMoneyText ; 11
+	dw .NotEnoughCoinsText ; 11
 	dw .OhFineThenText ; 12
 	dw .ComeAgainText ; 13
 
@@ -362,8 +362,8 @@ PrintDayCareText:
 	text_far _HaveNoRoomText
 	text_end
 
-.NotEnoughMoneyText:
-	text_far _NotEnoughMoneyText
+.NotEnoughCoinsText:
+	text_far _NotEnoughCoinsText
 	text_end
 
 .OhFineThenText:

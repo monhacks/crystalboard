@@ -160,24 +160,24 @@ _ResetWRAM:
 	ld [wChips], a
 	ld [wChips + 1], a
 
-if START_MONEY >= $10000
-	ld a, HIGH(START_MONEY >> 8)
+if START_COINS >= $10000
+	ld a, HIGH(START_COINS >> 8)
 endc
-	ld [wMoney], a
-	ld a, HIGH(START_MONEY) ; mid
-	ld [wMoney + 1], a
-	ld a, LOW(START_MONEY)
-	ld [wMoney + 2], a
+	ld [wCoins], a
+	ld a, HIGH(START_COINS) ; mid
+	ld [wCoins + 1], a
+	ld a, LOW(START_COINS)
+	ld [wCoins + 2], a
 
 	xor a
 	ld [wWhichMomItem], a
 
 	ld hl, wMomItemTriggerBalance
-	ld [hl], HIGH(MOM_MONEY >> 8)
+	ld [hl], HIGH(MOM_COINS >> 8)
 	inc hl
-	ld [hl], HIGH(MOM_MONEY) ; mid
+	ld [hl], HIGH(MOM_COINS) ; mid
 	inc hl
-	ld [hl], LOW(MOM_MONEY)
+	ld [hl], LOW(MOM_COINS)
 
 	call InitializeNPCNames
 

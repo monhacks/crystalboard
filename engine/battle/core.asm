@@ -2325,19 +2325,19 @@ WinTrainerBattle:
 	call PrintWinLossText
 .skip_win_loss_text
 
-	jp .give_money
+	jp .give_coins
 
-.give_money
+.give_coins
 	ld a, [wAmuletCoin]
 	and a
 	call nz, .DoubleReward
-	call .CheckMaxedOutMomMoney
+	call .CheckMaxedOutMomCoins
 	push af
 	ld a, FALSE
 	jr nc, .okay
-	ld a, [wMomSavingMoney]
-	and MOM_SAVING_MONEY_MASK
-	cp (1 << MOM_SAVING_SOME_MONEY_F) | (1 << MOM_SAVING_HALF_MONEY_F)
+	ld a, [wMomSavingCoins]
+	and MOM_SAVING_COINS_MASK
+	cp (1 << MOM_SAVING_SOME_COINS_F) | (1 << MOM_SAVING_HALF_COINS_F)
 	jr nz, .okay
 	inc a ; TRUE
 
@@ -2348,7 +2348,7 @@ WinTrainerBattle:
 	ld a, b
 	and a
 	jr z, .loop2
-	call .AddMoneyToMom
+	call .AddCoinsToMom
 	dec c
 	dec b
 	jr .loop
@@ -2357,7 +2357,7 @@ WinTrainerBattle:
 	ld a, c
 	and a
 	jr z, .done
-	call .AddMoneyToWallet
+	call .AddCoinsToWallet
 	dec c
 	jr .loop2
 
@@ -2366,8 +2366,8 @@ WinTrainerBattle:
 	call .DoubleReward
 	pop af
 	jr nc, .KeepItAll
-	ld a, [wMomSavingMoney]
-	and MOM_SAVING_MONEY_MASK
+	ld a, [wMomSavingCoins]
+	and MOM_SAVING_COINS_MASK
 	jr z, .KeepItAll
 	ld hl, .SentToMomTexts
 	dec a
@@ -2381,22 +2381,22 @@ WinTrainerBattle:
 	jp StdBattleTextbox
 
 .KeepItAll:
-	ld hl, GotMoneyForWinningText
+	ld hl, GotCoinsForWinningText
 	jp StdBattleTextbox
 
-.AddMoneyToMom:
+.AddCoinsToMom:
 	push bc
 	ld hl, wBattleReward + 2
-	ld de, wMomsMoney + 2
-	call AddBattleMoneyToAccount
+	ld de, wMomsCoins + 2
+	call AddBattleCoinsToAccount
 	pop bc
 	ret
 
-.AddMoneyToWallet:
+.AddCoinsToWallet:
 	push bc
 	ld hl, wBattleReward + 2
-	ld de, wMoney + 2
-	call AddBattleMoneyToAccount
+	ld de, wCoins + 2
+	call AddBattleCoinsToAccount
 	pop bc
 	ret
 
@@ -2420,17 +2420,17 @@ WinTrainerBattle:
 	dw SentHalfToMomText
 	dw SentAllToMomText
 
-.CheckMaxedOutMomMoney:
-	ld hl, wMomsMoney + 2
+.CheckMaxedOutMomCoins:
+	ld hl, wMomsCoins + 2
 	ld a, [hld]
-	cp LOW(MAX_MONEY)
+	cp LOW(MAX_COINS)
 	ld a, [hld]
-	sbc HIGH(MAX_MONEY) ; mid
+	sbc HIGH(MAX_COINS) ; mid
 	ld a, [hl]
-	sbc HIGH(MAX_MONEY >> 8)
+	sbc HIGH(MAX_COINS >> 8)
 	ret
 
-AddBattleMoneyToAccount:
+AddBattleCoinsToAccount:
 	ld c, 3
 	and a
 	push de
@@ -2450,17 +2450,17 @@ AddBattleMoneyToAccount:
 	jr nz, .loop
 	pop hl
 	ld a, [hld]
-	cp LOW(MAX_MONEY)
+	cp LOW(MAX_COINS)
 	ld a, [hld]
-	sbc HIGH(MAX_MONEY) ; mid
+	sbc HIGH(MAX_COINS) ; mid
 	ld a, [hl]
-	sbc HIGH(MAX_MONEY >> 8)
+	sbc HIGH(MAX_COINS >> 8)
 	ret c
-	ld [hl], HIGH(MAX_MONEY >> 8)
+	ld [hl], HIGH(MAX_COINS >> 8)
 	inc hl
-	ld [hl], HIGH(MAX_MONEY) ; mid
+	ld [hl], HIGH(MAX_COINS) ; mid
 	inc hl
-	ld [hl], LOW(MAX_MONEY)
+	ld [hl], LOW(MAX_COINS)
 	ret
 
 PlayVictoryMusic:
@@ -2476,7 +2476,7 @@ PlayVictoryMusic:
 	call IsAnyMonHoldingExpShare
 	pop de
 	jr nz, .play_music
-	ld hl, wPayDayMoney
+	ld hl, wPayDayCoins
 	ld a, [hli]
 	or [hl]
 	jr nz, .play_music
@@ -8142,7 +8142,7 @@ CleanUpBattleRAM:
 	ret
 
 CheckPayDay:
-	ld hl, wPayDayMoney
+	ld hl, wPayDayCoins
 	ld a, [hli]
 	or [hl]
 	inc hl
@@ -8151,7 +8151,7 @@ CheckPayDay:
 	ld a, [wAmuletCoin]
 	and a
 	jr z, .okay
-	ld hl, wPayDayMoney + 2
+	ld hl, wPayDayCoins + 2
 	sla [hl]
 	dec hl
 	rl [hl]
@@ -8164,10 +8164,10 @@ CheckPayDay:
 	ld [hl], a
 
 .okay
-	ld hl, wPayDayMoney + 2
-	ld de, wMoney + 2
-	call AddBattleMoneyToAccount
-	ld hl, BattleText_PlayerPickedUpPayDayMoney
+	ld hl, wPayDayCoins + 2
+	ld de, wCoins + 2
+	call AddBattleCoinsToAccount
+	ld hl, BattleText_PlayerPickedUpPayDayCoins
 	call StdBattleTextbox
 	ret
 

@@ -331,9 +331,9 @@ ChipVendor_Buy500ChipsText:
 	line "are 500 chips."
 	done
 
-ChipVendor_NotEnoughMoneyText:
+ChipVendor_NotEnoughCoinsText:
 	text "You don't have"
-	line "enough money."
+	line "enough coins."
 	done
 
 ChipVendor_ChipCaseFullText:

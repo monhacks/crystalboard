@@ -92,7 +92,7 @@ hCurSpriteOAMFlags:: db
 ENDU
 
 UNION
-hMoneyTemp:: ds 3
+hCoinsTemp:: ds 3
 NEXTU
 hMGJoypadPressed::  db
 hMGJoypadReleased:: db

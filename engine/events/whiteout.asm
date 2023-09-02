@@ -14,7 +14,7 @@ Script_Whiteout:
 	special HealParty
 	checkflag ENGINE_BUG_CONTEST_TIMER
 	iftrue .bug_contest
-	callasm HalveMoney
+	callasm HalveCoins
 	callasm GetWhiteoutSpawn
 	farscall Script_AbortBugContest
 	special WarpToSpawnPoint
@@ -42,9 +42,9 @@ BattleBGMap:
 	call SetPalettes
 	ret
 
-HalveMoney:
-; Halve the player's money.
-	ld hl, wMoney
+HalveCoins:
+; Halve the player's coins.
+	ld hl, wCoins
 	ld a, [hl]
 	srl a
 	ld [hli], a

@@ -123,13 +123,13 @@ Until this document is filled out, the [G/S Scripting Compendium](https://hax.ii
 ## `$21`: <code>checkitem <i>item_id</i></code>
 
 
-## `$22`: <code>givemoney <i>account</i>, <i>value</i></code>
+## `$22`: <code>givecoins <i>account</i>, <i>value</i></code>
 
 
-## `$23`: <code>takemoney <i>account</i>, <i>value</i></code>
+## `$23`: <code>takecoins <i>account</i>, <i>value</i></code>
 
 
-## `$24`: <code>checkmoney <i>account</i>, <i>value</i></code>
+## `$24`: <code>checkcoins <i>account</i>, <i>value</i></code>
 
 
 ## `$25`: <code>givechips <i>value</i></code>
@@ -204,9 +204,9 @@ Until this document is filled out, the [G/S Scripting Compendium](https://hax.ii
 ## `$3C`: <code>warp <i>map</i>, <i>x</i>, <i>y</i></code>
 
 
-## `$3D`: <code>getmoney <i>string_buffer</i>, <i>account</i></code>
+## `$3D`: <code>getcoins <i>string_buffer</i>, <i>account</i></code>
 
-<code>GetStringBuffer(<i>string_buffer</i>) = PrintNum(GetMoneyAccount(<i>account</i>))</code>
+<code>GetStringBuffer(<i>string_buffer</i>) = PrintNum(GetCoinsAccount(<i>account</i>))</code>
 
 
 ## `$3E`: <code>getchips <i>string_buffer</i></code>

@@ -1,12 +1,12 @@
-GiveMoney::
+GiveCoins::
 	ld a, 3
-	call AddMoney
-	ld bc, MaxMoney
+	call AddCoins
+	ld bc, MaxCoins
 	ld a, 3
-	call CompareMoney
+	call CompareCoins
 	jr z, .not_maxed_out
 	jr c, .not_maxed_out
-	ld hl, MaxMoney
+	ld hl, MaxCoins
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -22,14 +22,14 @@ GiveMoney::
 	and a
 	ret
 
-MaxMoney:
-	dt MAX_MONEY
+MaxCoins:
+	dt MAX_COINS
 
-TakeMoney::
+TakeCoins::
 	ld a, 3
-	call SubtractMoney
+	call SubtractCoins
 	jr nc, .okay
-	; leave with 0 money
+	; leave with 0 coins
 	xor a
 	ld [de], a
 	inc de
@@ -43,7 +43,7 @@ TakeMoney::
 	and a
 	ret
 
-CompareMoney::
+CompareCoins::
 	ld a, 3
 CompareFunds:
 ; a: number of bytes
@@ -91,7 +91,7 @@ CompareFunds:
 	pop hl
 	ret
 
-SubtractMoney:
+SubtractCoins:
 	ld a, 3
 SubtractFunds:
 ; a: number of bytes
@@ -126,7 +126,7 @@ SubtractFunds:
 	pop hl
 	ret
 
-AddMoney:
+AddCoins:
 	ld a, 3
 AddFunds:
 ; a: number of bytes

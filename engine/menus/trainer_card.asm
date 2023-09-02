@@ -228,7 +228,7 @@ TrainerCard_PrintTopHalfOfCard:
 	ld d, 5
 	call TrainerCard_InitBorder
 	hlcoord 2, 2
-	ld de, .Name_Money
+	ld de, .Name_Coins
 	call PlaceString
 	hlcoord 2, 4
 	ld de, .ID_No
@@ -241,8 +241,8 @@ TrainerCard_PrintTopHalfOfCard:
 	lb bc, PRINTNUM_LEADINGZEROS | 2, 5
 	call PrintNum
 	hlcoord 7, 6
-	ld de, wMoney
-	lb bc, PRINTNUM_MONEY | 3, 6
+	ld de, wCoins
+	lb bc, PRINTNUM_COINS | 3, 6
 	call PrintNum
 	hlcoord 1, 3
 	ld de, .HorizontalDivider
@@ -254,10 +254,10 @@ TrainerCard_PrintTopHalfOfCard:
 	predef PlaceGraphic
 	ret
 
-.Name_Money:
+.Name_Coins:
 	db   "NAME/"
 	next ""
-	next "MONEY@"
+	next "COINS@"
 
 .ID_No:
 	db $27, $28, -1 ; ID NO

@@ -23,24 +23,24 @@ BankOfMom:
 .dw
 	dw .CheckIfBankInitialized
 	dw .InitializeBank
-	dw .IsThisAboutYourMoney
+	dw .IsThisAboutYourCoins
 	dw .AccessBankOfMom
-	dw .StoreMoney
-	dw .TakeMoney
-	dw .StopOrStartSavingMoney
+	dw .StoreCoins
+	dw .TakeCoins
+	dw .StopOrStartSavingCoins
 	dw .JustDoWhatYouCan
 	dw .AskDST
 
 .CheckIfBankInitialized:
-	ld a, [wMomSavingMoney]
+	ld a, [wMomSavingCoins]
 	bit MOM_ACTIVE_F, a
-	jr nz, .savingmoneyalready
+	jr nz, .savingcoinsalready
 	set MOM_ACTIVE_F, a
-	ld [wMomSavingMoney], a
+	ld [wMomSavingCoins], a
 	ld a, $1
 	jr .done_0
 
-.savingmoneyalready
+.savingcoinsalready
 	ld a, $2
 
 .done_0
@@ -51,25 +51,25 @@ BankOfMom:
 	ld hl, MomLeavingText1
 	call PrintText1bpp
 	call YesNoBox
-	jr c, .DontSaveMoney
+	jr c, .DontSaveCoins
 	ld hl, MomLeavingText2
 	call PrintText1bpp
-	ld a, (1 << MOM_ACTIVE_F) | (1 << MOM_SAVING_SOME_MONEY_F)
+	ld a, (1 << MOM_ACTIVE_F) | (1 << MOM_SAVING_SOME_COINS_F)
 	jr .done_1
 
-.DontSaveMoney:
+.DontSaveCoins:
 	ld a, 1 << MOM_ACTIVE_F
 
 .done_1
-	ld [wMomSavingMoney], a
+	ld [wMomSavingCoins], a
 	ld hl, MomLeavingText3
 	call PrintText1bpp
 	ld a, $8
 	ld [wJumptableIndex], a
 	ret
 
-.IsThisAboutYourMoney:
-	ld hl, MomIsThisAboutYourMoneyText
+.IsThisAboutYourCoins:
+	ld hl, MomIsThisAboutYourCoinsText
 	call PrintText1bpp
 	call YesNoBox
 	jr c, .nope
@@ -119,8 +119,8 @@ BankOfMom:
 	ld [wJumptableIndex], a
 	ret
 
-.StoreMoney:
-	ld hl, MomStoreMoneyText
+.StoreCoins:
+	ld hl, MomStoreCoinsText
 	call PrintText1bpp
 	xor a
 	ld hl, wStringBuffer2
@@ -141,29 +141,29 @@ BankOfMom:
 	inc hl
 	or [hl]
 	jr z, .CancelDeposit
-	ld de, wMoney
+	ld de, wCoins
 	ld bc, wStringBuffer2
-	farcall CompareMoney
+	farcall CompareCoins
 	jr c, .InsufficientFundsInWallet
 	ld hl, wStringBuffer2
 	ld de, wStringBuffer2 + 3
 	ld bc, 3
 	call CopyBytes
-	ld bc, wMomsMoney
+	ld bc, wMomsCoins
 	ld de, wStringBuffer2
-	farcall GiveMoney
+	farcall GiveCoins
 	jr c, .NotEnoughRoomInBank
 	ld bc, wStringBuffer2 + 3
-	ld de, wMoney
-	farcall TakeMoney
+	ld de, wCoins
+	farcall TakeCoins
 	ld hl, wStringBuffer2
-	ld de, wMomsMoney
+	ld de, wMomsCoins
 	ld bc, 3
 	call CopyBytes
 	ld de, SFX_TRANSACTION
 	call PlaySFX
 	call WaitSFX
-	ld hl, MomStoredMoneyText
+	ld hl, MomStoredCoinsText
 	call PrintText1bpp
 	ld a, $8
 	jr .done_4
@@ -185,8 +185,8 @@ BankOfMom:
 	ld [wJumptableIndex], a
 	ret
 
-.TakeMoney:
-	ld hl, MomTakeMoneyText
+.TakeCoins:
+	ld hl, MomTakeCoinsText
 	call PrintText1bpp
 	xor a
 	ld hl, wStringBuffer2
@@ -211,25 +211,25 @@ BankOfMom:
 	ld de, wStringBuffer2 + 3
 	ld bc, 3
 	call CopyBytes
-	ld de, wMomsMoney
+	ld de, wMomsCoins
 	ld bc, wStringBuffer2
-	farcall CompareMoney
+	farcall CompareCoins
 	jr c, .InsufficientFundsInBank
-	ld bc, wMoney
+	ld bc, wCoins
 	ld de, wStringBuffer2
-	farcall GiveMoney
+	farcall GiveCoins
 	jr c, .NotEnoughRoomInWallet
 	ld bc, wStringBuffer2 + 3
-	ld de, wMomsMoney
-	farcall TakeMoney
+	ld de, wMomsCoins
+	farcall TakeCoins
 	ld hl, wStringBuffer2
-	ld de, wMoney
+	ld de, wCoins
 	ld bc, 3
 	call CopyBytes
 	ld de, SFX_TRANSACTION
 	call PlaySFX
 	call WaitSFX
-	ld hl, MomTakenMoneyText
+	ld hl, MomTakenCoinsText
 	call PrintText1bpp
 	ld a, $8
 	jr .done_5
@@ -251,22 +251,22 @@ BankOfMom:
 	ld [wJumptableIndex], a
 	ret
 
-.StopOrStartSavingMoney:
-	ld hl, MomSaveMoneyText
+.StopOrStartSavingCoins:
+	ld hl, MomSaveCoinsText
 	call PrintText1bpp
 	call YesNoBox
-	jr c, .StopSavingMoney
-	ld a, (1 << MOM_ACTIVE_F) | (1 << MOM_SAVING_SOME_MONEY_F)
-	ld [wMomSavingMoney], a
-	ld hl, MomStartSavingMoneyText
+	jr c, .StopSavingCoins
+	ld a, (1 << MOM_ACTIVE_F) | (1 << MOM_SAVING_SOME_COINS_F)
+	ld [wMomSavingCoins], a
+	ld hl, MomStartSavingCoinsText
 	call PrintText1bpp
 	ld a, $8
 	ld [wJumptableIndex], a
 	ret
 
-.StopSavingMoney:
+.StopSavingCoins:
 	ld a, 1 << MOM_ACTIVE_F
-	ld [wMomSavingMoney], a
+	ld [wMomSavingCoins], a
 	ld a, $7
 	ld [wJumptableIndex], a
 	ret
@@ -297,22 +297,22 @@ Mom_ContinueMenuSetup:
 	ld de, Mom_SavedString
 	call PlaceString
 	hlcoord 12, 2
-	ld de, wMomsMoney
-	lb bc, PRINTNUM_MONEY | 3, 6
+	ld de, wMomsCoins
+	lb bc, PRINTNUM_COINS | 3, 6
 	call PrintNum
 	hlcoord 1, 4
 	ld de, Mom_HeldString
 	call PlaceString
 	hlcoord 12, 4
-	ld de, wMoney
-	lb bc, PRINTNUM_MONEY | 3, 6
+	ld de, wCoins
+	lb bc, PRINTNUM_COINS | 3, 6
 	call PrintNum
 	hlcoord 1, 6
 	pop de
 	call PlaceString
 	hlcoord 12, 6
 	ld de, wStringBuffer2
-	lb bc, PRINTNUM_MONEY | PRINTNUM_LEADINGZEROS | 3, 6
+	lb bc, PRINTNUM_COINS | PRINTNUM_LEADINGZEROS | 3, 6
 	call PrintNum
 	call UpdateSprites
 	call CopyTilemapAtOnce
@@ -342,7 +342,7 @@ Mom_WithdrawDepositMenuJoypad:
 	call ByteFill
 	hlcoord 12, 6
 	ld de, wStringBuffer2
-	lb bc, PRINTNUM_MONEY | PRINTNUM_LEADINGZEROS | 3, 6
+	lb bc, PRINTNUM_COINS | PRINTNUM_LEADINGZEROS | 3, 6
 	call PrintNum
 	ldh a, [hVBlankCounter]
 	and $10
@@ -405,7 +405,7 @@ Mom_WithdrawDepositMenuJoypad:
 	ld c, l
 	ld b, h
 	ld de, wStringBuffer2
-	farcall GiveMoney
+	farcall GiveCoins
 	ret
 
 .decrementdigit
@@ -414,7 +414,7 @@ Mom_WithdrawDepositMenuJoypad:
 	ld c, l
 	ld b, h
 	ld de, wStringBuffer2
-	farcall TakeMoney
+	farcall TakeCoins
 	ret
 
 .getdigitquantity
@@ -462,24 +462,24 @@ MomLeavingText3:
 	text_far _MomLeavingText3
 	text_end
 
-MomIsThisAboutYourMoneyText:
-	text_far _MomIsThisAboutYourMoneyText
+MomIsThisAboutYourCoinsText:
+	text_far _MomIsThisAboutYourCoinsText
 	text_end
 
 MomBankWhatDoYouWantToDoText:
 	text_far _MomBankWhatDoYouWantToDoText
 	text_end
 
-MomStoreMoneyText:
-	text_far _MomStoreMoneyText
+MomStoreCoinsText:
+	text_far _MomStoreCoinsText
 	text_end
 
-MomTakeMoneyText:
-	text_far _MomTakeMoneyText
+MomTakeCoinsText:
+	text_far _MomTakeCoinsText
 	text_end
 
-MomSaveMoneyText:
-	text_far _MomSaveMoneyText
+MomSaveCoinsText:
+	text_far _MomSaveCoinsText
 	text_end
 
 MomHaventSavedThatMuchText:
@@ -498,16 +498,16 @@ MomNotEnoughRoomInBankText:
 	text_far _MomNotEnoughRoomInBankText
 	text_end
 
-MomStartSavingMoneyText:
-	text_far _MomStartSavingMoneyText
+MomStartSavingCoinsText:
+	text_far _MomStartSavingCoinsText
 	text_end
 
-MomStoredMoneyText:
-	text_far _MomStoredMoneyText
+MomStoredCoinsText:
+	text_far _MomStoredCoinsText
 	text_end
 
-MomTakenMoneyText:
-	text_far _MomTakenMoneyText
+MomTakenCoinsText:
+	text_far _MomTakenCoinsText
 	text_end
 
 MomJustDoWhatYouCanText:

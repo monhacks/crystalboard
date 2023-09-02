@@ -406,7 +406,7 @@ wEnemyItemState:: db
 wCurEnemyMoveNum:: db
 
 wEnemyHPAtTimeOfPlayerSwitch:: dw
-wPayDayMoney:: ds 3
+wPayDayCoins:: ds 3
 
 wSafariMonAngerCount:: db ; unreferenced
 wSafariMonEating:: db
@@ -2329,13 +2329,13 @@ wStatusFlags2::
 ; bit 7: rockets in mahogany
 	db
 
-wMoney:: ds 3
-wMomsMoney:: ds 3
+wCoins:: ds 3
+wMomsCoins:: ds 3
 
-wMomSavingMoney::
-; bit 0: saving some money
-; bit 1: saving half money (unused)
-; bit 2: saving all money (unused)
+wMomSavingCoins::
+; bit 0: saving some coins
+; bit 1: saving half coins (unused)
+; bit 2: saving all coins (unused)
 ; bit 7: active
 	db
 

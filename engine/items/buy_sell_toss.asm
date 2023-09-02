@@ -187,7 +187,7 @@ Sell_HalvePrice:
 
 BuySell_DisplaySubtotal:
 	push hl
-	ld hl, hMoneyTemp
+	ld hl, hCoinsTemp
 	ldh a, [hProduct + 1]
 	ld [hli], a
 	ldh a, [hProduct + 2]
@@ -196,8 +196,8 @@ BuySell_DisplaySubtotal:
 	ld [hl], a
 	pop hl
 	inc hl
-	ld de, hMoneyTemp
-	lb bc, PRINTNUM_MONEY | 3, 6
+	ld de, hCoinsTemp
+	lb bc, PRINTNUM_COINS | 3, 6
 	call PrintNum
 	call WaitBGMap
 	ret

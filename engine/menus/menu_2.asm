@@ -27,38 +27,38 @@ PlaceMenuItemQuantity:
 .done
 	ret
 
-PlaceMoneyTopRight:
-	ld hl, MoneyTopRightMenuHeader
+PlaceCoinsTopRight:
+	ld hl, CoinsTopRightMenuHeader
 	call CopyMenuHeader
-	jr PlaceMoneyTextbox
+	jr PlaceCoinsTextbox
 
-PlaceMoneyBottomLeft:
-	ld hl, MoneyBottomLeftMenuHeader
+PlaceCoinsBottomLeft:
+	ld hl, CoinsBottomLeftMenuHeader
 	call CopyMenuHeader
-	jr PlaceMoneyTextbox
+	jr PlaceCoinsTextbox
 
-PlaceMoneyAtTopLeftOfTextbox:
-	ld hl, MoneyTopRightMenuHeader
+PlaceCoinsAtTopLeftOfTextbox:
+	ld hl, CoinsTopRightMenuHeader
 	lb de, 0, 11
 	call OffsetMenuHeader
 
-PlaceMoneyTextbox:
+PlaceCoinsTextbox:
 	call MenuBox
 	call MenuBoxCoord2Tile
 	ld de, SCREEN_WIDTH + 1
 	add hl, de
-	ld de, wMoney
-	lb bc, PRINTNUM_MONEY | 3, 6
+	ld de, wCoins
+	lb bc, PRINTNUM_COINS | 3, 6
 	call PrintNum
 	ret
 
-MoneyTopRightMenuHeader:
+CoinsTopRightMenuHeader:
 	db MENU_BACKUP_TILES ; flags
 	menu_coords 11, 0, SCREEN_WIDTH - 1, 2
 	dw NULL
 	db 1 ; default option
 
-MoneyBottomLeftMenuHeader:
+CoinsBottomLeftMenuHeader:
 	db MENU_BACKUP_TILES ; flags
 	menu_coords 0, 11, 8, 13
 	dw NULL
@@ -74,7 +74,7 @@ DisplayChipCaseBalance:
 	ld de, ChipString
 	call PlaceString
 	hlcoord 17, 1
-	ld de, ShowMoney_TerminatorString
+	ld de, ShowCoins_TerminatorString
 	call PlaceString
 	ld de, wChips
 	lb bc, 2, 4
@@ -82,17 +82,17 @@ DisplayChipCaseBalance:
 	call PrintNum
 	ret
 
-DisplayMoneyAndChipBalance:
+DisplayCoinsAndChipBalance:
 	hlcoord 5, 0
 	ld b, 3
 	ld c, 13
 	call Textbox1bpp
 	hlcoord 6, 1
-	ld de, MoneyString
+	ld de, CoinsString
 	call PlaceString
 	hlcoord 12, 1
-	ld de, wMoney
-	lb bc, PRINTNUM_MONEY | 3, 6
+	ld de, wCoins
+	lb bc, PRINTNUM_COINS | 3, 6
 	call PrintNum
 	hlcoord 6, 3
 	ld de, ChipString
@@ -103,11 +103,11 @@ DisplayMoneyAndChipBalance:
 	call PrintNum
 	ret
 
-MoneyString:
-	db "MONEY@"
+CoinsString:
+	db "COINS@"
 ChipString:
 	db "CHIP@"
-ShowMoney_TerminatorString:
+ShowCoins_TerminatorString:
 	db "@"
 
 StartMenu_PrintSafariGameStatus: ; unreferenced

@@ -5,7 +5,7 @@ _PrintNum::
 ; The high nybble of the c register specifies how many of the total amount of
 ; digits will be in front of the decimal point.
 ; Some extra flags can be given in bits 5-7 of b.
-; Bit 5: money if set (unless left-aligned without leading zeros)
+; Bit 5: coins if set (unless left-aligned without leading zeros)
 ; Bit 6: left-aligned if set
 ; Bit 7: print leading zeros if set
 
@@ -14,11 +14,11 @@ _PrintNum::
 	bit 5, b
 	jr z, .main
 	bit 7, b
-	jr nz, .moneyflag
+	jr nz, .coinsflag
 	bit 6, b
 	jr z, .main
 
-.moneyflag ; 101xxxxx or 011xxxxx
+.coinsflag ; 101xxxxx or 011xxxxx
 	ld a, "<COIN>"
 	ld [hli], a
 	res 5, b ; 100xxxxx or 010xxxxx
@@ -150,11 +150,11 @@ _PrintNum::
 	ld b, a
 	ldh a, [hPrintNumBuffer + 0]
 	or c
-	jr nz, .money
+	jr nz, .coins
 	call .PrintLeadingZero
-	jr .money_leading_zero
+	jr .coins_leading_zero
 
-.money
+.coins
 	call .PrintCoin
 	push af
 	ld a, "0"
@@ -164,11 +164,11 @@ _PrintNum::
 	ldh [hPrintNumBuffer + 0], a
 	inc e
 	dec e
-	jr nz, .money_leading_zero
+	jr nz, .coins_leading_zero
 	inc hl
 	ld [hl], "."
 
-.money_leading_zero
+.coins_leading_zero
 	call .AdvancePointer
 	call .PrintCoin
 	ld a, "0"
