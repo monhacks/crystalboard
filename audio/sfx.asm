@@ -225,9 +225,9 @@ Sfx_Unknown66:
 	channel_count 1
 	channel 5, Sfx_Unknown66_Ch5
 
-Sfx_GetCoinFromSlots:
+Sfx_GetChipFromSlots:
 	channel_count 1
-	channel 5, Sfx_GetCoinFromSlots_Ch5
+	channel 5, Sfx_GetChipFromSlots_Ch5
 
 Sfx_PayDay:
 	channel_count 2
@@ -4936,7 +4936,7 @@ Sfx_Unknown66_Ch5:
 	square_note 8, 15, 1, 1792
 	sound_ret
 
-Sfx_GetCoinFromSlots_Ch5:
+Sfx_GetChipFromSlots_Ch5:
 	duty_cycle 2
 	square_note 2, 15, 1, 1792
 	square_note 8, 8, 1, 2016

@@ -45,7 +45,7 @@ DEF REEL_STOP_DELAY    rb ; 15
 	const SLOTS_NEXT_0B
 	const SLOTS_FLASH_IF_WIN
 	const SLOTS_FLASH_SCREEN
-	const SLOTS_GIVE_EARNED_COINS
+	const SLOTS_GIVE_EARNED_CHIPS
 	const SLOTS_PAYOUT_TEXT_AND_ANIM
 	const SLOTS_PAYOUT_ANIM
 	const SLOTS_RESTART_OF_QUIT
@@ -184,7 +184,7 @@ SlotsLoop:
 	xor a
 	ld [wCurSpriteOAMAddr], a
 	callfar DoNextFrameForFirst16Sprites
-	call .PrintCoinsAndPayout
+	call .PrintChipsAndPayout
 	call .Stubbed_AlternateMatchingSevensPalette
 	call DelayFrame
 	and a
@@ -219,9 +219,9 @@ SlotsLoop:
 	call DmgToCgbBGPals
 	ret
 
-.PrintCoinsAndPayout:
+.PrintChipsAndPayout:
 	hlcoord 5, 1
-	ld de, wCoins
+	ld de, wChips
 	lb bc, PRINTNUM_LEADINGZEROS | 2, 4
 	call PrintNum
 	hlcoord 11, 1
@@ -285,7 +285,7 @@ SlotsJumptable:
 	dw SlotsAction_Next              ; 0b
 	dw SlotsAction_FlashIfWin        ; 0c
 	dw SlotsAction_FlashScreen       ; 0d
-	dw SlotsAction_GiveEarnedCoins   ; 0e
+	dw SlotsAction_GiveEarnedChips   ; 0e
 	dw SlotsAction_PayoutTextAndAnim ; 0f
 	dw SlotsAction_PayoutAnim        ; 10
 	dw SlotsAction_RestartOrQuit     ; 11
@@ -440,7 +440,7 @@ SlotsAction_FlashScreen:
 	call SlotsAction_Next
 	ret
 
-SlotsAction_GiveEarnedCoins:
+SlotsAction_GiveEarnedChips:
 	xor a
 	ld [wFirstTwoReelsMatching], a
 	ld [wFirstTwoReelsMatchingSevens], a
@@ -471,11 +471,11 @@ SlotsAction_PayoutAnim:
 	ld [hl], e
 	dec hl
 	ld [hl], d
-	ld hl, wCoins
+	ld hl, wChips
 	ld d, [hl]
 	inc hl
 	ld e, [hl]
-	call Slots_CheckCoinCaseFull
+	call Slots_CheckChipCaseFull
 	jr c, .okay
 	inc de
 .okay
@@ -486,7 +486,7 @@ SlotsAction_PayoutAnim:
 	ld a, [wSlotsDelay]
 	and $7
 	ret z
-	ld de, SFX_GET_COIN_FROM_SLOTS
+	ld de, SFX_GET_CHIP_FROM_SLOTS
 	call PlaySFX
 	ret
 
@@ -527,12 +527,12 @@ Slots_LoadReelState:
 	ld [de], a
 	ret
 
-Slots_CheckCoinCaseFull:
+Slots_CheckChipCaseFull:
 	ld a, d
-	cp HIGH(MAX_COINS)
+	cp HIGH(MAX_CHIPS)
 	jr c, .not_full
 	ld a, e
-	cp LOW(MAX_COINS)
+	cp LOW(MAX_CHIPS)
 	jr c, .not_full
 	scf
 	ret
@@ -569,7 +569,7 @@ Slots_StopReel1:
 Slots_StopReel2:
 ; As long as, the following three meet, there's a 31.25% chance
 ; to set action REEL_ACTION_SET_UP_REEL2_SKIP_TO_7:
-; - Bet is >= 2 coins
+; - Bet is >= 2 chips
 ; - There's a 7 symbol visible in reel #1
 ; - Current spin isn't biased or is biased towards SEVEN
 ; In any other case, REEL_ACTION_STOP_REEL2 is set.
@@ -1716,7 +1716,7 @@ Slots_TurnLightsOnOrOff:
 
 Slots_AskBet:
 .loop
-	ld hl, .SlotsBetHowManyCoinsText
+	ld hl, .SlotsBetHowManyChipsText
 	call PrintText1bpp
 	ld hl, .MenuHeader
 	call LoadMenuHeader
@@ -1728,7 +1728,7 @@ Slots_AskBet:
 	ld a, 4
 	sub b
 	ld [wSlotBet], a
-	ld hl, wCoins
+	ld hl, wChips
 	ld c, a
 	ld a, [hli]
 	and a
@@ -1736,12 +1736,12 @@ Slots_AskBet:
 	ld a, [hl]
 	cp c
 	jr nc, .Start
-	ld hl, .SlotsNotEnoughCoinsText
+	ld hl, .SlotsNotEnoughChipsText
 	call PrintText1bpp
 	jr .loop
 
 .Start:
-	ld hl, wCoins + 1
+	ld hl, wChips + 1
 	ld a, [hl]
 	sub c
 	ld [hld], a
@@ -1756,16 +1756,16 @@ Slots_AskBet:
 	and a
 	ret
 
-.SlotsBetHowManyCoinsText:
-	text_far _SlotsBetHowManyCoinsText
+.SlotsBetHowManyChipsText:
+	text_far _SlotsBetHowManyChipsText
 	text_end
 
 .SlotsStartText:
 	text_far _SlotsStartText
 	text_end
 
-.SlotsNotEnoughCoinsText:
-	text_far _SlotsNotEnoughCoinsText
+.SlotsNotEnoughChipsText:
+	text_far _SlotsNotEnoughChipsText
 	text_end
 
 .MenuHeader:
@@ -1782,17 +1782,17 @@ Slots_AskBet:
 	db " 1@"
 
 Slots_AskPlayAgain:
-	ld hl, wCoins
+	ld hl, wChips
 	ld a, [hli]
 	or [hl]
-	jr nz, .you_have_coins
-	ld hl, .SlotsRanOutOfCoinsText
+	jr nz, .you_have_chips
+	ld hl, .SlotsRanOutOfChipsText
 	call PrintText1bpp
 	ld c, 60
 	call DelayFrames
 	jr .exit_slots
 
-.you_have_coins
+.you_have_chips
 	ld hl, .SlotsPlayAgainText
 	call PrintText1bpp
 	call LoadMenuTextbox
@@ -1810,8 +1810,8 @@ Slots_AskPlayAgain:
 	scf
 	ret
 
-.SlotsRanOutOfCoinsText:
-	text_far _SlotsRanOutOfCoinsText
+.SlotsRanOutOfChipsText:
+	text_far _SlotsRanOutOfChipsText
 	text_end
 
 .SlotsPlayAgainText:

@@ -576,23 +576,23 @@ _MartBoughtText::
 	text "(S)."
 	done
 
-_SlotsBetHowManyCoinsText::
+_SlotsBetHowManyChipsText::
 	text "Bet how many"
-	line "coins?"
+	line "chips?"
 	done
 
 _SlotsStartText::
 	text "Start!"
 	done
 
-_SlotsNotEnoughCoinsText::
+_SlotsNotEnoughChipsText::
 	text "Not enough"
-	line "coins."
+	line "chips."
 	prompt
 
-_SlotsRanOutOfCoinsText::
+_SlotsRanOutOfChipsText::
 	text "Darn… Ran out of"
-	line "coins…"
+	line "chips…"
 	done
 
 _SlotsPlayAgainText::
@@ -603,7 +603,7 @@ _SlotsLinedUpText::
 	text "lined up!"
 	line "Won @"
 	text_ram wStringBuffer2
-	text " coins!"
+	text " chips!"
 	done
 
 _SlotsDarnText::
@@ -760,13 +760,13 @@ _MoveCantForgetHMText::
 	line "forgotten now."
 	prompt
 
-_CardFlipPlayWithThreeCoinsText::
+_CardFlipPlayWithThreeChipsText::
 	text "Play with three"
-	line "coins?"
+	line "chips?"
 	done
 
-_CardFlipNotEnoughCoinsText::
-	text "Not enough coins…"
+_CardFlipNotEnoughChipsText::
+	text "Not enough chips…"
 	prompt
 
 _CardFlipChooseACardText::
@@ -1047,10 +1047,10 @@ _BlueCardBalanceText::
 	text " points."
 	done
 
-_CoinCaseCountText::
-	text "Coins:"
+_ChipCaseCountText::
+	text "Chips:"
 	line "@"
-	text_decimal wCoins, 2, 4
+	text_decimal wChips, 2, 4
 	text_end
 
 	text_end ; unreferenced

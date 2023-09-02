@@ -16,7 +16,7 @@ DEF STRING_BUFFER_LENGTH EQU 19
 	const YOUR_MONEY ; 0
 	const MOMS_MONEY ; 1
 
-; checkmoney/checkcoins return values
+; checkmoney/checkchips return values
 	const_def
 	const HAVE_MORE   ; 0
 	const HAVE_AMOUNT ; 1

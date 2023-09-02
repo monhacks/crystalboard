@@ -143,7 +143,7 @@ UnownPuzzle:
 	ret
 
 SlotMachine:
-	call CheckCoinsAndCoinCase
+	call CheckChipsAndChipCase
 	ret c
 	ld a, BANK(_SlotMachine)
 	ld hl, _SlotMachine
@@ -151,7 +151,7 @@ SlotMachine:
 	ret
 
 CardFlip:
-	call CheckCoinsAndCoinCase
+	call CheckChipsAndChipCase
 	ret c
 	ld a, BANK(_CardFlip)
 	ld hl, _CardFlip
@@ -159,7 +159,7 @@ CardFlip:
 	ret
 
 UnusedMemoryGame:
-	call CheckCoinsAndCoinCase
+	call CheckChipsAndChipCase
 	ret c
 	ld a, BANK(_MemoryGame)
 	ld hl, _MemoryGame
@@ -180,37 +180,37 @@ StartGameCornerGame:
 	call ExitAllMenus
 	ret
 
-CheckCoinsAndCoinCase:
-	ld hl, wCoins
+CheckChipsAndChipCase:
+	ld hl, wChips
 	ld a, [hli]
 	or [hl]
-	jr z, .no_coins
-	ld a, COIN_CASE
+	jr z, .no_chips
+	ld a, CHIP_CASE
 	ld [wCurItem], a
 	ld hl, wNumItems
 	call CheckItem
-	jr nc, .no_coin_case
+	jr nc, .no_chip_case
 	and a
 	ret
 
-.no_coins
-	ld hl, .NoCoinsText
+.no_chips
+	ld hl, .NoChipsText
 	jr .print
 
-.no_coin_case
-	ld hl, .NoCoinCaseText
+.no_chip_case
+	ld hl, .NoChipCaseText
 
 .print
 	call PrintText2bpp
 	scf
 	ret
 
-.NoCoinsText:
-	text_far _NoCoinsText
+.NoChipsText:
+	text_far _NoChipsText
 	text_end
 
-.NoCoinCaseText:
-	text_far _NoCoinCaseText
+.NoChipCaseText:
+	text_far _NoChipCaseText
 	text_end
 
 ClearBGPalettesBufferScreen:

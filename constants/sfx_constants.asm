@@ -103,7 +103,7 @@
 	const SFX_BURN                        ; 64
 	const SFX_TITLE_SCREEN_ENTRANCE       ; 65
 	const SFX_UNKNOWN_66                  ; 66
-	const SFX_GET_COIN_FROM_SLOTS         ; 67
+	const SFX_GET_CHIP_FROM_SLOTS         ; 67
 	const SFX_PAY_DAY                     ; 68
 	const SFX_METRONOME                   ; 69
 	const SFX_CALL                        ; 6a

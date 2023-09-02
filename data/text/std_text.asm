@@ -298,51 +298,51 @@ GymStatue_WinningTrainersText:
 	line "<PLAYER>"
 	done
 
-CoinVendor_WelcomeText:
+ChipVendor_WelcomeText:
 	text "Welcome to the"
 	line "GAME CORNER."
 	done
 
-CoinVendor_NoCoinCaseText:
+ChipVendor_NoChipCaseText:
 	text "Do you need game"
-	line "coins?"
+	line "chips?"
 
 	para "Oh, you don't have"
-	line "a COIN CASE for"
-	cont "your coins."
+	line "a CHIP CASE for"
+	cont "your chips."
 	done
 
-CoinVendor_IntroText:
+ChipVendor_IntroText:
 	text "Do you need some"
-	line "game coins?"
+	line "game chips?"
 
 	para "It costs ¥1000 for"
-	line "50 coins. Do you"
+	line "50 chips. Do you"
 	cont "want some?"
 	done
 
-CoinVendor_Buy50CoinsText:
+ChipVendor_Buy50ChipsText:
 	text "Thank you!"
-	line "Here are 50 coins."
+	line "Here are 50 chips."
 	done
 
-CoinVendor_Buy500CoinsText:
+ChipVendor_Buy500ChipsText:
 	text "Thank you! Here"
-	line "are 500 coins."
+	line "are 500 chips."
 	done
 
-CoinVendor_NotEnoughMoneyText:
+ChipVendor_NotEnoughMoneyText:
 	text "You don't have"
 	line "enough money."
 	done
 
-CoinVendor_CoinCaseFullText:
-	text "Whoops! Your COIN"
+ChipVendor_ChipCaseFullText:
+	text "Whoops! Your CHIP"
 	line "CASE is full."
 	done
 
-CoinVendor_CancelText:
-	text "No coins for you?"
+ChipVendor_CancelText:
+	text "No chips for you?"
 	line "Come again!"
 	done
 

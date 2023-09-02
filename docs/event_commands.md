@@ -132,13 +132,13 @@ Until this document is filled out, the [G/S Scripting Compendium](https://hax.ii
 ## `$24`: <code>checkmoney <i>account</i>, <i>value</i></code>
 
 
-## `$25`: <code>givecoins <i>value</i></code>
+## `$25`: <code>givechips <i>value</i></code>
 
 
-## `$26`: <code>takecoins <i>value</i></code>
+## `$26`: <code>takechips <i>value</i></code>
 
 
-## `$27`: <code>checkcoins <i>value</i></code>
+## `$27`: <code>checkchips <i>value</i></code>
 
 
 ## `$28`: <code>addcellnum <i>contact_id</i></code>
@@ -209,9 +209,9 @@ Until this document is filled out, the [G/S Scripting Compendium](https://hax.ii
 <code>GetStringBuffer(<i>string_buffer</i>) = PrintNum(GetMoneyAccount(<i>account</i>))</code>
 
 
-## `$3E`: <code>getcoins <i>string_buffer</i></code>
+## `$3E`: <code>getchips <i>string_buffer</i></code>
 
-<code>GetStringBuffer(<i>string_buffer</i>) = PrintNum([wCoins])</code>
+<code>GetStringBuffer(<i>string_buffer</i>) = PrintNum([wChips])</code>
 
 
 ## `$3F`: <code>getnum <i>string_buffer</i></code>

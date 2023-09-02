@@ -246,22 +246,22 @@ MACRO checkmoney
 	dt \2 ; money
 ENDM
 
-	const givecoins_command ; $25
-MACRO givecoins
-	db givecoins_command
-	dw \1 ; coins
+	const givechips_command ; $25
+MACRO givechips
+	db givechips_command
+	dw \1 ; chips
 ENDM
 
-	const takecoins_command ; $26
-MACRO takecoins
-	db takecoins_command
-	dw \1 ; coins
+	const takechips_command ; $26
+MACRO takechips
+	db takechips_command
+	dw \1 ; chips
 ENDM
 
-	const checkcoins_command ; $27
-MACRO checkcoins
-	db checkcoins_command
-	dw \1 ; coins
+	const checkchips_command ; $27
+MACRO checkchips
+	db checkchips_command
+	dw \1 ; chips
 ENDM
 
 	const addcellnum_command ; $28
@@ -414,9 +414,9 @@ MACRO getmoney
 	db \1 ; string_buffer
 ENDM
 
-	const getcoins_command ; $3e
-MACRO getcoins
-	db getcoins_command
+	const getchips_command ; $3e
+MACRO getchips
+	db getchips_command
 	db \1 ; string_buffer
 ENDM
 

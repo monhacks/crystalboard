@@ -64,25 +64,25 @@ MoneyBottomLeftMenuHeader:
 	dw NULL
 	db 1 ; default option
 
-DisplayCoinCaseBalance:
+DisplayChipCaseBalance:
 	; Place a text box of size 1x7 at 11, 0.
 	hlcoord 11, 0
 	ld b, 1
 	ld c, 7
 	call Textbox1bpp
 	hlcoord 12, 0
-	ld de, CoinString
+	ld de, ChipString
 	call PlaceString
 	hlcoord 17, 1
 	ld de, ShowMoney_TerminatorString
 	call PlaceString
-	ld de, wCoins
+	ld de, wChips
 	lb bc, 2, 4
 	hlcoord 13, 1
 	call PrintNum
 	ret
 
-DisplayMoneyAndCoinBalance:
+DisplayMoneyAndChipBalance:
 	hlcoord 5, 0
 	ld b, 3
 	ld c, 13
@@ -95,18 +95,18 @@ DisplayMoneyAndCoinBalance:
 	lb bc, PRINTNUM_MONEY | 3, 6
 	call PrintNum
 	hlcoord 6, 3
-	ld de, CoinString
+	ld de, ChipString
 	call PlaceString
 	hlcoord 15, 3
-	ld de, wCoins
+	ld de, wChips
 	lb bc, 2, 4
 	call PrintNum
 	ret
 
 MoneyString:
 	db "MONEY@"
-CoinString:
-	db "COIN@"
+ChipString:
+	db "CHIP@"
 ShowMoney_TerminatorString:
 	db "@"
 

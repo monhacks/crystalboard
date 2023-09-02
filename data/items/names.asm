@@ -53,7 +53,7 @@ ItemNames::
 	li "X DEFEND"
 	li "X SPEED"
 	li "X SPECIAL"
-	li "COIN CASE"
+	li "CHIP CASE"
 	li "ITEMFINDER"
 	li "TERU-SAMA"
 	li "EXP.SHARE"

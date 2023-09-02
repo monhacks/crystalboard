@@ -160,7 +160,7 @@ DEF MEM_BUFFER_2 EQUS "STRING_BUFFER_5"
 
 DEF vartomem      EQUS "getnum"
 DEF mapnametotext EQUS "getcurlandmarkname"
-DEF readcoins     EQUS "getcoins"
+DEF readchips     EQUS "getchips"
 
 MACRO pokenamemem
 	getmonname \2, \1
@@ -397,7 +397,7 @@ DEF gymstatue2            EQUS "GymStatue2Script"
 DEF receiveitem           EQUS "ReceiveItemScript"
 DEF receivetogepiegg      EQUS "ReceiveTogepiEggScript"
 DEF pcscript              EQUS "PCScript"
-DEF gamecornercoinvendor  EQUS "GameCornerCoinVendorScript"
+DEF gamecornerchipvendor  EQUS "GameCornerChipVendorScript"
 DEF happinesschecknpc     EQUS "HappinessCheckScript"
 
 ; constants/sprite_constants.asm

@@ -54,7 +54,7 @@ ItemDescriptions:
 	dw XDefendDesc
 	dw XSpeedDesc
 	dw XSpecialDesc
-	dw CoinCaseDesc
+	dw ChipCaseDesc
 	dw ItemfinderDesc
 	dw TeruSama5Desc
 	dw ExpShareDesc
@@ -467,9 +467,9 @@ XSpecialDesc:
 	db   "Raises SPECIAL"
 	next "ATTACK. (1 BTL)@"
 
-CoinCaseDesc:
+ChipCaseDesc:
 	db   "Holds up to 9,999"
-	next "game coins.@"
+	next "game chips.@"
 
 ItemfinderDesc:
 	db   "Checks for unseen"

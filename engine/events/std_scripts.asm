@@ -54,7 +54,7 @@ StdScripts::
 	add_stdscript ReceiveItemScript
 	add_stdscript ReceiveTogepiEggScript
 	add_stdscript PCScript
-	add_stdscript GameCornerCoinVendorScript
+	add_stdscript GameCornerChipVendorScript
 	add_stdscript HappinessCheckScript
 
 PokecenterNurseScript:
@@ -763,23 +763,23 @@ ReceiveTogepiEggScript:
 	waitsfx
 	end
 
-GameCornerCoinVendorScript:
+GameCornerChipVendorScript:
 	faceplayer
 	opentext
-	farwritetext CoinVendor_WelcomeText
+	farwritetext ChipVendor_WelcomeText
 	promptbutton
-	checkitem COIN_CASE
-	iftrue CoinVendor_IntroScript
-	farwritetext CoinVendor_NoCoinCaseText
+	checkitem CHIP_CASE
+	iftrue ChipVendor_IntroScript
+	farwritetext ChipVendor_NoChipCaseText
 	waitbutton
 	closetext
 	end
 
-CoinVendor_IntroScript:
-	farwritetext CoinVendor_IntroText
+ChipVendor_IntroScript:
+	farwritetext ChipVendor_IntroText
 
 .loop
-	special DisplayMoneyAndCoinBalance
+	special DisplayMoneyAndChipBalance
 	loadmenu .MenuHeader
 	verticalmenu
 	closewindow
@@ -788,45 +788,45 @@ CoinVendor_IntroScript:
 	sjump .Cancel
 
 .Buy50:
-	checkcoins MAX_COINS - 50
-	ifequal HAVE_MORE, .CoinCaseFull
+	checkchips MAX_CHIPS - 50
+	ifequal HAVE_MORE, .ChipCaseFull
 	checkmoney YOUR_MONEY, 1000
 	ifequal HAVE_LESS, .NotEnoughMoney
-	givecoins 50
+	givechips 50
 	takemoney YOUR_MONEY, 1000
 	waitsfx
 	playsound SFX_TRANSACTION
-	farwritetext CoinVendor_Buy50CoinsText
+	farwritetext ChipVendor_Buy50ChipsText
 	waitbutton
 	sjump .loop
 
 .Buy500:
-	checkcoins MAX_COINS - 500
-	ifequal HAVE_MORE, .CoinCaseFull
+	checkchips MAX_CHIPS - 500
+	ifequal HAVE_MORE, .ChipCaseFull
 	checkmoney YOUR_MONEY, 10000
 	ifequal HAVE_LESS, .NotEnoughMoney
-	givecoins 500
+	givechips 500
 	takemoney YOUR_MONEY, 10000
 	waitsfx
 	playsound SFX_TRANSACTION
-	farwritetext CoinVendor_Buy500CoinsText
+	farwritetext ChipVendor_Buy500ChipsText
 	waitbutton
 	sjump .loop
 
 .NotEnoughMoney:
-	farwritetext CoinVendor_NotEnoughMoneyText
+	farwritetext ChipVendor_NotEnoughMoneyText
 	waitbutton
 	closetext
 	end
 
-.CoinCaseFull:
-	farwritetext CoinVendor_CoinCaseFullText
+.ChipCaseFull:
+	farwritetext ChipVendor_ChipCaseFullText
 	waitbutton
 	closetext
 	end
 
 .Cancel:
-	farwritetext CoinVendor_CancelText
+	farwritetext ChipVendor_CancelText
 	waitbutton
 	closetext
 	end

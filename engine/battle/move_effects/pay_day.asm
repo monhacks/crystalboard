@@ -20,5 +20,5 @@ BattleCommand_PayDay:
 	jr nz, .done
 	inc [hl]
 .done
-	ld hl, CoinsScatteredText
+	ld hl, ChipsScatteredText
 	jp StdBattleTextbox

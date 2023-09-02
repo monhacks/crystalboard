@@ -101,9 +101,9 @@ ScriptCommandTable:
 	dw Script_givemoney                  ; 22
 	dw Script_takemoney                  ; 23
 	dw Script_checkmoney                 ; 24
-	dw Script_givecoins                  ; 25
-	dw Script_takecoins                  ; 26
-	dw Script_checkcoins                 ; 27
+	dw Script_givechips                  ; 25
+	dw Script_takechips                  ; 26
+	dw Script_checkchips                 ; 27
 	dw Script_addcellnum                 ; 28
 	dw Script_delcellnum                 ; 29
 	dw Script_checkcellnum               ; 2a
@@ -126,7 +126,7 @@ ScriptCommandTable:
 	dw Script_blackoutmod                ; 3b
 	dw Script_warp                       ; 3c
 	dw Script_getmoney                   ; 3d
-	dw Script_getcoins                   ; 3e
+	dw Script_getchips                   ; 3e
 	dw Script_getnum                     ; 3f
 	dw Script_getmonname                 ; 40
 	dw Script_getitemname                ; 41
@@ -1659,10 +1659,10 @@ Script_getmoney:
 	ld de, wStringBuffer1
 	jp GetStringBuffer
 
-Script_getcoins:
+Script_getchips:
 	call ResetStringBuffer1
 	ld hl, wStringBuffer1
-	ld de, wCoins
+	ld de, wChips
 	lb bc, PRINTNUM_LEFTALIGN | 2, 6
 	call PrintNum
 	ld de, wStringBuffer1
@@ -1824,22 +1824,22 @@ LoadMoneyAmountToMem:
 	pop bc
 	ret
 
-Script_givecoins:
-	call LoadCoinAmountToMem
-	farcall GiveCoins
+Script_givechips:
+	call LoadChipAmountToMem
+	farcall GiveChips
 	ret
 
-Script_takecoins:
-	call LoadCoinAmountToMem
-	farcall TakeCoins
+Script_takechips:
+	call LoadChipAmountToMem
+	farcall TakeChips
 	ret
 
-Script_checkcoins:
-	call LoadCoinAmountToMem
-	farcall CheckCoins
+Script_checkchips:
+	call LoadChipAmountToMem
+	farcall CheckChips
 	jr CompareMoneyAction
 
-LoadCoinAmountToMem:
+LoadChipAmountToMem:
 	call GetScriptByte
 	ldh [hMoneyTemp + 1], a
 	call GetScriptByte

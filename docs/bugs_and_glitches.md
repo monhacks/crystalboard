@@ -2055,7 +2055,7 @@ Most of the NPCs in [maps/NationalParkBugContest.asm](https://github.com/pret/po
  	and $7
 -	ret z
 +	ret nz
- 	ld de, SFX_GET_COIN_FROM_SLOTS
+ 	ld de, SFX_GET_CHIP_FROM_SLOTS
  	call PlaySFX
  	ret
 ```

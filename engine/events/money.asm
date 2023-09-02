@@ -162,15 +162,15 @@ AddFunds:
 	pop hl
 	ret
 
-GiveCoins::
+GiveChips::
 	ld a, 2
-	ld de, wCoins
+	ld de, wChips
 	call AddFunds
 	ld a, 2
-	ld bc, .maxcoins
+	ld bc, .maxchips
 	call CompareFunds
 	jr c, .not_maxed
-	ld hl, .maxcoins
+	ld hl, .maxchips
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -183,15 +183,15 @@ GiveCoins::
 	and a
 	ret
 
-.maxcoins
-	bigdw MAX_COINS
+.maxchips
+	bigdw MAX_CHIPS
 
-TakeCoins::
+TakeChips::
 	ld a, 2
-	ld de, wCoins
+	ld de, wChips
 	call SubtractFunds
 	jr nc, .okay
-	; leave with 0 coins
+	; leave with 0 chips
 	xor a
 	ld [de], a
 	inc de
@@ -203,7 +203,7 @@ TakeCoins::
 	and a
 	ret
 
-CheckCoins::
+CheckChips::
 	ld a, 2
-	ld de, wCoins
+	ld de, wChips
 	jp CompareFunds

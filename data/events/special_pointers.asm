@@ -84,8 +84,8 @@ SpecialsPointers::
 	add_special ReturnShuckie
 	add_special BillsGrandfather
 	add_special CheckPokerus
-	add_special DisplayCoinCaseBalance
-	add_special DisplayMoneyAndCoinBalance
+	add_special DisplayChipCaseBalance
+	add_special DisplayMoneyAndChipBalance
 	add_special PlaceMoneyTopRight
 	add_special CheckForLuckyNumberWinners
 	add_special CheckLuckyNumberShowFlag

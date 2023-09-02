@@ -845,8 +845,8 @@ WasDisabledText:
 	cont "DISABLED!"
 	prompt
 
-CoinsScatteredText:
-	text "Coins scattered"
+ChipsScatteredText:
+	text "Chips scattered"
 	line "everywhere!"
 	prompt
 

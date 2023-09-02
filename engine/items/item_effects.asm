@@ -67,7 +67,7 @@ ItemEffects:
 	dw XItemEffect         ; X_DEFEND
 	dw XItemEffect         ; X_SPEED
 	dw XItemEffect         ; X_SPECIAL
-	dw CoinCaseEffect      ; COIN_CASE
+	dw ChipCaseEffect      ; CHIP_CASE
 	dw ItemfinderEffect    ; ITEMFINDER
 	dw PokeFluteEffect     ; POKE_FLUTE
 	dw NoEffect            ; EXP_SHARE
@@ -2253,12 +2253,12 @@ BlueCardEffect:
 	text_far _BlueCardBalanceText
 	text_end
 
-CoinCaseEffect:
-	ld hl, .CoinCaseCountText
+ChipCaseEffect:
+	ld hl, .ChipCaseCountText
 	jp MenuTextboxWaitButton
 
-.CoinCaseCountText:
-	text_far _CoinCaseCountText
+.ChipCaseCountText:
+	text_far _ChipCaseCountText
 	text_end
 
 OldRodEffect:

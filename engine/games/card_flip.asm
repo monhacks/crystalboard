@@ -80,7 +80,7 @@ _CardFlip:
 
 .Jumptable:
 	dw .AskPlayWithThree
-	dw .DeductCoins
+	dw .DeductChips
 	dw .ChooseACard
 	dw .PlaceYourBet
 	dw .CheckTheCard
@@ -94,8 +94,8 @@ _CardFlip:
 	ret
 
 .AskPlayWithThree:
-	ld hl, .CardFlipPlayWithThreeCoinsText
-	call CardFlip_UpdateCoinBalanceDisplay
+	ld hl, .CardFlipPlayWithThreeChipsText
+	call CardFlip_UpdateChipBalanceDisplay
 	call YesNoBox
 	jr c, .SaidNo
 	call CardFlip_ShuffleDeck
@@ -107,23 +107,23 @@ _CardFlip:
 	ld [wJumptableIndex], a
 	ret
 
-.CardFlipPlayWithThreeCoinsText:
-	text_far _CardFlipPlayWithThreeCoinsText
+.CardFlipPlayWithThreeChipsText:
+	text_far _CardFlipPlayWithThreeChipsText
 	text_end
 
-.DeductCoins:
-	ld a, [wCoins]
+.DeductChips:
+	ld a, [wChips]
 	ld h, a
-	ld a, [wCoins + 1]
+	ld a, [wChips + 1]
 	ld l, a
 	ld a, h
 	and a
-	jr nz, .deduct ; You have at least 256 coins.
+	jr nz, .deduct ; You have at least 256 chips.
 	ld a, l
 	cp 3
-	jr nc, .deduct ; You have at least 3 coins.
-	ld hl, .CardFlipNotEnoughCoinsText
-	call CardFlip_UpdateCoinBalanceDisplay
+	jr nc, .deduct ; You have at least 3 chips.
+	ld hl, .CardFlipNotEnoughChipsText
+	call CardFlip_UpdateChipBalanceDisplay
 	ld a, 7
 	ld [wJumptableIndex], a
 	ret
@@ -132,22 +132,22 @@ _CardFlip:
 	ld de, -3
 	add hl, de
 	ld a, h
-	ld [wCoins], a
+	ld [wChips], a
 	ld a, l
-	ld [wCoins + 1], a
+	ld [wChips + 1], a
 	ld de, SFX_TRANSACTION
 	call PlaySFX
 	xor a
 	ldh [hBGMapMode], a
-	call CardFlip_PrintCoinBalance
+	call CardFlip_PrintChipBalance
 	ld a, $1
 	ldh [hBGMapMode], a
 	call WaitSFX
 	call .Increment
 	ret
 
-.CardFlipNotEnoughCoinsText:
-	text_far _CardFlipNotEnoughCoinsText
+.CardFlipNotEnoughChipsText:
+	text_far _CardFlipNotEnoughChipsText
 	text_end
 
 .ChooseACard:
@@ -175,7 +175,7 @@ _CardFlip:
 	call PlaceCardFaceDown
 	call WaitBGMap
 	ld hl, .CardFlipChooseACardText
-	call CardFlip_UpdateCoinBalanceDisplay
+	call CardFlip_UpdateChipBalanceDisplay
 	xor a
 	ld [wCardFlipWhichCard], a
 .loop
@@ -228,7 +228,7 @@ _CardFlip:
 
 .PlaceYourBet:
 	ld hl, .CardFlipPlaceYourBetText
-	call CardFlip_UpdateCoinBalanceDisplay
+	call CardFlip_UpdateChipBalanceDisplay
 .betloop
 	call JoyTextDelay
 	ldh a, [hJoyLast]
@@ -285,7 +285,7 @@ _CardFlip:
 .PlayAgain:
 	call ClearSprites
 	ld hl, .CardFlipPlayAgainText
-	call CardFlip_UpdateCoinBalanceDisplay
+	call CardFlip_UpdateChipBalanceDisplay
 	call YesNoBox
 	jr nc, .Continue
 	call .Increment
@@ -470,7 +470,7 @@ CardFlip_DisplayCardFaceUp:
 	db "5", $4e, "5", $57, "5", $69, "5", $60
 	db "6", $4e, "6", $57, "6", $69, "6", $60
 
-CardFlip_UpdateCoinBalanceDisplay:
+CardFlip_UpdateChipBalanceDisplay:
 	push hl
 	hlcoord 0, 12
 	ld b, 4
@@ -478,25 +478,25 @@ CardFlip_UpdateCoinBalanceDisplay:
 	call Textbox1bpp
 	pop hl
 	call PrintTextboxText
-	call CardFlip_PrintCoinBalance
+	call CardFlip_PrintChipBalance
 	ret
 
-CardFlip_PrintCoinBalance:
+CardFlip_PrintChipBalance:
 	hlcoord 9, 15
 	ld b, 1
 	ld c, 9
 	call Textbox1bpp
 	hlcoord 10, 16
-	ld de, .CoinStr
+	ld de, .ChipStr
 	call PlaceString
 	hlcoord 15, 16
-	ld de, wCoins
+	ld de, wChips
 	lb bc, PRINTNUM_LEADINGZEROS | 2, 4
 	call PrintNum
 	ret
 
-.CoinStr:
-	db "COIN@"
+.ChipStr:
+	db "CHIP@"
 
 CardFlip_InitTilemap:
 	xor a
@@ -1067,7 +1067,7 @@ CardFlip_CheckWinCondition:
 	ld de, SFX_WRONG
 	call PlaySFX
 	ld hl, .CardFlipDarnText
-	call CardFlip_UpdateCoinBalanceDisplay
+	call CardFlip_UpdateChipBalanceDisplay
 	call WaitSFX
 	ret
 
@@ -1075,19 +1075,19 @@ CardFlip_CheckWinCondition:
 	push bc
 	push de
 	ld hl, .CardFlipYeahText
-	call CardFlip_UpdateCoinBalanceDisplay
+	call CardFlip_UpdateChipBalanceDisplay
 	pop de
 	call PlaySFX
 	call WaitSFX
 	pop bc
 .loop
 	push bc
-	call .IsCoinCaseFull
+	call .IsChipCaseFull
 	jr c, .full
-	call .AddCoinPlaySFX
+	call .AddChipPlaySFX
 
 .full
-	call CardFlip_PrintCoinBalance
+	call CardFlip_PrintChipBalance
 	ld c, 2
 	call DelayFrames
 	pop bc
@@ -1103,30 +1103,30 @@ CardFlip_CheckWinCondition:
 	text_far _CardFlipDarnText
 	text_end
 
-.AddCoinPlaySFX:
-	ld a, [wCoins]
+.AddChipPlaySFX:
+	ld a, [wChips]
 	ld h, a
-	ld a, [wCoins + 1]
+	ld a, [wChips + 1]
 	ld l, a
 	inc hl
 	ld a, h
-	ld [wCoins], a
+	ld [wChips], a
 	ld a, l
-	ld [wCoins + 1], a
+	ld [wChips + 1], a
 	ld de, SFX_PAY_DAY
 	call PlaySFX
 	ret
 
-.IsCoinCaseFull:
-	ld a, [wCoins]
-	cp HIGH(MAX_COINS)
+.IsChipCaseFull:
+	ld a, [wChips]
+	cp HIGH(MAX_CHIPS)
 	jr c, .less
 	jr z, .check_low
 	jr .more
 
 .check_low
-	ld a, [wCoins + 1]
-	cp LOW(MAX_COINS)
+	ld a, [wChips + 1]
+	cp LOW(MAX_CHIPS)
 	jr c, .less
 
 .more

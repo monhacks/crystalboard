@@ -104,7 +104,7 @@ SFX:
 	dba Sfx_Burn
 	dba Sfx_TitleScreenEntrance
 	dba Sfx_Unknown66
-	dba Sfx_GetCoinFromSlots
+	dba Sfx_GetChipFromSlots
 	dba Sfx_PayDay
 	dba Sfx_Metronome
 	dba Sfx_Call

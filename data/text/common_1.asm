@@ -1351,13 +1351,13 @@ _ReceiveItemText::
 
 	text_end ; unreferenced
 
-_NoCoinsText::
-	text "You have no coins."
+_NoChipsText::
+	text "You have no chips."
 	prompt
 
-_NoCoinCaseText::
+_NoChipCaseText::
 	text "You don't have a"
-	line "COIN CASE."
+	line "CHIP CASE."
 	prompt
 
 _NPCTradeCableText::

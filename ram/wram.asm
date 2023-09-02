@@ -2339,7 +2339,7 @@ wMomSavingMoney::
 ; bit 7: active
 	db
 
-wCoins:: dw
+wChips:: dw
 
 wBadges::
 wJohtoBadges:: flag_array NUM_JOHTO_BADGES
