@@ -1,10 +1,13 @@
 ; Landmarks indexes (see data/maps/landmarks.asm)
 	const_def
 	const LANDMARK_LEVEL_1           ; 00
-	const LANDMARK_LEVEL_2           ; 01
-	const LANDMARK_LEVEL_3           ; 02
-	const LANDMARK_LEVEL_4           ; 03
-	const LANDMARK_LEVEL_5           ; 04
+if DEF(_DEBUG)
+	const LANDMARK_DEBUGLEVEL_1      ; 00
+	const LANDMARK_DEBUGLEVEL_2      ; 01
+	const LANDMARK_DEBUGLEVEL_3      ; 02
+	const LANDMARK_DEBUGLEVEL_4      ; 03
+	const LANDMARK_DEBUGLEVEL_5      ; 04
+endc
 DEF NUM_LANDMARKS EQU const_value
 
 ; used in CaughtData

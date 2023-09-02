@@ -79,8 +79,10 @@ DEF NUM_FISHGROUPS EQU const_value - 1
 	const_def
 	const SPAWN_LEVEL_1
 ;	const SPAWN_LEVEL_2
+if DEF(_DEBUG)
+	const SPAWN_DEBUGLEVEL_1
+endc
 DEF NUM_SPAWNS EQU const_value
-
 DEF SPAWN_N_A EQU -1
 
 ; Flypoints indexes (see data/maps/flypoints.asm)

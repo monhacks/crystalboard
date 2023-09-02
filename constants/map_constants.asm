@@ -44,4 +44,10 @@ ENDM
 ;	map_const LEVEL_2_MAP_1,                                4,  4 ;  1
 ;	endgroup
 
+if DEF(_DEBUG)
+	newgroup DEBUGLEVEL_1
+	map_const DEBUGLEVEL_1_MAP_1,                           5,  4 ;  1
+	endgroup
+endc
+
 DEF NUM_MAP_GROUPS EQU const_value

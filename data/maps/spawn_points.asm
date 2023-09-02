@@ -10,7 +10,9 @@ SpawnPoints:
 
 	spawn LEVEL_1_MAP_1,               3,  3  ; SPAWN_LEVEL_1
 ;	spawn LEVEL_2_MAP_1,               5,  3  ; SPAWN_LEVEL_2
-
+if DEF(_DEBUG)
+	spawn DEBUGLEVEL_1_MAP_1,          3,  3, ; SPAWN_DEBUGLEVEL_1
+endc
 	spawn N_A,                        -1, -1
 
 	assert_table_length NUM_SPAWNS + 1

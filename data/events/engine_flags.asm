@@ -72,6 +72,9 @@ EngineFlags:
 
 	; fly
 	engine_flag wVisitedSpawns, SPAWN_LEVEL_1
+if DEF(_DEBUG)
+	engine_flag wVisitedSpawns, SPAWN_DEBUGLEVEL_1
+endc
 	engine_flag wVisitedSpawns, NUM_SPAWNS ; unused
 
 	engine_flag wLuckyNumberShowFlag, LUCKYNUMBERSHOW_GAME_OVER_F

@@ -10,6 +10,14 @@
 	RGB 09,09,17, 05,07,13 ; nite
 	RGB 12,13,23, 06,08,11 ; eve
 
+if DEF(_DEBUG)
+; debug group 1 (DebugLevel1)
+	RGB 14,17,31, 07,11,15 ; morn
+	RGB 14,17,31, 07,11,15 ; day
+	RGB 09,09,17, 05,07,13 ; nite
+	RGB 12,13,23, 06,08,11 ; eve
+endc
+
 ; group 2 (Mahogany)
 ;	RGB 12,19,00, 06,10,00 ; morn
 ;	RGB 12,19,00, 06,10,00 ; day

@@ -13,6 +13,9 @@ MapGroupRoofs:
 	table_width 1, MapGroupRoofs
 	db -1             ;  0
 	db ROOF_OLIVINE   ;  1 (Level1)
+if DEF(_DEBUG)
+	db ROOF_OLIVINE   ;  1 (DebugLevel1)
+endc
 	assert_table_length NUM_MAP_GROUPS + 1
 
 Roofs:

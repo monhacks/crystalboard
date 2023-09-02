@@ -17,8 +17,11 @@ ENDM
 MapGroupPointers::
 ; pointers to the first map of each map group
 	table_width 2, MapGroupPointers
-	dw MapGroup_Level1    ;  1
-;	dw MapGroup_Level2    ;  2
+	dw MapGroup_Level1      ;  1
+;	dw MapGroup_Level2      ;  2
+if DEF(_DEBUG)
+	dw MapGroup_DebugLevel1 ;  1
+endc
 	assert_table_length NUM_MAP_GROUPS
 
 MapGroup_Level1:
@@ -31,3 +34,10 @@ MapGroup_Level1:
 ; 	table_width MAP_LENGTH, MapGroup_Level2
 ;	map Level2_Map1 ...
 ; 	assert_table_length NUM_LEVEL_2_MAPS
+
+if DEF(_DEBUG)
+MapGroup_DebugLevel1:
+	table_width MAP_LENGTH, MapGroup_DebugLevel1
+	map DebugLevel1_Map1, TILESET_PLAYERS_ROOM, INDOOR_BUILDING, LANDMARK_DEBUGLEVEL_1, MUSIC_NEW_BARK_TOWN, FALSE, PALETTE_DAY, FISHGROUP_SHORE
+	assert_table_length NUM_DEBUGLEVEL_1_MAPS
+endc
