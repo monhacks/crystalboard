@@ -333,9 +333,9 @@ LoadSpriteGFX:
 	ret
 
 .LoadSprite:
-	push de
+	push bc
 	call GetSprite
-	pop de
+	pop bc
 	ld a, l
 	ret
 
@@ -383,9 +383,10 @@ ArrangeUsedSprites:
 	ld a, [hl]
 	call GetSpriteLength
 
-; There are only two tables, so don't go any further than that.
+; Don't go any further than the second row in the second table.
 	add b
-	jr c, .quit
+	cp $a0 + 1
+	jr nc, .quit
 
 	ld [hl], b
 	ld b, a
