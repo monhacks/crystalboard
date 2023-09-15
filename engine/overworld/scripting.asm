@@ -1198,7 +1198,7 @@ Script_reloadmapafterbattle:
 	jr z, .done
 	ld b, BANK(Script_SpecialBillCall)
 	ld de, Script_SpecialBillCall
-	farcall LoadScriptBDE
+	farcall LoadMemScript
 .done
 	jp Script_reloadmap
 
@@ -2266,8 +2266,6 @@ Script_end:
 
 Script_endcallback:
 	call ExitScriptSubroutine
-	jr c, .dummy
-.dummy
 	ld hl, wScriptFlags
 	res 0, [hl]
 	call StopScript

@@ -30,7 +30,7 @@ EnableEvents::
 	ld [wScriptFlags2], a
 	ret
 
-CheckBit5_ScriptFlags2:
+CheckBit5_ScriptFlags2: ; unreferenced
 	ld hl, wScriptFlags2
 	bit 5, [hl]
 	ret
@@ -132,15 +132,10 @@ EnterMap:
 	ld [wMapStatus], a
 	ret
 
-UnusedWait30Frames: ; unreferenced
-	ld c, 30
-	call DelayFrames
-	ret
-
 HandleMap:
 	call ResetOverworldDelay
 	call HandleMapTimeAndJoypad
-	farcall HandleCmdQueue ; no need to farcall
+	call HandleCmdQueue
 	call MapEvents
 
 ; Not immediately entering a connected map will cause problems.
@@ -275,8 +270,6 @@ PlayerEvents:
 	ret
 
 CheckTrainerBattle_GetPlayerEvent:
-	nop
-	nop
 	call CheckTrainerBattle
 	jr nc, .nope
 
@@ -320,7 +313,6 @@ CheckTileEvent:
 
 	call RandomEncounter
 	ret c
-	jr .ok ; pointless
 
 .ok
 	xor a
@@ -368,9 +360,7 @@ SetUpFiveStepWildEncounterCooldown:
 	ld [wWildEncounterCooldown], a
 	ret
 
-SetMinTwoStepWildEncounterCooldown:
-; dummied out
-	ret
+SetMinTwoStepWildEncounterCooldown: ; unreferenced
 	ld a, [wWildEncounterCooldown]
 	cp 2
 	ret nc
@@ -752,7 +742,6 @@ PlayerMovementPointers:
 	ret
 
 .jump:
-	call SetMinTwoStepWildEncounterCooldown
 	xor a
 	ld c, a
 	ret
@@ -967,9 +956,6 @@ PlayerEventScriptPointers:
 InvalidEventScript:
 	end
 
-UnusedPlayerEventScript: ; unreferenced
-	end
-
 HatchEggScript:
 	callasm OverworldHatchEgg
 	end
@@ -1033,7 +1019,7 @@ RunMemScript::
 	pop af
 	ret
 
-LoadScriptBDE::
+LoadMemScript::
 ; If there's already a script here, don't overwrite.
 	ld hl, wMapReentryScriptQueueFlag
 	ld a, [hl]
