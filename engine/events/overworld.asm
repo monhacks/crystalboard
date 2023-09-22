@@ -1706,10 +1706,6 @@ Script_GetOnBike_Register:
 	special UpdatePlayerSprite
 	end
 
-Overworld_DummyFunction: ; unreferenced
-	nop
-	ret
-
 Script_GetOffBike:
 	reloadmappart
 	special UpdateTimePals

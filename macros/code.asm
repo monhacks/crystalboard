@@ -11,7 +11,11 @@ ENDM
 ; Design patterns
 
 MACRO jumptable
+if STRIN("\2", "h") == 1
+	ldh a, [\2]
+else
 	ld a, [\2]
+endc
 	ld e, a
 	ld d, 0
 	ld hl, \1

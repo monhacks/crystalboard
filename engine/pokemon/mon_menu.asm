@@ -104,6 +104,37 @@ CancelPokemonAction:
 	ld a, 1
 	ret
 
+Party::
+.choosemenu
+	xor a
+	ld [wPartyMenuActionText], a ; Choose a POKéMON.
+	call ClearBGPalettes
+
+.menu
+	farcall LoadPartyMenuGFX
+	farcall InitPartyMenuWithCancel
+	farcall InitPartyMenuGFX
+
+.menunoreload
+	farcall WritePartyMenuTilemap
+	farcall PlacePartyMenuText
+	call WaitBGMap
+	call SetPalettes ; load regular palettes?
+	call DelayFrame
+	farcall PartyMenuSelect
+	ret c ; if cancelled or pressed B
+
+	call PokemonActionSubmenu
+	and 3
+	cp 3
+	jr z, .menu
+	cp 0
+	jr z, .choosemenu
+	cp 1
+	jr z, .menunoreload
+	and a ; must be 2, which means quit after using field move
+	ret ; nc
+
 PokemonActionSubmenu:
 	hlcoord 1, 15
 	lb bc, 2, 18

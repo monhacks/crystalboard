@@ -1065,4 +1065,10 @@ MACRO checksave
 	db checksave_command
 ENDM
 
+	const exitoverworld_command ; $aa
+MACRO exitoverworld
+	db exitoverworld_command
+	db \1 ; exit reason
+ENDM
+
 DEF NUM_EVENT_COMMANDS EQU const_value

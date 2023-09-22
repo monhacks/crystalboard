@@ -11,6 +11,9 @@ OverworldLoop::
 	cp MAPSTATUS_DONE
 	jr nz, .loop
 .done
+	call DisableOverworldHUD
+	ld hl, wGameTimerPaused
+	res GAME_TIMER_PAUSED_F, [hl] ; stop game timer counter
 	ret
 
 .Jumptable:
@@ -105,6 +108,8 @@ StartMap:
 	call ByteFill
 	farcall InitCallReceiveDelay
 	call ClearJoypad
+	ld a, BOARDEVENT_DISPLAY_MENU
+	ld [hCurBoardEvent], a
 EnterMap:
 	xor a
 	ld [wXYComparePointer], a
@@ -238,6 +243,9 @@ PlayerEvents:
 	and a
 	ret nz
 
+	call CheckBoardEvent
+	jr c, .ok
+
 	call CheckTrainerBattle_GetPlayerEvent
 	jr c, .ok
 
@@ -266,6 +274,28 @@ PlayerEvents:
 
 	ld [wScriptRunning], a
 	call DoPlayerEvent
+	scf
+	ret
+
+CheckBoardEvent:
+	jumptable .Jumptable, hCurBoardEvent
+
+.Jumptable:
+	table_width 2, .Jumptable
+	dw .none
+	dw .menu
+	assert_table_length NUM_BOARD_EVENTS + 1
+
+.none
+	xor a
+	ret
+
+.menu
+	ld a, BANK(BoardMenuScript)
+	ld hl, BoardMenuScript
+	call CallScript
+	xor a
+	ld [hCurBoardEvent], a
 	scf
 	ret
 

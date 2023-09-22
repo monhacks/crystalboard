@@ -234,6 +234,7 @@ ScriptCommandTable:
 	dw Script_getname                    ; a7
 	dw Script_wait                       ; a8
 	dw Script_checksave                  ; a9
+	dw Script_exitoverworld              ; aa
 	assert_table_length NUM_EVENT_COMMANDS
 
 StartScript:
@@ -2323,6 +2324,14 @@ Script_halloffame:
 Script_credits:
 	farcall RedCredits
 ReturnFromCredits:
+	call Script_endall
+	ld a, MAPSTATUS_DONE
+	call LoadMapStatus
+	call StopScript
+	ret
+
+Script_exitoverworld:
+	call GetScriptByte
 	call Script_endall
 	ld a, MAPSTATUS_DONE
 	call LoadMapStatus

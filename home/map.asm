@@ -1916,7 +1916,7 @@ ReturnToMapWithSpeechTextbox::
 	call ClearBGPalettes
 	call ClearSprites
 	call ReloadTilesetAndPalettes
-	call SpeechTextbox1bpp
+	call SpeechTextbox ; 1bpp or 2bpp according to wTextboxFlags[TEXT_2BPP_F]
 	ld hl, wVramState
 	set 0, [hl]
 	call UpdateSprites
@@ -1934,8 +1934,15 @@ ReloadTilesetAndPalettes::
 	call DisableLCD
 	call ClearSprites
 	farcall RefreshSprites
+	ld a, [wTextboxFlags]
+	bit TEXT_2BPP_F, a
+	jr nz, .2bpp
 	call LoadStandardFont
 	call LoadFrame
+	jr .font_done
+.2bpp
+	call LoadOverworldFontAndFrame
+.font_done
 	ldh a, [hROMBank]
 	push af
 	ld a, [wMapGroup]

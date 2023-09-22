@@ -1,3 +1,70 @@
+BoardMenuScript::
+	opentext
+.display_menu
+	callasm BoardMenu
+	ifequal BOARDMENUITEM_DIE,      .Die
+	ifequal BOARDMENUITEM_PARTY,    .Party
+	ifequal BOARDMENUITEM_PACK,     .Pack
+	ifequal BOARDMENUITEM_POKEGEAR, .Pokegear
+	ifequal BOARDMENUITEM_EXIT,     .Exit
+	closetext
+	end
+
+.Die:
+	closetext
+	end
+
+.Party:
+	callasm BoardMenu_Party
+	scall .SubmenuCallback
+	sjump .display_menu
+
+.Pack:
+	callasm BoardMenu_Pack
+	scall .SubmenuCallback
+	sjump .display_menu
+
+.Pokegear:
+	callasm BoardMenu_Pokegear
+	scall .SubmenuCallback
+	sjump .display_menu
+
+.Exit:
+	writetext .EmptyText
+	callasm RestoreOverworldFontOverBoardMenuGFX
+	writetext .ConfirmExitText
+	yesorno
+	iftrue .exit
+	writetext .EmptyText
+	sjump .display_menu
+
+.exit:
+	exitoverworld $00
+
+.ConfirmExitText:
+	text "Abandon level and"
+	line "return to menu?"
+	done
+
+.EmptyText:
+	text ""
+	done
+
+.SubmenuCallback:
+; if submenu has requested a callback through hMenuReturn,
+; it has also taken care of queuing it into wQueuedScriptBank/wQueuedScriptAddr.
+	readmem hMenuReturn
+	ifequal HMENURETURN_SCRIPT, .CallbackScript
+	ifequal HMENURETURN_ASM, .CallbackAsm
+	end
+
+.CallbackScript:
+	memjump wQueuedScriptBank
+
+.CallbackAsm:
+	memcallasm wQueuedScriptBank
+	end
+
 BoardMenu::
 ; returns the selected menu item (BOARDMENUITEM_*) in wScriptVar upon exit
 	ld a, [wBoardMenuLastCursorPosition]
@@ -56,10 +123,16 @@ ApplyBoardMenuSpritePalette:
 	ld a, [wBoardMenuCursorPosition]
 	ld bc, PALETTE_SIZE
 	call AddNTimes
- ; set wOBPals2 directly rather than wOBPals1 to avoid calling ApplyPals and overwriting other overworld pals
+; write to wOBPals2 directly as well to avoid calling ApplyPals and overwriting other overworld pals
+; writing to wOBPals1 is still necessary to make fading animations consistent
+	ld de, wOBPals1 palette PAL_OW_MISC
+	ld bc, PALETTE_SIZE
+	ld a, BANK(wOBPals1)
+	call FarCopyWRAM
+	ld hl, wOBPals1 palette PAL_OW_MISC
 	ld de, wOBPals2 palette PAL_OW_MISC
 	ld bc, PALETTE_SIZE
-	ld a, BANK(wOBPals2)
+	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a
@@ -106,6 +179,74 @@ GetBoardMenuSelection:
 	ld [wBoardMenuCursorPosition], a
 	xor a
 	ret ; nc
+
+BoardMenu_Party:
+	ld a, [wPartyCount]
+	and a
+	ret z
+
+	call BoardMenu_OpenSubmenu
+	farcall Party
+	jr nc, .quit
+
+.return
+; if cancelled or pressed B
+	call BoardMenu_CloseSubmenu
+	ret
+
+.quit
+; if quitted party menu after using field move
+	call BoardMenu_CloseSubmenu
+	ld a, HMENURETURN_SCRIPT
+	ldh [hMenuReturn], a
+	ret
+
+BoardMenu_Pack:
+	call BoardMenu_OpenSubmenu
+	farcall Pack
+	call BoardMenu_CloseSubmenu
+	ld a, [wPackUsedItem]
+	and a
+	ret z
+	ld a, HMENURETURN_SCRIPT
+	ldh [hMenuReturn], a
+	ret
+
+BoardMenu_Pokegear:
+	call BoardMenu_OpenSubmenu
+	farcall PokeGear
+	jp BoardMenu_CloseSubmenu
+
+BoardMenu_OpenSubmenu:
+	xor a
+	ldh [hMenuReturn], a
+	ldh [hBGMapMode], a
+	call LoadStandardMenuHeader
+	farcall FadeOutPalettesToWhite
+	call DisableOverworldHUD
+	ld hl, wTextboxFlags
+	res TEXT_2BPP_F, [hl]
+	call LoadStandardFont
+	call LoadFrame
+	call ClearSprites
+	call DisableSpriteUpdates
+	ret
+
+BoardMenu_CloseSubmenu:
+	call ClearBGPalettes
+	ld hl, wTextboxFlags
+	set TEXT_2BPP_F, [hl]
+	call EnableOverworldHUD
+	call ReloadTilesetAndPalettes
+	call UpdateSprites
+	call ExitMenu
+	call ClearTextbox
+	ld b, CGB_MAPPALS
+	call GetCGBLayout
+	call WaitBGMap2
+	farcall FadeInPalettesFromWhite
+	call EnableSpriteUpdates
+	ret
 
 BoardMenuItemPals:
 INCLUDE "gfx/board/menu.pal"

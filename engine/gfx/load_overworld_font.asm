@@ -1,36 +1,41 @@
 _LoadOverworldFontAndFrame::
-	ld de, .OverworldFontGFX
+	ld de, OverworldFontGFX
 	ld hl, vTiles1
-	lb bc, BANK(.OverworldFontGFX), 64
+	lb bc, BANK(OverworldFontGFX), 64
 	call Get2bppViaHDMA
-	ld de, .OverworldFontGFX + 64 * LEN_2BPP_TILE
+	ld de, OverworldFontGFX + 64 * LEN_2BPP_TILE
 	ld hl, vTiles1 tile $40
-	lb bc, BANK(.OverworldFontGFX), 56
+	lb bc, BANK(OverworldFontGFX), 48
 	call Get2bppViaHDMA
-	ld de, .OverworldFontSpaceGFX
+	ld de, OverworldFontSpaceGFX
 	ld hl, vTiles2 tile " "
-	lb bc, BANK(.OverworldFontSpaceGFX), 1
+	lb bc, BANK(OverworldFontSpaceGFX), 1
 	call Get2bppViaHDMA
 	ld a, [wEnvironment]
 	maskbits NUM_ENVIRONMENTS
 	ld bc, OW_TEXTBOX_FRAME_TILES * LEN_2BPP_TILE
-	ld hl, .OverworldFrames
+	ld hl, OverworldFrames
 	call AddNTimes
 	ld d, h
 	ld e, l
 	ld hl, vTiles0 tile OVERWORLD_FRAME_FIRST_TILE ; $f0
-	lb bc, BANK(.OverworldFrames), OW_TEXTBOX_FRAME_TILES
-	call Get2bppViaHDMA
-	ret
+	lb bc, BANK(OverworldFrames), OW_TEXTBOX_FRAME_TILES
+	jp Get2bppViaHDMA
 
-.OverworldFontGFX:
+RestoreOverworldFontOverBoardMenuGFX::
+	ld de, OverworldFontGFX
+	ld hl, vTiles1
+	lb bc, BANK(OverworldFontGFX), 18 * 3
+	jp Get2bppViaHDMA
+
+OverworldFontGFX:
 INCBIN "gfx/font/overworld.2bpp"
 
-.OverworldFontSpaceGFX:
+OverworldFontSpaceGFX:
 INCBIN "gfx/font/overworld_space.2bpp"
 
-.OverworldFrames:
-	table_width OW_TEXTBOX_FRAME_TILES * LEN_2BPP_TILE, .OverworldFrames
+OverworldFrames:
+	table_width OW_TEXTBOX_FRAME_TILES * LEN_2BPP_TILE, OverworldFrames
 INCBIN "gfx/frames/ow1.2bpp"
 INCBIN "gfx/frames/ow2.2bpp"
 INCBIN "gfx/frames/ow3.2bpp"

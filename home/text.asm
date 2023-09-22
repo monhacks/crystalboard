@@ -165,6 +165,13 @@ Textbox2bpp::
 	pop bc
 	jp TextboxAttributes2bpp
 
+SpeechTextbox:
+; Standard 1bpp or 2bpp textbox according to wTextboxFlags[TEXT_2BPP_F]
+	ld a, [wTextboxFlags]
+	bit TEXT_2BPP_F, a
+	jr z, SpeechTextbox1bpp
+	jr SpeechTextbox2bpp
+
 RadioTerminator::
 	ld hl, .stop
 	ret
@@ -172,7 +179,7 @@ RadioTerminator::
 .stop:
 	text_end
 
-ClearTextbox:
+ClearTextbox::
 	hlcoord TEXTBOX_INNERX, TEXTBOX_INNERY
 	lb bc, TEXTBOX_INNERH - 1, TEXTBOX_INNERW
 	jp ClearBox

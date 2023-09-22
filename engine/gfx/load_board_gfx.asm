@@ -15,8 +15,8 @@ INCBIN "gfx/board/menu.2bpp"
 .BoardMenuOAMGFX:
 	table_width 3 * 3 * LEN_2BPP_TILE, .BoardMenuOAMGFX
 INCBIN "gfx/board/menu_die.2bpp"
-INCBIN "gfx/board/menu_pokemon.2bpp"
-INCBIN "gfx/board/menu_bag.2bpp"
+INCBIN "gfx/board/menu_party.2bpp"
+INCBIN "gfx/board/menu_pack.2bpp"
 INCBIN "gfx/board/menu_pokegear.2bpp"
 INCBIN "gfx/board/menu_exit.2bpp"
 	assert_table_length NUM_BOARD_MENU_ITEMS

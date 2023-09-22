@@ -322,3 +322,8 @@ DEF NUM_UNOWN_PUZZLES EQU const_value
 	const MOVETUTOR_FLAMETHROWER ; 1
 	const MOVETUTOR_THUNDERBOLT  ; 2
 	const MOVETUTOR_ICE_BEAM     ; 3
+
+; board events (tracked by hCurBoardEvent)
+	const_def 1
+	const BOARDEVENT_DISPLAY_MENU ; 1
+DEF NUM_BOARD_EVENTS EQU const_value - 1
