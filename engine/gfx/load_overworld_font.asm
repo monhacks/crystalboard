@@ -25,7 +25,7 @@ _LoadOverworldFontAndFrame::
 RestoreOverworldFontOverBoardMenuGFX::
 	ld de, OverworldFontGFX
 	ld hl, vTiles1
-	lb bc, BANK(OverworldFontGFX), 18 * 3
+	lb bc, BANK(OverworldFontGFX), TEXTBOX_INNERW * BOARD_MENU_ITEM_HEIGHT
 	jp Get2bppViaHDMA
 
 OverworldFontGFX:

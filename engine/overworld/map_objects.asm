@@ -3082,20 +3082,20 @@ InitSecondarySprites:
 
 	ld hl, BoardMenuOAM
 	ld a, [wBoardMenuCursorPosition]
-	ld bc, 3 * 3 * SPRITEOAMSTRUCT_LENGTH
+	ld bc, BOARD_MENU_ITEM_SIZE * SPRITEOAMSTRUCT_LENGTH
 	call AddNTimes
-; find the beginning of free space in OAM, and assure there's space for 3 * 3 objects
+; find the beginning of free space in OAM, and assure there's space for a BOARD_MENU_ITEM_SIZE object
 	ldh a, [hUsedSpriteIndex]
-	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (3 * 3 * SPRITEOAMSTRUCT_LENGTH) + 1
+	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (BOARD_MENU_ITEM_SIZE * SPRITEOAMSTRUCT_LENGTH) + 1
 	jr nc, .oam_full
-; copy the sprite data (3 * 3 objects) of that item to the available space in OAM
+; copy the sprite data (BOARD_MENU_ITEM_SIZE objects) of that item to the available space in OAM
 	ld e, a
 	ld d, HIGH(wShadowOAM)
-	ld bc, 3 * 3 * SPRITEOAMSTRUCT_LENGTH
+	ld bc, BOARD_MENU_ITEM_SIZE * SPRITEOAMSTRUCT_LENGTH
 	call CopyBytes
 
 	ldh a, [hUsedSpriteIndex]
-	add (3 * 3 * SPRITEOAMSTRUCT_LENGTH)
+	add (BOARD_MENU_ITEM_SIZE * SPRITEOAMSTRUCT_LENGTH)
 	ldh [hUsedSpriteIndex], a
 
 .oam_full

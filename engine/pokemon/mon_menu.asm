@@ -119,7 +119,7 @@ Party::
 	farcall WritePartyMenuTilemap
 	farcall PlacePartyMenuText
 	call WaitBGMap
-	call SetPalettes ; load regular palettes?
+	call SetPalettes
 	call DelayFrame
 	farcall PartyMenuSelect
 	ret c ; if cancelled or pressed B
