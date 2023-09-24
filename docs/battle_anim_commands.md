@@ -14,7 +14,7 @@ Defined in [macros/scripts/battle_anims.asm](https://github.com/pret/pokecrystal
 
 Spawns an *object* at coordinate (*x*, *y*).
 
-- *object*: `ANIM_OBJ` constants (see [constants/battle_anim_constants.asm](https://github.com/pret/pokecrystal/blob/master/constants/battle_anim_constants.asm))
+- *object*: `BATTLE_ANIM_OBJ` constants (see [constants/battle_anim_constants.asm](https://github.com/pret/pokecrystal/blob/master/constants/battle_anim_constants.asm))
 - *x*: the x position in pixels
 - *y*: the y position in pixels
 - *x_tile*: an added x position in tiles (8 pixels)
@@ -84,8 +84,8 @@ Since there can't be two of the same bg effect, the effect type is used. This is
 
 ## `$DA`: `anim_battlergfx_1row`
 
-Loads animation graphics for the bottom one or two rows of the enemy pokemon and the top one or two rows of the player's.  
-These graphics are identified through `ANIM_GFX_ENEMYFEET` and `ANIM_GFX_PLAYERHEAD`.
+Loads animation graphics for the bottom one or two rows of the enemy pokemon and the top one or two rows of the player's.
+These graphics are identified through `BATTLE_ANIM_GFX_ENEMYFEET` and `BATTLE_ANIM_GFX_PLAYERHEAD`.
 
 Caveats:
 - Doesn't work with `anim_4gfx` and `anim_5gfx`.

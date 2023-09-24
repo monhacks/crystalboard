@@ -652,7 +652,7 @@ Hatch_UpdateFrontpicBGMapCenter:
 	call SetPalettes
 	jp WaitBGMap
 
-EggHatch_DoAnimFrame:
+EggHatch_DoSpriteAnimFrame:
 	push hl
 	push de
 	push bc
@@ -711,14 +711,14 @@ EggHatch_AnimationSequence:
 	ldh [hSCX], a
 	ld a, -2
 	ld [wGlobalAnimXOffset], a
-	call EggHatch_DoAnimFrame
+	call EggHatch_DoSpriteAnimFrame
 	ld c, 2
 	call DelayFrames
 	ld a, -2
 	ldh [hSCX], a
 	ld a, 2
 	ld [wGlobalAnimXOffset], a
-	call EggHatch_DoAnimFrame
+	call EggHatch_DoSpriteAnimFrame
 	ld c, 2
 	call DelayFrames
 	dec e
@@ -772,7 +772,7 @@ EggHatch_CrackShell:
 	add 9 * TILE_WIDTH + 4
 	ld d, a
 	ld e, 11 * TILE_WIDTH
-	ld a, SPRITE_ANIM_INDEX_EGG_CRACK
+	ld a, SPRITE_ANIM_OBJ_EGG_CRACK
 	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
@@ -800,7 +800,7 @@ Hatch_InitShellFragments:
 	push hl
 	push bc
 
-	ld a, SPRITE_ANIM_INDEX_EGG_HATCH
+	ld a, SPRITE_ANIM_OBJ_EGG_HATCH
 	call InitSpriteAnimStruct
 
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
@@ -823,7 +823,7 @@ Hatch_InitShellFragments:
 .done
 	ld de, SFX_EGG_HATCH
 	call PlaySFX
-	call EggHatch_DoAnimFrame
+	call EggHatch_DoSpriteAnimFrame
 	ret
 
 MACRO shell_fragment
@@ -847,7 +847,7 @@ ENDM
 Hatch_ShellFragmentLoop:
 	ld c, 129
 .loop
-	call EggHatch_DoAnimFrame
+	call EggHatch_DoSpriteAnimFrame
 	dec c
 	jr nz, .loop
 	ret

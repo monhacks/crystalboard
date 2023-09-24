@@ -240,7 +240,7 @@ LevelSelectionMenu_InitPlayerSprite:
 	push af
 	depixel 0, 0
 ; all the SPRITE_ANIM_* related to the level selection menu are sorted by direction, then by gender
-	ld b, SPRITE_ANIM_INDEX_LEVEL_SELECTION_MENU_MALE_WALK_DOWN
+	ld b, SPRITE_ANIM_OBJ_LEVEL_SELECTION_MENU_MALE_WALK_DOWN
 	ld a, [wPlayerGender]
 	add b
 	call InitSpriteAnimStruct
@@ -343,7 +343,7 @@ LevelSelectionMenu_SetAnimSeqAndFrameset:
 	ld bc, wSpriteAnim1
 	ld hl, SPRITEANIMSTRUCT_ANIM_SEQ_ID
 	add hl, bc
-	ld a, SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_DOWN
+	ld a, SPRITE_ANIM_FUNC_LEVEL_SELECTION_MENU_WALK_DOWN
 	add e ; add direction
 	ld [hl], a
 	ld hl, SPRITEANIMSTRUCT_FRAMESET_ID
@@ -361,7 +361,7 @@ LevelSelectionMenu_DoPageChangeEvent:
 	ld de, .Events
 	ld bc, wSpriteAnim1
 .loop
-	ld a, [de] ; SPRITE_ANIM_SEQ_* or $00 table terminator
+	ld a, [de] ; SPRITE_ANIM_FUNC_* or $00 table terminator
 	and a
 	ret z
 	inc de
@@ -424,16 +424,16 @@ DEF PAGE_EDGE_LEFT  EQU $08
 DEF PAGE_EDGE_RIGHT EQU $a8
 
 MACRO page_change_event
-; SPRITE_ANIM_SEQ_* to match, Match object's X or Y, X/Y coordinate, Action if both SPRITE_ANIM_SEQ_* and X/Y match
+; SPRITE_ANIM_FUNC_* to match, Match object's X or Y, X/Y coordinate, Action if both SPRITE_ANIM_FUNC_* and X/Y match
 	db \1, \2, \3
 	dw \4
 ENDM
 
 .Events:
-	page_change_event SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_DOWN,  SPRITEANIMSTRUCT_YCOORD, PAGE_EDGE_DOWN,  .PageChangeDown
-	page_change_event SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_UP,    SPRITEANIMSTRUCT_YCOORD, PAGE_EDGE_UP,    .PageChangeUp
-	page_change_event SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_LEFT,  SPRITEANIMSTRUCT_XCOORD, PAGE_EDGE_LEFT,  .PageChangeLeft
-	page_change_event SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_RIGHT, SPRITEANIMSTRUCT_XCOORD, PAGE_EDGE_RIGHT, .PageChangeRight
+	page_change_event SPRITE_ANIM_FUNC_LEVEL_SELECTION_MENU_WALK_DOWN,  SPRITEANIMSTRUCT_YCOORD, PAGE_EDGE_DOWN,  .PageChangeDown
+	page_change_event SPRITE_ANIM_FUNC_LEVEL_SELECTION_MENU_WALK_UP,    SPRITEANIMSTRUCT_YCOORD, PAGE_EDGE_UP,    .PageChangeUp
+	page_change_event SPRITE_ANIM_FUNC_LEVEL_SELECTION_MENU_WALK_LEFT,  SPRITEANIMSTRUCT_XCOORD, PAGE_EDGE_LEFT,  .PageChangeLeft
+	page_change_event SPRITE_ANIM_FUNC_LEVEL_SELECTION_MENU_WALK_RIGHT, SPRITEANIMSTRUCT_XCOORD, PAGE_EDGE_RIGHT, .PageChangeRight
 	db $0
 
 .PageChangeDown:
@@ -675,7 +675,7 @@ LevelSelectionMenu_Delay10Frames:
 	ret
 
 _LevelSelectionMenuHandleTransition:
-; Called from the corresponding SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_* animation sequence.
+; Called from the corresponding SPRITE_ANIM_FUNC_LEVEL_SELECTION_MENU_* animation sequence.
 ; This function is here because LevelSelectionMenu_LandmarkTransitions is in this bank.
 ; Applies the animation to the player sprite for the current frame.
 	ld hl, wLevelSelectionMenuLandmarkTransitionsPointer
@@ -748,7 +748,7 @@ _LevelSelectionMenuHandleTransition:
 ; make the player sprite face down as the default state
 	ld hl, SPRITEANIMSTRUCT_ANIM_SEQ_ID
 	add hl, bc
-	ld a, SPRITE_ANIM_SEQ_LEVEL_SELECTION_MENU_WALK_DOWN
+	ld a, SPRITE_ANIM_FUNC_LEVEL_SELECTION_MENU_WALK_DOWN
 	ld [hl], a
 	ld hl, SPRITEANIMSTRUCT_FRAMESET_ID
 	add hl, bc

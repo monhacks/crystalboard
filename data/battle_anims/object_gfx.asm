@@ -5,7 +5,7 @@ MACRO anim_obj_gfx
 ENDM
 
 AnimObjGFX:
-; entries correspond to ANIM_GFX_* constants
+; entries correspond to BATTLE_ANIM_GFX_* constants
 	table_width 4, AnimObjGFX
 	anim_obj_gfx  0, AnimObj00GFX
 	anim_obj_gfx 21, AnimObjHitGFX
