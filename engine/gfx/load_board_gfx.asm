@@ -7,6 +7,10 @@ LoadBoardMenuGFX::
 	ld hl, vTiles0 + BOARD_MENU_OAM_FIRST_TILE * LEN_2BPP_TILE
 	lb bc, BANK(.BoardMenuOAMGFX), BOARD_MENU_ITEM_SIZE * NUM_BOARD_MENU_ITEMS
 	call Get2bppViaHDMA
+	ld de, .DieRollOAMGFX
+	ld hl, vTiles0 + DIE_ROLL_OAM_FIRST_TILE * LEN_2BPP_TILE
+	lb bc, BANK(.BoardMenuOAMGFX), DIE_SIZE * 10
+	call Get2bppViaHDMA
 	ret
 
 .BoardMenuGFX:
@@ -20,3 +24,6 @@ INCBIN "gfx/board/menu_pack.2bpp"
 INCBIN "gfx/board/menu_pokegear.2bpp"
 INCBIN "gfx/board/menu_exit.2bpp"
 	assert_table_length NUM_BOARD_MENU_ITEMS
+
+.DieRollOAMGFX:
+INCBIN "gfx/board/die_roll.2bpp"

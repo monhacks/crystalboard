@@ -11,7 +11,9 @@ BoardMenuScript::
 	end
 
 .Die:
-	closetext
+	callasm BoardMenu_Die
+	iffalse BoardMenuScript
+	callasm BoardMenu_BreakDieAnimation
 	end
 
 .Party:
@@ -180,6 +182,50 @@ GetBoardMenuSelection:
 	xor a
 	ret ; nc
 
+BoardMenu_Die:
+DIE_MAX_NUMBER EQU 6
+	ld hl, wDisplaySecondarySprites
+	set SECONDARYSPRITES_DIE_ROLL_F, [hl]
+	ld a, 1
+	ld [wDieRoll], a
+	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu ;
+	call CloseText	                                    ; closetext
+
+.rotate_die_loop
+	call IsSFXPlaying
+	ld de, SFX_KINESIS
+	call c, PlaySFX
+	call Random
+.sample_die_loop
+	sub DIE_MAX_NUMBER
+	jr nc, .sample_die_loop
+	add DIE_MAX_NUMBER
+	add $1
+	ld [wDieRoll], a
+	farcall _UpdateSprites
+	call GetJoypad
+	ldh a, [hJoyPressed]
+	bit B_BUTTON_F, a
+	jr nz, .back_to_menu
+	bit A_BUTTON_F, a
+	jr nz, .confirm_roll
+	call DelayFrame
+	jr .rotate_die_loop
+
+.back_to_menu
+	call PlayClickSFX
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_DIE_ROLL_F, [hl]
+	xor a ; FALSE
+	ld [wScriptVar], a
+	ret
+
+.confirm_roll
+	call PlayClickSFX
+	ld a, TRUE
+	ld [wScriptVar], a
+	ret
+
 BoardMenu_Party:
 	ld a, [wPartyCount]
 	and a
@@ -199,6 +245,9 @@ BoardMenu_Party:
 	call BoardMenu_CloseSubmenu
 	ld a, HMENURETURN_SCRIPT
 	ldh [hMenuReturn], a
+	ret
+
+BoardMenu_BreakDieAnimation:
 	ret
 
 BoardMenu_Pack:

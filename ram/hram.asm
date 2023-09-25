@@ -12,7 +12,6 @@ hVBlank:: db
 hMapEntryMethod:: db
 
 hMenuReturn:: db
-hUnusedByte:: db
 
 hJoypadReleased:: db
 hJoypadPressed::  db

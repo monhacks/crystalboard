@@ -3074,10 +3074,12 @@ InitSprites:
 InitSecondarySprites:
 	ld a, [wDisplaySecondarySprites]
 	bit SECONDARYSPRITES_BOARD_MENU_F, a
-	call nz, .InitBoardMenuSprites
+	call nz, InitBoardMenuSprites
+	bit SECONDARYSPRITES_DIE_ROLL_F, a
+	call nz, InitRollDieSprites
 	ret
 
-.InitBoardMenuSprites:
+InitBoardMenuSprites:
 	push af
 
 	ld hl, BoardMenuOAM
@@ -3096,6 +3098,32 @@ InitSecondarySprites:
 
 	ldh a, [hUsedSpriteIndex]
 	add (BOARD_MENU_ITEM_SIZE * SPRITEOAMSTRUCT_LENGTH)
+	ldh [hUsedSpriteIndex], a
+
+.oam_full
+	pop af
+	ret
+
+InitRollDieSprites:
+	push af
+
+	ld hl, DieRollOAM
+	ld a, [wDieRoll]
+	dec a
+	ld bc, DIE_SIZE * SPRITEOAMSTRUCT_LENGTH
+	call AddNTimes
+; find the beginning of free space in OAM, and assure there's space for a DIE_SIZE object
+	ldh a, [hUsedSpriteIndex]
+	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (DIE_SIZE * SPRITEOAMSTRUCT_LENGTH) + 1
+	jr nc, .oam_full
+; copy the sprite data (DIE_SIZE objects) of that item to the available space in OAM
+	ld e, a
+	ld d, HIGH(wShadowOAM)
+	ld bc, DIE_SIZE * SPRITEOAMSTRUCT_LENGTH
+	call CopyBytes
+
+	ldh a, [hUsedSpriteIndex]
+	add (DIE_SIZE * SPRITEOAMSTRUCT_LENGTH)
 	ldh [hUsedSpriteIndex], a
 
 .oam_full

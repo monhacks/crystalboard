@@ -2240,6 +2240,11 @@ wBugContestSecsRemaining:: db
 
 wMapStatusEnd::
 
+wTurnData::
+wDieRoll:: db
+wSpacesLeft:: db
+wTurnDataEnd::
+
 wGameData::
 wPlayerData::
 wPlayerID:: dw

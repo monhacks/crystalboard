@@ -9,6 +9,7 @@ DEF AUTO_INPUT EQU $ff
 ; wDisplaySecondarySprites
 	const_def
 	const SECONDARYSPRITES_BOARD_MENU_F	; 0
+	const SECONDARYSPRITES_DIE_ROLL_F   ; 1
 
 ; wCurDexMode::
 	const_def
