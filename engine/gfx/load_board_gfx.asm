@@ -9,7 +9,7 @@ LoadBoardMenuGFX::
 	call Get2bppViaHDMA
 	ld de, .DieRollOAMGFX
 	ld hl, vTiles0 + DIE_ROLL_OAM_FIRST_TILE * LEN_2BPP_TILE
-	lb bc, BANK(.BoardMenuOAMGFX), DIE_SIZE * 10
+	lb bc, BANK(.DieRollOAMGFX), DIE_SIZE * 10
 	call Get2bppViaHDMA
 	ret
 
@@ -27,3 +27,14 @@ INCBIN "gfx/board/menu_exit.2bpp"
 
 .DieRollOAMGFX:
 INCBIN "gfx/board/die_roll.2bpp"
+
+LoadBoardMenuDieNumbersGFX::
+	ld de, .DieNumbersOAMGFX
+; overwrite in vTiles0 the no-longer-needed BoardMenuOAMGFX, but keep DieRollOAMGFX
+	ld hl, vTiles0 + DIE_NUMBERS_OAM_FIRST_TILE * LEN_2BPP_TILE
+	lb bc, BANK(.DieNumbersOAMGFX), DIE_NUMBER_SIZE * 10
+	call Get2bppViaHDMA
+	ret
+
+.DieNumbersOAMGFX:
+INCBIN "gfx/board/die_numbers.2bpp"

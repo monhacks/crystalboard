@@ -132,6 +132,7 @@ INCLUDE "engine/pokemon/print_move_description.asm"
 INCLUDE "engine/events/pokerus/pokerus.asm"
 INCLUDE "engine/battle/start_battle.asm"
 INCLUDE "engine/gfx/place_graphic.asm"
+INCLUDE "engine/battle/battle_transition.asm"
 
 
 SECTION "Effect Commands", ROMX
@@ -273,7 +274,6 @@ INCLUDE "engine/events/dratini.asm"
 SECTION "bank23", ROMX
 
 INCLUDE "engine/tilesets/timeofday_pals.asm"
-INCLUDE "engine/battle/battle_transition.asm"
 INCLUDE "engine/events/field_moves.asm"
 INCLUDE "engine/events/magnet_train.asm"
 INCLUDE "engine/sprite_anims/core.asm"

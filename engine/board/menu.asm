@@ -226,6 +226,71 @@ DIE_MAX_NUMBER EQU 6
 	ld [wScriptVar], a
 	ret
 
+BoardMenu_BreakDieAnimation:
+	farcall LoadBoardMenuDieNumbersGFX
+	ld a, [wDieRoll]
+	dec a
+	add a
+	ld c, a
+	ld a, SPRITE_ANIM_DICT_BOARD_MENU
+	ld hl, wSpriteAnimDict ; wSpriteAnimDict[0]
+	ld [hli], a
+	ld a, DIE_ROLL_OAM_FIRST_TILE
+	add c
+	ld [hli], a
+	xor a ; SPRITE_ANIM_DICT_DEFAULT
+	ld [hli], a ; wSpriteAnimDict[1]
+	ld a, DIE_NUMBERS_OAM_FIRST_TILE
+	add c
+	ld [hl], a
+
+; initialize break die animation
+	depixel 8, 10, 0, 0
+	ld a, SPRITE_ANIM_OBJ_BOARD_MENU_BREAK_DIE
+	call InitSpriteAnimStruct
+
+; initialize appear die number animation, but only if there is enough
+; OAM space without pushing aside some NPC (aesthetic failsafe).
+	ldh a, [hUsedSpriteIndex]
+	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (4 * SPRITEOAMSTRUCT_LENGTH) + 1
+	jr nc, .anims_initialized
+	depixel 8, 10, 0, 0
+	ld a, SPRITE_ANIM_OBJ_BOARD_MENU_APPEAR_DIE_NUMBER
+	call InitSpriteAnimStruct
+
+.anims_initialized
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_DIE_ROLL_F, [hl]
+
+	ld hl, wVramState
+	set 2, [hl] ; do not clear wShadowOAM during DoNextFrameForAllSprites
+; animation plays above NPCs so draw the graphics at the beginning of OAM.
+; begin placing NPC sprites in OAM after all objects allocated to animations.
+	ld a, [wSpriteAnim2Index]
+	and a
+	ld a, $8 * SPRITEOAMSTRUCT_LENGTH ; with SPRITE_ANIM_OBJ_BOARD_MENU_APPEAR_DIE_NUMBER
+	jr nz, .go
+	ld a, $4 * SPRITEOAMSTRUCT_LENGTH ; w/o SPRITE_ANIM_OBJ_BOARD_MENU_APPEAR_DIE_NUMBER
+	ldh [hUsedSpriteIndex], a
+.go
+	farcall _UpdateSpritesAfterOffset
+
+	ld a, 44 ; total duration of SPRITE_ANIM_FRAMESET_BOARD_MENU_BREAK_DIE
+	ld [wFrameCounter], a
+.loop
+	farcall PlaySpriteAnimationsAndDelayFrame
+	ld hl, wFrameCounter
+	ld a, [hl]
+	and a
+	jr z, .done
+	dec [hl]
+	jr .loop
+
+.done
+	ld hl, wVramState
+	res 2, [hl]
+	ret
+
 BoardMenu_Party:
 	ld a, [wPartyCount]
 	and a
@@ -245,9 +310,6 @@ BoardMenu_Party:
 	call BoardMenu_CloseSubmenu
 	ld a, HMENURETURN_SCRIPT
 	ldh [hMenuReturn], a
-	ret
-
-BoardMenu_BreakDieAnimation:
 	ret
 
 BoardMenu_Pack:

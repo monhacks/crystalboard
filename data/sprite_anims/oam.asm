@@ -163,6 +163,11 @@ SpriteAnimOAMData:
 	spriteanimoam $14, .OAMData_RedWalkRight             ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_MALE_RIGHT_2
 	spriteanimoam $08, .OAMData_BlueWalkRight            ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_RIGHT_1
 	spriteanimoam $14, .OAMData_BlueWalkRight            ; SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_RIGHT_2
+	spriteanimoam $00, .OAMData_BreakDie1                ; SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_1
+	spriteanimoam $00, .OAMData_BreakDie2                ; SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_2
+	spriteanimoam $00, .OAMData_BreakDie3                ; SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_3
+	spriteanimoam $00, .OAMData_BreakDie4                ; SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_4
+	spriteanimoam $00, .OAMData_AppearDieNumber          ; SPRITE_ANIM_OAMSET_BOARD_MENU_APPEAR_DIE_NUMBER
 
 	assert_table_length NUM_SPRITE_ANIM_OAMSETS
 
@@ -630,6 +635,41 @@ SpriteAnimOAMData:
 	dbsprite  1, -1,  0,  0, $01, PAL_OW_TREE
 	dbsprite -2,  0,  0,  0, $02, PAL_OW_TREE
 	dbsprite  1,  0,  0,  0, $03, PAL_OW_TREE
+
+.OAMData_BreakDie1:
+	db 4
+	dbsprite -1, -1,  0,  0, $00, PAL_OW_MISC
+	dbsprite  0, -1,  0,  0, $01, PAL_OW_MISC
+	dbsprite -1,  0,  0,  0, $14, PAL_OW_MISC
+	dbsprite  0,  0,  0,  0, $15, PAL_OW_MISC
+
+.OAMData_BreakDie2:
+	db 4
+	dbsprite -2, -1,  6,  0, $00, PAL_OW_MISC
+	dbsprite  0, -1,  2,  0, $01, PAL_OW_MISC
+	dbsprite -2,  0,  6,  0, $14, PAL_OW_MISC
+	dbsprite  0,  0,  2,  0, $15, PAL_OW_MISC
+
+.OAMData_BreakDie3:
+	db 4
+	dbsprite -2, -1,  4,  0, $00, PAL_OW_MISC
+	dbsprite  0, -1,  4,  0, $01, PAL_OW_MISC
+	dbsprite -2,  0,  4,  0, $14, PAL_OW_MISC
+	dbsprite  0,  0,  4,  0, $15, PAL_OW_MISC
+
+.OAMData_BreakDie4:
+	db 4
+	dbsprite -2, -1,  0,  0, $00, PAL_OW_MISC
+	dbsprite  1, -1,  0,  0, $01, PAL_OW_MISC
+	dbsprite -2,  0,  0,  0, $14, PAL_OW_MISC
+	dbsprite  1,  0,  0,  0, $15, PAL_OW_MISC
+
+.OAMData_AppearDieNumber:
+	db 4
+	dbsprite -1, -1,  0,  0, $00, PAL_OW_MISC
+	dbsprite  0, -1,  0,  0, $01, PAL_OW_MISC
+	dbsprite -1,  0,  0,  0, $14, PAL_OW_MISC
+	dbsprite  0,  0,  0,  0, $15, PAL_OW_MISC
 
 .OAMData_GSIntroHoOhLugia1:
 	db 19

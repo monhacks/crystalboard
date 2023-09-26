@@ -2754,12 +2754,19 @@ ResetObject:
 	db SPRITEMOVEDATA_STANDING_LEFT
 	db SPRITEMOVEDATA_STANDING_RIGHT
 
+_UpdateSpritesAfterOffset::
+	ld a, [wVramState]
+	bit 0, a
+	ret z
+	jr _UpdateSprites.go
+
 _UpdateSprites::
 	ld a, [wVramState]
 	bit 0, a
 	ret z
 	xor a
 	ldh [hUsedSpriteIndex], a
+.go
 	ldh a, [hOAMUpdate]
 	push af
 	ld a, 1

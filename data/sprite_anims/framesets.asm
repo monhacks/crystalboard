@@ -75,6 +75,9 @@ SpriteAnimFrameData:
 	dw .Frameset_LevelSelectionMenuFemaleWalkLeft
 	dw .Frameset_LevelSelectionMenuMaleWalkRight
 	dw .Frameset_LevelSelectionMenuFemaleWalkRight
+	dw .Frameset_BoardMenuBreakDie
+	dw .Frameset_BoardMenuAppearDieNumber
+	dw .Frameset_BoardMenuMoveDieNumber
 	assert_table_length NUM_SPRITE_ANIM_FRAMESETS
 
 .Frameset_00:
@@ -561,3 +564,23 @@ SpriteAnimFrameData:
 	oamframe SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_RIGHT_1,  6, OAM_X_FLIP
 	oamframe SPRITE_ANIM_OAMSET_LEVEL_SELECTION_MENU_FEMALE_RIGHT_2,  6, OAM_X_FLIP
 	oamrestart
+
+.Frameset_BoardMenuBreakDie:
+	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_1, 2
+	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_2, 6
+	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_3, 6
+	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_4, 6
+	oamwait 2
+	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_4, 6
+	oamwait 2
+	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_4, 6
+	oamwait 2
+	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_4, 6
+	oamdelete
+
+.Frameset_BoardMenuAppearDieNumber:
+	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_APPEAR_DIE_NUMBER, 44
+	oamdelete
+
+.Frameset_BoardMenuMoveDieNumber:
+	oamdelete
