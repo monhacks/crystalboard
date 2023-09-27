@@ -167,7 +167,7 @@ SpriteAnimOAMData:
 	spriteanimoam $00, .OAMData_BreakDie2                ; SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_2
 	spriteanimoam $00, .OAMData_BreakDie3                ; SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_3
 	spriteanimoam $00, .OAMData_BreakDie4                ; SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_4
-	spriteanimoam $00, .OAMData_AppearDieNumber          ; SPRITE_ANIM_OAMSET_BOARD_MENU_APPEAR_DIE_NUMBER
+	spriteanimoam $00, .OAMData_DieNumber                ; SPRITE_ANIM_OAMSET_BOARD_MENU_DIE_NUMBER
 
 	assert_table_length NUM_SPRITE_ANIM_OAMSETS
 
@@ -664,7 +664,7 @@ SpriteAnimOAMData:
 	dbsprite -2,  0,  0,  0, $14, PAL_OW_MISC
 	dbsprite  1,  0,  0,  0, $15, PAL_OW_MISC
 
-.OAMData_AppearDieNumber:
+.OAMData_DieNumber:
 	db 4
 	dbsprite -1, -1,  0,  0, $00, PAL_OW_MISC
 	dbsprite  0, -1,  0,  0, $01, PAL_OW_MISC

@@ -53,8 +53,6 @@ DoSpriteAnimFrame:
 	dw SpriteAnimFunc_LevelSelectionMenuWalkUp
 	dw SpriteAnimFunc_LevelSelectionMenuWalkLeft
 	dw SpriteAnimFunc_LevelSelectionMenuWalkRight
-	dw SpriteAnimFunc_BoardMenuBreakDie
-	dw SpriteAnimFunc_BoardMenuAppearDieNumber
 	dw SpriteAnimFunc_BoardMenuMoveDieNumber
 	assert_table_length NUM_SPRITE_ANIM_FUNCS
 
@@ -880,13 +878,43 @@ SpriteAnimFunc_LevelSelectionMenuWalkRight:
 	inc [hl]
 	ret
 
-SpriteAnimFunc_BoardMenuBreakDie:
-	ret
-
-SpriteAnimFunc_BoardMenuAppearDieNumber:
-	ret
-
 SpriteAnimFunc_BoardMenuMoveDieNumber:
+	ld hl, SPRITEANIMSTRUCT_YCOORD
+	add hl, bc
+	ld a, [hl]
+; 10 frames
+	ld e, 2
+	ld d, 0
+	cp 44 + 2
+	jr nc, .move
+; 2 frames
+	ld e, 2
+	ld d, 1
+	cp 40 + 1
+	jr nc, .move
+; 2 frames
+	ld e, 1
+	ld d, 1
+	cp 38 + 1
+	jr nc, .move
+; 2 frames
+	ld e, 1
+	ld d, 2
+	cp 36 + 1
+	jr nc, .move
+; 26 frames
+	ld e, 0
+	ld d, 2
+.move
+	sub e
+	ld [hl], a
+	ld hl, SPRITEANIMSTRUCT_XCOORD
+	add hl, bc
+	ld a, [hl]
+	cp 20 + 1
+	ret c
+	sub d
+	ld [hl], a
 	ret
 
 LevelSelectionMenuHandleTransition:

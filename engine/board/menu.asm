@@ -221,7 +221,6 @@ DIE_MAX_NUMBER EQU 6
 	ret
 
 .confirm_roll
-	call PlayClickSFX
 	ld a, TRUE
 	ld [wScriptVar], a
 	ret
@@ -275,20 +274,53 @@ BoardMenu_BreakDieAnimation:
 .go
 	farcall _UpdateSpritesAfterOffset
 
-	ld a, 44 ; total duration of SPRITE_ANIM_FRAMESET_BOARD_MENU_BREAK_DIE
+	ld de, SFX_STRENGTH
+	call PlaySFX
+
+; play break die and appear die number animations
+	ld a, 61 ; total duration of SPRITE_ANIM_FRAMESET_BOARD_MENU_BREAK_DIE.
+	         ; the total duration is the sum of all durations in the frameset
+	         ; plus one for each oam* entry in the frameset.
 	ld [wFrameCounter], a
-.loop
+.loop1
+	farcall PlaySpriteAnimationsAndDelayFrame
+	ld hl, wFrameCounter
+	ld a, [hl]
+	and a
+	jr z, .next
+	dec [hl]
+	jr .loop1
+
+.next
+; initialize move die number animation
+	depixel 8, 10, 0, 0
+	ld a, SPRITE_ANIM_OBJ_BOARD_MENU_MOVE_DIE_NUMBER
+	call InitSpriteAnimStruct
+
+	ld a, $4 * SPRITEOAMSTRUCT_LENGTH
+	ldh [hUsedSpriteIndex], a
+	farcall _UpdateSpritesAfterOffset
+
+; play move die number animation
+	ld a, 41 ; total duration of SPRITE_ANIM_FRAMESET_BOARD_MENU_MOVE_DIE_NUMBER
+	ld [wFrameCounter], a
+.loop2
 	farcall PlaySpriteAnimationsAndDelayFrame
 	ld hl, wFrameCounter
 	ld a, [hl]
 	and a
 	jr z, .done
 	dec [hl]
-	jr .loop
+	jr .loop2
 
 .done
 	ld hl, wVramState
 	res 2, [hl]
+	ld hl, wDisplaySecondarySprites
+	set SECONDARYSPRITES_SPACES_LEFT_F, [hl]
+	ld a, [wDieRoll]
+	ld [wSpacesLeft], a
+	call UpdateSprites
 	ret
 
 BoardMenu_Party:
