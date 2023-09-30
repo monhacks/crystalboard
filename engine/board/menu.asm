@@ -303,7 +303,7 @@ BoardMenu_BreakDieAnimation:
 	farcall _UpdateSpritesAfterOffset
 
 ; play move die number animation
-	ld a, 41 ; total duration of SPRITE_ANIM_FRAMESET_BOARD_MENU_MOVE_DIE_NUMBER
+	ld a, 43 ; total duration of SPRITE_ANIM_FRAMESET_BOARD_MENU_MOVE_DIE_NUMBER
 	ld [wFrameCounter], a
 .loop2
 	farcall PlaySpriteAnimationsAndDelayFrame

@@ -584,5 +584,5 @@ SpriteAnimFrameData:
 	oamdelete
 
 .Frameset_BoardMenuMoveDieNumber:
-	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_DIE_NUMBER, 40
+	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_DIE_NUMBER, 42
 	oamdelete
