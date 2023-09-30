@@ -13,8 +13,8 @@
 StartMenu::
 	call ClearMenuAndWindowData
 
-	ld hl, wTextboxFlags
-	res TEXT_2BPP_F, [hl]
+	ld a, FALSE
+	ld [wText2bpp], a
 
 	ld de, SFX_MENU
 	call PlaySFX

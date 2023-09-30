@@ -1934,8 +1934,8 @@ ReloadTilesetAndPalettes::
 	call DisableLCD
 	call ClearSprites
 	farcall RefreshSprites
-	ld a, [wTextboxFlags]
-	bit TEXT_2BPP_F, a
+	ld a, [wText2bpp]
+	and a
 	jr nz, .2bpp
 	call LoadStandardFont
 	call LoadFrame

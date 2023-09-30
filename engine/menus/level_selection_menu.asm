@@ -132,6 +132,7 @@ LevelSelectionMenu::
 	ld [wMusicFadeID + 1], a
 	call ClearBGPalettes
 	call ClearTilemap
+	farcall ClearSpriteAnims
 	call ClearSprites
 	xor a
 	ld [wVramState], a
@@ -149,7 +150,7 @@ LevelSelectionMenu::
 	ld a, PLAYER_NORMAL
 	ld [wPlayerState], a ; this may need to be set on a per-level basis (e.g. if specific level starts with player in surf state)
 	ld hl, wGameTimerPaused
-	set GAME_TIMER_PAUSED_F, [hl] ; start game timer counter
+	set GAME_TIMER_COUNTING_F, [hl] ; start game timer counter
 	farcall OverworldLoop
 	ret
 
@@ -161,6 +162,7 @@ LevelSelectionMenu::
 	call LevelSelectionMenu_Delay10Frames
 	call ClearBGPalettes
 	call ClearTilemap
+	farcall ClearSpriteAnims
 	call ClearSprites
 	xor a
 	ld [wVramState], a

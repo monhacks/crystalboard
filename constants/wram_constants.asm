@@ -28,8 +28,7 @@ DEF AUTO_INPUT EQU $ff
 	const WILDMON    ; 4
 
 ; wGameTimerPaused::
-DEF GAME_TIMER_PAUSED_F EQU 0
-DEF GAME_TIMER_MOBILE_F EQU 7
+DEF GAME_TIMER_COUNTING_F EQU 0
 
 ; wJoypadDisable::
 DEF JOYPAD_DISABLE_MON_FAINT_F    EQU 6
@@ -63,7 +62,6 @@ DEF NUM_FRAMES EQU const_value
 	const_def
 	const FAST_TEXT_DELAY_F ; 0
 	const TEXT_DELAY_F      ; 1
-	const TEXT_2BPP_F       ; 2
 
 ; wGBPrinterBrightness::
 DEF GBPRINTER_LIGHTEST EQU $00
@@ -177,10 +175,6 @@ DEF SCRIPT_RUNNING EQU 2
 	const SCRIPT_READ
 	const SCRIPT_WAIT_MOVEMENT
 	const SCRIPT_WAIT
-
-; wSpawnAfterChampion::
-DEF SPAWN_LANCE EQU 1
-DEF SPAWN_RED   EQU 2
 
 ; wCurDay::
 	const_def

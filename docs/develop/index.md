@@ -31,7 +31,7 @@
 - **PrintText1bpp**, **FarPrintText1bpp**: SpeechTextbox1bpp + UpdateSprites + ApplyTilemap + ClearTextbox + PrintTextboxText
 - **PrintText2bpp**: SpeechTextbox2bpp + UpdateSprites + ApplyTilemap + ClearTextbox + PrintTextboxText
 - **MapTextbox**: ClearTextbox + redraw tile behind cursor + SafeUpdateSprites + disable OAM update + ApplyTilemap + PrintTextboxText + enable OAM update
-- **MenuBox**: Calls Textbox1bpp or Textbox2bpp, depending on the value at wTextboxFlags[TEXT_2BPP_F], with menu location and dimensions.
+- **MenuBox**: Calls Textbox1bpp or Textbox2bpp, depending on the value of wText2bpp, with menu location and dimensions.
 
 #### Overworld map scrolling
 

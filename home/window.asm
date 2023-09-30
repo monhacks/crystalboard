@@ -46,8 +46,8 @@ OpenText2bpp::
 	ld a, BANK(ReanchorBGMap_NoOAMUpdate)
 	rst Bankswitch
 
-	ld hl, wTextboxFlags
-	set TEXT_2BPP_F, [hl]
+	ld a, TRUE
+	ld [wText2bpp], a
 
 	; assumes that the overworld 2bpp font and frame are loaded when calling this
 	call ReanchorBGMap_NoOAMUpdate ; anchor bgmap
@@ -68,8 +68,8 @@ OpenText1bpp::
 	rst Bankswitch
 
 	; note: 1bpp text is NOT compatible with the overworld HUD enabled because it uses 2bpp font tiles.
-	ld hl, wTextboxFlags
-	res TEXT_2BPP_F, [hl]
+	ld a, FALSE
+	ld [wText2bpp], a
 
 	call ReanchorBGMap_NoOAMUpdate ; anchor bgmap
 	call SpeechTextbox1bpp

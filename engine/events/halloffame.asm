@@ -7,8 +7,6 @@ HallOfFame::
 	ld a, 1
 	ld [wGameLogicPaused], a
 	call DisableSpriteUpdates
-	ld a, SPAWN_LEVEL_1
-	ld [wSpawnAfterChampion], a
 
 	; Enable the Pokégear map to cycle through all of Kanto
 	ld hl, wStatusFlags
@@ -49,8 +47,6 @@ RedCredits::
 	ld c, 8
 	call DelayFrames
 	call DisableSpriteUpdates
-	ld a, SPAWN_LEVEL_1
-	ld [wSpawnAfterChampion], a
 	ld a, [wStatusFlags]
 	ld b, a
 	farcall Credits

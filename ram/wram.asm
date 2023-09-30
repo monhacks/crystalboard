@@ -1231,6 +1231,19 @@ wOBP1:: db
 
 wNumHits:: db
 
+; Time buffer, for counting the amount of time since
+; an event began.
+wSecondsSince:: db
+wMinutesSince:: db
+wHoursSince:: db
+wDaysSince:: db
+
+wText2bpp:: db
+
+wWhichHUD::
+; index to LoadHUD
+	db
+
 wOptions::
 ; bit 0-2: number of frames to delay when printing text
 ;   fast 1; mid 3; slow 5
@@ -1261,17 +1274,6 @@ wOptions2::
 ; bit 1: menu account off/on
 	db
 wOptionsEnd::
-
-; Time buffer, for counting the amount of time since
-; an event began.
-wSecondsSince:: db
-wMinutesSince:: db
-wHoursSince:: db
-wDaysSince:: db
-
-wWhichHUD::
-; index to LoadHUD
-	db
 
 
 SECTION "WRAM 1", WRAMX
@@ -2257,7 +2259,6 @@ wPlayerGender::
 
 wSavedAtLeastOnce:: db
 wSaveFileInOverworld:: db
-wSpawnAfterChampion:: db
 
 ; init time set at newgame
 wStartDay::    db
@@ -2437,8 +2438,6 @@ wDailyResetTimer:: dw
 wDailyFlags1:: db
 wDailyFlags2:: db
 wSwarmFlags:: db
-
-wTimerEventStartDay:: db
 
 wFruitTreeFlags:: flag_array NUM_FRUIT_TREES
 

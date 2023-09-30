@@ -1,7 +1,3 @@
-_InitializeStartDay:
-	call InitializeStartDay
-	ret
-
 ClearDailyTimers::
 	xor a
 	ld [wLuckyNumberDayTimer], a
@@ -63,7 +59,8 @@ InitOneDayCountdown:
 InitNDaysCountdown:
 	ld [hl], a
 	inc hl ; wLuckyNumberDayTimer + 1 or wDailyResetTimer + 1 (both are dw)
-	call CopyDayToHL
+	ld a, [wCurDay]
+	ld [hl], a
 	ret
 
 CheckDayDependentEventHL:
@@ -147,13 +144,8 @@ CheckBugContestTimer::
 	scf
 	ret
 
-InitializeStartDay:
-	ld hl, wTimerEventStartDay
-	call CopyDayToHL
-	ret
-
 CheckPokerusTick::
-	ld hl, wTimerEventStartDay
+	ld hl, .Day0
 	call CalcDaysSince
 	call GetDaysSince
 	and a
@@ -163,6 +155,9 @@ CheckPokerusTick::
 .done
 	xor a
 	ret
+
+.Day0:
+	db 0
 
 RestartLuckyNumberCountdown:
 	call .GetDaysUntilNextFriday
@@ -302,11 +297,6 @@ CopyHourMinSecToHL:
 	ld [hli], a
 	ld a, [wGameTimeSeconds]
 	ld [hli], a
-	ret
-
-CopyDayToHL:
-	ld a, [wCurDay]
-	ld [hl], a
 	ret
 
 CopyHourMinToHL:

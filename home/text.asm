@@ -167,8 +167,8 @@ Textbox2bpp::
 
 SpeechTextbox:
 ; Standard 1bpp or 2bpp textbox according to wTextboxFlags[TEXT_2BPP_F]
-	ld a, [wTextboxFlags]
-	bit TEXT_2BPP_F, a
+	ld a, [wText2bpp]
+	and a
 	jr z, SpeechTextbox1bpp
 	jr SpeechTextbox2bpp
 

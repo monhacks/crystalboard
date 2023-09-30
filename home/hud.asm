@@ -120,7 +120,7 @@ endr
 
 ConstructAndEnableOverworldHUD::
 ; map setup command used by MAPSETUP_ENTERLEVEL and MAPSETUP_CONTINUE
-	ld hl, wTextboxFlags
-	set TEXT_2BPP_F, [hl]
+	ld a, TRUE
+	ld [wText2bpp], a
 	call ConstructOverworldHUDTilemap
 	jp EnableOverworldHUD

@@ -22,6 +22,36 @@ SaveMenu:
 	scf
 	ret
 
+AutoSaveGameInOverworld:
+	call PauseGameLogic
+	; Prevent joypad interrupts
+	xor a
+	ldh [hJoypadReleased], a
+	ldh [hJoypadPressed], a
+	ldh [hJoypadSum], a
+	ldh [hJoypadDown], a
+	; Signal that we're saving inside a level
+	ld a, TRUE
+	ld [wSaveFileInOverworld], a
+	call SaveGameData
+	call ResumeGameLogic
+	ret
+
+AutoSaveGameOutsideOverworld:
+	call PauseGameLogic
+	; Prevent joypad interrupts
+	xor a
+	ldh [hJoypadReleased], a
+	ldh [hJoypadPressed], a
+	ldh [hJoypadSum], a
+	ldh [hJoypadDown], a
+	; Signal that we're not saving inside a level
+	xor a ; FALSE
+	ld [wSaveFileInOverworld], a
+	call SaveGameData
+	call ResumeGameLogic
+	ret
+
 SaveAfterLinkTrade:
 	call PauseGameLogic
 	call SavePokemonData
@@ -166,10 +196,6 @@ AddHallOfFameEntry:
 		"MOBILE_EVENT_OBJECT_GS_BALL is no longer equal to $0b."
 	ret
 
-SaveGameData:
-	call _SaveGameData
-	ret
-
 AskOverwriteSaveFile:
 	ld a, [wSaveFileExists]
 	and a
@@ -230,7 +256,9 @@ CompareLoadedAndSavedPlayerID:
 _SavingDontTurnOffThePower:
 	call SavingDontTurnOffThePower
 SavedTheGame:
-	call _SaveGameData
+	ld a, TRUE
+	ld [wSaveFileInOverworld], a
+	call SaveGameData
 	; wait 32 frames
 	ld c, 32
 	call DelayFrames
@@ -254,7 +282,7 @@ SavedTheGame:
 	call DelayFrames
 	ret
 
-_SaveGameData:
+SaveGameData:
 	ld a, TRUE
 	ld [wSaveFileExists], a
 	call ValidateSave

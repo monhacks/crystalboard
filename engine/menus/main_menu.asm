@@ -1,25 +1,29 @@
 	; MainMenuItems indexes
 	const_def
-	const MAINMENU_NEW_GAME               ; 0
-	const MAINMENU_CONTINUE               ; 1
+	const MAINMENU_NEW_GAME        ; 0
+	const MAINMENU_CONTINUE        ; 1
 
 	; MainMenu.Strings and MainMenu.Jumptable indexes
 	const_def
-	const MAINMENUITEM_CONTINUE       ; 0
-	const MAINMENUITEM_NEW_GAME       ; 1
-	const MAINMENUITEM_OPTION         ; 2
-	const MAINMENUITEM_DEBUG_ROOM     ; 3
+	const MAINMENUITEM_CONTINUE    ; 0
+	const MAINMENUITEM_NEW_GAME    ; 1
+	const MAINMENUITEM_OPTION      ; 2
+	const MAINMENUITEM_DEBUG_ROOM  ; 3
 
 MainMenu:
 .loop
 	xor a
 	ld [wDisableTextAcceleration], a
-	call ClearTilemapEtc
+	ldh [hMapAnims], a
+	call ClearTilemap
+	call LoadFrame
+	call LoadStandardFont
+	call ClearMenuAndWindowData
 	ld b, CGB_DIPLOMA
 	call GetCGBLayout
 	call SetPalettes
 	ld hl, wGameTimerPaused
-	res GAME_TIMER_PAUSED_F, [hl]
+	res GAME_TIMER_COUNTING_F, [hl]
 	call MainMenu_GetWhichMenu
 	ld [wWhichIndexSet], a
 	call MainMenu_PrintCurrentTimeAndDay
@@ -88,9 +92,6 @@ endc
 	db -1
 
 MainMenu_GetWhichMenu:
-	nop
-	nop
-	nop
 	ld a, [wSaveFileExists]
 	and a
 	jr nz, .next
@@ -206,25 +207,16 @@ MainMenu_PrintCurrentTimeAndDay:
 	db "NITE@"
 	db "EVE@"
 
-ClearTilemapEtc:
-	xor a
-	ldh [hMapAnims], a
-	call ClearTilemap
-	call LoadFrame
-	call LoadStandardFont
-	call ClearMenuAndWindowData
-	ret
-
 MainMenu_NewGame:
-	farcall NewGame
+	call NewGame
 	ret
 
 MainMenu_Option:
-	farcall Option
+	call Option
 	ret
 
 MainMenu_Continue:
-	farcall Continue
+	call Continue
 	ret
 
 if DEF(_DEBUG)

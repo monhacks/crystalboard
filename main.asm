@@ -1,9 +1,12 @@
 SECTION "bank1", ROMX
 
+INCLUDE "engine/menus/titlescreen.asm"
+INCLUDE "engine/menus/main_menu.asm"
+INCLUDE "engine/menus/intro_menu.asm"
+INCLUDE "engine/menus/game_menu.asm"
 INCLUDE "engine/link/place_waiting_text.asm"
 INCLUDE "engine/gfx/load_push_oam.asm"
 INCLUDE "engine/overworld/map_objects.asm"
-INCLUDE "engine/menus/intro_menu.asm"
 INCLUDE "engine/overworld/init_map.asm"
 INCLUDE "engine/pokemon/learn.asm"
 INCLUDE "engine/pokemon/correct_nick_errors.asm"
@@ -176,7 +179,6 @@ INCLUDE "engine/items/pack_kris.asm"
 INCLUDE "engine/events/move_tutor.asm"
 INCLUDE "engine/gfx/crystal_layouts.asm"
 INCLUDE "engine/events/celebi.asm"
-INCLUDE "engine/menus/main_menu.asm"
 INCLUDE "engine/pokemon/search_owned.asm"
 INCLUDE "engine/events/buena_menu.asm"
 

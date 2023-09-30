@@ -2428,14 +2428,14 @@ CheckObjectCoveredByTextbox:
 	jr c, .object_not_in_textbox
 
 ;.object_in_textbox
-	ld a, [wTextboxFlags]
-	bit TEXT_2BPP_F, a
+	ld a, [wText2bpp]
+	and a
 	jr z, .disappear
 	jr .ok8
 
 .object_not_in_textbox
-	ld a, [wTextboxFlags]
-	bit TEXT_2BPP_F, a
+	ld a, [wText2bpp]
+	and a
 	jr nz, .not_disappear
 
 .ok8
@@ -2453,8 +2453,8 @@ CheckObjectCoveredByTextbox:
 ; if we managed make it here without returning early, there are only two options:
 ; - if 1bpp text, the sprite is wholly outside of a textbox
 ; - if 2bpp text, the sprite is wholly inside a textbox
-	ld a, [wTextboxFlags]
-	bit TEXT_2BPP_F, a
+	ld a, [wText2bpp]
+	and a
 	jr z, .not_disappear
 
 .disappear

@@ -13,7 +13,9 @@ OverworldLoop::
 .done
 	call DisableOverworldHUD
 	ld hl, wGameTimerPaused
-	res GAME_TIMER_PAUSED_F, [hl] ; stop game timer counter
+	res GAME_TIMER_COUNTING_F, [hl] ; stop game timer counter
+	ld a, FALSE
+	ld [wText2bpp], a
 	ret
 
 .Jumptable:

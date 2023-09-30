@@ -368,8 +368,8 @@ BoardMenu_OpenSubmenu:
 	call LoadStandardMenuHeader
 	farcall FadeOutPalettesToWhite
 	call DisableOverworldHUD
-	ld hl, wTextboxFlags
-	res TEXT_2BPP_F, [hl]
+	ld a, FALSE
+	ld [wText2bpp], a
 	call LoadStandardFont
 	call LoadFrame
 	call ClearSprites
@@ -378,8 +378,8 @@ BoardMenu_OpenSubmenu:
 
 BoardMenu_CloseSubmenu:
 	call ClearBGPalettes
-	ld hl, wTextboxFlags
-	set TEXT_2BPP_F, [hl]
+	ld a, TRUE
+	ld [wText2bpp], a
 	call EnableOverworldHUD
 	call ReloadTilesetAndPalettes
 	call UpdateSprites
