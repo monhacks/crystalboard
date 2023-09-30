@@ -202,7 +202,7 @@ DIE_MAX_NUMBER EQU 6
 	add DIE_MAX_NUMBER
 	add $1
 	ld [wDieRoll], a
-	farcall _UpdateSprites
+	farcall _UpdateSecondarySprites
 	call GetJoypad
 	ldh a, [hJoyPressed]
 	bit B_BUTTON_F, a
@@ -221,6 +221,7 @@ DIE_MAX_NUMBER EQU 6
 	ret
 
 .confirm_roll
+	call UpdateSprites
 	ld a, TRUE
 	ld [wScriptVar], a
 	ret
@@ -270,8 +271,8 @@ BoardMenu_BreakDieAnimation:
 	ld a, $8 * SPRITEOAMSTRUCT_LENGTH ; with SPRITE_ANIM_OBJ_BOARD_MENU_APPEAR_DIE_NUMBER
 	jr nz, .go
 	ld a, $4 * SPRITEOAMSTRUCT_LENGTH ; w/o SPRITE_ANIM_OBJ_BOARD_MENU_APPEAR_DIE_NUMBER
-	ldh [hUsedSpriteIndex], a
 .go
+	ldh [hUsedSpriteIndex], a
 	farcall _UpdateSpritesAfterOffset
 
 	ld de, SFX_STRENGTH

@@ -3078,6 +3078,35 @@ InitSprites:
 	dw wObject11Struct
 	dw wObject12Struct
 
+_UpdateSecondarySprites:
+; this is a shorter _UpdateSprites for when only secondary sprites have changed since the last sprites update,
+; but NOT expanded, which would require to displace primary (NPC) sprites in OAM.
+; if it is detected that the size of secondary sprites has increased in the end,
+; fall back to calling _UpdateSprites to avoid corruption.
+	ld a, [wVramState]
+	bit 0, a
+	ret z
+	ld a, [hUsedSpriteIndex]
+	push af
+
+	xor a
+	ldh [hUsedSpriteIndex], a
+.go
+	ldh a, [hOAMUpdate]
+	push af
+	ld a, 1
+	ldh [hOAMUpdate], a
+	call InitSecondarySprites
+	pop af
+	ldh [hOAMUpdate], a
+
+	ldh a, [hUsedSpriteIndex]
+	ld c, a
+	pop af
+	cp c
+	ret nc
+	jp _UpdateSprites
+
 InitSecondarySprites:
 	ld a, [wDisplaySecondarySprites]
 	bit SECONDARYSPRITES_BOARD_MENU_F, a
