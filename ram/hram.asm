@@ -7,11 +7,13 @@ hSRAMBank:: db
 
 hVBlankCounter:: db
 
+hOverworldDelay:: db
+hTextDelayFrames:: db
+hVBlankOccurred:: db
+
 hROMBank:: db
 hVBlank:: db
 hMapEntryMethod:: db
-
-hMenuReturn:: db
 
 hJoypadReleased:: db
 hJoypadPressed::  db
@@ -126,6 +128,8 @@ hBGMapTileCount:: db
 
 hMapAnims::      db
 hTileAnimFrame:: db
+
+hScriptVar:: db
 
 hLastTalked:: db
 

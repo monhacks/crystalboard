@@ -211,7 +211,7 @@ SlotsLoop:
 	ret
 
 .matching_sevens
-	ld a, [wTextDelayFrames]
+	ldh a, [hTextDelayFrames]
 	and $7
 	ret nz
 	ldh a, [rBGP]
@@ -1638,7 +1638,7 @@ Slots_InitBias:
 	and a
 	ret z
 	ld hl, .Normal
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	and a
 	jr z, .okay
 	ld hl, .Lucky

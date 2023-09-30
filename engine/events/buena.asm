@@ -24,7 +24,7 @@ BuenasPassword:
 
 .wrong
 	ld a, b
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .MenuHeader:

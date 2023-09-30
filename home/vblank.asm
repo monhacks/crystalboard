@@ -115,7 +115,7 @@ VBlank0::
 	; vblank-sensitive operations are done
 
 	xor a
-	ld [wVBlankOccurred], a
+	ldh [hVBlankOccurred], a
 
 	; if hWindowHUDLY is active, enable interrupts so the LCD interrupt can trigger
 	ldh a, [hWindowHUDLY]
@@ -141,18 +141,18 @@ VBlank0::
 	sbc b
 	ldh [hRandomSub], a
 
-	ld a, [wOverworldDelay]
+	ldh a, [hOverworldDelay]
 	and a
 	jr z, .ok
 	dec a
-	ld [wOverworldDelay], a
+	ldh [hOverworldDelay], a
 .ok
 
-	ld a, [wTextDelayFrames]
+	ldh a, [hTextDelayFrames]
 	and a
 	jr z, .ok2
 	dec a
-	ld [wTextDelayFrames], a
+	ldh [hTextDelayFrames], a
 .ok2
 
 	call UpdateJoypad
@@ -199,7 +199,7 @@ VBlank2::
 	rst Bankswitch
 
 	xor a
-	ld [wVBlankOccurred], a
+	ldh [hVBlankOccurred], a
 	ret
 
 VBlank1::
@@ -228,7 +228,7 @@ VBlank1::
 
 .done
 	xor a
-	ld [wVBlankOccurred], a
+	ldh [hVBlankOccurred], a
 
 	; get requested ints
 	ldh a, [rIF]
@@ -296,7 +296,7 @@ VBlank3::
 .done
 
 	xor a
-	ld [wVBlankOccurred], a
+	ldh [hVBlankOccurred], a
 
 	ldh a, [rIF]
 	push af
@@ -351,7 +351,7 @@ VBlank4::
 	call UpdateJoypad
 
 	xor a
-	ld [wVBlankOccurred], a
+	ldh [hVBlankOccurred], a
 
 	call AskSerial
 
@@ -385,7 +385,7 @@ VBlank5::
 .done
 
 	xor a
-	ld [wVBlankOccurred], a
+	ldh [hVBlankOccurred], a
 
 	call UpdateJoypad
 
@@ -433,7 +433,7 @@ VBlank6::
 .done
 
 	xor a
-	ld [wVBlankOccurred], a
+	ldh [hVBlankOccurred], a
 
 	ld a, BANK(_UpdateSound)
 	rst Bankswitch

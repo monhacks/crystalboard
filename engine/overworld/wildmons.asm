@@ -818,12 +818,12 @@ RandomUnseenWildMon:
 	ld hl, .JustSawSomeRareMonText
 	call PrintText2bpp
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .done
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .JustSawSomeRareMonText:

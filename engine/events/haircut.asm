@@ -2,14 +2,14 @@ BillsGrandfather:
 	farcall SelectMonFromParty
 	jr c, .cancel
 	ld a, [wCurPartySpecies]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld [wNamedObjectIndex], a
 	call GetPokemonName
 	jp CopyPokemonName_Buffer1_Buffer3
 
 .cancel
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 OlderHaircutBrother:
@@ -48,19 +48,19 @@ HaircutOrGrooming:
 .ok
 	inc hl
 	ld a, [hli]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld c, [hl]
 	call ChangeHappiness
 	ret
 
 .nope
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .egg
 	ld a, 1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 INCLUDE "data/events/happiness_probabilities.asm"

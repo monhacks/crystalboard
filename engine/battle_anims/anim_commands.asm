@@ -193,9 +193,9 @@ BattleAnimDelayFrame:
 ; Like DelayFrame but wastes battery life.
 
 	ld a, 1
-	ld [wVBlankOccurred], a
+	ldh [hVBlankOccurred], a
 .wait
-	ld a, [wVBlankOccurred]
+	ldh a, [hVBlankOccurred]
 	and a
 	jr nz, .wait
 	ret

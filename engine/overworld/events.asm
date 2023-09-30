@@ -100,7 +100,7 @@ CheckWildEncountersScriptFlag:
 
 StartMap:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	xor a
 	ld [wScriptRunning], a
 	ld hl, wMapStatus
@@ -179,11 +179,11 @@ MaxOverworldDelay:
 
 ResetOverworldDelay:
 	ld a, [MaxOverworldDelay]
-	ld [wOverworldDelay], a
+	ldh [hOverworldDelay], a
 	ret
 
 NextOverworldFrame:
-	ld a, [wOverworldDelay]
+	ldh a, [hOverworldDelay]
 	and a
 	ret z
 	ld c, a
@@ -806,7 +806,7 @@ PlayerMovementPointers:
 
 CheckMenuOW:
 	xor a
-	ldh [hMenuReturn], a
+	ld [wMenuReturn], a
 	ldh a, [hJoyPressed]
 
 	bit SELECT_F, a
@@ -843,9 +843,9 @@ SelectMenuScript:
 
 StartMenuCallback:
 SelectMenuCallback:
-	readmem hMenuReturn
-	ifequal HMENURETURN_SCRIPT, .Script
-	ifequal HMENURETURN_ASM, .Asm
+	readmem wMenuReturn
+	ifequal MENURETURN_SCRIPT, .Script
+	ifequal MENURETURN_ASM, .Asm
 	end
 
 .Script:

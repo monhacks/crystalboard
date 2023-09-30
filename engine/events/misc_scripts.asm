@@ -37,7 +37,7 @@ FindItemInBallScript::
 
 .TryReceiveItem:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld a, [wItemBallItemID]
 	ld [wNamedObjectIndex], a
 	call GetItemName
@@ -51,5 +51,5 @@ FindItemInBallScript::
 	call ReceiveItem
 	ret nc
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret

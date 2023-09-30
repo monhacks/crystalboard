@@ -206,7 +206,7 @@ Gen2ToGen2LinkComms:
 	call Link_PrepPartyData_Gen2
 	call FixDataForLinkTransfer
 	call CheckLinkTimeout_Gen2
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	and a
 	jp z, LinkTimeout
 	ldh a, [hSerialConnectionStatus]
@@ -1574,8 +1574,6 @@ ExitLinkCommunications:
 	call GetCGBLayout
 	call WaitBGMap2
 	xor a
-	ld [wUnusedLinkCommunicationByte], a
-	xor a
 	ldh [rSB], a
 	ldh [hSerialSend], a
 	ld a, (0 << rSC_ON) | (1 << rSC_CLOCK)
@@ -2041,7 +2039,7 @@ INCLUDE "engine/movie/trade_animation.asm"
 
 CheckTimeCapsuleCompatibility:
 ; Checks to see if your party is compatible with the Gen 1 games.
-; Returns the following in wScriptVar:
+; Returns the following in hScriptVar:
 ; 0: Party is okay
 ; 1: At least one Pokémon was introduced in Gen 2
 ; 2: At least one Pokémon has a move that was introduced in Gen 2
@@ -2117,7 +2115,7 @@ CheckTimeCapsuleCompatibility:
 	ld a, $3
 
 .done
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 GetIncompatibleMonName:
@@ -2299,12 +2297,12 @@ WaitForLinkedFriend:
 	ld c, 50
 	call DelayFrames
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .done
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 CheckLinkTimeout_Receptionist:
@@ -2323,13 +2321,13 @@ CheckLinkTimeout_Receptionist:
 	call Link_CheckCommunicationError
 	xor a
 	ldh [hVBlank], a
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	and a
 	ret nz
 	jp Link_ResetSerialRegistersAfterLinkClosure
 
 CheckLinkTimeout_Gen2:
-; if wScriptVar = 0 on exit, link connection is closed
+; if hScriptVar = 0 on exit, link connection is closed
 	ld a, $5
 	ld [wPlayerLinkAction], a
 	ld hl, wLinkTimeoutFrames
@@ -2343,7 +2341,7 @@ CheckLinkTimeout_Gen2:
 	call DelayFrame
 	call DelayFrame
 	call Link_CheckCommunicationError
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	and a
 	jr z, .exit
 
@@ -2380,7 +2378,7 @@ endc
 
 .timeout
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .exit
@@ -2412,7 +2410,7 @@ Link_CheckCommunicationError:
 	ld a, TRUE
 
 .done
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld hl, wLinkTimeoutFrames
 	xor a
 	ld [hli], a
@@ -2470,7 +2468,7 @@ TryQuickSave:
 	vc_hook Wireless_TryQuickSave_block_input_2
 	xor a ; FALSE
 .return_result
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld c, 30
 	call DelayFrames
 	pop af
@@ -2495,12 +2493,12 @@ CheckBothSelectedSameRoom:
 	xor a
 	ldh [hVBlank], a
 	ld a, TRUE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .fail
 	xor a ; FALSE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 TimeCapsule:
@@ -2598,7 +2596,7 @@ CableClubCheckWhichChris:
 	dec a ; FALSE
 
 .yes
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 GSLinkCommsBorderGFX: ; unreferenced

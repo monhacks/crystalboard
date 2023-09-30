@@ -77,7 +77,7 @@ SpecialKabutoChamber:
 	ret
 
 DisplayUnownWords:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld hl, MenuHeaders_UnownWalls
 	and a
 	jr z, .load
@@ -102,7 +102,7 @@ DisplayUnownWords:
 	ld e, SCREEN_WIDTH
 	add hl, de
 	add hl, de
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld c, a
 	ld de, UnownWalls
 	and a

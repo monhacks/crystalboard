@@ -1,5 +1,5 @@
 MagnetTrain:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	and a
 	jr nz, .ToGoldenrod
 	ld a, 1 ; forwards

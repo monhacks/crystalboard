@@ -80,7 +80,7 @@ CheckPartyFullAfterContest:
 	xor a
 	ld [wContestMonSpecies], a
 	and a ; BUGCONTEST_CAUGHT_MON
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .TryAddToBox:
@@ -139,12 +139,12 @@ CheckPartyFullAfterContest:
 	xor a
 	ld [wContestMon], a
 	ld a, BUGCONTEST_BOXED_MON
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .DidntCatchAnything:
 	ld a, BUGCONTEST_NO_CATCH
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 GiveANickname_YesNo:

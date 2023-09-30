@@ -50,7 +50,7 @@ CheckFruitTree:
 	ld b, 2
 	call GetFruitTreeFlag
 	ld a, c
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 PickedFruitTree:

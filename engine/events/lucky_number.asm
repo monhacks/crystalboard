@@ -1,6 +1,6 @@
 CheckForLuckyNumberWinners:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld [wTempByteValue], a
 	ld a, [wPartyCount]
 	and a
@@ -79,7 +79,7 @@ CheckForLuckyNumberWinners:
 	cp EGG
 	jr z, .SkipBoxMon
 
-	call .CompareLuckyNumberToMonID ; sets wScriptVar and wCurPartySpecies appropriately
+	call .CompareLuckyNumberToMonID ; sets hScriptVar and wCurPartySpecies appropriately
 	jr nc, .SkipBoxMon
 	ld a, TRUE
 	ld [wTempByteValue], a
@@ -100,7 +100,7 @@ CheckForLuckyNumberWinners:
 	jr c, .BoxesLoop
 
 	call CloseSRAM
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	and a
 	ret z ; found nothing
 
@@ -167,7 +167,7 @@ CheckForLuckyNumberWinners:
 
 .okay
 	inc b
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	and a
 	jr z, .bettermatch
 	cp b
@@ -176,7 +176,7 @@ CheckForLuckyNumberWinners:
 .bettermatch
 	dec b
 	ld a, b
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	pop bc
 	ld a, b
 	ld [wCurPartySpecies], a

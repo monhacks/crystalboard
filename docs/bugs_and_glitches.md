@@ -2304,7 +2304,7 @@ This is a bug with `HaircutOrGrooming` in [engine/events/haircut.asm](https://gi
 .ok
 	inc hl
 	ld a, [hli]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld c, [hl]
 	call ChangeHappiness
 	ret

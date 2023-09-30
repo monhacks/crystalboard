@@ -185,7 +185,7 @@ CheckPokeMail::
 	pop bc
 
 .return
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 GivePokeMail::

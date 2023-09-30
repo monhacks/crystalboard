@@ -303,12 +303,12 @@ CheckCaughtCelebi:
 	bit BATTLERESULT_CAUGHT_CELEBI, a
 	jr z, .false
 	ld a, TRUE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	jr .done
 
 .false
 	xor a ; FALSE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 
 .done
 	ret

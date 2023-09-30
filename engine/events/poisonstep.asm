@@ -142,7 +142,7 @@ DoPoisonStep::
 	jr nz, .party_loop
 	predef CheckPlayerPartyForFitMon
 	ld a, d
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .PoisonFaintText:

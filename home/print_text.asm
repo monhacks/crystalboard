@@ -44,7 +44,7 @@ PrintLetterDelay::
 	ld a, TEXT_DELAY_FAST
 
 .updatedelay
-	ld [wTextDelayFrames], a
+	ldh [hTextDelayFrames], a
 
 .checkjoypad
 	call GetJoypad
@@ -68,7 +68,7 @@ PrintLetterDelay::
 	jr .end
 
 .wait
-	ld a, [wTextDelayFrames]
+	ldh a, [hTextDelayFrames]
 	and a
 	jr nz, .checkjoypad
 

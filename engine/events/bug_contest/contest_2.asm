@@ -88,12 +88,12 @@ ContestDropOffMons:
 ; ... and replacing it with the terminator byte
 	ld [hl], -1
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .fainted
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 ContestReturnMons:

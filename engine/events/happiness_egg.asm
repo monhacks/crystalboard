@@ -13,7 +13,7 @@ GetFirstPokemonHappiness:
 .done
 	ld [wNamedObjectIndex], a
 	ld a, [hl]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	call GetPokemonName
 	jp CopyPokemonName_Buffer1_Buffer3
 
@@ -26,7 +26,7 @@ CheckFirstMonIsEgg:
 	xor a
 
 .egg
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	call GetPokemonName
 	jp CopyPokemonName_Buffer1_Buffer3
 

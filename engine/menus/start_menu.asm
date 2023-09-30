@@ -122,14 +122,14 @@ StartMenu::
 
 .ExitMenuRunScript:
 	call ExitMenu
-	ld a, HMENURETURN_SCRIPT
-	ldh [hMenuReturn], a
+	ld a, MENURETURN_SCRIPT
+	ld [wMenuReturn], a
 	ret
 
 .ExitMenuRunScriptCloseText:
 	call ExitMenu
-	ld a, HMENURETURN_SCRIPT
-	ldh [hMenuReturn], a
+	ld a, MENURETURN_SCRIPT
+	ld [wMenuReturn], a
 	jr .ReturnEnd2
 
 .ExitMenuCallFuncCloseText:

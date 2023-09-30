@@ -1,52 +1,52 @@
 BeastsCheck:
 ; Check if the player owns all three legendary beasts.
 ; They must exist in either party or PC, and have the player's OT and ID.
-; Return the result in wScriptVar.
+; Return the result in hScriptVar.
 
 	ld a, RAIKOU
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	call CheckOwnMonAnywhere
 	jr nc, .notexist
 
 	ld a, ENTEI
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	call CheckOwnMonAnywhere
 	jr nc, .notexist
 
 	ld a, SUICUNE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	call CheckOwnMonAnywhere
 	jr nc, .notexist
 
 	; they exist
 	ld a, 1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .notexist
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 MonCheck:
-; Check if the player owns any Pokémon of the species in wScriptVar.
-; Return the result in wScriptVar.
+; Check if the player owns any Pokémon of the species in hScriptVar.
+; Return the result in hScriptVar.
 
 	call CheckOwnMonAnywhere
 	jr c, .exists
 
 	; doesn't exist
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .exists
 	ld a, 1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 CheckOwnMonAnywhere:
-; Check if the player owns any monsters of the species in wScriptVar.
+; Check if the player owns any monsters of the species in hScriptVar.
 ; It must exist in either party or PC, and have the player's OT and ID.
 
 	; If there are no monsters in the party,
@@ -182,13 +182,13 @@ CheckOwnMonAnywhere:
 
 CheckOwnMon:
 ; Check if a Pokémon belongs to the player and is of a specific species.
-; We compare the species we are looking for in [wScriptVar] to the species
+; We compare the species we are looking for in [hScriptVar] to the species
 ; we have in [hl].
 
 ; inputs:
 ; hl, pointer to PartyMonNSpecies
 ; bc, pointer to PartyMonNOT
-; wScriptVar should contain the species we're looking for
+; hScriptVar should contain the species we're looking for
 
 ; outputs:
 ; sets carry if monster matches species, ID, and OT name.
@@ -201,7 +201,7 @@ CheckOwnMon:
 
 	; check species
 
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld b, [hl]
 	cp b
 	jr nz, .notfound

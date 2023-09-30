@@ -16,12 +16,12 @@ TreeMonEncounter:
 	ld a, BATTLETYPE_TREE
 	ld [wBattleType], a
 	ld a, 1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .no_battle
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 RockMonEncounter:

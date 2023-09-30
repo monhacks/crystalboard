@@ -30,7 +30,7 @@ SelectApricornForKurt:
 	ld [wMenuSelection], a
 	call Kurt_SelectApricorn
 	ld a, c
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	and a
 	jr z, .done
 	ld [wCurItem], a

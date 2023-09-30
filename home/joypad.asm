@@ -295,11 +295,11 @@ JoyTextDelay::
 	and a
 	jr z, .checkframedelay
 	ld a, 15
-	ld [wTextDelayFrames], a
+	ldh [hTextDelayFrames], a
 	ret
 
 .checkframedelay
-	ld a, [wTextDelayFrames]
+	ldh a, [hTextDelayFrames]
 	and a
 	jr z, .restartframedelay
 	xor a
@@ -308,7 +308,7 @@ JoyTextDelay::
 
 .restartframedelay
 	ld a, 5
-	ld [wTextDelayFrames], a
+	ldh [hTextDelayFrames], a
 	ret
 
 WaitPressAorB_BlinkCursor::

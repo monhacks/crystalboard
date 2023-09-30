@@ -1,5 +1,5 @@
 ; Special routines can be used with the "special" map script command.
-; They often use wScriptVar for arguments and return values.
+; They often use hScriptVar for arguments and return values.
 
 MACRO add_special
 \1Special::

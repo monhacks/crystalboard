@@ -72,8 +72,8 @@ DEF MONMENU_MENUOPTION EQU 1
 DEF NUM_MONMENU_ITEMS EQU 8
 
 ; start/select menu return values
-DEF HMENURETURN_SCRIPT EQU %10000000
-DEF HMENURETURN_ASM    EQU %11111111
+DEF MENURETURN_SCRIPT EQU %10000000
+DEF MENURETURN_ASM    EQU %11111111
 
 ; PartyMenuQualityPointers indexes (see data/party_menu_qualities.asm)
 	const_def

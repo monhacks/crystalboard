@@ -140,8 +140,6 @@ wLinkMode::
 ; a LINK_* value for the link type
 	db
 
-wScriptVar:: db
-
 wPlayerNextMovement:: db
 wPlayerMovement:: db
 
@@ -1195,16 +1193,12 @@ wCursorCurrentTile:: dw
 	ds 3
 wMoreMenuDataEnd::
 
-wOverworldDelay:: db
-wTextDelayFrames:: db
-wVBlankOccurred:: db
+wMenuReturn:: db
 
 wPredefID:: db
 wPredefHL:: dw
 wPredefAddress:: dw
 wFarCallBC:: dw
-
-wUnusedLinkCommunicationByte:: db
 
 wGameTimerPaused::
 ; bit 0: game timer paused

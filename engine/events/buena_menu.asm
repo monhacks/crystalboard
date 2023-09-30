@@ -5,7 +5,7 @@ AskRememberPassword:
 	ld a, $1
 
 .okay
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .DoMenu:

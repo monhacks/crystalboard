@@ -413,14 +413,14 @@ DayCareManOutside:
 .Load0:
 	call PrintText1bpp
 	xor a ; FALSE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .PartyFull:
 	ld hl, .NoRoomForEggText
 	call PrintText1bpp
 	ld a, TRUE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .FoundAnEggText:

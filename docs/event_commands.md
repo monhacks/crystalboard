@@ -70,12 +70,12 @@ Until this document is filled out, the [G/S Scripting Compendium](https://hax.ii
 
 ## `$15`: <code>setval <i>value</i></code>
 
-<code>[wScriptVar] = <i>value</i></code>
+<code>[hScriptVar] = <i>value</i></code>
 
 
 ## `$16`: <code>addval <i>value</i></code>
 
-<code>[wScriptVar] += <i>value</i></code>
+<code>[hScriptVar] += <i>value</i></code>
 
 
 ## `$17`: <code>random <i>value</i></code>
@@ -86,12 +86,12 @@ Until this document is filled out, the [G/S Scripting Compendium](https://hax.ii
 
 ## `$19`: <code>readmem <i>address</i></code>
 
-<code>[wScriptVar] = [<i>address</i>]</code>
+<code>[hScriptVar] = [<i>address</i>]</code>
 
 
 ## `$1A`: <code>writemem <i>address</i></code>
 
-<code>[<i>address</i>] = [wScriptVar]</code>
+<code>[<i>address</i>] = [hScriptVar]</code>
 
 
 ## `$1B`: <code>loadmem <i>address</i>, <i>value</i></code>
@@ -101,12 +101,12 @@ Until this document is filled out, the [G/S Scripting Compendium](https://hax.ii
 
 ## `$1C`: <code>readvar <i>variable</i></code>
 
-<code>[wScriptVar] = GetVarAction(<i>variable</i>)</code>
+<code>[hScriptVar] = GetVarAction(<i>variable</i>)</code>
 
 
 ## `$1D`: <code>writevar <i>variable</i></code>
 
-<code>GetVarAction(<i>variable</i>) = [wScriptVar]</code>
+<code>GetVarAction(<i>variable</i>) = [hScriptVar]</code>
 
 
 ## `$1E`: <code>loadvar <i>variable</i>, <i>value</i></code>
@@ -216,21 +216,21 @@ Until this document is filled out, the [G/S Scripting Compendium](https://hax.ii
 
 ## `$3F`: <code>getnum <i>string_buffer</i></code>
 
-<code>GetStringBuffer(<i>string_buffer</i>) = PrintNum([wScriptVar])</code>
+<code>GetStringBuffer(<i>string_buffer</i>) = PrintNum([hScriptVar])</code>
 
 
 ## `$40`: <code>getmonname <i>string_buffer</i>, <i>mon_id</i></code>
 
 <code>GetStringBuffer(<i>string_buffer</i>) = GetPokemonName(<i>mon_id</i>)</code>
 
-If <code><i>mon_id</i></code> = `USE_SCRIPT_VAR`, then it uses `[wScriptVar]` instead.
+If <code><i>mon_id</i></code> = `USE_SCRIPT_VAR`, then it uses `[hScriptVar]` instead.
 
 
 ## `$41`: <code>getitemname <i>string_buffer</i>, <i>item_id</i></code>
 
 <code>GetStringBuffer(<i>string_buffer</i>) = GetItemName(<i>item_id</i>)</code>
 
-If <code><i>item_id</i></code> = `USE_SCRIPT_VAR`, then it uses `[wScriptVar]` instead.
+If <code><i>item_id</i></code> = `USE_SCRIPT_VAR`, then it uses `[hScriptVar]` instead.
 
 
 ## `$42`: <code>getcurlandmarkname <i>string_buffer</i></code>

@@ -16,55 +16,55 @@ Special::
 INCLUDE "data/events/special_pointers.asm"
 
 SetPlayerPalette:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld d, a
 	farcall _SetPlayerPalette
 	ret
 
 GameCornerPrizeMonCheckDex:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	dec a
 	call CheckCaughtMon
 	ret nz
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	dec a
 	call SetSeenAndCaughtMon
 	call FadeToMenu
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld [wNamedObjectIndex], a
 	farcall NewPokedexEntry
 	call ExitAllMenus
 	ret
 
 UnusedSetSeenMon:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	dec a
 	call SetSeenMon
 	ret
 
 FindPartyMonAboveLevel:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld b, a
 	farcall _FindPartyMonAboveLevel
 	jr z, FoundNone
 	jr FoundOne
 
 FindPartyMonAtLeastThatHappy:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld b, a
 	farcall _FindPartyMonAtLeastThatHappy
 	jr z, FoundNone
 	jr FoundOne
 
 FindPartyMonThatSpecies:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld b, a
 	farcall _FindPartyMonThatSpecies
 	jr z, FoundNone
 	jr FoundOne
 
 FindPartyMonThatSpeciesYourTrainerID:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld b, a
 	farcall _FindPartyMonThatSpeciesYourTrainerID
 	jr z, FoundNone
@@ -72,12 +72,12 @@ FindPartyMonThatSpeciesYourTrainerID:
 
 FoundOne:
 	ld a, TRUE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 FoundNone:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 NameRival:
@@ -116,20 +116,20 @@ DisplayLinkRecord:
 
 PlayersHousePC:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	farcall _PlayersHousePC
 	ld a, c
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 BugContestJudging:
 	farcall _BugContestJudging
 	ld a, b
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 MapRadio:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld e, a
 	farcall PlayRadio
 	ret
@@ -138,7 +138,7 @@ UnownPuzzle:
 	call FadeToMenu
 	farcall _UnownPuzzle
 	ld a, [wSolvedUnownPuzzle]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	call ExitAllMenus
 	ret
 
@@ -221,15 +221,15 @@ ClearBGPalettesBufferScreen:
 ScriptReturnCarry:
 	jr c, .carry
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 .carry
 	ld a, 1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 ActivateFishingSwarm:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	ld [wFishingSwarmFlag], a
 	ret
 
@@ -272,7 +272,7 @@ SnorlaxAwake:
 ; next to Snorlax.
 
 ; outputs:
-; wScriptVar is 1 if the conditions are met, otherwise 0.
+; hScriptVar is 1 if the conditions are met, otherwise 0.
 
 ; check background music
 	ld a, [wMapMusic]
@@ -305,7 +305,7 @@ SnorlaxAwake:
 .nope
 	xor a
 .done
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .ProximityCoords:
@@ -339,7 +339,7 @@ GameboyCheck:
 .cgb
 	ld a, GBCHECK_CGB
 .done
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 FadeOutMusic:

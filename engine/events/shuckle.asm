@@ -57,12 +57,12 @@ GiveShuckle:
 	ld hl, wDailyFlags1
 	set DAILYFLAGS1_GOT_SHUCKIE_TODAY_F, [hl]
 	ld a, 1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .NotGiven:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 SpecialShuckleOT:
@@ -123,20 +123,20 @@ ReturnShuckie:
 	callfar RemoveMonFromPartyOrBox
 	ld a, SHUCKIE_RETURNED
 .HappyToStayWithYou:
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .refused
 	ld a, SHUCKIE_REFUSED
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .DontReturn:
 	xor a ; SHUCKIE_WRONG_MON
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .fainted
 	ld a, SHUCKIE_FAINTED
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret

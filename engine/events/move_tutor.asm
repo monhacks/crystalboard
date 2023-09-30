@@ -23,18 +23,18 @@ MoveTutor:
 	call CheckCanLearnMoveTutorMove
 	jr nc, .loop
 	xor a ; FALSE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	jr .quit
 
 .cancel
 	ld a, -1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 .quit
 	call CloseSubmenu
 	ret
 
 .GetMoveTutorMove:
-	ld a, [wScriptVar]
+	ldh a, [hScriptVar]
 	cp MOVETUTOR_FLAMETHROWER
 	jr z, .flamethrower
 	cp MOVETUTOR_THUNDERBOLT

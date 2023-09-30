@@ -678,12 +678,12 @@ Script_UsedWaterfall:
 
 .CheckContinueWaterfall:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld a, [wPlayerTile]
 	call CheckWaterfallTile
 	ret z
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .WaterfallStep:
@@ -1070,7 +1070,7 @@ TryStrengthOW:
 	jr .done
 
 .done
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 WhirlpoolFunction:
@@ -1409,7 +1409,7 @@ HasRockSmash:
 	xor a
 	jr .done
 .done
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 FishFunction:
@@ -1570,7 +1570,7 @@ Fishing_CheckFacingUp:
 	xor a
 
 .up
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 Script_FishCastRod:
@@ -1776,11 +1776,11 @@ AskCutScript:
 
 .CheckMap:
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	call CheckMapForSomethingToCut
 	ret c
 	ld a, TRUE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 AskCutText:

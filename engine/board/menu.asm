@@ -53,11 +53,11 @@ BoardMenuScript::
 	done
 
 .SubmenuCallback:
-; if submenu has requested a callback through hMenuReturn,
+; if submenu has requested a callback through wMenuReturn,
 ; it has also taken care of queuing it into wQueuedScriptBank/wQueuedScriptAddr.
-	readmem hMenuReturn
-	ifequal HMENURETURN_SCRIPT, .CallbackScript
-	ifequal HMENURETURN_ASM, .CallbackAsm
+	readmem wMenuReturn
+	ifequal MENURETURN_SCRIPT, .CallbackScript
+	ifequal MENURETURN_ASM, .CallbackAsm
 	end
 
 .CallbackScript:
@@ -68,7 +68,7 @@ BoardMenuScript::
 	end
 
 BoardMenu::
-; returns the selected menu item (BOARDMENUITEM_*) in wScriptVar upon exit
+; returns the selected menu item (BOARDMENUITEM_*) in hScriptVar upon exit
 	ld a, [wBoardMenuLastCursorPosition]
 	cp NUM_BOARD_MENU_ITEMS
 	jr c, .ok
@@ -107,7 +107,7 @@ BoardMenu::
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_BOARD_MENU_F, [hl]
 	ld a, [wBoardMenuCursorPosition]
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 DrawBoardMenuTilesAndClearPriorityAttr:
@@ -217,13 +217,13 @@ DIE_MAX_NUMBER EQU 6
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_DIE_ROLL_F, [hl]
 	xor a ; FALSE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .confirm_roll
 	call UpdateSprites
 	ld a, TRUE
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 BoardMenu_BreakDieAnimation:
@@ -341,8 +341,8 @@ BoardMenu_Party:
 .quit
 ; if quitted party menu after using field move
 	call BoardMenu_CloseSubmenu
-	ld a, HMENURETURN_SCRIPT
-	ldh [hMenuReturn], a
+	ld a, MENURETURN_SCRIPT
+	ld [wMenuReturn], a
 	ret
 
 BoardMenu_Pack:
@@ -352,8 +352,8 @@ BoardMenu_Pack:
 	ld a, [wPackUsedItem]
 	and a
 	ret z
-	ld a, HMENURETURN_SCRIPT
-	ldh [hMenuReturn], a
+	ld a, MENURETURN_SCRIPT
+	ld [wMenuReturn], a
 	ret
 
 BoardMenu_Pokegear:
@@ -363,7 +363,7 @@ BoardMenu_Pokegear:
 
 BoardMenu_OpenSubmenu:
 	xor a
-	ldh [hMenuReturn], a
+	ld [wMenuReturn], a
 	ldh [hBGMapMode], a
 	call LoadStandardMenuHeader
 	farcall FadeOutPalettesToWhite

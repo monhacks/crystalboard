@@ -52,22 +52,22 @@ CheckMagikarpLength:
 	call SkipNames
 	call CopyBytes
 	ld a, MAGIKARPLENGTH_BEAT_RECORD
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .not_long_enough
 	ld a, MAGIKARPLENGTH_TOO_SHORT
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .declined
 	ld a, MAGIKARPLENGTH_REFUSED
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .not_magikarp
 	xor a ; MAGIKARPLENGTH_NOT_MAGIKARP
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .MagikarpGuruMeasureText:

@@ -102,7 +102,7 @@ $~~~~$*Exit overworld loop*
 ---
 
 wMapStatus == MAPSTATUS_HANDLE: <c>the remainder of the code goes at this level</c>
-> wOverworldDelay <= 2 <c>2 is *MaxOverworldDelay*</c>\
+> hOverworldDelay <= 2 <c>2 is *MaxOverworldDelay*</c>\
 > MapEventStatus == MAPEVENTS_ON:\
 >$~~~~$*Get joypad* <c>update hJoyDown, hJoyReleased, hJoyPressed</c>\
 >$~~~~$*Refresh pals*
@@ -295,7 +295,7 @@ wMapStatus == MAPSTATUS_HANDLE: <c>the remainder of the code goes at this level<
 
 >> **CheckObjectEnteringVisibleRange** (wPlayerStepFlags[PLAYERSTEP_STOP_F] == TRUE)
 
-> DelayFrames(wOverworldDelay)
+> DelayFrames(hOverworldDelay)
 
 > <f>**HandleMapBackground**</f> <c>_UpdateSprites + ScrollScreen</c>
 

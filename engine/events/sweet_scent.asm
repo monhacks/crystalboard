@@ -48,12 +48,12 @@ SweetScentEncounter:
 
 .start_battle
 	ld a, $1
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ret
 
 .no_battle
 	xor a
-	ld [wScriptVar], a
+	ldh [hScriptVar], a
 	ld [wBattleType], a
 	ret
 
