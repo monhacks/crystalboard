@@ -92,6 +92,22 @@ GameMenu_WorldMap:
 	and a
 	jr z, .not_in_overworld
 
+	ld a, MAPSETUP_CONTINUE
+	jr .SpawnToMap
+
+.not_in_overworld
+	farcall LevelSelectionMenu
+	ret nc ; if pressed B, go back to Game Menu
+
+	farcall ClearSpriteAnims
+	call ClearSprites
+	ld a, PLAYER_NORMAL
+	ld [wPlayerState], a ; this may need to be set on a per-level basis (e.g. if specific level starts with player in surf state)
+	ld a, MAPSETUP_ENTERLEVEL
+;	jr .SpawnToMap
+
+.SpawnToMap:
+	ldh [hMapEntryMethod], a
 	ld a, $8
 	ld [wMusicFade], a
 	ld a, LOW(MUSIC_NONE)
@@ -103,18 +119,16 @@ GameMenu_WorldMap:
 	ld c, 20
 	call DelayFrames
 	farcall JumpRoamMons
-	ld a, MAPSETUP_CONTINUE
-	ldh [hMapEntryMethod], a
 	xor a
-	ld [wDontPlayMapMusicOnReload], a
+	ld [wDontPlayMapMusicOnReload], a ; play map music
 	ld [wLinkMode], a
 	ld hl, wGameTimerPaused
-	set GAME_TIMER_COUNTING_F, [hl]
+	set GAME_TIMER_COUNTING_F, [hl] ; start game timer counter
 	farcall OverworldLoop
-	jp GameMenu
 
-.not_in_overworld
-	farcall LevelSelectionMenu
+; return from overworld loop
+	call ClearBGPalettes
+	call ClearSprites
 	ret
 
 GameMenu_Shop:

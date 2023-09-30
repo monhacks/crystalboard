@@ -41,6 +41,7 @@ BoardMenuScript::
 	sjump .display_menu
 
 .exit:
+	wait 300
 	exitoverworld $00
 
 .ConfirmExitText:

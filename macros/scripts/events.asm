@@ -1057,7 +1057,7 @@ ENDM
 	const wait_command ; $a8
 MACRO wait
 	db wait_command
-	db \1 ; duration
+	db \1 / 100 ; duration (ms)
 ENDM
 
 	const checksave_command ; $a9

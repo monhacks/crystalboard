@@ -119,39 +119,15 @@ LevelSelectionMenu::
 	jr .main_loop
 
 .enter_level
+	ld a, [wLevelSelectionMenuCurrentLandmark]
+	call LevelSelectionMenu_GetLandmarkSpawnPoint
+	ld [wDefaultSpawnpoint], a
 	call LevelSelectionMenu_Delay10Frames
 	ld de, SFX_WARP_TO
 	call PlaySFX
 	call LevelSelectionMenu_Delay10Frames
 	call .EnterLevelFadeOut
-	ld a, $8
-	ld [wMusicFade], a
-	ld a, LOW(MUSIC_NONE)
-	ld [wMusicFadeID], a
-	ld a, HIGH(MUSIC_NONE)
-	ld [wMusicFadeID + 1], a
-	call ClearBGPalettes
-	call ClearTilemap
-	farcall ClearSpriteAnims
-	call ClearSprites
-	xor a
-	ld [wVramState], a
-	ld c, 20
-	call DelayFrames
-
-	ld a, [wLevelSelectionMenuCurrentLandmark]
-	call LevelSelectionMenu_GetLandmarkSpawnPoint
-	ld [wDefaultSpawnpoint], a
-	ld a, MAPSETUP_ENTERLEVEL
-	ld [hMapEntryMethod], a
-	xor a
-	ld [wDontPlayMapMusicOnReload], a ; play map music
-	ld [wLinkMode], a
-	ld a, PLAYER_NORMAL
-	ld [wPlayerState], a ; this may need to be set on a per-level basis (e.g. if specific level starts with player in surf state)
-	ld hl, wGameTimerPaused
-	set GAME_TIMER_COUNTING_F, [hl] ; start game timer counter
-	farcall OverworldLoop
+	scf
 	ret
 
 .EnterLevelFadeOut:
@@ -166,7 +142,7 @@ LevelSelectionMenu::
 	call ClearSprites
 	xor a
 	ld [wVramState], a
-	ret
+	ret ; nc
 
 LevelSelectionMenu_LoadGFX:
 ; load gfx for the background tiles, and for the player and directional arrow sprites
