@@ -12,6 +12,8 @@ GameMenu:
 	; fallthrough
 
 GameMenu_KeepMusic:
+	xor a
+	ldh [hMapAnims], a
 	call ClearTilemap
 	call LoadFrame
 	call LoadStandardFont

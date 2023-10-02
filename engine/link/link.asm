@@ -461,7 +461,7 @@ endc
 	call ReturnToMapFromSubmenu
 	ld a, [wDisableTextAcceleration]
 	push af
-	ld a, 1
+	ld a, TRUE
 	ld [wDisableTextAcceleration], a
 	ldh a, [rIE]
 	push af

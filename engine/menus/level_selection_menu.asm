@@ -1,6 +1,7 @@
 LevelSelectionMenu::
 	xor a
 	ldh [hInMenu], a
+	ldh [hMapAnims], a
 	ld a, 1 << 2 ; do not clear wShadowOAM during DoNextFrameForAllSprites
 	ld [wVramState], a
 	ld a, -1

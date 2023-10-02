@@ -13,7 +13,6 @@
 MainMenu:
 .loop
 	xor a
-	ld [wDisableTextAcceleration], a
 	ldh [hMapAnims], a
 	call ClearTilemap
 	call LoadFrame
