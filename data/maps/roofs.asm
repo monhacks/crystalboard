@@ -15,6 +15,10 @@ MapGroupRoofs:
 	db ROOF_OLIVINE   ;  1 (Level1)
 if DEF(_DEBUG)
 	db ROOF_OLIVINE   ;  1 (DebugLevel1)
+	db ROOF_OLIVINE   ;  2 (DebugLevel2)
+	db ROOF_OLIVINE   ;  3 (DebugLevel3)
+	db ROOF_OLIVINE   ;  4 (DebugLevel4)
+	db ROOF_OLIVINE   ;  5 (DebugLevel5)
 endc
 	assert_table_length NUM_MAP_GROUPS + 1
 

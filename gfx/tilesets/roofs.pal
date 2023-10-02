@@ -16,6 +16,30 @@ if DEF(_DEBUG)
 	RGB 14,17,31, 07,11,15 ; day
 	RGB 09,09,17, 05,07,13 ; nite
 	RGB 12,13,23, 06,08,11 ; eve
+
+; debug group 2 (DebugLevel2)
+	RGB 14,17,31, 07,11,15 ; morn
+	RGB 14,17,31, 07,11,15 ; day
+	RGB 09,09,17, 05,07,13 ; nite
+	RGB 12,13,23, 06,08,11 ; eve
+
+; debug group 3 (DebugLevel3)
+	RGB 14,17,31, 07,11,15 ; morn
+	RGB 14,17,31, 07,11,15 ; day
+	RGB 09,09,17, 05,07,13 ; nite
+	RGB 12,13,23, 06,08,11 ; eve
+
+; debug group 4 (DebugLevel4)
+	RGB 14,17,31, 07,11,15 ; morn
+	RGB 14,17,31, 07,11,15 ; day
+	RGB 09,09,17, 05,07,13 ; nite
+	RGB 12,13,23, 06,08,11 ; eve
+
+; debug group 5 (DebugLevel5)
+	RGB 14,17,31, 07,11,15 ; morn
+	RGB 14,17,31, 07,11,15 ; day
+	RGB 09,09,17, 05,07,13 ; nite
+	RGB 12,13,23, 06,08,11 ; eve
 endc
 
 ; group 2 (Mahogany)

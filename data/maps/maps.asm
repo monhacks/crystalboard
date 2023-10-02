@@ -21,6 +21,10 @@ MapGroupPointers::
 ;	dw MapGroup_Level2      ;  2
 if DEF(_DEBUG)
 	dw MapGroup_DebugLevel1 ;  1
+	dw MapGroup_DebugLevel2 ;  2
+	dw MapGroup_DebugLevel3 ;  3
+	dw MapGroup_DebugLevel4 ;  4
+	dw MapGroup_DebugLevel5 ;  5
 endc
 	assert_table_length NUM_MAP_GROUPS
 
@@ -40,4 +44,24 @@ MapGroup_DebugLevel1:
 	table_width MAP_LENGTH, MapGroup_DebugLevel1
 	map DebugLevel1_Map1, TILESET_PLAYERS_ROOM, INDOOR_BUILDING, LANDMARK_DEBUGLEVEL_1, MUSIC_NEW_BARK_TOWN, FALSE, PALETTE_DAY, FISHGROUP_SHORE
 	assert_table_length NUM_DEBUGLEVEL_1_MAPS
+
+MapGroup_DebugLevel2:
+	table_width MAP_LENGTH, MapGroup_DebugLevel2
+	map DebugLevel2_Map1, TILESET_CAVE, INDOOR_CAVE, LANDMARK_DEBUGLEVEL_2, MUSIC_NEW_BARK_TOWN, FALSE, PALETTE_NITE | IN_DARKNESS, FISHGROUP_SHORE
+	assert_table_length NUM_DEBUGLEVEL_2_MAPS
+
+MapGroup_DebugLevel3:
+	table_width MAP_LENGTH, MapGroup_DebugLevel3
+	map DebugLevel3_Map1, TILESET_FOREST, INDOOR_FOREST, LANDMARK_DEBUGLEVEL_3, MUSIC_NEW_BARK_TOWN, FALSE, PALETTE_AUTO, FISHGROUP_SHORE
+	assert_table_length NUM_DEBUGLEVEL_3_MAPS
+
+MapGroup_DebugLevel4:
+	table_width MAP_LENGTH, MapGroup_DebugLevel4
+	map DebugLevel4_Map1, TILESET_JOHTO, OUTDOOR_GRASSY, LANDMARK_DEBUGLEVEL_4, MUSIC_NEW_BARK_TOWN, FALSE, PALETTE_AUTO, FISHGROUP_SHORE
+	assert_table_length NUM_DEBUGLEVEL_4_MAPS
+
+MapGroup_DebugLevel5:
+	table_width MAP_LENGTH, MapGroup_DebugLevel5
+	map DebugLevel5_Map1, TILESET_JOHTO, OUTDOOR_GRASSY, LANDMARK_DEBUGLEVEL_5, MUSIC_NEW_BARK_TOWN, FALSE, PALETTE_AUTO, FISHGROUP_SHORE
+	assert_table_length NUM_DEBUGLEVEL_5_MAPS
 endc

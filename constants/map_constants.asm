@@ -48,6 +48,22 @@ if DEF(_DEBUG)
 	newgroup DEBUGLEVEL_1
 	map_const DEBUGLEVEL_1_MAP_1,                           5,  4 ;  1
 	endgroup
+
+	newgroup DEBUGLEVEL_2
+	map_const DEBUGLEVEL_2_MAP_1,                           5,  4 ;  1
+	endgroup
+
+	newgroup DEBUGLEVEL_3
+	map_const DEBUGLEVEL_3_MAP_1,                           5,  4 ;  1
+	endgroup
+
+	newgroup DEBUGLEVEL_4
+	map_const DEBUGLEVEL_4_MAP_1,                           5,  4 ;  1
+	endgroup
+
+	newgroup DEBUGLEVEL_5
+	map_const DEBUGLEVEL_5_MAP_1,                           5,  4 ;  1
+	endgroup
 endc
 
 DEF NUM_MAP_GROUPS EQU const_value

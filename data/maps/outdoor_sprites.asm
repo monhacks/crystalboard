@@ -8,6 +8,10 @@ OutdoorSprites:
 ;	dw Level2GroupSprites
 if DEF(_DEBUG)
 	dw DebugLevel1GroupSprites
+	dw DebugLevel2GroupSprites
+	dw DebugLevel3GroupSprites
+	dw DebugLevel4GroupSprites
+	dw DebugLevel5GroupSprites
 endc
 	assert_table_length NUM_MAP_GROUPS
 
@@ -33,6 +37,10 @@ Level1GroupSprites:
 
 if DEF(_DEBUG)
 DebugLevel1GroupSprites:
+DebugLevel2GroupSprites:
+DebugLevel3GroupSprites:
+DebugLevel4GroupSprites:
+DebugLevel5GroupSprites:
 	db SPRITE_YOUNGSTER
 	db SPRITE_BUG_CATCHER
 	db SPRITE_FISHER

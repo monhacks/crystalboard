@@ -74,6 +74,10 @@ EngineFlags:
 	engine_flag wVisitedSpawns, SPAWN_LEVEL_1
 if DEF(_DEBUG)
 	engine_flag wVisitedSpawns, SPAWN_DEBUGLEVEL_1
+	engine_flag wVisitedSpawns, SPAWN_DEBUGLEVEL_2
+	engine_flag wVisitedSpawns, SPAWN_DEBUGLEVEL_3
+	engine_flag wVisitedSpawns, SPAWN_DEBUGLEVEL_4
+	engine_flag wVisitedSpawns, SPAWN_DEBUGLEVEL_5
 endc
 	engine_flag wVisitedSpawns, NUM_SPAWNS ; unused
 
