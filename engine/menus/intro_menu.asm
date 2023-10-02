@@ -1,30 +1,3 @@
-PrintDayOfWeek:
-	push de
-	ld hl, .Days
-	ld a, b
-	call GetNthString
-	ld d, h
-	ld e, l
-	pop hl
-	call PlaceString
-	ld h, b
-	ld l, c
-	ld de, .Day
-	call PlaceString
-	ret
-
-.Days:
-	db "SUN@"
-	db "MON@"
-	db "TUES@"
-	db "WEDNES@"
-	db "THURS@"
-	db "FRI@"
-	db "SATUR@"
-
-.Day:
-	db "DAY@"
-
 Option:
 	farcall _Option
 	ret
@@ -41,25 +14,16 @@ NewGame:
 	call ClearMenuAndWindowData
 	call InitTime ; set wStartDay through wStartSecond to $00
 	farcall InitGender
-	call .SetPlayerName
+	ld b, NAME_PLAYER
+	ld de, wPlayerName
+	farcall NamingScreen
+	ld de, .DefaultName
+	call InitName
 	farcall AutoSaveGameOutsideOverworld
 	jp GameMenu
 
-.SetPlayerName
-	ld hl, wPlayerName
-	ld a, "D"
-	ld [hli], a
-	ld a, "E"
-	ld [hli], a
-	ld a, "B"
-	ld [hli], a
-	ld a, "U"
-	ld [hli], a
-	ld a, "G"
-	ld [hli], a
-	ld a, "@"
-	ld [hl], a
-	ret
+.DefaultName:
+	db "DEBUG@@@@@@"
 
 ResetWRAM:
 	xor a
