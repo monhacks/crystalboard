@@ -194,7 +194,7 @@ DIE_MAX_NUMBER EQU 6
 
 .rotate_die_loop
 	call IsSFXPlaying
-	ld de, SFX_KINESIS
+	ld de, SFX_STOP_SLOT
 	call c, PlaySFX
 	call Random
 .sample_die_loop
