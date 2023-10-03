@@ -1870,6 +1870,7 @@ wTilesetCollisionBank:: db
 wTilesetCollisionAddress:: dw
 wTilesetAnim:: dw ; bank 3f
 wTilesetPalettes:: dw ; bank 3f
+wTilesetVariableSpaces:: db
 wTilesetEnd::
 	assert wTilesetEnd - wTileset == TILESET_LENGTH
 

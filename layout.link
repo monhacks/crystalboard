@@ -40,6 +40,7 @@ ROMX $04
 ROMX $05
 	"bank5"
 ROMX $06
+	"Tileset Spaces"
 	"Tileset Data 1"
 ROMX $07
 	"Roofs"

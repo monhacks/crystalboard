@@ -4,6 +4,21 @@ MACRO tilecoll
 ENDM
 
 
+SECTION "Tileset Spaces", ROMX
+
+TilesetVariableSpacesPointers::
+; entries correspond to TILESET_VARIABLE_SPACES_* constants (see constants/tileset_constants.asm)
+	table_width 2, TilesetVariableSpacesPointers
+	dw TilesetVariableSpaces1
+	assert_table_length NUM_VARIABLE_SPACES_SETS
+
+TilesetFixedSpaces::
+INCBIN "gfx/tilesets/spaces/fixed_spaces.2bpp.lz"
+
+TilesetVariableSpaces1::
+INCBIN "gfx/tilesets/spaces/variable_spaces_1.2bpp.lz"
+
+
 SECTION "Tileset Data 1", ROMX
 
 TilesetKantoGFX::

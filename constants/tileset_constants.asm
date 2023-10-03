@@ -39,7 +39,7 @@
 DEF NUM_TILESETS EQU const_value - 1
 
 ; wTileset struct size
-DEF TILESET_LENGTH EQU 13
+DEF TILESET_LENGTH EQU 14
 
 ; roof length (see gfx/tilesets/roofs)
 DEF ROOF_LENGTH EQU 9
@@ -55,3 +55,13 @@ DEF ROOF_LENGTH EQU 9
 	const PAL_BG_BROWN  ; 5
 	const PAL_BG_ROOF   ; 6
 	const PAL_BG_TEXT   ; 7
+
+; variable spaces sets (see gfx/tilesets.asm)
+	const_def
+	const TILESET_VARIABLE_SPACES_1 ; 0
+;	const TILESET_VARIABLE_SPACES_2 ; 1
+DEF NUM_VARIABLE_SPACES_SETS EQU const_value
+
+; size of the tileset occupied by space tiles (see LoadTilesetGFX)
+DEF TILESET_FIXED_SPACES_SIZE    EQU $20 tiles
+DEF TILESET_VARIABLE_SPACES_SIZE EQU $20 tiles

@@ -27,7 +27,8 @@ hJoyLast::        db
 hInMenu:: db
 
 hPrinter:: db
-hGraphicStartTile:: db
+hGraphicStartTile::
+hTilesetVariableSpaces:: db
 hMoveMon:: db
 
 UNION

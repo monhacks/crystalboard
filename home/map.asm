@@ -1318,6 +1318,9 @@ LoadTilesetGFX::
 	ld a, [wTilesetBank]
 	ld e, a
 
+	ld a, [wTilesetVariableSpaces]
+	ldh [hTilesetVariableSpaces], a
+
 	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wDecompressScratch)
@@ -1339,8 +1342,44 @@ LoadTilesetGFX::
 
 	ld hl, wDecompressScratch + $80 tiles
 	ld de, vTiles5
-	ld bc, $80 tiles
+	ld bc, $80 tiles - (TILESET_FIXED_SPACES_SIZE + TILESET_VARIABLE_SPACES_SIZE)
 	call CopyBytes
+
+	ldh a, [hROMBank]
+	push af
+	ld a, BANK(TilesetFixedSpaces) ; BANK(TilesetVariableSpaces*)
+	ldh [hROMBank], a
+	ld [MBC5RomBankLo], a
+
+	ld hl, TilesetFixedSpaces
+	ld de, wDecompressScratch
+	call Decompress
+
+	ld hl, wDecompressScratch
+	ld de, vTiles5 + $80 tiles - (TILESET_FIXED_SPACES_SIZE + TILESET_VARIABLE_SPACES_SIZE)
+	ld bc, TILESET_FIXED_SPACES_SIZE
+	call CopyBytes
+
+	ld hl, TilesetVariableSpacesPointers
+	ldh a, [hTilesetVariableSpaces]
+	ld c, a
+	ld b, $0
+	add hl, bc
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld de, wDecompressScratch
+	call Decompress
+
+	ld hl, wDecompressScratch
+	ld de, vTiles5 + $80 tiles - TILESET_VARIABLE_SPACES_SIZE
+	ld bc, TILESET_VARIABLE_SPACES_SIZE
+	call CopyBytes
+
+	pop af
+	ldh [hROMBank], a
+	ld [MBC5RomBankLo], a
 
 	pop af
 	ldh [rVBK], a
@@ -2250,7 +2289,7 @@ LoadMapTileset::
 	ld a, [wMapTileset]
 	call AddNTimes
 
-	ld de, wTilesetBank
+	ld de, wTileset
 	ld bc, TILESET_LENGTH
 
 	ld a, BANK(Tilesets)
