@@ -62,6 +62,6 @@ DEF ROOF_LENGTH EQU 9
 ;	const TILESET_VARIABLE_SPACES_2 ; 1
 DEF NUM_VARIABLE_SPACES_SETS EQU const_value
 
-; size of the tileset occupied by space tiles (see LoadTilesetGFX)
-DEF TILESET_FIXED_SPACES_SIZE    EQU $20 tiles
-DEF TILESET_VARIABLE_SPACES_SIZE EQU $20 tiles
+; number of tiles of the tileset occupied by space tiles (see LoadTilesetGFX)
+DEF TILESET_FIXED_SPACES_NUM_TILES    EQU $20
+DEF TILESET_VARIABLE_SPACES_NUM_TILES EQU $20

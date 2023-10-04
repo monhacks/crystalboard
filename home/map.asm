@@ -1342,7 +1342,7 @@ LoadTilesetGFX::
 
 	ld hl, wDecompressScratch + $80 tiles
 	ld de, vTiles5
-	ld bc, $80 tiles - (TILESET_FIXED_SPACES_SIZE + TILESET_VARIABLE_SPACES_SIZE)
+	ld bc, $80 tiles - (TILESET_FIXED_SPACES_NUM_TILES + TILESET_VARIABLE_SPACES_NUM_TILES) tiles
 	call CopyBytes
 
 	ldh a, [hROMBank]
@@ -1356,8 +1356,8 @@ LoadTilesetGFX::
 	call Decompress
 
 	ld hl, wDecompressScratch
-	ld de, vTiles5 + $80 tiles - (TILESET_FIXED_SPACES_SIZE + TILESET_VARIABLE_SPACES_SIZE)
-	ld bc, TILESET_FIXED_SPACES_SIZE
+	ld de, vTiles5 + $80 tiles - (TILESET_FIXED_SPACES_NUM_TILES + TILESET_VARIABLE_SPACES_NUM_TILES) tiles
+	ld bc, TILESET_FIXED_SPACES_NUM_TILES tiles
 	call CopyBytes
 
 	ld hl, TilesetVariableSpacesPointers
@@ -1373,8 +1373,8 @@ LoadTilesetGFX::
 	call Decompress
 
 	ld hl, wDecompressScratch
-	ld de, vTiles5 + $80 tiles - TILESET_VARIABLE_SPACES_SIZE
-	ld bc, TILESET_VARIABLE_SPACES_SIZE
+	ld de, vTiles5 + $80 tiles - TILESET_VARIABLE_SPACES_NUM_TILES tiles
+	ld bc, TILESET_VARIABLE_SPACES_NUM_TILES tiles
 	call CopyBytes
 
 	pop af

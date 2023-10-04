@@ -8,6 +8,18 @@ MACRO tilepal
 	endr
 ENDM
 
+TilesetVariableSpacesPalMaps::
+; entries correspond to TILESET_VARIABLE_SPACES_* constants (see constants/tileset_constants.asm)
+	table_width 2, TilesetVariableSpacesPalMaps
+	dw TilesetVariableSpaces1PalMap
+	assert_table_length NUM_VARIABLE_SPACES_SETS
+
+TilesetFixedSpacesPalMap:
+INCLUDE "gfx/tilesets/spaces/fixed_spaces_palette_map.asm"
+
+TilesetVariableSpaces1PalMap:
+INCLUDE "gfx/tilesets/spaces/variable_spaces_1_palette_map.asm"
+
 TilesetKantoPalMap:
 INCLUDE "gfx/tilesets/kanto_palette_map.asm"
 
@@ -90,9 +102,6 @@ INCLUDE "gfx/tilesets/lighthouse_palette_map.asm"
 TilesetPlayersRoomPalMap:
 INCLUDE "gfx/tilesets/players_room_palette_map.asm"
 
-UnusedMuseumPalMap: ; unreferenced
-INCLUDE "gfx/tilesets/unused_museum_palette_map.asm"
-
 TilesetIcePathPalMap:
 INCLUDE "gfx/tilesets/ice_path_palette_map.asm"
 
@@ -107,9 +116,3 @@ INCLUDE "gfx/tilesets/battle_tower_inside_palette_map.asm"
 
 TilesetBattleTowerOutsidePalMap:
 INCLUDE "gfx/tilesets/battle_tower_outside_palette_map.asm"
-
-MapGroupPalettes: ; unreferenced
-; entries correspond to MAPGROUP_* constants
-rept NUM_MAP_GROUPS
-	db PAL_BG_ROOF
-endr
