@@ -103,8 +103,6 @@ GameMenu_WorldMap:
 
 	farcall ClearSpriteAnims
 	call ClearSprites
-	ld a, PLAYER_NORMAL
-	ld [wPlayerState], a ; this may need to be set on a per-level basis (e.g. if specific level starts with player in surf state)
 	ld a, MAPSETUP_ENTERLEVEL
 ;	jr .SpawnToMap
 

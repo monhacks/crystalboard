@@ -111,5 +111,5 @@ if DEF(_DEBUG)
 	map_attributes DebugLevel2_Map1, DEBUGLEVEL_2_MAP_1, $00, 0
 	map_attributes DebugLevel3_Map1, DEBUGLEVEL_3_MAP_1, $00, 0
 	map_attributes DebugLevel4_Map1, DEBUGLEVEL_4_MAP_1, $00, 0
-	map_attributes DebugLevel5_Map1, DEBUGLEVEL_5_MAP_1, $00, 0
+	map_attributes DebugLevel5_Map1, DEBUGLEVEL_5_MAP_1, $05, 0
 endc

@@ -116,3 +116,8 @@ INCLUDE "gfx/tilesets/battle_tower_inside_palette_map.asm"
 
 TilesetBattleTowerOutsidePalMap:
 INCLUDE "gfx/tilesets/battle_tower_outside_palette_map.asm"
+
+if DEF(_DEBUG)
+TilesetBoardDebug1PalMap::
+INCLUDE "gfx/tilesets/board_debug_1_palette_map.asm"
+endc
