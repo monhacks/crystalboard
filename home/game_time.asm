@@ -32,7 +32,7 @@ GameTimer::
 	ret nz
 
 ; Is the timer paused?
-	ld hl, wGameTimerPaused
+	ld hl, wGameTimer
 	bit GAME_TIMER_COUNTING_F, [hl]
 	ret z
 

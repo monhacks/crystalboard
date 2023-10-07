@@ -122,13 +122,15 @@ GameMenu_WorldMap:
 	xor a
 	ld [wDontPlayMapMusicOnReload], a ; play map music
 	ld [wLinkMode], a
-	ld hl, wGameTimerPaused
+	ld [wBoardMenuLastCursorPosition], a
+	ld hl, wGameTimer
 	set GAME_TIMER_COUNTING_F, [hl] ; start game timer counter
 	farcall OverworldLoop
 
 ; return from overworld loop
 	call ClearBGPalettes
 	call ClearSprites
+	farcall AutoSaveGameOutsideOverworld
 	ret
 
 GameMenu_Shop:

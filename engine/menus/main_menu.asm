@@ -21,8 +21,6 @@ MainMenu:
 	ld b, CGB_DIPLOMA
 	call GetCGBLayout
 	call SetPalettes
-	ld hl, wGameTimerPaused
-	res GAME_TIMER_COUNTING_F, [hl]
 	call MainMenu_GetWhichMenu
 	ld [wWhichIndexSet], a
 	call MainMenu_PrintCurrentTimeAndDay

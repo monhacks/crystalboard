@@ -95,7 +95,7 @@ endc
 ; wSwarmFlags
 	const ENGINE_BUENAS_PASSWORD_2
 	const ENGINE_GOLDENROD_DEPT_STORE_SALE_IS_ON
-; wGameTimerPaused
+; wGameTimer
 	const ENGINE_62
 ; wPlayerGender
 	const ENGINE_PLAYER_IS_FEMALE

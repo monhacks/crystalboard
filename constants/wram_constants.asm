@@ -27,7 +27,7 @@ DEF AUTO_INPUT EQU $ff
 	const TEMPMON    ; 3
 	const WILDMON    ; 4
 
-; wGameTimerPaused::
+; wGameTimer::
 DEF GAME_TIMER_COUNTING_F EQU 0
 
 ; wJoypadDisable::

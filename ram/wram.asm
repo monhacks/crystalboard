@@ -1200,7 +1200,7 @@ wPredefHL:: dw
 wPredefAddress:: dw
 wFarCallBC:: dw
 
-wGameTimerPaused::
+wGameTimer::
 ; bit 0: game timer paused
 ; bit 7: something mobile
 	db

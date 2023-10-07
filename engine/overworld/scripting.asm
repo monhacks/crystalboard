@@ -2314,10 +2314,10 @@ Script_endall:
 	ret
 
 Script_halloffame:
-	ld hl, wGameTimerPaused
+	ld hl, wGameTimer
 	res GAME_TIMER_COUNTING_F, [hl]
 	farcall HallOfFame
-	ld hl, wGameTimerPaused
+	ld hl, wGameTimer
 	set GAME_TIMER_COUNTING_F, [hl]
 	jr ReturnFromCredits
 

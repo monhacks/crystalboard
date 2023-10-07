@@ -12,7 +12,7 @@ OverworldLoop::
 	jr nz, .loop
 .done
 	call DisableOverworldHUD
-	ld hl, wGameTimerPaused
+	ld hl, wGameTimer
 	res GAME_TIMER_COUNTING_F, [hl] ; stop game timer counter
 	ld a, FALSE
 	ld [wText2bpp], a

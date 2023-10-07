@@ -698,7 +698,7 @@ LoadMapPals:
 	ld a, BANK(wOBPals1)
 	ld de, wOBPals1
 	ld hl, MapObjectDarknessPals
-	ld bc, 7 palettes
+	ld bc, 7 palettes ; all but PAL_OW_MISC
 	jp FarCopyWRAM
 
 .not_darkness
@@ -708,7 +708,7 @@ LoadMapPals:
 	ld hl, MapObjectPals
 	call AddNTimes
 	ld de, wOBPals1
-	ld bc, 7 palettes
+	ld bc, 7 palettes ; all but PAL_OW_MISC
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
 
