@@ -1,3 +1,5 @@
+; in darkness, these eight are always used rather than following environment colors indices
+
 ; dark
 	RGB 01,01,02, 00,00,00, 00,00,00, 00,00,00 ; gray
 	RGB 01,01,02, 00,00,00, 00,00,00, 00,00,00 ; red

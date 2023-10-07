@@ -628,7 +628,7 @@ INCLUDE "data/pokemon/palettes.asm"
 INCLUDE "data/trainers/palettes.asm"
 
 LoadMapPals:
-	call LoadDarknessPaletteIfDark ; also handles darkness palettes
+	call LoadDarknessPaletteIfDark
 	jr c, .got_pals
 
 	; Which palette group is based on whether we're outside or inside
@@ -697,8 +697,8 @@ LoadMapPals:
 	jr nz, .not_darkness
 	ld a, BANK(wOBPals1)
 	ld de, wOBPals1
-	ld hl, NPCDarknessPalette
-	ld bc, 8 palettes
+	ld hl, MapObjectDarknessPals
+	ld bc, 7 palettes
 	jp FarCopyWRAM
 
 .not_darkness
@@ -708,7 +708,7 @@ LoadMapPals:
 	ld hl, MapObjectPals
 	call AddNTimes
 	ld de, wOBPals1
-	ld bc, 8 palettes
+	ld bc, 7 palettes
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
 
@@ -759,7 +759,7 @@ LoadDarknessPaletteIfDark:
 LoadDarknessPalette:
 	ld a, BANK(wBGPals1)
 	ld de, wBGPals1
-	ld hl, DarknessPalette
+	ld hl, TilesetBGDarknessPalette
 	ld bc, 8 palettes
 	jp FarCopyWRAM
 
@@ -771,13 +771,13 @@ INCLUDE "gfx/stats/party_menu_bg_mobile.pal"
 PartyMenuBGPalette:
 INCLUDE "gfx/stats/party_menu_bg.pal"
 
-DarknessPalette:
+TilesetBGDarknessPalette:
 INCLUDE "gfx/tilesets/bg_tiles_darkness.pal"
 
 TilesetBGPalette:
 INCLUDE "gfx/tilesets/bg_tiles.pal"
 
-NPCDarknessPalette:
+MapObjectDarknessPals:
 INCLUDE "gfx/overworld/npc_sprites_darkness.pal"
 
 MapObjectPals::
