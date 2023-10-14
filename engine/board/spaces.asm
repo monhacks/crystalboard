@@ -31,5 +31,5 @@ ArriveToRegularSpace:
 	and a
 	jp nz, UpdateSecondarySprites
 	ld hl, wDisplaySecondarySprites
-	res SECONDARYSPRITES_DIE_ROLL_F, [hl]
+	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
 	ret
