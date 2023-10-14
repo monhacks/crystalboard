@@ -266,7 +266,7 @@ PlayerEvents:
 	call CheckBoardEvent
 	jr c, .ok
 
-	call CheckTrainerBattle_GetPlayerEvent
+	call CheckTrainerEvent
 	jr c, .ok
 
 	call CheckTileEvent
@@ -281,6 +281,18 @@ PlayerEvents:
 	call CheckTimeEvents
 	jr c, .ok
 
+; BOARDEVENT_END_TURN is used as turn cleanup after BOARDEVENT_HANDLE_BOARD.
+; when we make it here, it means there's finally nothing else to do (e.g. a trainer),
+; so return with BOARDEVENT_DISPLAY_MENU for the next MapEvents iteration.
+	ldh a, [hCurBoardEvent]
+	cp BOARDEVENT_END_TURN
+	jr nz, .continue
+	ld a, BOARDEVENT_DISPLAY_MENU
+	ldh [hCurBoardEvent], a
+	xor a
+	ret
+
+.continue
 	call OWPlayerInput
 	jr c, .ok
 
@@ -305,6 +317,7 @@ CheckBoardEvent:
 	dw .none
 	dw .menu  ; BOARDEVENT_DISPLAY_MENU
 	dw .board ; BOARDEVENT_HANDLE_BOARD
+	dw .none  ; BOARDEVENT_END_TURN
 	assert_table_length NUM_BOARD_EVENTS + 1
 
 .none
@@ -352,7 +365,7 @@ CheckBoardEvent:
 	dw GreySpaceScript ; COLL_GREY_SPACE
 	assert_table_length NUM_COLL_SPACES
 
-CheckTrainerBattle_GetPlayerEvent:
+CheckTrainerEvent:
 	call CheckTrainerBattle
 	jr nc, .nope
 

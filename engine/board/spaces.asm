@@ -2,20 +2,23 @@ BoardSpaceScripts:: ; used only for BANK(BoardSpaceScripts)
 
 BlueSpaceScript::
 	scall ArriveToRegularSpaceScript
-	iftrue .done
-.done
+	iftrue .not_landed
+	scall LandedInRegularSpaceScript
+.not_landed
 	end
 
 RedSpaceScript::
 	scall ArriveToRegularSpaceScript
-	iftrue .done
-.done
+	iftrue .not_landed
+	scall LandedInRegularSpaceScript
+.not_landed
 	end
 
 GreySpaceScript::
 	scall ArriveToRegularSpaceScript
-	iftrue .done
-.done
+	iftrue .not_landed
+	scall LandedInRegularSpaceScript
+.not_landed
 	end
 
 ArriveToRegularSpaceScript:
@@ -32,4 +35,13 @@ ArriveToRegularSpace:
 	jp nz, UpdateSecondarySprites
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
+	ret
+
+LandedInRegularSpaceScript:
+	callasm LandedInRegularSpace
+	end
+
+LandedInRegularSpace:
+	ld a, BOARDEVENT_END_TURN
+	ldh [hCurBoardEvent], a
 	ret
