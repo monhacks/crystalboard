@@ -243,6 +243,7 @@ INCLUDE "engine/menus/level_selection_menu.asm"
 SECTION "Board 1", ROMX
 
 INCLUDE "engine/board/menu.asm"
+INCLUDE "engine/board/spaces.asm"
 
 
 SECTION "bank20", ROMX

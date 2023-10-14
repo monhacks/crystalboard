@@ -2190,7 +2190,7 @@ wScriptFlags2::
 ; bit 1: coord events
 ; bit 2: warps and connections
 ; bit 4: wild encounters
-; bit 5: unknown
+; bit 5: space effects
 	db
 
 wScriptMode:: db

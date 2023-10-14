@@ -114,6 +114,11 @@ DEF COLL_DOWN_RIGHT_BUOY   EQU $c4 ; unused
 DEF COLL_DOWN_LEFT_BUOY    EQU $c5 ; unused
 DEF COLL_UP_RIGHT_BUOY     EQU $c6 ; unused
 DEF COLL_UP_LEFT_BUOY      EQU $c7 ; unused
+    const_def $d0
+    const COLL_BLUE_SPACE    ; $d0
+    const COLL_RED_SPACE     ; $d1
+    const COLL_GREY_SPACE    ; $d2
+DEF NUM_COLL_SPACES EQU const_value - $d0
 DEF COLL_FF                EQU $ff ; garbage
 
 ; collision data type nybbles
@@ -127,3 +132,4 @@ DEF HI_NYBBLE_WARPS      EQU $70
 DEF HI_NYBBLE_LEDGES     EQU $a0
 DEF HI_NYBBLE_SIDE_WALLS EQU $b0
 DEF HI_NYBBLE_SIDE_BUOYS EQU $c0
+DEF HI_NYBBLE_SPACES     EQU $d0

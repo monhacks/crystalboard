@@ -14,6 +14,7 @@ BoardMenuScript::
 	callasm BoardMenu_Die
 	iffalse BoardMenuScript
 	callasm BoardMenu_BreakDieAnimation
+	callasm RestoreOverworldFontOverBoardMenuGFX
 	end
 
 .Party:
@@ -203,7 +204,7 @@ DIE_MAX_NUMBER EQU 6
 	add DIE_MAX_NUMBER
 	add $1
 	ld [wDieRoll], a
-	farcall _UpdateSecondarySprites
+	call UpdateSecondarySprites
 	call GetJoypad
 	ldh a, [hJoyPressed]
 	bit B_BUTTON_F, a
@@ -323,6 +324,8 @@ BoardMenu_BreakDieAnimation:
 	ld a, [wDieRoll]
 	ld [wSpacesLeft], a
 	call UpdateSprites
+	ld a, BOARDEVENT_HANDLE_BOARD
+	ldh [hCurBoardEvent], a
 	ret
 
 BoardMenu_Party:

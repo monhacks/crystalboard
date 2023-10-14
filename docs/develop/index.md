@@ -103,7 +103,7 @@ $~~~~$*Exit overworld loop*
 
 wMapStatus == MAPSTATUS_HANDLE: <c>the remainder of the code goes at this level</c>
 > hOverworldDelay <= 2 <c>2 is *MaxOverworldDelay*</c>\
-> MapEventStatus == MAPEVENTS_ON:\
+> wMapEventStatus == MAPEVENTS_ON:\
 >$~~~~$*Get joypad* <c>update hJoyDown, hJoyReleased, hJoyPressed</c>\
 >$~~~~$*Refresh pals*
 
@@ -144,7 +144,7 @@ wMapStatus == MAPSTATUS_HANDLE: <c>the remainder of the code goes at this level<
 >>>>> wWalkingIntoEdgeWarp <= FALSE
 
 >>>>> <c>Tile collision checks below consist on reading the current tile *wPlayerTile* and comparing it to a *COLL_* constant or a range of *COLL_* constants.</c>\
->>>>> <c>Tile permission checks below on reading the permissions of the tile that the player is walking into: *wTilePermissions* (applies only to *COLL_WALL*s) and *wWalkingTile* (*LAND_TILE*, *WATER_TILE*, or *WALL_TILE* for the tile in the walking direction; *WALL_TILE* permission is not the same as a *COLL_WALL* collision).</c>\
+>>>>> <c>Tile permission checks below consist on reading the permissions of the tile that the player is walking into: *wTilePermissions* (applies only to *COLL_WALL*s) and *wWalkingTile* (*LAND_TILE*, *WATER_TILE*, or *WALL_TILE* for the tile in the walking direction; *WALL_TILE* permission is not the same as a *COLL_WALL* collision).</c>\
 >>>>> wPlayerState == PLAYER_NORMAL or wPlayerState = PLAYER_BIKE:\
 >>>>> $~~~~$*if on ice tile and wPlayerTurningDirection != 0: wCurInput <= current direction button*\
 >>>>> $~~~~$*update wWalkingDirection, wFacingDirection, wWalkingX, wWalkingY, wWalkingTile, based on wCurInput direction*\

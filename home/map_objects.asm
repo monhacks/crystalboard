@@ -544,9 +544,15 @@ UpdateSprites::
 	ld a, [wVramState]
 	bit 0, a
 	ret z
-
 	farcall UpdateAllObjectsFrozen
 	farcall _UpdateSprites
+	ret
+
+UpdateSecondarySprites::
+	ld a, [wVramState]
+	bit 0, a
+	ret z
+	farcall _UpdateSecondarySprites
 	ret
 
 GetObjectStruct::

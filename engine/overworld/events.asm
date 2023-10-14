@@ -35,11 +35,6 @@ EnableEvents::
 	ld [wScriptFlags2], a
 	ret
 
-CheckBit5_ScriptFlags2: ; unreferenced
-	ld hl, wScriptFlags2
-	bit 5, [hl]
-	ret
-
 DisableWarpsConnxns: ; unreferenced
 	ld hl, wScriptFlags2
 	res 2, [hl]
@@ -58,6 +53,11 @@ DisableStepCount: ; unreferenced
 DisableWildEncounters: ; unreferenced
 	ld hl, wScriptFlags2
 	res 4, [hl]
+	ret
+
+DisableSpaceEffects: ; unreferenced
+	ld hl, wScriptFlags2
+	res 5, [hl]
 	ret
 
 EnableWarpsConnxns: ; unreferenced
@@ -80,6 +80,11 @@ EnableWildEncounters:
 	set 4, [hl]
 	ret
 
+EnableSpaceEffects: ; unreferenced
+	ld hl, wScriptFlags2
+	set 5, [hl]
+	ret
+
 CheckWarpConnxnScriptFlag:
 	ld hl, wScriptFlags2
 	bit 2, [hl]
@@ -100,6 +105,11 @@ CheckWildEncountersScriptFlag:
 	bit 4, [hl]
 	ret
 
+CheckSpaceEffects:
+	ld hl, wScriptFlags2
+	bit 5, [hl]
+	ret
+
 StartMap:
 	xor a
 	ldh [hScriptVar], a
@@ -111,7 +121,7 @@ StartMap:
 	farcall InitCallReceiveDelay
 	call ClearJoypad
 	ld a, BOARDEVENT_DISPLAY_MENU
-	ld [hCurBoardEvent], a
+	ldh [hCurBoardEvent], a
 EnterMap:
 	xor a
 	ld [wXYComparePointer], a
@@ -285,7 +295,8 @@ CheckBoardEvent:
 .Jumptable:
 	table_width 2, .Jumptable
 	dw .none
-	dw .menu
+	dw .menu  ; BOARDEVENT_DISPLAY_MENU
+	dw .board ; BOARDEVENT_HANDLE_BOARD
 	assert_table_length NUM_BOARD_EVENTS + 1
 
 .none
@@ -296,10 +307,42 @@ CheckBoardEvent:
 	ld a, BANK(BoardMenuScript)
 	ld hl, BoardMenuScript
 	call CallScript
-	xor a
-	ld [hCurBoardEvent], a
 	scf
 	ret
+
+.board
+	call CheckSpaceEffects
+	jr z, .no_space_effect
+	ld a, [wPlayerTile]
+	and $f0
+	cp HI_NYBBLE_SPACES
+	jr nz, .no_space_effect
+	ld a, [wPlayerTile]
+	and $0f
+	ld e, a
+	ld d, 0
+	ld hl, .SpaceScripts
+	add hl, de
+	add hl, de
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, BANK(BoardSpaceScripts)
+	call CallScript
+	scf
+	ret
+
+.no_space_effect
+; continue moving in board
+	xor a
+	ret
+
+.SpaceScripts:
+	table_width 2, .SpaceScripts
+	dw BlueSpaceScript ; COLL_BLUE_SPACE
+	dw RedSpaceScript  ; COLL_RED_SPACE
+	dw GreySpaceScript ; COLL_GREY_SPACE
+	assert_table_length NUM_COLL_SPACES
 
 CheckTrainerBattle_GetPlayerEvent:
 	call CheckTrainerBattle

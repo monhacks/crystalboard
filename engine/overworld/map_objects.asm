@@ -3078,7 +3078,7 @@ InitSprites:
 	dw wObject11Struct
 	dw wObject12Struct
 
-_UpdateSecondarySprites:
+_UpdateSecondarySprites::
 ; this is a shorter _UpdateSprites for when only secondary sprites have changed since the last sprites update,
 ; but NOT expanded, which would require to displace primary (NPC) sprites in OAM.
 ; if it is detected that the size of secondary sprites has increased in the end,
@@ -3145,15 +3145,17 @@ InitBoardMenuSprites:
 InitRollDieSprites:
 	push af
 
-	ld hl, DieRollOAM
 	ld a, [wDieRoll]
+	and a
+	jr z, .zero_or_oam_full
 	dec a
+	ld hl, DieRollOAM
 	ld bc, DIE_SIZE * SPRITEOAMSTRUCT_LENGTH
 	call AddNTimes
 ; find the beginning of free space in OAM, and assure there's space for a DIE_SIZE object
 	ldh a, [hUsedSpriteIndex]
 	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (DIE_SIZE * SPRITEOAMSTRUCT_LENGTH) + 1
-	jr nc, .oam_full
+	jr nc, .zero_or_oam_full
 ; copy the sprite data (DIE_SIZE objects) of that item to the available space in OAM
 	ld e, a
 	ld d, HIGH(wShadowOAM)
@@ -3164,7 +3166,7 @@ InitRollDieSprites:
 	add (DIE_SIZE * SPRITEOAMSTRUCT_LENGTH)
 	ldh [hUsedSpriteIndex], a
 
-.oam_full
+.zero_or_oam_full
 	pop af
 	ret
 
