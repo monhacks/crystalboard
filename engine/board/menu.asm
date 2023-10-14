@@ -1,5 +1,6 @@
 BoardMenuScript::
 	opentext
+	callasm .Upkeep
 .display_menu
 	callasm BoardMenu
 	ifequal BOARDMENUITEM_DIE,      .Die
@@ -9,6 +10,17 @@ BoardMenuScript::
 	ifequal BOARDMENUITEM_EXIT,     .Exit
 	closetext
 	end
+
+.Upkeep:
+; save after opentext to reanchor map first
+; save before processing variables like wCurTurn due to BoardMenuScript reentry after game reset
+	farcall AutoSaveGameInOverworld
+	ld hl, wCurTurn
+	inc [hl]
+	ld hl, wTurnData
+	ld bc, wTurnDataEnd - wTurnData
+	xor a
+	jp ByteFill
 
 .Die:
 	callasm BoardMenu_Die

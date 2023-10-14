@@ -110,6 +110,7 @@ CheckSpaceEffects:
 	bit 5, [hl]
 	ret
 
+; on enter overworld loop
 StartMap:
 	xor a
 	ldh [hScriptVar], a
@@ -120,8 +121,15 @@ StartMap:
 	call ByteFill
 	farcall InitCallReceiveDelay
 	call ClearJoypad
+; initialize board state
+	xor a
+	ld [wCurTurn], a
+	ld [wCurSpace], a
 	ld a, BOARDEVENT_DISPLAY_MENU
 	ldh [hCurBoardEvent], a
+; fallthrough
+
+; on map reload (e.g. after battle), warps and connections
 EnterMap:
 	xor a
 	ld [wXYComparePointer], a
