@@ -10,9 +10,10 @@ MACRO map_attributes
 	db CURRENT_MAP_HEIGHT, CURRENT_MAP_WIDTH
 	db BANK(\1_Blocks)
 	dw \1_Blocks
-	db BANK(\1_MapScripts) ; aka BANK(\1_MapEvents)
+	db BANK(\1_MapScripts) ; aka BANK(\1_MapEvents), BANK(\1_MapSpaces)
 	dw \1_MapScripts
 	dw \1_MapEvents
+	dw \1_MapSpaces
 	db \4
 ENDM
 

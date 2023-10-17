@@ -10,6 +10,29 @@ Level1_Map1_MapScripts:
 
 	def_callbacks
 
+Level1_Map1_MapEvents:
+	db 0, 0 ; filler
+
+	def_warp_events
+	warp_event  7,  0, LEVEL_1_MAP_1, 1
+
+	def_coord_events
+
+	def_bg_events
+	bg_event  2,  1, BGEVENT_UP, Level1_Map1_PCScript
+	bg_event  3,  1, BGEVENT_READ, Level1_Map1_RadioScript
+	bg_event  5,  1, BGEVENT_READ, Level1_Map1_BookshelfScript
+	bg_event  6,  0, BGEVENT_IFSET, Level1_Map1_PosterScript
+
+	def_object_events
+	object_event  4,  2, SPRITE_CONSOLE, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Level1_Map1_GameConsoleScript, -1
+	object_event  4,  4, SPRITE_DOLL_1, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Level1_Map1_Doll1Script, -1
+	object_event  5,  4, SPRITE_DOLL_2, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Level1_Map1_Doll2Script, -1
+	object_event  0,  1, SPRITE_BIG_DOLL, SPRITEMOVEDATA_BIGDOLL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Level1_Map1_BigDollScript, -1
+	object_event  6,  6, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 1, Level1_Map1_TrainerYoungsterMikey, -1
+
+Level1_Map1_MapSpaces:
+
 Level1_Map1_Doll1Script::
 	opentext
 	callasm .BoardMenu
@@ -90,24 +113,3 @@ Level1_Map1_TrainerYoungsterMikey:
 	line "tle other people"
 	cont "to get better."
 	done
-
-Level1_Map1_MapEvents:
-	db 0, 0 ; filler
-
-	def_warp_events
-	warp_event  7,  0, LEVEL_1_MAP_1, 1
-
-	def_coord_events
-
-	def_bg_events
-	bg_event  2,  1, BGEVENT_UP, Level1_Map1_PCScript
-	bg_event  3,  1, BGEVENT_READ, Level1_Map1_RadioScript
-	bg_event  5,  1, BGEVENT_READ, Level1_Map1_BookshelfScript
-	bg_event  6,  0, BGEVENT_IFSET, Level1_Map1_PosterScript
-
-	def_object_events
-	object_event  4,  2, SPRITE_CONSOLE, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Level1_Map1_GameConsoleScript, -1
-	object_event  4,  4, SPRITE_DOLL_1, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Level1_Map1_Doll1Script, -1
-	object_event  5,  4, SPRITE_DOLL_2, SPRITEMOVEDATA_STILL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Level1_Map1_Doll2Script, -1
-	object_event  0,  1, SPRITE_BIG_DOLL, SPRITEMOVEDATA_BIGDOLL, 0, 0, -1, -1, 0, OBJECTTYPE_SCRIPT, 0, Level1_Map1_BigDollScript, -1
-	object_event  6,  6, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 1, Level1_Map1_TrainerYoungsterMikey, -1

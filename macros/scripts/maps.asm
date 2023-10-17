@@ -131,6 +131,14 @@ MACRO object_event
 	endc
 ENDM
 
+MACRO space
+;\1: x coord
+;\2: y coord
+;\3: effect (space type specific)
+;\4: next space
+	db \1, \2, \3, \4
+ENDM
+
 MACRO trainer
 ;\1: trainer group
 ;\2: trainer id

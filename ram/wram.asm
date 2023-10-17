@@ -1852,6 +1852,7 @@ wMapBlocksPointer:: dw
 wMapScriptsBank:: db
 wMapScriptsPointer:: dw
 wMapEventsPointer:: dw
+wMapSpacesPointer:: dw
 ; bit set
 wMapConnections:: db
 wMapAttributesEnd::

@@ -15,3 +15,5 @@ DebugLevel2_Map1_MapEvents:
 	def_bg_events
 
 	def_object_events
+
+DebugLevel2_Map1_MapSpaces:
