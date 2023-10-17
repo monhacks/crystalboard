@@ -35,6 +35,16 @@ EnableEvents::
 	ld [wScriptFlags2], a
 	ret
 
+DisableTileEvents:
+; DisableWarpsConnxns + DisableCoordEvents + DisableStepCount + DisableWildEncounters
+	push af
+	ld hl, wScriptFlags2
+	ld a, [hl]
+	and ~((1 << 0) | (1 << 1) | (1 << 2) | (1 << 3))
+	ld [hl], a
+	pop af
+	ret
+
 DisableWarpsConnxns: ; unreferenced
 	ld hl, wScriptFlags2
 	res 2, [hl]
@@ -52,12 +62,12 @@ DisableStepCount: ; unreferenced
 
 DisableWildEncounters: ; unreferenced
 	ld hl, wScriptFlags2
-	res 4, [hl]
+	res 3, [hl]
 	ret
 
-DisableSpaceEffects: ; unreferenced
+DisableSpaceEffects:
 	ld hl, wScriptFlags2
-	res 5, [hl]
+	res 4, [hl]
 	ret
 
 EnableWarpsConnxns: ; unreferenced
@@ -77,12 +87,12 @@ EnableStepCount: ; unreferenced
 
 EnableWildEncounters:
 	ld hl, wScriptFlags2
-	set 4, [hl]
+	set 3, [hl]
 	ret
 
 EnableSpaceEffects: ; unreferenced
 	ld hl, wScriptFlags2
-	set 5, [hl]
+	set 4, [hl]
 	ret
 
 CheckWarpConnxnScriptFlag:
@@ -102,12 +112,12 @@ CheckStepCountScriptFlag:
 
 CheckWildEncountersScriptFlag:
 	ld hl, wScriptFlags2
-	bit 4, [hl]
+	bit 3, [hl]
 	ret
 
-CheckSpaceEffects:
+CheckSpaceEffectsScriptFlag:
 	ld hl, wScriptFlags2
-	bit 5, [hl]
+	bit 4, [hl]
 	ret
 
 ; on enter overworld loop
@@ -187,7 +197,6 @@ MapEvents:
 
 .events:
 	call PlayerEvents
-	call DisableEvents
 	farcall ScriptEvents
 	ret
 
@@ -264,12 +273,14 @@ PlayerEvents:
 	ret nz
 
 	call CheckBoardEvent
+	call DisableSpaceEffects ; doesn't alter f
 	jr c, .ok
 
 	call CheckTrainerEvent
 	jr c, .ok
 
 	call CheckTileEvent
+	call DisableTileEvents ; preserves f
 	jr c, .ok
 
 	call RunMemScript
@@ -332,7 +343,7 @@ CheckBoardEvent:
 	ret
 
 .board
-	call CheckSpaceEffects
+	call CheckSpaceEffectsScriptFlag
 	jr z, .no_space_effect
 	ld a, [wPlayerTile]
 	and $f0

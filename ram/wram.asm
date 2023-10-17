@@ -2189,8 +2189,8 @@ wScriptFlags2::
 ; bit 0: count steps
 ; bit 1: coord events
 ; bit 2: warps and connections
-; bit 4: wild encounters
-; bit 5: space effects
+; bit 3: wild encounters
+; bit 4: space effects
 	db
 
 wScriptMode:: db
