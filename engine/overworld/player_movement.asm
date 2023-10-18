@@ -11,19 +11,25 @@ DoPlayerMovement::
 	ret
 
 .GetDPad:
+	ldh a, [hCurBoardEvent]
+	cp BOARDEVENT_HANDLE_BOARD
+	jr nz, .not_auto_in_board
+
+; compute direction according to space layout and save to wCurInput
+	farcall StepTowardsNextSpace
+	ret
+
+.not_auto_in_board
 	ldh a, [hJoyDown]
 	ld [wCurInput], a
 
 ; Standing downhill instead moves down.
-
 	ld hl, wBikeFlags
 	bit BIKEFLAGS_DOWNHILL_F, [hl]
 	ret z
-
 	ld c, a
 	and D_PAD
 	ret nz
-
 	ld a, c
 	or D_DOWN
 	ld [wCurInput], a

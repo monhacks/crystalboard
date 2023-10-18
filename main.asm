@@ -244,6 +244,7 @@ SECTION "Board 1", ROMX
 
 INCLUDE "engine/board/menu.asm"
 INCLUDE "engine/board/spaces.asm"
+INCLUDE "engine/board/movement.asm"
 
 
 SECTION "bank20", ROMX

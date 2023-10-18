@@ -27,12 +27,18 @@ ArriveToRegularSpaceScript:
 	end
 
 ArriveToRegularSpace:
+; load new space
+	ld a, [wCurSpaceNextSpace]
+	ld [wCurSpace], a
+	call LoadCurSpaceData
+; decrease wSpacesLeft and copy to hScriptVar
 	ld hl, wSpacesLeft
 	dec [hl]
 	ld a, [hl]
 	ld [hScriptVar], a
+; if landed, clear spaces left sprites
 	and a
-	jp nz, UpdateSecondarySprites
+	ret nz
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
 	ret

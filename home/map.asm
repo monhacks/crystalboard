@@ -2298,3 +2298,29 @@ LoadMapTileset::
 	pop bc
 	pop hl
 	ret
+
+; a: which space to load
+LoadTempSpaceData::
+	ld de, wTempSpaceData
+	jr LoadSpaceData
+
+LoadCurSpaceData::
+	ld de, wCurSpaceData
+	ld a, [wCurSpace]
+	; fallthrough
+
+; de: location where to load
+;  a: which space to load
+LoadSpaceData::
+	push de
+	push af
+	ld hl, wMapSpacesPointer
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld bc, wCurSpaceDataEnd - wCurSpaceData ; wTempSpaceDataEnd - wTempSpaceData
+	pop af
+	call AddNTimes
+	pop de
+	ld a, [wMapScriptsBank]
+	jp FarCopyBytes

@@ -1669,13 +1669,22 @@ ENDU
 
 SECTION "More WRAM 1", WRAMX
 
-wTMHMMoveNameBackup:: ds MOVE_NAME_LENGTH
-
 wStringBuffer1:: ds STRING_BUFFER_LENGTH
 wStringBuffer2:: ds STRING_BUFFER_LENGTH
+
+UNION
 wStringBuffer3:: ds STRING_BUFFER_LENGTH
 wStringBuffer4:: ds STRING_BUFFER_LENGTH
 wStringBuffer5:: ds STRING_BUFFER_LENGTH
+
+NEXTU
+wTempSpaceData::
+wTempSpaceXCoord:: db
+wTempSpaceYCoord:: db
+wTempSpaceEffect:: db
+wTempSpaceNextSpace:: db
+wTempSpaceDataEnd::
+ENDU
 
 wBattleMenuCursorPosition::
 wStartMenuLastCursorPosition::
@@ -2180,7 +2189,10 @@ ENDU
 wBattleAction:: db
 
 wLinkBattleSentAction:: db
+
+; wMapStatus ~ wMapStatusEnd is cleared in StartMap
 wMapStatus:: db
+
 wMapEventStatus:: db
 
 wScriptFlags::
@@ -2236,12 +2248,13 @@ wReceiveCallDelay_StartTime:: ds 2 ; hour, min
 wBugContestMinsRemaining:: db
 wBugContestSecsRemaining:: db
 
-wMapStatusEnd::
-
+; TurnData ~ wTurnDataEnd is cleared at the beginning of BoardMenuScript (i.e. on turn begin)
 wTurnData::
 wDieRoll:: db
 wSpacesLeft:: db
 wTurnDataEnd::
+
+wMapStatusEnd::
 
 wGameData::
 wPlayerData::
@@ -2497,8 +2510,15 @@ wYCoord:: db
 wXCoord:: db
 wScreenSave:: ds SCREEN_META_WIDTH * SCREEN_META_HEIGHT
 
-wCurSpace:: db
 wCurTurn:: db
+wCurSpace:: db
+
+wCurSpaceData::
+wCurSpaceXCoord:: db
+wCurSpaceYCoord:: db
+wCurSpaceEffect:: db
+wCurSpaceNextSpace:: db
+wCurSpaceDataEnd::
 
 wCurMapDataEnd::
 

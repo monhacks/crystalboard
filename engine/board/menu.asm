@@ -15,12 +15,13 @@ BoardMenuScript::
 ; save after opentext to reanchor map first
 ; save before processing variables like wCurTurn due to BoardMenuScript reentry after game reset
 	farcall AutoSaveGameInOverworld
-	ld hl, wCurTurn
-	inc [hl]
 	ld hl, wTurnData
 	ld bc, wTurnDataEnd - wTurnData
 	xor a
-	jp ByteFill
+	call ByteFill
+	ld hl, wCurTurn
+	inc [hl]
+	jp LoadCurSpaceData
 
 .Die:
 	callasm BoardMenu_Die
