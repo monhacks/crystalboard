@@ -131,10 +131,15 @@ StartMap:
 	call ByteFill
 	farcall InitCallReceiveDelay
 	call ClearJoypad
+
 ; initialize board state
+	ld a, [hMapEntryMethod]
+	cp MAPSETUP_ENTERLEVEL
+	jr nz, .not_starting_level
 	xor a
 	ld [wCurTurn], a
 	ld [wCurSpace], a
+.not_starting_level
 	ld a, BOARDEVENT_DISPLAY_MENU
 	ldh [hCurBoardEvent], a
 ; fallthrough
