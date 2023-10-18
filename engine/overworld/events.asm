@@ -565,6 +565,11 @@ OWPlayerInput:
 	and a
 	jr nz, .NoAction
 
+; Can't perform button actions while in BOARDEVENT_HANDLE_BOARD
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_HANDLE_BOARD
+	jr z, .NoAction
+
 ; Can't perform button actions while sliding on ice.
 	farcall CheckStandingOnIce
 	jr c, .NoAction
