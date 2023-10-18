@@ -247,11 +247,11 @@ HandleMapBackground:
 CheckPlayerState:
 	ld a, [wPlayerStepFlags]
 	bit PLAYERSTEP_CONTINUE_F, a
-	jr z, .events
+	jr z, .events ; PLAYERSTEP_CONTINUE_F not set
 	bit PLAYERSTEP_STOP_F, a
-	jr z, .noevents
+	jr z, .noevents ; PLAYERSTEP_CONTINUE_F set and PLAYERSTEP_STOP_F not set
 	bit PLAYERSTEP_MIDAIR_F, a
-	jr nz, .noevents
+	jr nz, .noevents ; PLAYERSTEP_CONTINUE_F, PLAYERSTEP_STOP_F, and PLAYERSTEP_MIDAIR_F all set
 	call EnableEvents
 .events
 	ld a, MAPEVENTS_ON
