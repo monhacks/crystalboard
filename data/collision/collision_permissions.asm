@@ -209,9 +209,9 @@ TileCollisionTable::
 	db WATER_TILE        ; cd
 	db WATER_TILE        ; ce
 	db WATER_TILE        ; cf
-	db LAND_TILE         ; d0
-	db LAND_TILE         ; d1
-	db LAND_TILE         ; d2
+	db LAND_TILE         ; COLL_BLUE_SPACE
+	db LAND_TILE         ; COLL_RED_SPACE
+	db LAND_TILE         ; COLL_GREY_SPACE
 	db LAND_TILE         ; d3
 	db LAND_TILE         ; d4
 	db LAND_TILE         ; d5
