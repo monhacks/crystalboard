@@ -14,6 +14,37 @@ RedSpaceScript::
 .not_landed
 	end
 
+GreenSpaceScript::
+	scall ArriveToRegularSpaceScript
+	iftrue .not_landed
+	scall LandedInRegularSpaceScript
+.not_landed
+	end
+
+ItemSpaceScript::
+	scall ArriveToRegularSpaceScript
+	iftrue .not_landed
+	scall LandedInRegularSpaceScript
+.not_landed
+	end
+
+PokemonSpaceScript::
+	scall ArriveToRegularSpaceScript
+	iftrue .not_landed
+	scall LandedInRegularSpaceScript
+.not_landed
+	end
+
+MinigameSpaceScript::
+	scall ArriveToRegularSpaceScript
+	iftrue .not_landed
+	scall LandedInRegularSpaceScript
+.not_landed
+	end
+
+EndSpaceScript::
+	end
+
 GreySpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed

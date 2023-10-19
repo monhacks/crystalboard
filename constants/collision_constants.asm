@@ -115,9 +115,14 @@ DEF COLL_DOWN_LEFT_BUOY    EQU $c5 ; unused
 DEF COLL_UP_RIGHT_BUOY     EQU $c6 ; unused
 DEF COLL_UP_LEFT_BUOY      EQU $c7 ; unused
     const_def $d0
-    const COLL_BLUE_SPACE    ; $d0
-    const COLL_RED_SPACE     ; $d1
-    const COLL_GREY_SPACE    ; $d2
+    const COLL_BLUE_SPACE     ; $d0
+    const COLL_RED_SPACE      ; $d1
+    const COLL_GREEN_SPACE    ; $d2
+    const COLL_ITEM_SPACE     ; $d3
+    const COLL_POKEMON_SPACE  ; $d4
+    const COLL_MINIGAME_SPACE ; $d5
+    const COLL_END_SPACE      ; $d6
+    const COLL_GREY_SPACE     ; $d7
 DEF NUM_COLL_SPACES EQU const_value - $d0
 DEF COLL_FF                EQU $ff ; garbage
 

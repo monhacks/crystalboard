@@ -376,9 +376,14 @@ CheckBoardEvent:
 
 .SpaceScripts:
 	table_width 2, .SpaceScripts
-	dw BlueSpaceScript ; COLL_BLUE_SPACE
-	dw RedSpaceScript  ; COLL_RED_SPACE
-	dw GreySpaceScript ; COLL_GREY_SPACE
+	dw BlueSpaceScript     ; COLL_BLUE_SPACE
+	dw RedSpaceScript      ; COLL_RED_SPACE
+	dw GreenSpaceScript    ; COLL_GREEN_SPACE
+	dw ItemSpaceScript     ; COLL_ITEM_SPACE
+	dw PokemonSpaceScript  ; COLL_POKEMON_SPACE
+	dw MinigameSpaceScript ; COLL_MINIGAME_SPACE
+	dw EndSpaceScript      ; COLL_END_SPACE
+	dw GreySpaceScript     ; COLL_GREY_SPACE
 	assert_table_length NUM_COLL_SPACES
 
 CheckTrainerEvent:

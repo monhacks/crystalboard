@@ -374,4 +374,4 @@ $~~~~$<c>then always returns PLAYERMOVEMENT_FINISH but often is overwritten by c
 11)  The space script loads the value of ``wCurSpaceNextSpace`` into ``wCurSpace``, loads the new space data to ``wCurSpaceData[]``, and decreases ``wSpacesLeft``.
       - If ``wSpacesLeft`` is non-0, **go back to 6)**.
 12)  ``hCurBoardEvent`` is set to ``BOARDEVENT_END_TURN``. ``CheckBoardEvent`` does nothing in this state. In the first subsequent ``HandleMap`` iteration where no other kind of event triggers causing ``PlayerEvents`` to return early, ``hCurBoardEvent`` is set to ``BOARDEVENT_DISPLAY_MENU``.
-13)  Go back to 3)
+13)  **Go back to 3)**

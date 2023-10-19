@@ -211,12 +211,12 @@ TileCollisionTable::
 	db WATER_TILE        ; cf
 	db LAND_TILE         ; COLL_BLUE_SPACE
 	db LAND_TILE         ; COLL_RED_SPACE
+	db LAND_TILE         ; COLL_GREEN_SPACE
+	db LAND_TILE         ; COLL_ITEM_SPACE
+	db LAND_TILE         ; COLL_POKEMON_SPACE
+	db LAND_TILE         ; COLL_MINIGAME_SPACE
+	db LAND_TILE         ; COLL_END_SPACE
 	db LAND_TILE         ; COLL_GREY_SPACE
-	db LAND_TILE         ; d3
-	db LAND_TILE         ; d4
-	db LAND_TILE         ; d5
-	db LAND_TILE         ; d6
-	db LAND_TILE         ; d7
 	db LAND_TILE         ; d8
 	db LAND_TILE         ; d9
 	db LAND_TILE         ; da
