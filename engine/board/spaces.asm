@@ -79,6 +79,19 @@ LandedInRegularSpaceScript:
 	end
 
 LandedInRegularSpace:
+; disable the space effect (turn the space into a grey space)
+	ld a, [wCurSpaceXCoord]
+	add 4
+	ld d, a
+	ld a, [wCurSpaceYCoord]
+	add 4
+	ld e, a
+	call GetBlockLocation
+	ld a, [hl]
+	and UNIQUE_SPACE_METATILES_MASK
+	add FIRST_GREY_SPACE_METATILE
+	ld [hl], a
+; trigger end of turn
 	ld a, BOARDEVENT_END_TURN
 	ldh [hCurBoardEvent], a
 	ret
