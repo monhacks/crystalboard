@@ -406,3 +406,10 @@ MACRO battle_bg_effect
 \1BattleTurn::     db
 \1Param::          db
 ENDM
+
+MACRO space_struct
+\1XCoord::   db
+\1YCoord::   db
+\1Effect::   db
+\1NextSpace:: db
+ENDM

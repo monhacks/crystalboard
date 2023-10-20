@@ -2301,11 +2301,11 @@ LoadMapTileset::
 
 ; a: which space to load
 LoadTempSpaceData::
-	ld de, wTempSpaceData
+	ld de, wTempSpaceStruct
 	jr LoadSpaceData
 
 LoadCurSpaceData::
-	ld de, wCurSpaceData
+	ld de, wCurSpaceStruct
 	ld a, [wCurSpace]
 	; fallthrough
 
@@ -2318,7 +2318,7 @@ LoadSpaceData::
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld bc, wCurSpaceDataEnd - wCurSpaceData ; wTempSpaceDataEnd - wTempSpaceData
+	ld bc, wCurSpaceStructEnd - wCurSpaceStruct ; wTempSpaceStructEnd - wTempSpaceStruct
 	pop af
 	call AddNTimes
 	pop de

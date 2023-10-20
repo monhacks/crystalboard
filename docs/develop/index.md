@@ -348,20 +348,20 @@ $~~~~$<c>then always returns PLAYERMOVEMENT_FINISH but often is overwritten by c
 - Addresses within *wCurMapData* ~ *wCurMapDataEnd*: preserved on save.
   - **wCurTurn**
   - **wCurSpace**
-  - **wCurSpaceData**:
+  - **wCurSpaceStruct**:
     - **wCurSpaceXCoord**
     - **wCurSpaceYCoord**
     - **wCurSpaceEffect**
     - **wCurSpaceNextSpace**.
 
-- **wTempSpaceData**: shares memory region with string buffers from *wStringBuffer3* onwards. Temporary scope. Same structure as *wCurSpaceData*
+- **wTempSpaceStruct**: shares memory region with string buffers from *wStringBuffer3* onwards. Temporary scope. Same structure as *wCurSpaceStruct*
 
 ### Workflow
 
 1) ``OverworldLoop`` is called from ``GameMenu_WorldMap`` with either ``hMapEntryMethod`` = ``MAPSETUP_ENTERLEVEL`` or ``hMapEntryMethod`` = ``MAPSETUP_CONTINUE``.
 2) ``StartMap`` resets ``wCurTurn`` and ``wCurSpace`` if ``MAPSETUP_ENTERLEVEL``. ``StartMap`` sets ``hCurBoardEvent`` to ``BOARDEVENT_DISPLAY_MENU``. ``wScriptFlags2`` is cleared. ``wMapStatus`` is set to ``MAPSTATUS_HANDLE`` causing ``HandleMap`` to be called.
 3) ``MapEvents`` (from ``HandleMap``) calls ``PlayerEvents``. ``CheckBoardEvent`` queues ``BoardMenuScript`` which is executed by ``ScriptEvents``.
-4) ``BoardMenuScript``.``Upkeep`` saves the game, clears ``wTurnData[]``, increases ``wCurTurn``, and loads current space to ``wCurSpaceData[]``.
+4) ``BoardMenuScript``.``Upkeep`` saves the game, clears ``wTurnData[]``, increases ``wCurTurn``, and loads current space to ``wCurSpaceStruct[]``.
     - If player exits, the ``exitoverworld`` script sets ``wMapStatus`` to ``MAPSTATUS_DONE``. This causes ``OverworldLoop`` to return back to the game menu. **Exit this workflow**.
 5) Player rolls die and the animation plays. After the animation, ``wDisplaySecondarySprites``.``SECONDARYSPRITES_SPACES_LEFT_F`` is set and ``hCurBoardEvent`` is set to ``BOARDEVENT_HANDLE_BOARD``. At the end of this ``HandleMap`` iteration, ``CheckPlayerState`` sets ``wMapEventStatus`` to ``MAPEVENTS_ON`` (``wScriptFlags2`` is not touched so it remains cleared).
 6) In the next ``HandleMap`` iteration, ``CheckBoardEvent`` from ``PlayerEvents`` jumps to ``.board`` and then to ``.no_space_effect`` due to ``wScriptFlags2[4]`` not being set.
@@ -371,7 +371,7 @@ $~~~~$<c>then always returns PLAYERMOVEMENT_FINISH but often is overwritten by c
 10)  In the next ``HandleMap`` iteration, ``CheckBoardEvent.board`` is called with ``wScriptFlags2[4]`` set.
       - If player is not above a tile (``wPlayerTile``) with a space collision: ``wScriptFlags2[4]`` is reset. **Go back to 7)**.
       - If player is above a tile, the corresponding space script is queued to be executed by ``ScriptEvents`` in the current ``HandleMap`` iteration. ``wScriptFlags2[4]`` is reset. **Continue to 11)**.
-11)  The space script loads the value of ``wCurSpaceNextSpace`` into ``wCurSpace``, loads the new space data to ``wCurSpaceData[]``, and decreases ``wSpacesLeft``.
+11)  The space script loads the value of ``wCurSpaceNextSpace`` into ``wCurSpace``, loads the new space data to ``wCurSpaceStruct[]``, and decreases ``wSpacesLeft``.
       - If ``wSpacesLeft`` is non-0, **go back to 6)**.
 12)  ``hCurBoardEvent`` is set to ``BOARDEVENT_END_TURN``. ``CheckBoardEvent`` does nothing in this state. In the first subsequent ``HandleMap`` iteration where no other kind of event triggers causing ``PlayerEvents`` to return early, ``hCurBoardEvent`` is set to ``BOARDEVENT_DISPLAY_MENU``.
 13)  **Go back to 3)**

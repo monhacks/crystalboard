@@ -1678,12 +1678,8 @@ wStringBuffer4:: ds STRING_BUFFER_LENGTH
 wStringBuffer5:: ds STRING_BUFFER_LENGTH
 
 NEXTU
-wTempSpaceData::
-wTempSpaceXCoord:: db
-wTempSpaceYCoord:: db
-wTempSpaceEffect:: db
-wTempSpaceNextSpace:: db
-wTempSpaceDataEnd::
+wTempSpaceStruct:: space_struct wTempSpace
+wTempSpaceStructEnd::
 ENDU
 
 wBattleMenuCursorPosition::
@@ -2513,12 +2509,8 @@ wScreenSave:: ds SCREEN_META_WIDTH * SCREEN_META_HEIGHT
 wCurTurn:: db
 wCurSpace:: db
 
-wCurSpaceData::
-wCurSpaceXCoord:: db
-wCurSpaceYCoord:: db
-wCurSpaceEffect:: db
-wCurSpaceNextSpace:: db
-wCurSpaceDataEnd::
+wCurSpaceStruct:: space_struct wCurSpace
+wCurSpaceStructEnd::
 
 wCurMapDataEnd::
 
