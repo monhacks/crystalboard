@@ -130,6 +130,7 @@ GameMenu_WorldMap:
 	farcall OverworldLoop
 
 ; return from overworld loop
+	call ClearObjectStructs
 	call ClearBGPalettes
 	call ClearSprites
 	farcall AutoSaveGameOutsideOverworld

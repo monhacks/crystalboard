@@ -551,7 +551,7 @@ ReadBGEvents::
 
 ReadObjectEvents::
 	push hl
-	call ClearObjectStructs
+	call ClearNonPlayerObjectStructs
 	pop de
 	ld hl, wMap1Object
 	ld a, [de]
@@ -618,22 +618,16 @@ CopyMapObjectEvents::
 	ret
 
 ClearObjectStructs::
+	ld hl, wObjectStructs
+	ld bc, OBJECT_LENGTH * NUM_OBJECT_STRUCTS
+	xor a
+	jp ByteFill
+
+ClearNonPlayerObjectStructs::
 	ld hl, wObject1Struct
 	ld bc, OBJECT_LENGTH * (NUM_OBJECT_STRUCTS - 1)
 	xor a
-	call ByteFill
-
-; Just to make sure (this is rather pointless)
-	ld hl, wObject1Struct
-	ld de, OBJECT_LENGTH
-	ld c, NUM_OBJECT_STRUCTS - 1
-	xor a
-.loop
-	ld [hl], a
-	add hl, de
-	dec c
-	jr nz, .loop
-	ret
+	jp ByteFill
 
 GetWarpDestCoords::
 	call GetMapScriptsBank
