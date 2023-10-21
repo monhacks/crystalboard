@@ -275,9 +275,10 @@ _DoRGBFadeEffect::
 RGBFadeEffectJumptable:
 ; entries correspond to RGBFADE_* constants (see constants/cgb_pal_constants.asm)
 	table_width 2, RGBFadeEffectJumptable
-	dw _RGBFadeToBlack_6BGP
-	dw _RGBFadeToLighter_6BGP
-	dw _RGBFadeToWhite_6BGP_2OBP
+	dw _RGBFadeToBlack_6BGP      ; RGBFADE_TO_BLACK_6BGP
+	dw _RGBFadeToLighter_6BGP    ; RGBFADE_TO_LIGHTER_6BGP
+	dw _RGBFadeToWhite_6BGP_2OBP ; RGBFADE_TO_WHITE_6BGP_2OBP
+	dw _RGBFadeToWhite_8BGP_8OBP ; RGBFADE_TO_WHITE_8BGP_8OBP
 	assert_table_length NUM_RGB_FADE_EFFECTS
 
 _RGBFadeToBlack_6BGP:
@@ -340,6 +341,37 @@ _RGBFadeToWhite_6BGP_2OBP:
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a
 	call DelayFrame
+
+	pop bc
+	dec c
+	jr nz, .loop
+	ret
+
+_RGBFadeToWhite_8BGP_8OBP:
+	ld c, 32 / 2
+.loop
+	push bc
+
+; fade BGP to white
+	ld de, wBGPals2
+	ld c, 8 * NUM_PAL_COLORS
+	call FadeStepColorsToWhite
+
+; commit pals
+	ld a, TRUE
+	ldh [hCGBPalUpdate], a
+	call DelayFrame
+
+; fade OBP to white
+	ld de, wOBPals2
+	ld c, 8 * NUM_PAL_COLORS
+	call FadeStepColorsToWhite
+
+; commit pals and apply delay
+	ld a, TRUE
+	ldh [hCGBPalUpdate], a
+	ld c, 2
+	call DelayFrames
 
 	pop bc
 	dec c

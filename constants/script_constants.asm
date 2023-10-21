@@ -330,3 +330,8 @@ DEF NUM_UNOWN_PUZZLES EQU const_value
 	const BOARDEVENT_HANDLE_BOARD ; 2
 	const BOARDEVENT_END_TURN     ; 3
 DEF NUM_BOARD_EVENTS EQU const_value - 1
+
+; exitoverworld arguments
+	const_def
+	const ABANDONED_LEVEL ; 0
+	const CLEARED_LEVEL   ; 1

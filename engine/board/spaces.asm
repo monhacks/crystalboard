@@ -43,7 +43,24 @@ MinigameSpaceScript::
 	end
 
 EndSpaceScript::
+; fading out will kick before reaching HandleMapBackground, so update sprites after any change
+	scall ArriveToRegularSpaceScript
+	wait 400
+	playmusic MUSIC_TRAINER_VICTORY
+	wait 600
+	callasm .FadeOutSlow ; 800 ms
+	wait 400
+	exitoverworld CLEARED_LEVEL
 	end
+
+.FadeOutSlow:
+; clear spaces left sprites
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
+	farcall _UpdateSprites
+; fade out slow to white
+	ld b, RGBFADE_TO_WHITE_8BGP_8OBP
+	jp DoRGBFadeEffect
 
 GreySpaceScript::
 	scall ArriveToRegularSpaceScript
@@ -69,9 +86,15 @@ ArriveToRegularSpace:
 	ld [hScriptVar], a
 ; if landed, clear spaces left sprites
 	and a
-	ret nz
+	jr nz, .not_landed
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
+.not_landed
+; if End Space, update sprites
+	ld a, [wPlayerTile]
+	cp COLL_END_SPACE
+	ret nz
+	farcall _UpdateSprites
 	ret
 
 LandedInRegularSpaceScript:

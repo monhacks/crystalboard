@@ -3080,7 +3080,7 @@ InitSprites:
 
 _UpdateSecondarySprites::
 ; this is a shorter _UpdateSprites for when only secondary sprites have changed since the last sprites update,
-; but NOT expanded, which would require to displace primary (NPC) sprites in OAM.
+; but NOT expanded or shrinked, which would require to displace primary (NPC) sprites in OAM.
 ; if it is detected that the size of secondary sprites has increased in the end,
 ; fall back to calling _UpdateSprites to avoid corruption.
 	ld a, [wVramState]
