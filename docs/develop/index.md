@@ -297,7 +297,7 @@ wMapStatus == MAPSTATUS_HANDLE: <c>the remainder of the code goes at this level<
 
 > DelayFrames(hOverworldDelay)
 
-> <f>**HandleMapBackground**</f> <c>_UpdateSprites + ScrollScreen</c>
+> <f>**HandleMapBackground**</f> <c>UpdateActiveSprites + ScrollScreen</c>
 
 > <f>CheckPlayerState:</f>\
 > wPlayerStepFlags[PLAYERSTEP_CONTINUE_F] == FALSE:\

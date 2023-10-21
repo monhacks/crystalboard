@@ -984,7 +984,7 @@ Script_disappear:
 	ldh a, [hMapObjectIndex]
 	ld b, 1 ; set
 	call ApplyEventActionAppearDisappear
-	farcall _UpdateSprites
+	call UpdateActiveSprites
 	ret
 
 ApplyEventActionAppearDisappear:

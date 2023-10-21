@@ -288,7 +288,7 @@ BoardMenu_BreakDieAnimation:
 	ld a, $4 * SPRITEOAMSTRUCT_LENGTH ; w/o SPRITE_ANIM_OBJ_BOARD_MENU_APPEAR_DIE_NUMBER
 .go
 	ldh [hUsedSpriteIndex], a
-	farcall _UpdateSpritesAfterOffset
+	farcall _UpdateActiveSpritesAfterOffset
 
 	ld de, SFX_STRENGTH
 	call PlaySFX
@@ -315,7 +315,7 @@ BoardMenu_BreakDieAnimation:
 
 	ld a, $4 * SPRITEOAMSTRUCT_LENGTH
 	ldh [hUsedSpriteIndex], a
-	farcall _UpdateSpritesAfterOffset
+	farcall _UpdateActiveSpritesAfterOffset
 
 ; play move die number animation
 	ld a, 43 ; total duration of SPRITE_ANIM_FRAMESET_BOARD_MENU_MOVE_DIE_NUMBER

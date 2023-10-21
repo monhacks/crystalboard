@@ -57,7 +57,7 @@ EndSpaceScript::
 ; clear spaces left sprites
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
-	farcall _UpdateSprites
+	call UpdateActiveSprites
 ; fade out slow to white
 	ld b, RGBFADE_TO_WHITE_8BGP_8OBP
 	jp DoRGBFadeEffect
@@ -94,8 +94,7 @@ ArriveToRegularSpace:
 	ld a, [wPlayerTile]
 	cp COLL_END_SPACE
 	ret nz
-	farcall _UpdateSprites
-	ret
+	jp UpdateActiveSprites
 
 LandedInRegularSpaceScript:
 	callasm LandedInRegularSpace

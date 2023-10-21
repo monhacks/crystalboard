@@ -2201,14 +2201,14 @@ RespawnPlayerAndOpponent:
 	jr z, .skip_opponent
 	call RespawnObject
 .skip_opponent
-	call _UpdateSprites
+	call _UpdateActiveSprites
 	ret
 
 RespawnPlayer:
 	call HideAllObjects
 	ld a, PLAYER
 	call RespawnObject
-	call _UpdateSprites
+	call _UpdateActiveSprites
 	ret
 
 RespawnObject:
@@ -2754,13 +2754,13 @@ ResetObject:
 	db SPRITEMOVEDATA_STANDING_LEFT
 	db SPRITEMOVEDATA_STANDING_RIGHT
 
-_UpdateSpritesAfterOffset::
+_UpdateActiveSpritesAfterOffset::
 	ld a, [wVramState]
 	bit 0, a
 	ret z
-	jr _UpdateSprites.go
+	jr _UpdateActiveSprites.go
 
-_UpdateSprites::
+_UpdateActiveSprites::
 	ld a, [wVramState]
 	bit 0, a
 	ret z
@@ -3079,10 +3079,11 @@ InitSprites:
 	dw wObject12Struct
 
 _UpdateSecondarySprites::
-; this is a shorter _UpdateSprites for when only secondary sprites have changed since the last sprites update,
-; but NOT expanded or shrinked, which would require to displace primary (NPC) sprites in OAM.
+; this is a shorter _UpdateActiveSprites for when only secondary sprites
+; have changed since the last sprites update, but NOT expanded or shrinked,
+; which would require to displace primary (NPC) sprites in OAM.
 ; if it is detected that the size of secondary sprites has increased in the end,
-; fall back to calling _UpdateSprites to avoid corruption.
+; fall back to calling _UpdateActiveSprites to avoid corruption.
 	ld a, [wVramState]
 	bit 0, a
 	ret z
@@ -3105,7 +3106,7 @@ _UpdateSecondarySprites::
 	pop af
 	cp c
 	ret nc
-	jp _UpdateSprites
+	jp _UpdateActiveSprites
 
 InitSecondarySprites:
 	ld a, [wDisplaySecondarySprites]

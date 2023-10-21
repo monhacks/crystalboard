@@ -240,7 +240,7 @@ HandleMapObjects:
 	ret
 
 HandleMapBackground:
-	farcall _UpdateSprites
+	call UpdateActiveSprites
 	farcall ScrollScreen
 	ret
 
