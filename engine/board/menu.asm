@@ -231,6 +231,7 @@ DIE_MAX_NUMBER EQU 6
 	call PlayClickSFX
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_DIE_ROLL_F, [hl]
+	call UpdateActiveSprites ; update sprites not to drag a static die
 	xor a ; FALSE
 	ldh [hScriptVar], a
 	ret
