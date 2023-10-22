@@ -372,6 +372,7 @@ $~~~~$<c>then always returns PLAYERMOVEMENT_FINISH but often is overwritten by c
       - If player is not above a tile (``wPlayerTile``) with a space collision: ``wScriptFlags2[4]`` is reset. **Go back to 7)**.
       - If player is above a tile, the corresponding space script is queued to be executed by ``ScriptEvents`` in the current ``HandleMap`` iteration. ``wScriptFlags2[4]`` is reset. **Continue to 11)**.
 11)  The space script loads the value of ``wCurSpaceNextSpace`` into ``wCurSpace``, loads the new space data to ``wCurSpaceStruct[]``, and decreases ``wSpacesLeft``.
+      - If the space is an End Space, a fading out animation plays and then the ``exitoverworld`` script sets ``wMapStatus`` to ``MAPSTATUS_DONE``. This causes ``OverworldLoop`` to return back to the game menu. **Exit this workflow**.
       - If ``wSpacesLeft`` is non-0, **go back to 6)**.
-12)  ``hCurBoardEvent`` is set to ``BOARDEVENT_END_TURN``. ``CheckBoardEvent`` does nothing in this state. In the first subsequent ``HandleMap`` iteration where no other kind of event triggers causing ``PlayerEvents`` to return early, ``hCurBoardEvent`` is set to ``BOARDEVENT_DISPLAY_MENU``.
+12)  The landed-on space is disabled by executing a block change that converts it into a Grey Space. ``hCurBoardEvent`` is set to ``BOARDEVENT_END_TURN``. ``CheckBoardEvent`` does nothing in this state. In the first subsequent ``HandleMap`` iteration where no other kind of event triggers causing ``PlayerEvents`` to return early, ``hCurBoardEvent`` is set to ``BOARDEVENT_DISPLAY_MENU``.
 13)  **Go back to 3)**
