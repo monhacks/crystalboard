@@ -90,6 +90,8 @@ BoardMenu::
 	ld a, BOARDMENUITEM_DIE
 .ok
 	ld [wBoardMenuCursorPosition], a
+; clear any other sprite animation
+	farcall ClearSpriteAnims
 ; refresh overworld sprites to hide those behind textbox before drawing new graphics
 	call UpdateSprites
 	farcall LoadBoardMenuGFX
@@ -396,6 +398,7 @@ BoardMenu_OpenSubmenu:
 
 BoardMenu_CloseSubmenu:
 	call ClearBGPalettes
+	farcall ClearSpriteAnims
 	ld a, TRUE
 	ld [wText2bpp], a
 	call EnableOverworldHUD
