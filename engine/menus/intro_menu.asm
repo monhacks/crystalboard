@@ -17,13 +17,15 @@ NewGame:
 	ld b, NAME_PLAYER
 	ld de, wPlayerName
 	farcall NamingScreen
-	ld de, .DefaultName
-	call InitName
+if DEF(_DEBUG)
+	ld a, MEW
+	ld [wCurPartySpecies], a
+	ld a, 100
+	ld [wCurPartyLevel], a
+	predef TryAddMonToParty
+endc
 	farcall AutoSaveGameOutsideOverworld
 	jp GameMenu
-
-.DefaultName:
-	db "DEBUG@@@@@@"
 
 ResetWRAM:
 	xor a

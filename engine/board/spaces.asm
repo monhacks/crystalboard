@@ -31,6 +31,10 @@ ItemSpaceScript::
 PokemonSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
+	loadpikachudata
+	startbattle
+	reloadmapafterbattle
+	wait 100
 	scall LandedInRegularSpaceScript
 .not_landed
 	end
@@ -72,6 +76,9 @@ GreySpaceScript::
 ArriveToRegularSpaceScript:
 	playsound SFX_PRESENT
 	callasm ArriveToRegularSpace
+	iftrue .not_landed
+	wait 600
+.not_landed
 	end
 
 ArriveToRegularSpace:
@@ -90,10 +97,7 @@ ArriveToRegularSpace:
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
 .not_landed
-; if End Space, update sprites
-	ld a, [wPlayerTile]
-	cp COLL_END_SPACE
-	ret nz
+; update sprites
 	jp UpdateActiveSprites
 
 LandedInRegularSpaceScript:
