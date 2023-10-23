@@ -333,5 +333,6 @@ DEF NUM_BOARD_EVENTS EQU const_value - 1
 
 ; exitoverworld arguments
 	const_def
-	const ABANDONED_LEVEL ; 0
-	const CLEARED_LEVEL   ; 1
+	const ABANDONED_LEVEL     ; 0
+	const CLEARED_LEVEL       ; 1
+	const WHITED_OUT_IN_LEVEL ; 2

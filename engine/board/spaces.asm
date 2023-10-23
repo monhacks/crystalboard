@@ -55,7 +55,7 @@ EndSpaceScript::
 	callasm .FadeOutSlow ; 800 ms
 	wait 400
 	exitoverworld CLEARED_LEVEL
-	end
+	endall
 
 .FadeOutSlow:
 ; clear spaces left sprites

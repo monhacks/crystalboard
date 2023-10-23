@@ -15,10 +15,8 @@ Script_Whiteout:
 	checkflag ENGINE_BUG_CONTEST_TIMER
 	iftrue .bug_contest
 	callasm HalveCoins
-	callasm GetWhiteoutSpawn
 	farscall Script_AbortBugContest
-	special WarpToSpawnPoint
-	newloadmap MAPSETUP_WARP
+	exitoverworld WHITED_OUT_IN_LEVEL
 	endall
 
 .bug_contest
@@ -32,9 +30,17 @@ OverworldBGMap:
 	call ClearPalettes
 	call ClearScreen
 	call WaitBGMap2
-	call HideSprites
+	call DisableOverworldHUD
+	xor a
+	ld [wDisplaySecondarySprites], a
+	farcall ClearSpriteAnims
+	call ClearSprites
+	call LoadStandardFont
+	call LoadFrame
 	call RotateThreePalettesLeft
-	ret
+	ld a, FALSE
+	ld [wText2bpp], a
+	jp SpeechTextbox1bpp
 
 BattleBGMap:
 	ld b, CGB_BATTLE_GRAYSCALE

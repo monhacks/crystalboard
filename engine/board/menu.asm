@@ -57,6 +57,7 @@ BoardMenuScript::
 .exit:
 	wait 300
 	exitoverworld ABANDONED_LEVEL
+	endall
 
 .ConfirmExitText:
 	text "Abandon level and"

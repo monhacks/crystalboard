@@ -1157,6 +1157,8 @@ Script_loadtrainer:
 
 Script_startbattle:
 	call DisableOverworldHUD
+	ld a, FALSE
+	ld [wText2bpp], a
 	call BufferScreen
 	predef StartBattle
 	ld a, [wBattleResult]
@@ -1175,6 +1177,8 @@ Script_reloadmapafterbattle:
 	ld hl, wBattleScriptFlags
 	ld d, [hl]
 	ld [hl], 0
+	ld a, TRUE
+	ld [wText2bpp], a
 	ld a, [wBattleResult]
 	and ~BATTLERESULT_BITMASK
 	cp LOSE
