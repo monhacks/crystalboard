@@ -38,3 +38,13 @@ LoadBoardMenuDieNumbersGFX::
 
 .DieNumbersOAMGFX:
 INCBIN "gfx/board/die_numbers.2bpp"
+
+LoadBranchArrowsGFX::
+	ld de, .BranchArrowsOAMGFX
+	ld hl, vTiles0 + BRANCH_ARROWS_OAM_FIRST_TILE * LEN_2BPP_TILE
+	lb bc, BANK(.BranchArrowsOAMGFX), NUM_DIRECTIONS
+	call Get2bppViaHDMA
+	ret
+
+.BranchArrowsOAMGFX:
+INCBIN "gfx/board/branch_arrows.2bpp"

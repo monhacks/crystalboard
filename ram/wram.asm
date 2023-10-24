@@ -1680,6 +1680,8 @@ wStringBuffer5:: ds STRING_BUFFER_LENGTH
 NEXTU
 wTempSpaceStruct:: space_struct wTempSpace
 wTempSpaceStructEnd::
+wTempSpaceBranchStruct:: ds NUM_DIRECTIONS * 2
+wTempSpaceBranchStructEnd::
 ENDU
 
 wBattleMenuCursorPosition::

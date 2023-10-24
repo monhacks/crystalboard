@@ -113,3 +113,10 @@ SpacesLeftNumberOAM:
 	dbsprite  2,  3, 4, 4, DIE_NUMBERS_OAM_FIRST_TILE + 11, PAL_OW_MISC
 	dbsprite  1,  4, 4, 4, DIE_NUMBERS_OAM_FIRST_TILE + 30, PAL_OW_MISC
 	dbsprite  2,  4, 4, 4, DIE_NUMBERS_OAM_FIRST_TILE + 31, PAL_OW_MISC
+
+BranchArrowsOAM:
+; the PAL_ argument is unused (actual palette comes from the player gender)
+	dbsprite 10,  7, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE,     PAL_OW_RED ; right
+	dbsprite  8,  7, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 1, PAL_OW_RED ; left
+	dbsprite  9,  6, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 2, PAL_OW_RED ; up
+	dbsprite  9,  8, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 3, PAL_OW_RED ; down

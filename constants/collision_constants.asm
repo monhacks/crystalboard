@@ -123,6 +123,7 @@ DEF COLL_UP_LEFT_BUOY      EQU $c7 ; unused
     const COLL_MINIGAME_SPACE ; $d5
     const COLL_END_SPACE      ; $d6
     const COLL_GREY_SPACE     ; $d7
+    const COLL_BRANCH_SPACE   ; $d8
 DEF NUM_COLL_SPACES EQU const_value - $d0
 DEF COLL_FF                EQU $ff ; garbage
 

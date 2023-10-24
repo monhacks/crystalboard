@@ -410,6 +410,7 @@ ENDM
 MACRO space_struct
 \1XCoord::   db
 \1YCoord::   db
+\1BranchStructPtr:: ; dw
 \1Effect::   db
 \1NextSpace:: db
 ENDM

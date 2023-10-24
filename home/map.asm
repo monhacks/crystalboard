@@ -2318,3 +2318,14 @@ LoadSpaceData::
 	pop de
 	ld a, [wMapScriptsBank]
 	jp FarCopyBytes
+
+; load the branch data of the space at wCurSpaceStruct to wTempSpaceBranchStruct
+LoadTempSpaceBranchData::
+	ld hl, wCurSpaceBranchStructPtr
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld de, wTempSpaceBranchStruct
+	ld bc, wTempSpaceBranchStructEnd - wTempSpaceBranchStruct
+	ld a, [wMapScriptsBank]
+	jp FarCopyBytes

@@ -3,6 +3,7 @@ BoardSpaceScripts:: ; used only for BANK(BoardSpaceScripts)
 BlueSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
+	wait 400
 	scall LandedInRegularSpaceScript
 .not_landed
 	end
@@ -10,6 +11,7 @@ BlueSpaceScript::
 RedSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
+	wait 400
 	scall LandedInRegularSpaceScript
 .not_landed
 	end
@@ -17,6 +19,7 @@ RedSpaceScript::
 GreenSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
+	wait 400
 	scall LandedInRegularSpaceScript
 .not_landed
 	end
@@ -24,6 +27,7 @@ GreenSpaceScript::
 ItemSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
+	wait 400
 	scall LandedInRegularSpaceScript
 .not_landed
 	end
@@ -31,6 +35,7 @@ ItemSpaceScript::
 PokemonSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
+	wait 600
 	loadpikachudata
 	startbattle
 	reloadmapafterbattle
@@ -42,6 +47,7 @@ PokemonSpaceScript::
 MinigameSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
+	wait 600
 	scall LandedInRegularSpaceScript
 .not_landed
 	end
@@ -76,9 +82,6 @@ GreySpaceScript::
 ArriveToRegularSpaceScript:
 	playsound SFX_PRESENT
 	callasm ArriveToRegularSpace
-	iftrue .not_landed
-	wait 600
-.not_landed
 	end
 
 ArriveToRegularSpace:
@@ -120,4 +123,32 @@ LandedInRegularSpace:
 ; trigger end of turn
 	ld a, BOARDEVENT_END_TURN
 	ldh [hCurBoardEvent], a
+	ret
+
+BranchSpaceScript::
+	scall .ArriveToBranchSpaceScript
+	end
+
+.ArriveToBranchSpaceScript:
+	playsound SFX_TWINKLE
+	wait 400
+	callasm .ArriveToBranchSpace
+	end
+
+.ArriveToBranchSpace:
+; load new space
+	ld a, [wCurSpaceNextSpace]
+	ld [wCurSpace], a
+	call LoadCurSpaceData
+; load its branch data
+	call LoadTempSpaceBranchData
+	call .DisableDirectionsRequiringLockedTechniques
+; draw arrows for valid directions
+	farcall LoadBranchArrowsGFX
+	ld hl, wDisplaySecondarySprites
+	set SECONDARYSPRITES_BRANCH_ARROWS_F, [hl]
+; update sprites
+	jp UpdateActiveSprites
+
+.DisableDirectionsRequiringLockedTechniques:
 	ret

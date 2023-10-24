@@ -3113,9 +3113,11 @@ InitSecondarySprites:
 	bit SECONDARYSPRITES_BOARD_MENU_F, a
 	call nz, InitBoardMenuSprites
 	bit SECONDARYSPRITES_DIE_ROLL_F, a
-	call nz, InitRollDieSprites
+	call nz, InitDieRollSprites
 	bit SECONDARYSPRITES_SPACES_LEFT_F, a
 	call nz, InitSpacesLeftNumberSprites
+	bit SECONDARYSPRITES_BRANCH_ARROWS_F, a
+	call nz, InitBranchArrowsSprites
 	ret
 
 InitBoardMenuSprites:
@@ -3143,7 +3145,7 @@ InitBoardMenuSprites:
 	pop af
 	ret
 
-InitRollDieSprites:
+InitDieRollSprites:
 	push af
 
 	ld a, [wDieRoll]
@@ -3192,6 +3194,57 @@ InitSpacesLeftNumberSprites:
 	ldh a, [hUsedSpriteIndex]
 	add (DIE_NUMBER_SIZE * SPRITEOAMSTRUCT_LENGTH)
 	ldh [hUsedSpriteIndex], a
+
+.oam_full
+	pop af
+	ret
+
+InitBranchArrowsSprites:
+	push af
+
+; find the beginning of free space in OAM, and assure there's space for 4 objects
+	ldh a, [hUsedSpriteIndex]
+	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (NUM_DIRECTIONS * SPRITEOAMSTRUCT_LENGTH) + 1
+	jr nc, .oam_full
+
+	ld hl, BranchArrowsOAM
+	ld de, wTempSpaceBranchStruct
+	ld c, NUM_DIRECTIONS
+.loop
+	ld a, [de]
+	cp -1        ;
+	jr z, .next1 ; skip this arrow if this direction is not valid
+
+; draw this arrow and advance hUsedSpriteIndex
+; preserve loop variables d, e, c
+	push de
+	push bc
+	ldh a, [hUsedSpriteIndex]
+	ld e, a
+	ld d, HIGH(wShadowOAM)
+; copy all bytes minus the attributes one
+; the palette matches the player's color palette
+	ld bc, SPRITEOAMSTRUCT_LENGTH - 1
+	call CopyBytes
+	gender_to_pal
+	ld [de], a
+	inc de
+	ld a, e
+	ldh [hUsedSpriteIndex], a
+	pop bc
+	pop de
+	jr .next2
+
+.next1
+	inc hl ;
+	inc hl ;
+	inc hl ;
+
+.next2
+	inc hl ; next object in BranchArrowsOAM
+	inc de
+	dec c
+	jr nz, .loop
 
 .oam_full
 	pop af

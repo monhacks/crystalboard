@@ -341,11 +341,11 @@ $~~~~$<c>then always returns PLAYERMOVEMENT_FINISH but often is overwritten by c
 
 - **hCurBoardEvent**: holds a *BOARDEVENT_* value.
 
-- **wTurnData** ~ **wTurnDataEnd**: not preserved on save, and cleared at the beginning of BoardMenuScript (i.e. on turn begin). It's part of *wMapStatus* ~ *wMapStatusEnd*, so it's also cleared by *StartMap*.
+- **wTurnData** ~ **wTurnDataEnd**: not preserved on save, and cleared at the beginning of BoardMenuScript (i.e. on turn begin). It's part of *wMapStatus* ~ *wMapStatusEnd*, so it's also cleared by *StartMap*. Includes:
   - **wDieRoll**
   - **wSpacesLeft**
 
-- Addresses within *wCurMapData* ~ *wCurMapDataEnd*: preserved on save.
+- Addresses within *wCurMapData* ~ *wCurMapDataEnd*: preserved on save. Includes:
   - **wCurTurn**
   - **wCurSpace**
   - **wCurSpaceStruct**:
