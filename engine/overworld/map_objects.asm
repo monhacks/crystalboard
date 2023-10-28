@@ -1614,10 +1614,10 @@ StepFunction_Turn:
 	ld hl, OBJECT_STEP_FRAME
 	add hl, bc
 	ld a, [hl]
-	ld [hl], 2
+	ld [hl], 4
 	ld hl, OBJECT_STEP_DURATION
 	add hl, bc
-	ld [hl], 2
+	ld [hl], 1
 	call ObjectStep_IncAnonJumptableIndex
 .step1
 	ld hl, OBJECT_STEP_DURATION
@@ -1634,7 +1634,7 @@ StepFunction_Turn:
 	ld [hl], a
 	ld hl, OBJECT_STEP_DURATION
 	add hl, bc
-	ld [hl], 2
+	ld [hl], 3
 	call ObjectStep_IncAnonJumptableIndex
 .step2
 	ld hl, OBJECT_STEP_DURATION
@@ -3213,7 +3213,7 @@ InitBranchArrowsSprites:
 .loop
 	ld a, [de]
 	cp -1        ;
-	jr z, .next1 ; skip this arrow if this direction is not valid
+	jr z, .next1 ; skip this arrow if this direction is not available
 
 ; draw this arrow and advance hUsedSpriteIndex
 ; preserve loop variables d, e, c
