@@ -385,6 +385,7 @@ CheckBoardEvent:
 	dw EndSpaceScript      ; COLL_END_SPACE
 	dw GreySpaceScript     ; COLL_GREY_SPACE
 	dw BranchSpaceScript   ; COLL_BRANCH_SPACE
+	dw UnionSpaceScript    ; COLL_UNION_SPACE
 	assert_table_length NUM_COLL_SPACES
 
 CheckTrainerEvent:

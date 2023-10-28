@@ -116,7 +116,7 @@ SpacesLeftNumberOAM:
 
 BranchArrowsOAM:
 ; the PAL_ argument is unused (actual palette comes from the player gender)
-	dbsprite 10,  7, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE,     PAL_OW_RED ; right
-	dbsprite  8,  7, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 1, PAL_OW_RED ; left
-	dbsprite  9,  6, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 2, PAL_OW_RED ; up
-	dbsprite  9,  8, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 3, PAL_OW_RED ; down
+	dbsprite 11, 10, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE,     PAL_OW_RED ; right
+	dbsprite  7, 10, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 1, PAL_OW_RED ; left
+	dbsprite  9,  8, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 2, PAL_OW_RED ; up
+	dbsprite  9, 12, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 3, PAL_OW_RED ; down

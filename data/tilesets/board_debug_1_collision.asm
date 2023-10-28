@@ -67,7 +67,7 @@
 	tilecoll WALL, WALL, FLOOR, WALL ; 42
 	tilecoll WATER, WATER, WATER, WATER ; 43
 	tilecoll WALL, FLOOR, WALL, FLOOR ; 44
-	tilecoll WALL, FLOOR, FLOOR, FLOOR ; 45
+	tilecoll FLOOR, FLOOR, FLOOR, FLOOR ; 45
 	tilecoll FLOOR, WALL, FLOOR, WALL ; 46
 	tilecoll FLOOR, FLOOR, FLOOR, WALL ; 47
 	tilecoll WALL, FLOOR, WALL, WALL ; 48
@@ -124,8 +124,8 @@
 	tilecoll WALL, WALL, WALL, WALL ; 7b
 	tilecoll WALL, WALL, WALL, WALL ; 7c
 	tilecoll WALL, WALL, WALL, WALL ; 7d
-	tilecoll WALL, WALL, WALL, WALL ; 7e
-	tilecoll WALL, WALL, WALL, WALL ; 7f
+	tilecoll BRANCH_SPACE, FLOOR, FLOOR, FLOOR ; 7e
+	tilecoll UNION_SPACE, FLOOR, FLOOR, FLOOR ; 7f
 	tilecoll BLUE_SPACE, FLOOR, FLOOR, FLOOR ; 80
 	tilecoll BLUE_SPACE, FLOOR, FLOOR, FLOOR ; 81
 	tilecoll BLUE_SPACE, FLOOR, FLOOR, FLOOR ; 82

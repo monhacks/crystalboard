@@ -217,8 +217,8 @@ TileCollisionTable::
 	db LAND_TILE         ; COLL_MINIGAME_SPACE
 	db LAND_TILE         ; COLL_END_SPACE
 	db LAND_TILE         ; COLL_GREY_SPACE
-	db LAND_TILE         ; d8
-	db LAND_TILE         ; d9
+	db LAND_TILE         ; COLL_BRANCH_SPACE
+	db LAND_TILE         ; COLL_UNION_SPACE
 	db LAND_TILE         ; da
 	db LAND_TILE         ; db
 	db LAND_TILE         ; dc

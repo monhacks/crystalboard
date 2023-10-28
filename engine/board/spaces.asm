@@ -127,6 +127,8 @@ LandedInRegularSpace:
 
 BranchSpaceScript::
 	scall .ArriveToBranchSpaceScript
+	callasm .PromptPlayerToChooseDirection
+	wait 200
 	end
 
 .ArriveToBranchSpaceScript:
@@ -152,3 +154,63 @@ BranchSpaceScript::
 
 .DisableDirectionsRequiringLockedTechniques:
 	ret
+
+.PromptPlayerToChooseDirection:
+; compute available directions in b as joypad dpad flags
+	ld hl, wTempSpaceBranchStruct
+	ld b, 0
+	ld a, [hli]
+	cp -1
+	jr z, .not_right
+	set D_RIGHT_F, b
+.not_right
+	ld a, [hli]
+	cp -1
+	jr z, .not_left
+	set D_LEFT_F, b
+.not_left
+	ld a, [hli]
+	cp -1
+	jr z, .not_up
+	set D_UP_F, b
+.not_up
+	ld a, [hli]
+	cp -1
+	jr z, .joypad_loop
+	set D_DOWN_F, b
+
+; sample input of an available direction
+.joypad_loop
+	call GetJoypad
+	ldh a, [hJoyPressed]
+	and b
+	jr z, .joypad_loop
+
+; load the next space for the chosen direction
+	ld hl, wTempSpaceBranchStruct
+	bit D_RIGHT_F, a
+	jr nz, .ok
+	inc hl
+	bit D_LEFT_F, a
+	jr nz, .ok
+	inc hl
+	bit D_UP_F, a
+	jr nz, .ok
+	inc hl
+.ok
+	ld a, [hl]
+	ld [wCurSpaceNextSpace], a
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_BRANCH_ARROWS_F, [hl]
+	jp PlayClickSFX
+
+UnionSpaceScript::
+	callasm .ArriveToUnionSpace
+	end
+
+.ArriveToUnionSpace:
+; these are just transition spaces, so simply load the next space
+	ld a, [wCurSpaceNextSpace]
+	ld [wCurSpace], a
+	call LoadCurSpaceData
+	end

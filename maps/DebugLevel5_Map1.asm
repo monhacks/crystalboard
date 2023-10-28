@@ -19,12 +19,14 @@ DebugLevel5_Map1_MapEvents:
 DebugLevel5_Map1_MapSpaces:
 	space  2,  4,  $0,  1 ;  0
 	space  4,  4,  $0,  2 ;  1
-	space  6,  4,  $0,  3 ;  2
+	space  6,  4,  .BranchDataSpace2 ;  2
+
 	space  8,  4,  $0,  4 ;  3
 	space 10,  4,  $0,  5 ;  4
 	space 12,  4,  $0,  6 ;  5
 	space 14,  4,  $0,  7 ;  6
 	space 16,  4,  $0,  8 ;  7
+
 	space 18,  4,  $0,  9 ;  8
 	space 20,  4,  $0, 10 ;  9
 	space 22,  4,  $0, 11 ; 10
@@ -52,3 +54,17 @@ DebugLevel5_Map1_MapSpaces:
 	space 10,  8,  $0, 33 ; 32
 	space 12,  8,  $0, 34 ; 33
 	space 14,  8,  $0, 34 ; 34
+
+	space  6,  2,  $0, 36 ; 35
+	space  6,  0,  $0, 37 ; 36
+	space  8,  0,  $0, 38 ; 37
+	space 10,  0,  $0, 39 ; 38
+	space 12,  0,  $0, 40 ; 39
+	space 14,  0,  $0, 41 ; 40
+	space 16,  0,  $0, 42 ; 41
+	space 16,  2,  $0, 43 ; 42
+	space 16,  4,  $0,  8 ; 43
+
+.BranchDataSpace2:
+	db  3, -1, 35, -1
+	db  0,  0,  0,  0

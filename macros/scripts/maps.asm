@@ -134,9 +134,17 @@ ENDM
 MACRO space
 ;\1: x coord
 ;\2: y coord
+; [non-branch space]
 ;\3: effect (space type specific)
 ;\4: next space
-	db \1, \2, \3, \4
+; [branch space]
+;\3: pointer to branch struct
+	db \1, \2
+if _NARG == 4
+	db \3, \4
+else
+	dw \3
+endc
 ENDM
 
 MACRO trainer
