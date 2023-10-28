@@ -19,7 +19,7 @@ DebugLevel5_Map1_MapEvents:
 DebugLevel5_Map1_MapSpaces:
 	space  2,  4,  $0,  1 ;  0
 	space  4,  4,  $0,  2 ;  1
-	space  6,  4,  .BranchDataSpace2 ;  2
+	space  6,  4,  .BS2   ;  2
 
 	space  8,  4,  $0,  4 ;  3
 	space 10,  4,  $0,  5 ;  4
@@ -65,6 +65,7 @@ DebugLevel5_Map1_MapSpaces:
 	space 16,  2,  $0, 43 ; 42
 	space 16,  4,  $0,  8 ; 43
 
-.BranchDataSpace2:
-	db  3, -1, 35, -1
-	db  0,  0,  0,  0
+.BS2:
+	branchdir RIGHT,  3, 0
+	branchdir UP,    35, 0
+	endbranch

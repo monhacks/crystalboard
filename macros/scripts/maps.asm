@@ -147,6 +147,73 @@ else
 endc
 ENDM
 
+MACRO branchdir
+if !STRCMP("\1", "RIGHT")
+	DEF _NEXT_SPACE_RIGHT = \2
+	DEF _TECHNIQUES_RIGHT = \3
+elif !STRCMP("\1", "LEFT")
+	DEF _NEXT_SPACE_LEFT = \2
+	DEF _TECHNIQUES_LEFT = \3
+elif !STRCMP("\1", "UP")
+	DEF _NEXT_SPACE_UP = \2
+	DEF _TECHNIQUES_UP = \3
+elif !STRCMP("\1", "DOWN")
+	DEF _NEXT_SPACE_DOWN = \2
+	DEF _TECHNIQUES_DOWN = \3
+endc
+ENDM
+
+MACRO endbranch
+if DEF(_NEXT_SPACE_RIGHT)
+	db {_NEXT_SPACE_RIGHT}
+	PURGE _NEXT_SPACE_RIGHT
+else
+	db -1
+endc
+if DEF(_NEXT_SPACE_LEFT)
+	db {_NEXT_SPACE_LEFT}
+	PURGE _NEXT_SPACE_LEFT
+else
+	db -1
+endc
+if DEF(_NEXT_SPACE_UP)
+	db {_NEXT_SPACE_UP}
+	PURGE _NEXT_SPACE_UP
+else
+	db -1
+endc
+if DEF(_NEXT_SPACE_DOWN)
+	db {_NEXT_SPACE_DOWN}
+	PURGE _NEXT_SPACE_DOWN
+else
+	db -1
+endc
+if DEF(_TECHNIQUES_RIGHT)
+	db {_TECHNIQUES_RIGHT}
+	PURGE _TECHNIQUES_RIGHT
+else
+	db 0
+endc
+if DEF(_TECHNIQUES_LEFT)
+	db {_TECHNIQUES_LEFT}
+	PURGE _TECHNIQUES_LEFT
+else
+	db 0
+endc
+if DEF(_TECHNIQUES_UP)
+	db {_TECHNIQUES_UP}
+	PURGE _TECHNIQUES_UP
+else
+	db 0
+endc
+if DEF(_TECHNIQUES_DOWN)
+	db {_TECHNIQUES_DOWN}
+	PURGE _TECHNIQUES_DOWN
+else
+	db 0
+endc
+ENDM
+
 MACRO trainer
 ;\1: trainer group
 ;\2: trainer id
