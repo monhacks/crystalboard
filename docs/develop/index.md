@@ -351,10 +351,12 @@ $~~~~$<c>then always returns PLAYERMOVEMENT_FINISH but often is overwritten by c
   - **wCurSpaceStruct**:
     - **wCurSpaceXCoord**
     - **wCurSpaceYCoord**
-    - **wCurSpaceEffect**
-    - **wCurSpaceNextSpace**.
+    - **wCurSpaceEffect** for non-branch spaces, or **wCurSpaceBranchStructPtr** (two bytes) for branch spaces
+    - **wCurSpaceNextSpace** for non-branch spaces
 
-- **wTempSpaceStruct**: shares memory region with string buffers from *wStringBuffer3* onwards. Temporary scope. Same structure as *wCurSpaceStruct*
+- These addresses share memory region with string buffers from *wStringBuffer3* onwards.
+- **wTempSpaceStruct**: Temporary scope. Same structure as *wCurSpaceStruct*
+- **wTempSpaceBranchStruct**: Temporary scope. The structure is four bytes for next space for each direction (R/L/U/D; -1 if unavailable direction) followed by four bytes for required techniques for each direction (R/L/U/D)
 
 ### Workflow
 
@@ -371,10 +373,11 @@ $~~~~$<c>then always returns PLAYERMOVEMENT_FINISH but often is overwritten by c
 10) In the next ``HandleMap`` iteration, ``CheckBoardEvent.board`` is called with ``wScriptFlags2[4]`` set.
       - If player is not above a tile (``wPlayerTile``) with a space collision: ``wScriptFlags2[4]`` is reset. **Go back to 7**.
       - If player is above a tile, the corresponding space script is queued to be executed by ``ScriptEvents`` in the current ``HandleMap`` iteration. ``wScriptFlags2[4]`` is reset. **Continue to 11**.
-11) The space script loads the value of ``wCurSpaceNextSpace`` into ``wCurSpace``, loads the new space data to ``wCurSpaceStruct[]``, and decreases ``wSpacesLeft``.
+11) The space script loads the value of ``wCurSpaceNextSpace`` into ``wCurSpace``, and loads the new space data to ``wCurSpaceStruct[]``. Unless the space is a Branch Space or a Union Space, ``wSpacesLeft`` is decreased.
+      - If the space is a Branch Space, the branch data is loaded to ``wTempSpaceBranchStruct``. Then the player is prompted to choose a valid direction. ``wCurSpaceNextSpace`` is populated with the next space that corresponds to the chosen direction. **Go back to 6**.
       - If the space is an End Space, a fading out animation plays and then the ``exitoverworld`` script sets ``wMapStatus`` to ``MAPSTATUS_DONE``. This causes ``OverworldLoop`` to return back to the game menu. **Exit this workflow**.
-      - If ``wSpacesLeft`` is non-0, **go back to 6**.
-12) The script code specific to the space type of the landed-on space is executed.
+12) If ``wSpacesLeft`` is non-0, **go back to 6**.
+13) The script code specific to the space type of the landed-on space is executed.
       - If player whites out in battle, ``Script_BattleWhiteout`` executes ``exitoverworld``. **Exit this workflow**.
-13) The landed-on space is disabled by executing a block change that converts it into a Grey Space. ``hCurBoardEvent`` is set to ``BOARDEVENT_END_TURN``. ``CheckBoardEvent`` does nothing in this state. In the first subsequent ``HandleMap`` iteration where no other kind of event triggers causing ``PlayerEvents`` to return early, ``hCurBoardEvent`` is set to ``BOARDEVENT_DISPLAY_MENU``.
-14) **Go back to 3**
+14) The landed-on space is disabled by executing a block change that converts it into a Grey Space. ``hCurBoardEvent`` is set to ``BOARDEVENT_END_TURN``. ``CheckBoardEvent`` does nothing in this state. In the first subsequent ``HandleMap`` iteration where no other kind of event triggers causing ``PlayerEvents`` to return early, ``hCurBoardEvent`` is set to ``BOARDEVENT_DISPLAY_MENU``.
+15) **Go back to 3**
