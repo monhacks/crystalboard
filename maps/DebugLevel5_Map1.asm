@@ -66,6 +66,6 @@ DebugLevel5_Map1_MapSpaces:
 	space 16,  4,  $0,  8 ; 43
 
 .BS2:
-	branchdir RIGHT,  3, 0
+	branchdir RIGHT,  3, TECHNIQUE_SURF
 	branchdir UP,    35, 0
 	endbranch

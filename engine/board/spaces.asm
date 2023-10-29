@@ -127,9 +127,23 @@ LandedInRegularSpace:
 
 BranchSpaceScript::
 	scall .ArriveToBranchSpaceScript
+.prompt_player
 	callasm .PromptPlayerToChooseDirection
+	iffalse .print_technique_required
 	wait 200
 	end
+
+.print_technique_required
+	opentext
+	writetext .TechniqueRequiredText
+	waitbutton
+	closetext
+	sjump .prompt_player
+
+.TechniqueRequiredText:
+	text "A new TECHNIQUE is"
+	line "required!"
+	done
 
 .ArriveToBranchSpaceScript:
 	playsound SFX_TWINKLE
@@ -141,8 +155,11 @@ BranchSpaceScript::
 ; load new space
 	ld a, [wCurSpaceNextSpace]
 	ld [wCurSpace], a
+; unlike in other cases, wCurSpaceNextSpace will not yet
+; contain the next space after calling LoadCurSpaceData.
+; it will be defined after the player has chosen which direction to take.
 	call LoadCurSpaceData
-; load its branch data
+; load the space's branch data
 	call LoadTempSpaceBranchData
 	call .DisableDirectionsRequiringLockedTechniques
 ; draw arrows for valid directions
@@ -153,55 +170,86 @@ BranchSpaceScript::
 	jp UpdateActiveSprites
 
 .DisableDirectionsRequiringLockedTechniques:
+; set to BRANCH_DIRECTION_UNAVAILABLE each next space byte of the branch struct
+; that has an unavailable direction due to required techniques not yet unlocked.
+	ld hl, wTempSpaceBranchStruct + NUM_DIRECTIONS
+	ld de, wTempSpaceBranchStruct
+	ld bc, wUnlockedTechniques
+rept NUM_DIRECTIONS
+	ld a, [bc]
+	and [hl]
+	cp [hl]
+	jr z, .next\@
+	ld a, BRANCH_DIRECTION_UNAVAILABLE
+	ld [de], a
+.next\@
+	inc hl
+	inc de
+endr
 	ret
 
 .PromptPlayerToChooseDirection:
-; compute available directions in b as joypad dpad flags
+; sample a dpad press
 	ld hl, wTempSpaceBranchStruct
-	ld b, 0
-	ld a, [hli]
-	cp -1
-	jr z, .not_right
-	set D_RIGHT_F, b
-.not_right
-	ld a, [hli]
-	cp -1
-	jr z, .not_left
-	set D_LEFT_F, b
-.not_left
-	ld a, [hli]
-	cp -1
-	jr z, .not_up
-	set D_UP_F, b
-.not_up
-	ld a, [hli]
-	cp -1
-	jr z, .joypad_loop
-	set D_DOWN_F, b
-
-; sample input of an available direction
-.joypad_loop
 	call GetJoypad
 	ldh a, [hJoyPressed]
-	and b
-	jr z, .joypad_loop
+	and D_PAD
+	jr z, .PromptPlayerToChooseDirection
 
-; load the next space for the chosen direction
-	ld hl, wTempSpaceBranchStruct
+; determine the status (ok/invalid/unavailable) of the chosen direction
 	bit D_RIGHT_F, a
-	jr nz, .ok
+	jr z, .not_right
+	ld a, [hl]
+	inc a ; cp BRANCH_DIRECTION_INVALID
+	jr z, .PromptPlayerToChooseDirection
+	inc a ; cp BRANCH_DIRECTION_UNAVAILABLE
+	jr z, .technique_required
+	jr .direction_chosen
+.not_right
+
 	inc hl
 	bit D_LEFT_F, a
-	jr nz, .ok
+	jr z, .not_left
+	ld a, [hl]
+	inc a ; cp BRANCH_DIRECTION_INVALID
+	jr z, .PromptPlayerToChooseDirection
+	inc a ; cp BRANCH_DIRECTION_UNAVAILABLE
+	jr z, .technique_required
+	jr .direction_chosen
+.not_left
+
 	inc hl
 	bit D_UP_F, a
-	jr nz, .ok
+	jr z, .not_up
+	ld a, [hl]
+	inc a ; cp BRANCH_DIRECTION_INVALID
+	jr z, .PromptPlayerToChooseDirection
+	inc a ; cp BRANCH_DIRECTION_UNAVAILABLE
+	jr z, .technique_required
+	jr .direction_chosen
+.not_up
+
 	inc hl
-.ok
+	ld a, [hl]
+	inc a ; cp BRANCH_DIRECTION_INVALID
+	jr z, .PromptPlayerToChooseDirection
+	inc a ; cp BRANCH_DIRECTION_UNAVAILABLE
+	jr z, .technique_required
+	; fallthrough
+
+.direction_chosen
+; save the next space of the chosen direction to wCurSpaceNextSpace
 	ld a, [hl]
 	ld [wCurSpaceNextSpace], a
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_BRANCH_ARROWS_F, [hl]
+	ld a, TRUE
+	ldh [hScriptVar], a
+	jp PlayClickSFX
+
+.technique_required
+	xor a ; FALSE
+	ldh [hScriptVar], a
 	jp PlayClickSFX
 
 UnionSpaceScript::
