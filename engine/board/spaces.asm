@@ -3,59 +3,61 @@ BoardSpaceScripts:: ; used only for BANK(BoardSpaceScripts)
 BlueSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
-	wait 400
-	scall LandedInRegularSpaceScript
+	scall LandedInRegularSpaceScript_BeforeSpaceEffect
+	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
 
 RedSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
-	wait 400
-	scall LandedInRegularSpaceScript
+	scall LandedInRegularSpaceScript_BeforeSpaceEffect
+	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
 
 GreenSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
-	wait 400
-	scall LandedInRegularSpaceScript
+	scall LandedInRegularSpaceScript_BeforeSpaceEffect
+	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
 
 ItemSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
-	wait 400
-	scall LandedInRegularSpaceScript
+	scall LandedInRegularSpaceScript_BeforeSpaceEffect
+	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
 
 PokemonSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
-	wait 600
+	scall LandedInRegularSpaceScript_BeforeSpaceEffect
+	wait 200
 	loadpikachudata
 	startbattle
 	reloadmapafterbattle
 	wait 100
-	scall LandedInRegularSpaceScript
+	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
 
 MinigameSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
-	wait 600
-	scall LandedInRegularSpaceScript
+	scall LandedInRegularSpaceScript_BeforeSpaceEffect
+	wait 200
+	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
 
 EndSpaceScript::
 ; fading out will kick before reaching HandleMapBackground, so update sprites after any change
 	scall ArriveToRegularSpaceScript
-	wait 400
+	scall LandedInRegularSpaceScript_BeforeSpaceEffect
 	playmusic MUSIC_TRAINER_VICTORY
 	wait 600
 	callasm .FadeOutSlow ; 800 ms
@@ -75,16 +77,19 @@ EndSpaceScript::
 GreySpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
-	scall LandedInRegularSpaceScript
+	wait 300
+	turnobject PLAYER, DOWN
+	wait 100
+	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
 
 ArriveToRegularSpaceScript:
 	playsound SFX_PRESENT
-	callasm ArriveToRegularSpace
+	callasm .ArriveToRegularSpace
 	end
 
-ArriveToRegularSpace:
+.ArriveToRegularSpace:
 ; load new space
 	ld a, [wCurSpaceNextSpace]
 	ld [wCurSpace], a
@@ -103,11 +108,17 @@ ArriveToRegularSpace:
 ; update sprites
 	jp UpdateActiveSprites
 
-LandedInRegularSpaceScript:
-	callasm LandedInRegularSpace
+LandedInRegularSpaceScript_BeforeSpaceEffect:
+	wait 300
+	turnobject PLAYER, DOWN
+	wait 100
 	end
 
-LandedInRegularSpace:
+LandedInRegularSpaceScript_AfterSpaceEffect:
+	callasm .LandedInRegularSpace
+	end
+
+.LandedInRegularSpace:
 ; disable the space effect (turn the space into a grey space)
 	ld a, [wCurSpaceXCoord]
 	add 4
