@@ -257,6 +257,34 @@ ClearWholeMenuBox::
 	call ClearBox
 	ret
 
+ScrollAwareCoord2Tile::
+; Return the address of wTilemap(c, b) in hl relative to the background scroll in hSCX and hSCY.
+; c = c - [hSCX] / 8
+	ld a, [hSCX]
+	srl a
+	srl a
+	srl a
+	ld l, a
+	ld a, c
+	sub l
+	jr nc, .ok1
+	add BG_MAP_WIDTH
+.ok1
+	ld c, a
+; b = b - [hSCY] / 8
+	ld a, [hSCY]
+	srl a
+	srl a
+	srl a
+	ld l, a
+	ld a, b
+	sub l
+	jr nc, .ok2
+	add BG_MAP_HEIGHT
+.ok2
+	ld b, a
+	jr Coord2Tile
+
 MenuBoxCoord2Tile::
 	ld a, [wMenuBorderLeftCoord]
 	ld c, a

@@ -2406,18 +2406,14 @@ CheckObjectCoveredByTextbox:
 	ldh a, [hCurSpriteYCoord]
 	add e
 	dec a
-	cp SCREEN_HEIGHT
-	jr nc, .ok9
 	ld b, a
 .next
 	ldh a, [hCurSpriteXCoord]
 	add d
 	dec a
-	cp SCREEN_WIDTH
-	jr nc, .ok8
 	ld c, a
 	push bc
-	call Coord2Tile
+	call ScrollAwareCoord2Tile
 	pop bc
 ; NPCs disappear if standing on tiles FIRST_REGULAR_TEXT_CHAR or above,
 ; since those IDs are for text characters and textbox frames.
