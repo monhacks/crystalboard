@@ -87,7 +87,8 @@ if DEF(_DEBUG)
 	const SPAWN_DEBUGLEVEL_5
 endc
 DEF NUM_SPAWNS EQU const_value
-DEF SPAWN_N_A EQU -1
+DEF SPAWN_FROM_RAM EQU -2
+DEF SPAWN_N_A      EQU -1
 
 ; Flypoints indexes (see data/maps/flypoints.asm)
 	const_def

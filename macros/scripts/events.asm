@@ -1071,4 +1071,9 @@ MACRO exitoverworld
 	db \1 ; exit reason
 ENDM
 
+	const reloadmapafterviewmapmode_command ; $ab
+MACRO reloadmapafterviewmapmode
+	db reloadmapafterviewmapmode_command
+ENDM
+
 DEF NUM_EVENT_COMMANDS EQU const_value

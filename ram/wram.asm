@@ -1682,6 +1682,16 @@ wTempSpaceStruct:: space_struct wTempSpace
 wTempSpaceStructEnd::
 wTempSpaceBranchStruct:: ds NUM_DIRECTIONS * 2
 wTempSpaceBranchStructEnd::
+
+wViewMapModeRange:: db
+; if either displacement (abs) equals the range, player can't move further in that direction
+wViewMapModeDisplacementY:: db
+wViewMapModeDisplacementX:: db
+; coords and map backup to know where to spawn after returning from View Map mode
+wBeforeViewMapYCoord::    db
+wBeforeViewMapXCoord::    db
+wBeforeViewMapMapGroup::  db
+wBeforeViewMapMapNumber:: db
 ENDU
 
 wBattleMenuCursorPosition::

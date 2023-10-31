@@ -8,10 +8,15 @@ BoardMenuScript::
 	ifequal BOARDMENUITEM_PACK,     .Pack
 	ifequal BOARDMENUITEM_POKEGEAR, .Pokegear
 	ifequal BOARDMENUITEM_EXIT,     .Exit
+	ifequal BOARDMENUITEM_VIEWMAP,  .ViewMap
 	closetext
 	end
 
 .Upkeep:
+; skip upkeep if we are re-entering after returning from View Map mode
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_REDISPLAY_MENU
+	ret z
 ; save after opentext to reanchor map first
 ; save before processing variables like wCurTurn due to BoardMenuScript reentry after game reset
 	farcall AutoSaveGameInOverworld
@@ -67,6 +72,34 @@ BoardMenuScript::
 .EmptyText:
 	text ""
 	done
+
+.ViewMap:
+	callasm .EnterViewMapMode
+	closetext
+	end
+
+.EnterViewMapMode:
+	ld hl, wVramState
+	res 2, [hl]
+	ld a, BOARDEVENT_VIEW_MAP_MODE
+	ldh [hCurBoardEvent], a
+	ld a, TRUE
+	ld [wViewMapModeRange], a
+	ld a, [wMapGroup]
+	ld [wBeforeViewMapMapGroup], a
+	ld a, [wMapNumber]
+	ld [wBeforeViewMapMapNumber], a
+	ld a, [wXCoord]
+	ld [wBeforeViewMapXCoord], a
+	ld a, [wYCoord]
+	ld [wBeforeViewMapYCoord], a
+	xor a
+	ld [wViewMapModeDisplacementY], a
+	ld [wViewMapModeDisplacementX], a
+	call DisableOverworldHUD
+	ld hl, wPlayerFlags
+	set INVISIBLE_F, [hl]
+	ret
 
 .SubmenuCallback:
 ; if submenu has requested a callback through wMenuReturn,
@@ -163,6 +196,8 @@ GetBoardMenuSelection:
 	call GetMenuJoypad
 	bit A_BUTTON_F, a
 	jr nz, .a_button
+	bit SELECT_F, a
+	jr nz, .select_button
 	bit D_RIGHT_F, a
 	jr nz, .d_right
 	bit D_LEFT_F, a
@@ -171,6 +206,14 @@ GetBoardMenuSelection:
 	ret ; nc
 
 .a_button
+	call PlayClickSFX
+	call WaitSFX
+	scf
+	ret
+
+.select_button
+	ld a, BOARDMENUITEM_VIEWMAP
+	ld [wBoardMenuCursorPosition], a
 	call PlayClickSFX
 	call WaitSFX
 	scf

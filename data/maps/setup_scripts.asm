@@ -14,6 +14,7 @@ MapSetupScripts:
 	dw MapSetupScript_BadWarp
 	dw MapSetupScript_Fly
 	dw MapSetupScript_EnterLevel
+	dw MapSetupScript_ExitViewMap
 	assert_table_length NUM_MAPSETUP_SCRIPTS
 
 ; valid commands are listed in MapSetupCommands (see data/maps/setup_script_pointers.asm)
@@ -161,6 +162,28 @@ MapSetupScript_ReloadMap:
 	mapsetup LoadMapPalettes
 	mapsetup RefreshMapSprites
 	mapsetup ForceMapMusic
+	mapsetup FadeInPalettesFromWhite
+	mapsetup ActivateMapAnims
+	mapsetup LoadWildMonData
+	db -1 ; end
+
+MapSetupScript_ExitViewMap:
+	mapsetup ClearBGPalettes
+	mapsetup DisableLCD
+	mapsetup EnterMapSpawnPoint
+	mapsetup LoadMapAttributes
+	mapsetup SpawnPlayer
+	mapsetup RefreshPlayerCoords
+	mapsetup GetMapScreenCoords
+	mapsetup LoadBlockData
+	mapsetup BufferScreen
+	mapsetup LoadMapGraphics
+	mapsetup LoadMapTimeOfDay
+	mapsetup EnableOverworldHUD
+	mapsetup LoadMapObjects
+	mapsetup EnableLCD
+	mapsetup LoadMapPalettes
+	mapsetup RefreshMapSprites
 	mapsetup FadeInPalettesFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData

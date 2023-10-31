@@ -331,9 +331,11 @@ CheckBoardEvent:
 .Jumptable:
 	table_width 2, .Jumptable
 	dw .none
-	dw .menu  ; BOARDEVENT_DISPLAY_MENU
-	dw .board ; BOARDEVENT_HANDLE_BOARD
-	dw .none  ; BOARDEVENT_END_TURN
+	dw .menu    ; BOARDEVENT_DISPLAY_MENU
+	dw .board   ; BOARDEVENT_HANDLE_BOARD
+	dw .none    ; BOARDEVENT_END_TURN
+	dw .mapview ; BOARDEVENT_VIEW_MAP_MODE
+	dw .menu    ; BOARDEVENT_REDISPLAY_MENU
 	assert_table_length NUM_BOARD_EVENTS + 1
 
 .none
@@ -369,6 +371,25 @@ CheckBoardEvent:
 	scf
 	ret
 
+.mapview
+; check if player pressed B and if so queue the script to exit View Map mode
+	ldh a, [hJoyDown]
+	and D_PAD
+	ret nz ; nc
+	ldh a, [hJoyPressed]
+	bit B_BUTTON_F, a
+	ret z ; nc
+; B was pressed
+	ld a, BANK(.ExitMapViewModeScript)
+	ld hl, .ExitMapViewModeScript
+	call CallScript
+	scf
+	ret
+
+.ExitMapViewModeScript:
+	reloadmapafterviewmapmode
+	end
+
 .no_space_effect
 ; continue moving in board
 	xor a
@@ -389,6 +410,10 @@ CheckBoardEvent:
 	assert_table_length NUM_COLL_SPACES
 
 CheckTrainerEvent:
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret z
+
 	call CheckTrainerBattle
 	jr nc, .nope
 
@@ -409,10 +434,18 @@ CheckTileEvent:
 	farcall CheckMovingOffEdgeOfMap
 	jr c, .map_connection
 
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret z
+
 	call CheckWarpTile
 	jr c, .warp_tile
 
 .connections_disabled
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret z
+
 	call CheckCoordEventScriptFlag
 	jr z, .coord_events_disabled
 
@@ -488,6 +521,10 @@ SetMinTwoStepWildEncounterCooldown: ; unreferenced
 	ret
 
 RunSceneScript:
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret z
+
 	ld a, [wCurMapSceneScriptCount]
 	and a
 	jr z, .nope
@@ -536,6 +573,10 @@ endr
 	ret
 
 CheckTimeEvents:
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret z
+
 	ld a, [wLinkMode]
 	and a
 	jr nz, .nothing
@@ -572,9 +613,11 @@ OWPlayerInput:
 	and a
 	jr nz, .NoAction
 
-; Can't perform button actions while in BOARDEVENT_HANDLE_BOARD
+; Can't perform button actions while in BOARDEVENT_HANDLE_BOARD or BOARDEVENT_VIEW_MAP_MODE
 	ld a, [hCurBoardEvent]
 	cp BOARDEVENT_HANDLE_BOARD
+	jr z, .NoAction
+	cp BOARDEVENT_VIEW_MAP_MODE
 	jr z, .NoAction
 
 ; Can't perform button actions while sliding on ice.
@@ -1121,6 +1164,9 @@ WarpToSpawnPoint::
 	ret
 
 RunMemScript::
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret z
 ; If there is no script here, we don't need to be here.
 	ld a, [wMapReentryScriptQueueFlag]
 	and a

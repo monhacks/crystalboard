@@ -87,12 +87,22 @@ UpdatePlayerCoords:
 	jr nz, .check_step_down
 	ld hl, wYCoord
 	inc [hl]
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret nz
+	ld hl, wViewMapModeDisplacementY
+	inc [hl]
 	ret
 
 .check_step_down
 	cp UP
 	jr nz, .check_step_left
 	ld hl, wYCoord
+	dec [hl]
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret nz
+	ld hl, wViewMapModeDisplacementY
 	dec [hl]
 	ret
 
@@ -101,12 +111,22 @@ UpdatePlayerCoords:
 	jr nz, .check_step_right
 	ld hl, wXCoord
 	dec [hl]
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret nz
+	ld hl, wViewMapModeDisplacementX
+	dec [hl]
 	ret
 
 .check_step_right
 	cp RIGHT
 	ret nz
 	ld hl, wXCoord
+	inc [hl]
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret nz
+	ld hl, wViewMapModeDisplacementX
 	inc [hl]
 	ret
 

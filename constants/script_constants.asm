@@ -326,9 +326,11 @@ DEF NUM_UNOWN_PUZZLES EQU const_value
 
 ; board events (tracked by hCurBoardEvent)
 	const_def 1
-	const BOARDEVENT_DISPLAY_MENU ; 1
-	const BOARDEVENT_HANDLE_BOARD ; 2
-	const BOARDEVENT_END_TURN     ; 3
+	const BOARDEVENT_DISPLAY_MENU   ; 1
+	const BOARDEVENT_HANDLE_BOARD   ; 2
+	const BOARDEVENT_END_TURN       ; 3
+	const BOARDEVENT_VIEW_MAP_MODE  ; 4
+	const BOARDEVENT_REDISPLAY_MENU ; 5
 DEF NUM_BOARD_EVENTS EQU const_value - 1
 
 ; exitoverworld arguments

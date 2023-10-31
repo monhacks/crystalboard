@@ -7,6 +7,8 @@ EnterMapSpawnPoint:
 	ld a, [wDefaultSpawnpoint]
 	cp SPAWN_N_A
 	jr z, .spawn_n_a
+	cp SPAWN_FROM_RAM
+	jr z, .spawn_from_ram
 	ld l, a
 	ld h, 0
 	add hl, hl
@@ -20,6 +22,20 @@ EnterMapSpawnPoint:
 	ld a, [hli]
 	ld [wXCoord], a
 	ld a, [hli]
+	ld [wYCoord], a
+	pop de
+	pop hl
+	ret
+
+.spawn_from_ram
+; exiting from View Map mode
+	ld a, [wBeforeViewMapMapGroup]
+	ld [wMapGroup], a
+	ld a, [wBeforeViewMapMapNumber]
+	ld [wMapNumber], a
+	ld a, [wBeforeViewMapXCoord]
+	ld [wXCoord], a
+	ld a, [wBeforeViewMapYCoord]
 	ld [wYCoord], a
 .spawn_n_a
 	pop de

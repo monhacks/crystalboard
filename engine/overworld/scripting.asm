@@ -235,6 +235,7 @@ ScriptCommandTable:
 	dw Script_wait                       ; a8
 	dw Script_checksave                  ; a9
 	dw Script_exitoverworld              ; aa
+	dw Script_reloadmapafterviewmapmode  ; db
 	assert_table_length NUM_EVENT_COMMANDS
 
 StartScript:
@@ -1202,6 +1203,22 @@ Script_reloadmapafterbattle:
 	farcall LoadMemScript
 .done
 	jp Script_reloadmap
+
+Script_reloadmapafterviewmapmode:
+	xor a
+	ld [wBattleScriptFlags], a
+	ld a, MAPSETUP_EXITVIEWMAP
+	ldh [hMapEntryMethod], a
+	ld a, SPAWN_FROM_RAM
+	ld [wDefaultSpawnpoint], a
+	ld a, BOARDEVENT_REDISPLAY_MENU
+	ldh [hCurBoardEvent], a
+	ld a, MAPSTATUS_ENTER
+	call LoadMapStatus
+	ld hl, wPlayerFlags
+	res INVISIBLE_F, [hl]
+	call StopScript
+	ret
 
 Script_reloadmap:
 	xor a
