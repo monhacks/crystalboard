@@ -208,11 +208,15 @@ MapEvents:
 .no_events:
 	ret
 
-MaxOverworldDelay:
-	db 2
-
+DEF MAX_OVERWORLD_DELAY      EQU 2
+DEF VIEW_MAP_OVERWORLD_DELAY EQU 1
 ResetOverworldDelay:
-	ld a, [MaxOverworldDelay]
+	ldh a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ld a, MAX_OVERWORLD_DELAY
+	jr nz, .set_delay
+	ld a, VIEW_MAP_OVERWORLD_DELAY
+.set_delay
 	ldh [hOverworldDelay], a
 	ret
 

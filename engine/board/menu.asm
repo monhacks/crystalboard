@@ -75,6 +75,7 @@ BoardMenuScript::
 
 .ViewMap:
 	callasm .EnterViewMapMode
+	appearplayermock
 	closetext
 	end
 
