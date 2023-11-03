@@ -23,7 +23,12 @@ DoPlayerMovement::
 	ldh a, [hJoyDown]
 	ld [wCurInput], a
 
-; Standing downhill instead moves down.
+; ignore standing downhill if in View Map mode
+	ldh a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret z
+
+; Otherwise, standing downhill instead moves down.
 	ld hl, wBikeFlags
 	bit BIKEFLAGS_DOWNHILL_F, [hl]
 	ret z
@@ -36,6 +41,10 @@ DoPlayerMovement::
 	ret
 
 .TranslateIntoMovement:
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	jp z, .ViewMapMode
+
 	ld a, [wPlayerState]
 	cp PLAYER_NORMAL
 	jr z, .Normal
@@ -100,7 +109,6 @@ DoPlayerMovement::
 	ld a, [wWalkingDirection]
 	cp STANDING
 	jr z, .Standing
-
 ; Walking into an edge warp won't bump.
 	ld a, [wWalkingIntoEdgeWarp]
 	and a
@@ -110,11 +118,102 @@ DoPlayerMovement::
 	call ._WalkInPlace
 	xor a
 	ret
-
 .Standing:
 	call .StandInPlace
 	xor a
 	ret
+
+.BumpSound:
+	call CheckSFX
+	ret c
+	ld de, SFX_BUMP
+	call PlaySFX
+	ret
+
+.ViewMapMode:
+; if View Map mode, ignore regular collisions but account for going off-limits or off-range
+	call .GetAction
+	call .CheckViewMapModeCollision
+; perform a normal step (Stand in place if wWalkingDirection is STANDING)
+	ld a, STEP_WALK
+	call .DoStep
+	scf
+	ret
+
+.CheckViewMapModeCollision:
+; return STANDING into wWalkingDirection if trying to walk
+; off-limits (unless there is a connected map) or off-range
+	ld a, [wWalkingDirection]
+	ld hl, wYCoord
+	ld de, wMapHeight
+	ld bc, wSouthConnectedMapGroup
+	cp DOWN
+	jr z, .next1
+;	ld hl, wYCoord
+	ld de, .TopLimit
+	ld bc, wNorthConnectedMapGroup
+	cp UP
+	jr z, .next1
+	ld hl, wXCoord
+	ld de, wMapWidth
+	ld bc, wEastConnectedMapGroup
+	cp RIGHT
+	jr z, .next1
+;	ld hl, wXCoord
+	ld de, .LeftLimit
+	ld bc, wWestConnectedMapGroup
+	cp LEFT
+	jr z, .next1
+	ret ; wWalkingDirection is already STANDING
+
+; check if walking off-limits
+.next1
+	ld a, [bc] ; connected map group
+	inc a
+	jr nz, .next2 ; it's ok if there's any connected map in this direction
+	ld a, [de] ; map dimension size (in metatiles), or 0 if moving up/left
+	add a
+	and a
+	jr z, .ok
+	dec a ; if e.g. size is 0x10, limit is at coord=0x1f
+.ok
+	cp [hl] ; player coord (in half-metatiles)
+	jr z, .already_in_limit
+
+.next2
+; not walking off-limits; check if walking off-range
+	ld hl, wViewMapModeDisplacementY
+	ld a, [wWalkingDirection]
+	cp DOWN
+	jr z, .next3
+	cp UP
+	jr z, .next3
+	ld hl, wViewMapModeDisplacementX
+.next3
+	ld c, [hl]
+	cp DOWN
+	jr z, .next4
+	cp RIGHT
+	jr z, .next4
+; if UP or LEFT, the displacement to check is negative
+	ld a, c
+	xor $ff
+	inc a
+	ld c, a
+.next4
+	ld a, [wViewMapModeRange]
+	cp c
+	ret nz
+	; fallthrough
+
+.already_in_limit
+	ld a, STANDING
+	ld [wWalkingDirection], a
+	ret
+
+.TopLimit:
+.LeftLimit:
+	db 0
 
 .CheckTile:
 ; Tiles such as waterfalls and warps move the player
@@ -766,13 +865,6 @@ ENDM
 
 .Neither:
 	scf
-	ret
-
-.BumpSound:
-	call CheckSFX
-	ret c
-	ld de, SFX_BUMP
-	call PlaySFX
 	ret
 
 .GetOutOfWater:
