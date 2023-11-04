@@ -48,3 +48,13 @@ LoadBranchArrowsGFX::
 
 .BranchArrowsOAMGFX:
 INCBIN "gfx/board/branch_arrows.2bpp"
+
+LoadViewMapModeGFX::
+	ld de, .ViewMapModeArrowsOAMGFX
+	ld hl, vTiles0 + VIEW_MAP_MODE_OAM_FIRST_TILE * LEN_2BPP_TILE
+	lb bc, BANK(.ViewMapModeArrowsOAMGFX), NUM_DIRECTIONS
+	call Get2bppViaHDMA
+	ret
+
+.ViewMapModeArrowsOAMGFX:
+INCBIN "gfx/board/view_map_arrows.2bpp"

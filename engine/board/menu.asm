@@ -77,6 +77,7 @@ BoardMenuScript::
 	callasm .EnterViewMapMode
 	appearplayermock
 	closetext
+	callasm .ViewMapModeOAM
 	end
 
 .EnterViewMapMode:
@@ -100,6 +101,13 @@ BoardMenuScript::
 	call DisableOverworldHUD
 	ld hl, wPlayerFlags
 	set INVISIBLE_F, [hl]
+	ret
+
+.ViewMapModeOAM:
+; this runs after closetext to prevent graphical glitches with the board menu OAM
+	farcall LoadViewMapModeGFX
+	ld hl, wDisplaySecondarySprites
+	set SECONDARYSPRITES_VIEW_MAP_MODE_F, [hl]
 	ret
 
 .SubmenuCallback:

@@ -133,80 +133,96 @@ DoPlayerMovement::
 .ViewMapMode:
 ; if View Map mode, ignore regular collisions but account for going off-limits or off-range
 	call .GetAction
-	call .CheckViewMapModeCollision
+	call .ViewMapMode_CheckCollision
 ; perform a normal step (Stand in place if wWalkingDirection is STANDING)
 	ld a, STEP_WALK
 	call .DoStep
 	scf
 	ret
 
-.CheckViewMapModeCollision:
+.ViewMapMode_CheckCollision:
 ; return STANDING into wWalkingDirection if trying to walk
 ; off-limits (unless there is a connected map) or off-range
-	ld a, [wWalkingDirection]
+
+; as wTileDown, wTileUp, wTileLeft, and wTileRight are not used in this mode,
+; they are borrowed in order to signal valid directions to InitSecondarySprites
+	xor a
+	ld hl, wTileDown
+	ld [hli], a
+	ld [hli], a ; wTileUp
+	ld [hli], a ; wTileLeft
+	ld [hl], a ; wTileRight
+
 	ld hl, wYCoord
 	ld de, wMapHeight
 	ld bc, wSouthConnectedMapGroup
-	cp DOWN
-	jr z, .next1
-;	ld hl, wYCoord
+	ld a, DOWN
+	call .ViewMapMode_CheckDirectionOffLimits
+	ld hl, wYCoord
 	ld de, .TopLimit
 	ld bc, wNorthConnectedMapGroup
-	cp UP
-	jr z, .next1
+	ld a, UP
+	call .ViewMapMode_CheckDirectionOffLimits
 	ld hl, wXCoord
 	ld de, wMapWidth
 	ld bc, wEastConnectedMapGroup
-	cp RIGHT
-	jr z, .next1
-;	ld hl, wXCoord
+	ld a, RIGHT
+	call .ViewMapMode_CheckDirectionOffLimits
+	ld hl, wXCoord
 	ld de, .LeftLimit
 	ld bc, wWestConnectedMapGroup
-	cp LEFT
-	jr z, .next1
-	ret ; wWalkingDirection is already STANDING
+	ld a, LEFT
+	call .ViewMapMode_CheckDirectionOffLimits
 
-; check if walking off-limits
+; now check in which directions the player would be walking off-range
+	ld hl, wViewMapModeRange
+	ld de, wViewMapModeDisplacementY
+	ld bc, wTileDown
+	ld a, [de]
+	cp [hl]
+	jr nz, .next1
+	ld a, $ff
+	ld [bc], a
 .next1
-	ld a, [bc] ; connected map group
-	inc a
-	jr nz, .next2 ; it's ok if there's any connected map in this direction
-	ld a, [de] ; map dimension size (in metatiles), or 0 if moving up/left
-	add a
-	and a
-	jr z, .ok
-	dec a ; if e.g. size is 0x10, limit is at coord=0x1f
-.ok
-	cp [hl] ; player coord (in half-metatiles)
-	jr z, .already_in_limit
-
-.next2
-; not walking off-limits; check if walking off-range
-	ld hl, wViewMapModeDisplacementY
-	ld a, [wWalkingDirection]
-	cp DOWN
-	jr z, .next3
-	cp UP
-	jr z, .next3
-	ld hl, wViewMapModeDisplacementX
-.next3
-	ld c, [hl]
-	cp DOWN
-	jr z, .next4
-	cp RIGHT
-	jr z, .next4
-; if UP or LEFT, the displacement to check is negative
-	ld a, c
+	inc bc ; wTileUp
+	ld a, [de]
 	xor $ff
 	inc a
-	ld c, a
+	cp [hl]
+	jr nz, .next2
+	ld a, $ff
+	ld [bc], a
+.next2
+	ld de, wViewMapModeDisplacementX
+	inc bc ; wTileLeft
+	ld a, [de]
+	xor $ff
+	inc a
+	cp [hl]
+	jr nz, .next3
+	ld a, $ff
+	ld [bc], a
+.next3
+	inc bc ; wTileRight
+	ld a, [de]
+	cp [hl]
+	jr nz, .next4
+	ld a, $ff
+	ld [bc], a
 .next4
-	ld a, [wViewMapModeRange]
-	cp c
-	ret nz
-	; fallthrough
 
-.already_in_limit
+; finally return STANDING into wWalkingDirection in the current direction at
+; wWalkingDirection has had its corresponding wTile* address set to $ff.
+	ld a, [wWalkingDirection]
+	cp STANDING
+	ret z
+	ld hl, wTileDown
+	ld c, a
+	ld b, 0
+	add hl, bc
+	ld a, [hl]
+	inc a ; cp $ff
+	ret nz
 	ld a, STANDING
 	ld [wWalkingDirection], a
 	ret
@@ -214,6 +230,36 @@ DoPlayerMovement::
 .TopLimit:
 .LeftLimit:
 	db 0
+
+; check if player would be walking off-limits in this direction
+.ViewMapMode_CheckDirectionOffLimits:
+	push af
+
+	ld a, [bc] ; connected map group
+	inc a
+	jr nz, .valid ; it's ok if there's any connected map in this direction
+
+	ld a, [de] ; map dimension size (in metatiles), or 0 if moving up/left
+	add a
+	and a
+	jr z, .ok
+	dec a ; if e.g. size is 0x10, limit is at coord=0x1f
+.ok
+	cp [hl] ; player coord (in half-metatiles)
+	jr nz, .valid
+
+; not valid: set wTile* to $ff
+	pop af
+	ld hl, wTileDown
+	ld c, a
+	ld b, 0
+	add hl, bc
+	ld [hl], $ff
+	ret
+
+.valid
+	pop af
+	ret
 
 .CheckTile:
 ; Tiles such as waterfalls and warps move the player

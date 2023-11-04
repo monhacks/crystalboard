@@ -1515,6 +1515,12 @@ SaveScreen_LoadConnection::
 	ret
 
 GetMovementPermissions::
+; permissions are ignored in View Map mode
+; collisions are handled differently in View Map mode
+	ld a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret z
+
 	xor a
 	ld [wTilePermissions], a
 	call .LeftRight

@@ -1277,6 +1277,8 @@ Script_reloadmapafterviewmapmode:
 	ld [wDefaultSpawnpoint], a
 	ld a, BOARDEVENT_REDISPLAY_MENU
 	ldh [hCurBoardEvent], a
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_VIEW_MAP_MODE_F, [hl]
 	ld a, MAPSTATUS_ENTER
 	call LoadMapStatus
 	ld hl, wPlayerFlags

@@ -3114,6 +3114,8 @@ InitSecondarySprites:
 	call nz, InitSpacesLeftNumberSprites
 	bit SECONDARYSPRITES_BRANCH_ARROWS_F, a
 	call nz, InitBranchArrowsSprites
+	bit SECONDARYSPRITES_VIEW_MAP_MODE_F, a
+	call nz, InitViewMapModeSprites
 	ret
 
 InitBoardMenuSprites:
@@ -3246,6 +3248,61 @@ InitBranchArrowsSprites:
 
 .next2
 	inc hl ; next object in BranchArrowsOAM
+	inc de
+	dec c
+	jr nz, .loop
+
+.oam_full
+	pop af
+	ret
+
+InitViewMapModeSprites:
+	push af
+
+; find the beginning of free space in OAM, and assure there's space for 4 objects
+	ldh a, [hUsedSpriteIndex]
+	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (NUM_DIRECTIONS * SPRITEOAMSTRUCT_LENGTH) + 1
+	jr nc, .oam_full
+
+	ld hl, ViewMapModeArrowsOAM
+	ld de, wTileDown
+	ld c, NUM_DIRECTIONS
+
+.loop
+	ld a, [de]
+	cp $ff
+	jr z, .next1 ; skip this arrow if this direction is not valid
+	gender_to_pal
+	ld b, a
+; draw this arrow and advance hUsedSpriteIndex
+; preserve loop variables d, e, c
+	push de
+	push bc
+	ldh a, [hUsedSpriteIndex]
+	ld e, a
+	ld d, HIGH(wShadowOAM)
+; copy all bytes minus the attributes one.
+; the palette matches the player's color palette.
+	push bc
+	ld bc, SPRITEOAMSTRUCT_LENGTH - 1
+	call CopyBytes
+	pop bc
+	ld a, b ; palette
+	ld [de], a
+	inc de
+	ld a, e
+	ldh [hUsedSpriteIndex], a
+	pop bc
+	pop de
+	jr .next2
+
+.next1
+	inc hl ;
+	inc hl ;
+	inc hl ;
+
+.next2
+	inc hl ; next object in ViewMapModeArrowsOAM
 	inc de
 	dec c
 	jr nz, .loop

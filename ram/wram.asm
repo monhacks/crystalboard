@@ -171,6 +171,9 @@ wTileDown::  db
 wTileUp::    db
 wTileLeft::  db
 wTileRight:: db
+	assert wTileUp - wTileDown == UP
+	assert wTileLeft - wTileDown == LEFT
+	assert wTileRight - wTileDown == RIGHT
 
 wTilePermissions::
 ; set if tile behavior prevents
