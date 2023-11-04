@@ -137,9 +137,9 @@ LandedInRegularSpaceScript_AfterSpaceEffect:
 	ret
 
 BranchSpaceScript::
-	scall .ArriveToBranchSpaceScript
-.prompt_player
-	callasm .PromptPlayerToChooseDirection
+	scall ArriveToBranchSpaceScript
+BranchSpaceScript_PromptPlayer::
+	callasm PromptPlayerToChooseBranchDirection
 	iffalse .print_technique_required
 	wait 200
 	end
@@ -149,14 +149,14 @@ BranchSpaceScript::
 	writetext .TechniqueRequiredText
 	waitbutton
 	closetext
-	sjump .prompt_player
+	sjump BranchSpaceScript_PromptPlayer
 
 .TechniqueRequiredText:
 	text "A new TECHNIQUE is"
 	line "required!"
 	done
 
-.ArriveToBranchSpaceScript:
+ArriveToBranchSpaceScript:
 	playsound SFX_TWINKLE
 	wait 400
 	callasm .ArriveToBranchSpace
@@ -199,20 +199,25 @@ rept NUM_DIRECTIONS
 endr
 	ret
 
-.PromptPlayerToChooseDirection:
-; sample a dpad press
+PromptPlayerToChooseBranchDirection:
+; sample a dpad press or SELECT button
 	ld hl, wTempSpaceBranchStruct
 	call GetJoypad
 	ldh a, [hJoyPressed]
-	and D_PAD
-	jr z, .PromptPlayerToChooseDirection
+	and D_PAD | SELECT
+	jr z, PromptPlayerToChooseBranchDirection
 
+	cp SELECT ; check if SELECT pressed along with no dpad key
+	jr nz, .not_select
+	jp .EnterViewMapMode
+
+.not_select
 ; determine the status (ok/invalid/unavailable) of the chosen direction
 	bit D_RIGHT_F, a
 	jr z, .not_right
 	ld a, [hl]
 	inc a ; cp BRANCH_DIRECTION_INVALID
-	jr z, .PromptPlayerToChooseDirection
+	jr z, PromptPlayerToChooseBranchDirection
 	inc a ; cp BRANCH_DIRECTION_UNAVAILABLE
 	jr z, .technique_required
 	jr .direction_chosen
@@ -223,7 +228,7 @@ endr
 	jr z, .not_left
 	ld a, [hl]
 	inc a ; cp BRANCH_DIRECTION_INVALID
-	jr z, .PromptPlayerToChooseDirection
+	jr z, PromptPlayerToChooseBranchDirection
 	inc a ; cp BRANCH_DIRECTION_UNAVAILABLE
 	jr z, .technique_required
 	jr .direction_chosen
@@ -234,7 +239,7 @@ endr
 	jr z, .not_up
 	ld a, [hl]
 	inc a ; cp BRANCH_DIRECTION_INVALID
-	jr z, .PromptPlayerToChooseDirection
+	jr z, PromptPlayerToChooseBranchDirection
 	inc a ; cp BRANCH_DIRECTION_UNAVAILABLE
 	jr z, .technique_required
 	jr .direction_chosen
@@ -243,7 +248,7 @@ endr
 	inc hl
 	ld a, [hl]
 	inc a ; cp BRANCH_DIRECTION_INVALID
-	jr z, .PromptPlayerToChooseDirection
+	jr z, PromptPlayerToChooseBranchDirection
 	inc a ; cp BRANCH_DIRECTION_UNAVAILABLE
 	jr z, .technique_required
 	; fallthrough
@@ -260,6 +265,37 @@ endr
 
 .technique_required
 	xor a ; FALSE
+	ldh [hScriptVar], a
+	jp PlayClickSFX
+
+.EnterViewMapMode:
+	ld a, BOARDEVENT_VIEW_MAP_MODE
+	ldh [hCurBoardEvent], a
+	ld a, TRUE
+	ld [wViewMapModeRange], a
+	ld a, [wMapGroup]
+	ld [wBeforeViewMapMapGroup], a
+	ld a, [wMapNumber]
+	ld [wBeforeViewMapMapNumber], a
+	ld a, [wXCoord]
+	ld [wBeforeViewMapXCoord], a
+	ld a, [wYCoord]
+	ld [wBeforeViewMapYCoord], a
+	xor a
+	ld [wViewMapModeDisplacementY], a
+	ld [wViewMapModeDisplacementX], a
+	call DisableOverworldHUD
+	ld hl, wPlayerFlags
+	set INVISIBLE_F, [hl]
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
+	res SECONDARYSPRITES_BRANCH_ARROWS_F, [hl]
+	farcall MockPlayerObject
+	call UpdateSprites
+	farcall LoadViewMapModeGFX
+	ld hl, wDisplaySecondarySprites
+	set SECONDARYSPRITES_VIEW_MAP_MODE_F, [hl]
+	ld a, TRUE
 	ldh [hScriptVar], a
 	jp PlayClickSFX
 

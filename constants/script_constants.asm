@@ -331,6 +331,7 @@ DEF NUM_UNOWN_PUZZLES EQU const_value
 	const BOARDEVENT_END_TURN       ; 3
 	const BOARDEVENT_VIEW_MAP_MODE  ; 4
 	const BOARDEVENT_REDISPLAY_MENU ; 5
+	const BOARDEVENT_RESUME_BRANCH  ; 6
 DEF NUM_BOARD_EVENTS EQU const_value - 1
 
 ; exitoverworld arguments

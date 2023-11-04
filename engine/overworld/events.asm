@@ -338,8 +338,9 @@ CheckBoardEvent:
 	dw .menu    ; BOARDEVENT_DISPLAY_MENU
 	dw .board   ; BOARDEVENT_HANDLE_BOARD
 	dw .none    ; BOARDEVENT_END_TURN
-	dw .mapview ; BOARDEVENT_VIEW_MAP_MODE
+	dw .viewmap ; BOARDEVENT_VIEW_MAP_MODE
 	dw .menu    ; BOARDEVENT_REDISPLAY_MENU
+	dw .branch  ; BOARDEVENT_RESUME_BRANCH
 	assert_table_length NUM_BOARD_EVENTS + 1
 
 .none
@@ -375,7 +376,7 @@ CheckBoardEvent:
 	scf
 	ret
 
-.mapview
+.viewmap
 ; check if player pressed B and if so queue the script to exit View Map mode
 	ldh a, [hJoyDown]
 	and D_PAD
@@ -384,15 +385,26 @@ CheckBoardEvent:
 	bit B_BUTTON_F, a
 	ret z ; nc
 ; B was pressed
-	ld a, BANK(.ExitMapViewModeScript)
-	ld hl, .ExitMapViewModeScript
+	ld a, BANK(.ExitViewMapModeScript)
+	ld hl, .ExitViewMapModeScript
 	call CallScript
 	scf
 	ret
 
-.ExitMapViewModeScript:
+.ExitViewMapModeScript:
 	reloadmapafterviewmapmode
 	end
+
+.branch
+; special handler to resume branch space after returning from View Map mode.
+; skip scall to .ArriveToBranchSpaceScript not to recompute branch struct.
+	ld a, BOARDEVENT_HANDLE_BOARD
+	ldh [hCurBoardEvent], a
+	ld a, BANK(BranchSpaceScript)
+	ld hl, BranchSpaceScript_PromptPlayer
+	call CallScript
+	scf
+	ret
 
 .no_space_effect
 ; continue moving in board

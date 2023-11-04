@@ -183,6 +183,7 @@ MapSetupScript_ExitViewMap:
 	mapsetup LoadMapObjects
 	mapsetup EnableLCD
 	mapsetup LoadMapPalettes
+	mapsetup SpawnInCustomFacing ; restore player's facing if in branch space
 	mapsetup RefreshMapSprites
 	mapsetup FadeInPalettesFromWhite
 	mapsetup ActivateMapAnims

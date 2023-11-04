@@ -1076,9 +1076,4 @@ MACRO reloadmapafterviewmapmode
 	db reloadmapafterviewmapmode_command
 ENDM
 
-	const appearplayermock_command ; $ac
-MACRO appearplayermock
-	db appearplayermock_command
-ENDM
-
 DEF NUM_EVENT_COMMANDS EQU const_value

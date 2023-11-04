@@ -236,7 +236,6 @@ ScriptCommandTable:
 	dw Script_checksave                  ; a9
 	dw Script_exitoverworld              ; aa
 	dw Script_reloadmapafterviewmapmode  ; ab
-	dw Script_appearplayermock           ; ac
 	assert_table_length NUM_EVENT_COMMANDS
 
 StartScript:
@@ -962,69 +961,6 @@ Script_variablesprite:
 	ld [hl], a
 	ret
 
-Script_appearplayermock:
-	ld hl, .DefaultPlayerObject
-	ld de, wMap{d:LAST_OBJECT}Object
-	ld bc, OBJECT_EVENT_SIZE + 1
-	call CopyBytes
-
-; adjust sprite id and palette number
-	ld hl, .PlayerObjectFields
-.loop
-	ld a, [wPlayerGender]
-	cp [hl]
-	inc hl
-	jr nz, .next1
-	ld a, [wPlayerState]
-	cp [hl]
-	inc hl
-	jr nz, .next2
-; found a match
-	ld a, [hli] ; sprite
-	ld [wMap{d:LAST_OBJECT}ObjectSprite], a
-	ld a, [hl] ; palette | objecttype
-	ld [wMap{d:LAST_OBJECT}ObjectPalette], a ; also wMap{d:LAST_OBJECT}ObjectType
-	jr .copy_player_coords
-.next1
-	inc hl
-.next2
-	inc hl
-	inc hl
-	ld a, [hl]
-	cp -1
-	jr nz, .loop
-
-.copy_player_coords
-; copy player's coordinates
-	ld hl, wPlayerObjectYCoord
-	ld de, wMap{d:LAST_OBJECT}ObjectYCoord
-	ld a, [hli]
-	ld [de], a
-	inc de
-	ld a, [hl] ; wPlayerObjectXCoord
-	ld [de], a ; wMap{d:LAST_OBJECT}ObjectXCoord
-
-; display mocked player object
-; it will go to the last wMapObjects slot and to whichever wObjectStructs slot
-; wObjectStructs[n][MAPOBJECT_OBJECT_STRUCT_ID] links both structs
-	ld a, NUM_OBJECTS - 1
-	call UnmaskCopyMapObjectStruct
-	ret
-
-.DefaultPlayerObject:
-	db -1 ; MAPOBJECT_OBJECT_STRUCT_ID
-	object_event  0,  0, SPRITE_CHRIS, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_RED,  OBJECTTYPE_SCRIPT, 0, ObjectEvent, -1
-
-.PlayerObjectFields:
-; [wPlayerGender], [wPlayerState], sprite id, palette
-	db 0,                          PLAYER_NORMAL, SPRITE_CHRIS,      PAL_NPC_RED << 4 | OBJECTTYPE_SCRIPT
-	db 1 << PLAYERGENDER_FEMALE_F, PLAYER_NORMAL, SPRITE_KRIS,       PAL_NPC_BLUE << 4 | OBJECTTYPE_SCRIPT
-	db 0,                          PLAYER_SURF,   SPRITE_SURF,       PAL_NPC_RED << 4 | OBJECTTYPE_SCRIPT
-	db 1 << PLAYERGENDER_FEMALE_F, PLAYER_SURF,   SPRITE_SURF,       PAL_NPC_BLUE << 4 | OBJECTTYPE_SCRIPT
-	db 0,                          PLAYER_BIKE,   SPRITE_CHRIS_BIKE, PAL_NPC_RED << 4 | OBJECTTYPE_SCRIPT
-	db 1 << PLAYERGENDER_FEMALE_F, PLAYER_BIKE,   SPRITE_KRIS_BIKE,  PAL_NPC_BLUE << 4 | OBJECTTYPE_SCRIPT
-	db -1
-
 Script_appear:
 	call GetScriptByte
 	call GetScriptObject
@@ -1275,7 +1211,24 @@ Script_reloadmapafterviewmapmode:
 	ldh [hMapEntryMethod], a
 	ld a, SPAWN_FROM_RAM
 	ld [wDefaultSpawnpoint], a
+	ld a, [wSpacesLeft]
+	and a
 	ld a, BOARDEVENT_REDISPLAY_MENU
+	jr z, .in_board_menu
+
+; .in_branch_space
+	ld hl, wDisplaySecondarySprites
+	set SECONDARYSPRITES_SPACES_LEFT_F, [hl]
+	set SECONDARYSPRITES_BRANCH_ARROWS_F, [hl]
+	ld hl, wPlayerSpriteSetupFlags
+; get the facing direction from the mocked object's facing direction
+	ld a, [wMap{d:LAST_OBJECT}ObjectMovement]
+	sub SPRITEMOVEDATA_STANDING_DOWN
+	ld [hl], a
+	set PLAYERSPRITESETUP_CUSTOM_FACING_F, [hl]
+	ld a, BOARDEVENT_RESUME_BRANCH
+
+.in_board_menu
 	ldh [hCurBoardEvent], a
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_VIEW_MAP_MODE_F, [hl]
