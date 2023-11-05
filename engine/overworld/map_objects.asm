@@ -2034,7 +2034,7 @@ SpawnShadow:
 
 .ShadowObject:
 	; vtile, palette, movement
-	db $00, PAL_OW_EMOTE, SPRITEMOVEDATA_SHADOW
+	db $00, PAL_OW_GREY, SPRITEMOVEDATA_SHADOW
 
 SpawnStrengthBoulderDust:
 	push bc
@@ -2046,7 +2046,7 @@ SpawnStrengthBoulderDust:
 
 .BoulderDustObject:
 	; vtile, palette, movement
-	db $00, PAL_OW_EMOTE, SPRITEMOVEDATA_BOULDERDUST
+	db $00, PAL_OW_GREY, SPRITEMOVEDATA_BOULDERDUST
 
 SpawnEmote:
 	push bc
@@ -2058,7 +2058,7 @@ SpawnEmote:
 
 .EmoteObject:
 	; vtile, palette, movement
-	db $00, PAL_OW_EMOTE, SPRITEMOVEDATA_EMOTE
+	db $00, PAL_OW_GREY, SPRITEMOVEDATA_EMOTE
 
 ShakeGrass:
 	push bc
@@ -2085,7 +2085,7 @@ ShakeScreen:
 
 .ScreenShakeObject:
 	; vtile, palette, movement
-	db $00, PAL_OW_EMOTE, SPRITEMOVEDATA_SCREENSHAKE
+	db $00, PAL_OW_GREY, SPRITEMOVEDATA_SCREENSHAKE
 
 DespawnEmote:
 	push bc
@@ -3216,7 +3216,7 @@ InitBranchArrowsSprites:
 	gender_to_pal
 	ld b, a
 	jr nz, .available
-	ld b, PAL_OW_EMOTE ; draw grey arrow if this direction is unavailable
+	ld b, PAL_OW_GREY ; draw grey arrow if this direction is unavailable
 
 .available
 ; draw this arrow and advance hUsedSpriteIndex
@@ -3227,7 +3227,7 @@ InitBranchArrowsSprites:
 	ld e, a
 	ld d, HIGH(wShadowOAM)
 ; copy all bytes minus the attributes one. the palette matches the
-; player's color palette, or is PAL_OW_EMOTE if direction is unavailable
+; player's color palette, or is PAL_OW_GREY if direction is unavailable
 	push bc
 	ld bc, SPRITEOAMSTRUCT_LENGTH - 1
 	call CopyBytes

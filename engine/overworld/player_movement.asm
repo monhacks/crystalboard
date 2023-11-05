@@ -41,7 +41,7 @@ DoPlayerMovement::
 	ret
 
 .TranslateIntoMovement:
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	jp z, .ViewMapMode
 

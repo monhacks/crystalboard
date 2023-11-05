@@ -87,7 +87,7 @@ UpdatePlayerCoords:
 	jr nz, .check_step_down
 	ld hl, wYCoord
 	inc [hl]
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret nz
 	ld hl, wViewMapModeDisplacementY
@@ -99,7 +99,7 @@ UpdatePlayerCoords:
 	jr nz, .check_step_left
 	ld hl, wYCoord
 	dec [hl]
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret nz
 	ld hl, wViewMapModeDisplacementY
@@ -111,7 +111,7 @@ UpdatePlayerCoords:
 	jr nz, .check_step_right
 	ld hl, wXCoord
 	dec [hl]
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret nz
 	ld hl, wViewMapModeDisplacementX
@@ -123,7 +123,7 @@ UpdatePlayerCoords:
 	ret nz
 	ld hl, wXCoord
 	inc [hl]
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret nz
 	ld hl, wViewMapModeDisplacementX

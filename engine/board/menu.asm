@@ -14,7 +14,7 @@ BoardMenuScript::
 
 .Upkeep:
 ; skip upkeep if we are re-entering after returning from View Map mode
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_REDISPLAY_MENU
 	ret z
 ; save after opentext to reanchor map first

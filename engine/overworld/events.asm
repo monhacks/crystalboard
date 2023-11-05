@@ -426,7 +426,7 @@ CheckBoardEvent:
 	assert_table_length NUM_COLL_SPACES
 
 CheckTrainerEvent:
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret z
 
@@ -450,7 +450,7 @@ CheckTileEvent:
 	farcall CheckMovingOffEdgeOfMap
 	jr c, .map_connection
 
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret z
 
@@ -458,7 +458,7 @@ CheckTileEvent:
 	jr c, .warp_tile
 
 .connections_disabled
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret z
 
@@ -537,7 +537,7 @@ SetMinTwoStepWildEncounterCooldown: ; unreferenced
 	ret
 
 RunSceneScript:
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret z
 
@@ -589,7 +589,7 @@ endr
 	ret
 
 CheckTimeEvents:
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret z
 
@@ -630,7 +630,7 @@ OWPlayerInput:
 	jr nz, .NoAction
 
 ; Can't perform button actions while in BOARDEVENT_HANDLE_BOARD or BOARDEVENT_VIEW_MAP_MODE
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_HANDLE_BOARD
 	jr z, .NoAction
 	cp BOARDEVENT_VIEW_MAP_MODE
@@ -1180,7 +1180,7 @@ WarpToSpawnPoint::
 	ret
 
 RunMemScript::
-	ld a, [hCurBoardEvent]
+	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret z
 ; If there is no script here, we don't need to be here.
