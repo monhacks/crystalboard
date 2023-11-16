@@ -10,6 +10,10 @@ DebugLevel5_Map1_MapEvents:
 
 	def_warp_events
 
+	def_anchor_events
+	anchor_event 10,  1, GO_RIGHT
+	anchor_event 12,  1, 39
+
 	def_coord_events
 
 	def_bg_events
@@ -58,7 +62,7 @@ DebugLevel5_Map1_MapSpaces:
 	space  6,  2,  $0, 36 ; 35
 	space  6,  0,  $0, 37 ; 36
 	space  8,  0,  $0, 38 ; 37
-	space 10,  0,  $0, 39 ; 38
+	space 10,  0,  $0, GO_DOWN ; 38
 	space 12,  0,  $0, 40 ; 39
 	space 14,  0,  $0, 41 ; 40
 	space 16,  0,  $0, 42 ; 41

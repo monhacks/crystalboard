@@ -10,6 +10,8 @@ DebugLevel4_Map1_MapEvents:
 
 	def_warp_events
 
+	def_anchor_events
+
 	def_coord_events
 
 	def_bg_events

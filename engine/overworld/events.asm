@@ -357,6 +357,32 @@ CheckBoardEvent:
 .board
 	call CheckSpaceEffectsScriptFlag
 	jr z, .no_space_effect
+
+; anchor point handler
+; if wCurSpaceNextSpace is not an anchor point, override any anchor point we pass though
+	ld a, [wCurSpaceNextSpace]
+	cp NEXT_SPACE_IS_ANCHOR_POINT
+	jr c, .next
+	ld a, [wCurMapAnchorEventCount]
+	and a
+	jr z, .next
+; if we have arrived to an anchor point, load its associated next space to wCurSpaceNextSpace right now.
+; don't queue a script so that it happens transparently from the point of view of the player's movement.
+; note that the next space of an anchor point could be another anchor point.
+	ld c, a
+	ld hl, wCurMapAnchorEventsPointer
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, [wXCoord]
+	ld d, a
+	ld a, [wYCoord]
+	ld e, a
+	call CheckAndApplyAnchorPoint
+	ret nc ; if we applied an anchor point, we're done here (we're not in a space)
+
+.next
+; space handler
 	ld a, [wPlayerTile]
 	and $f0
 	cp HI_NYBBLE_SPACES

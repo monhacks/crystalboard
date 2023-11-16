@@ -62,6 +62,21 @@ MACRO warp_event
 	DEF {_NUM_WARP_EVENTS} += 1
 ENDM
 
+MACRO def_anchor_events
+	REDEF _NUM_ANCHOR_EVENTS EQUS "_NUM_ANCHOR_EVENTS_\@"
+	db {_NUM_ANCHOR_EVENTS}
+	DEF {_NUM_ANCHOR_EVENTS} = 0
+ENDM
+
+MACRO anchor_event
+;\1: x coord
+;\2: y coord
+;\3: next space
+; there is no \4. An anchor point can't act as an space with an effect (neither as a branch space)
+	db \1, \2, \3
+	DEF {_NUM_ANCHOR_EVENTS} += 1
+ENDM
+
 MACRO def_coord_events
 	REDEF _NUM_COORD_EVENTS EQUS "_NUM_COORD_EVENTS_\@"
 	db {_NUM_COORD_EVENTS}

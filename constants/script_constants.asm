@@ -107,6 +107,7 @@ DEF NUM_PLAYER_MOVEMENTS EQU const_value
 DEF SCENE_SCRIPT_SIZE EQU  4 ; scene_script
 DEF CALLBACK_SIZE     EQU  3 ; callback
 DEF WARP_EVENT_SIZE   EQU  5 ; warp_event
+DEF ANCHOR_EVENT_SIZE EQU  3 ; anchor_event
 DEF COORD_EVENT_SIZE  EQU  8 ; coord_event
 DEF BG_EVENT_SIZE     EQU  5 ; bg_event
 ; An object_event is a map_object without its initial MAPOBJECT_OBJECT_STRUCT_ID or final padding

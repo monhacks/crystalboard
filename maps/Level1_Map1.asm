@@ -16,6 +16,8 @@ Level1_Map1_MapEvents:
 	def_warp_events
 	warp_event  7,  0, LEVEL_1_MAP_1, 1
 
+	def_anchor_events
+
 	def_coord_events
 
 	def_bg_events

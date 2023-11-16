@@ -1598,6 +1598,13 @@ wElevatorOriginFloor:: db
 wElevatorDataEnd::
 
 NEXTU
+; anchor event data
+wCurAnchorEvent::
+wCurAnchorEventXCoord:: db
+wCurAnchorEventYCoord:: db
+wCurAnchorEventNextSpace:: db
+
+NEXTU
 ; coord event data
 wCurCoordEvent::
 wCurCoordEventSceneID:: db
@@ -2434,8 +2441,10 @@ wBikeFlags::
 wCurMapSceneScriptPointer:: dw
 
 wCurCaller:: dw
-wCurMapWarpCount:: db
-wCurMapWarpsPointer:: dw
+wCurMapWarpEventCount:: db
+wCurMapWarpEventsPointer:: dw
+wCurMapAnchorEventCount:: db
+wCurMapAnchorEventsPointer:: dw
 wCurMapCoordEventCount:: db
 wCurMapCoordEventsPointer:: dw
 wCurMapBGEventCount:: db

@@ -244,12 +244,12 @@ GetDestinationWarpNumber::
 	ld a, [wPlayerMapX]
 	sub 4
 	ld d, a
-	ld a, [wCurMapWarpCount]
+	ld a, [wCurMapWarpEventCount]
 	and a
 	ret z
 
 	ld c, a
-	ld hl, wCurMapWarpsPointer
+	ld hl, wCurMapWarpEventsPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -282,7 +282,7 @@ GetDestinationWarpNumber::
 	call .IncreaseHLTwice
 	ret nc ; never encountered
 
-	ld a, [wCurMapWarpCount]
+	ld a, [wCurMapWarpEventCount]
 	inc a
 	sub c
 	ld c, a
@@ -309,7 +309,7 @@ CopyWarpData::
 
 .CopyWarpData:
 	push bc
-	ld hl, wCurMapWarpsPointer
+	ld hl, wCurMapWarpEventsPointer
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
@@ -390,7 +390,8 @@ ReadMapEvents::
 	ld l, a
 	inc hl
 	inc hl
-	call ReadWarps
+	call ReadWarpEvents
+	call ReadAnchorEvents
 	call ReadCoordEvents
 	call ReadBGEvents
 
@@ -500,18 +501,35 @@ ReadMapCallbacks::
 	call AddNTimes
 	ret
 
-ReadWarps::
+ReadWarpEvents::
 	ld a, [hli]
 	ld c, a
-	ld [wCurMapWarpCount], a
+	ld [wCurMapWarpEventCount], a
 	ld a, l
-	ld [wCurMapWarpsPointer], a
+	ld [wCurMapWarpEventsPointer], a
 	ld a, h
-	ld [wCurMapWarpsPointer + 1], a
+	ld [wCurMapWarpEventsPointer + 1], a
 	ld a, c
 	and a
 	ret z
 	ld bc, WARP_EVENT_SIZE
+	call AddNTimes
+	ret
+
+ReadAnchorEvents::
+	ld a, [hli]
+	ld c, a
+	ld [wCurMapAnchorEventCount], a
+	ld a, l
+	ld [wCurMapAnchorEventsPointer], a
+	ld a, h
+	ld [wCurMapAnchorEventsPointer + 1], a
+
+	ld a, c
+	and a
+	ret z
+
+	ld bc, ANCHOR_EVENT_SIZE
 	call AddNTimes
 	ret
 
@@ -1781,6 +1799,44 @@ GetBlockLocation::
 	srl c
 	ld b, 0
 	add hl, bc
+	ret
+
+CheckAndApplyAnchorPoint::
+; c = [wCurMapAnchorEventCount] (non-0)
+; d = [wXCoord]
+; e = [wYCoord]
+; hl = [wCurMapAnchorEventsPointer]
+; if currently at coords of any anchor point, copy its next space byte to wCurSpaceNextSpace.
+; return carry if anchor point matched, nc otherwise.
+	ldh a, [hROMBank]
+	push af
+	call SwitchToMapScriptsBank
+
+.loop
+	ld a, [hli]
+	cp d ; x
+	jr nz, .next1
+	ld a, [hli]
+	cp e ; y
+	jr nz, .next2
+
+; found anchor point in current player coords
+	ld a, [hl]
+	ld [wCurSpaceNextSpace], a
+	pop af
+	rst Bankswitch
+	xor a
+	ret
+
+.next1
+	inc hl
+.next2
+	inc hl
+	dec c
+	jr nz, .loop
+	pop af
+	rst Bankswitch
+	scf
 	ret
 
 CheckFacingBGEvent::
