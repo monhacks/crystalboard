@@ -373,6 +373,7 @@ $~~~~$<c>then always returns PLAYERMOVEMENT_FINISH but often is overwritten by c
 8) The player may need to turn to a different direction through the ``ChangeDirectionScript`` (when ``DoPlayerMovement`` returns with ``PLAYERMOVEMENT_TURN``). Otherwise or after that, ``CheckPlayerState`` sets ``wMapEventStatus`` to ``MAPEVENTS_OFF``,
 9) When the step finishes (i.e. ``PLAYERSTEP_STOP_F`` becomes set) in some ``HandleMap`` iteration, ``CheckPlayerState`` sets ``wScriptFlags2`` to $ff and ``wMapEventStatus`` to ``MAPEVENTS_ON``.
 10) In the next ``HandleMap`` iteration, ``CheckBoardEvent.board`` is called with ``wScriptFlags2[4]`` set.
+      - If ``wCurSpaceNextSpace`` matches ``NEXT_SPACE_IS_ANCHOR_POINT``: If player is at a tile with an anchor event, ``wCurSpaceNextSpace`` is updated with the next space byte of salid anchor event. ``wScriptFlags2[4]`` is reset. **Go back to 7**.
       - If player is not above a tile (``wPlayerTile``) with a space collision: ``wScriptFlags2[4]`` is reset. **Go back to 7**.
       - If player is above a tile, the corresponding space script is queued to be executed by ``ScriptEvents`` in the current ``HandleMap`` iteration. ``wScriptFlags2[4]`` is reset. **Continue to 11**.
 11) The space script loads the value of ``wCurSpaceNextSpace`` into ``wCurSpace``, and loads the new space data to ``wCurSpaceStruct[]``. Unless the space is a Branch Space or a Union Space, ``wSpacesLeft`` is decreased.

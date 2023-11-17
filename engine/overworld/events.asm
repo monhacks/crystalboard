@@ -359,7 +359,7 @@ CheckBoardEvent:
 	jr z, .no_space_effect
 
 ; anchor point handler
-; if wCurSpaceNextSpace is not an anchor point, override any anchor point we pass though
+; if wCurSpaceNextSpace is not an anchor point, override any anchor point we pass through
 	ld a, [wCurSpaceNextSpace]
 	cp NEXT_SPACE_IS_ANCHOR_POINT
 	jr c, .next
