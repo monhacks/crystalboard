@@ -39,14 +39,14 @@ _CheckTrainerBattleOrTalkerPrompt::
 	jr z, .is_trainer
 	cp OBJECTTYPE_TALKER
 	jr nz, .next
-; also set wTrainerOrTalkerIsTalker accordingly (flag is only relevant if there's actually an event)
+; also set wSeenTrainerOrTalkerIsTalker accordingly (flag is only relevant if there's actually an event)
 ;.is_talker
 	ld a, TRUE
-	ld [wTrainerOrTalkerIsTalker], a
+	ld [wSeenTrainerOrTalkerIsTalker], a
 	jr .go
 .is_trainer
 	xor a ; FALSE
-	ld [wTrainerOrTalkerIsTalker], a
+	ld [wSeenTrainerOrTalkerIsTalker], a
 
 .go
 ; Is visible on the map
@@ -68,11 +68,31 @@ _CheckTrainerBattleOrTalkerPrompt::
 	cp b
 	jr c, .next
 
-	ld a, [wTrainerOrTalkerIsTalker]
-	and a ; TRUE?
-	jr z, .trainer_battle
+; And hasn't already been beaten if it's a trainer, or talked to if it's a talker,
+; according to the scope of the flag of the trainer or talker event.
+	push bc
+	push de
+	ld hl, MAPOBJECT_SCRIPT_POINTER
+	add hl, de
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld e, [hl]
+	inc hl
+	ld d, [hl] ; de = wTempTrainerEventFlag = wTempTalkerEventFlag
+	ld b, CHECK_FLAG
+	call EventFlagAction
+	ld a, c
+	pop de
+	pop bc
+	and a
+	jr nz, .next
 
-;.talker_prompt
+	ld a, [wSeenTrainerOrTalkerIsTalker]
+	and a ; cp FALSE
+	jr z, .prepare_trainer_battle
+
+;.prepare_talker_prompt
 	pop de
 	pop af
 	ldh [hLastTalked], a
@@ -98,26 +118,6 @@ _CheckTrainerBattleOrTalkerPrompt::
 	scf
 	ret
 
-.trainer_battle
-; And hasn't already been beaten if it's a trainer
-	push bc
-	push de
-	ld hl, MAPOBJECT_SCRIPT_POINTER
-	add hl, de
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	ld e, [hl]
-	inc hl
-	ld d, [hl]
-	ld b, CHECK_FLAG
-	call EventFlagAction
-	ld a, c
-	pop de
-	pop bc
-	and a
-	jr z, .startbattle
-
 .next
 	pop de
 	ld hl, MAPOBJECT_LENGTH
@@ -132,7 +132,7 @@ _CheckTrainerBattleOrTalkerPrompt::
 	xor a
 	ret
 
-.startbattle
+.prepare_trainer_battle
 	pop de
 	pop af
 	ldh [hLastTalked], a

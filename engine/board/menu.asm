@@ -20,12 +20,22 @@ BoardMenuScript::
 ; save after opentext to reanchor map first
 ; save before processing variables like wCurTurn due to BoardMenuScript reentry after game reset
 	farcall AutoSaveGameInOverworld
+; reset turn-scoped variables (wDieRoll, wSpacesLeft) and update wCurTurn
 	ld hl, wTurnData
 	ld bc, wTurnDataEnd - wTurnData
 	xor a
 	call ByteFill
 	ld hl, wCurTurn
 	inc [hl]
+; reset turn-scoped event flags
+	ld hl, wEventFlags + EVENT_LEVEL_SCOPED_FLAGS_START / 8
+	ld c, (EVENT_LEVEL_SCOPED_FLAGS_END / 8) - (EVENT_LEVEL_SCOPED_FLAGS_START / 8)
+	xor a
+.loop
+	ld [hli], a
+	dec c
+	jr nz, .loop
+; load the data for the current space to wCurSpaceStruct
 	jp LoadCurSpaceData
 
 .Die:

@@ -163,7 +163,7 @@ ScriptCommandTable:
 	dw Script_reloadmapafterbattle       ; 60
 	dw Script_catchtutorial              ; 61
 	dw Script_trainertext                ; 62
-	dw Script_trainerflagaction          ; 63
+	dw Script_trainerortalkerflagaction  ; 63
 	dw Script_winlosstext                ; 64
 	dw Script_scripttalkafter            ; 65
 	dw Script_endifjustbattled           ; 66
@@ -685,10 +685,10 @@ Script_scripttalkafter:
 	ld b, a
 	jp ScriptJump
 
-Script_trainerflagaction:
+Script_trainerortalkerflagaction:
 	xor a
 	ldh [hScriptVar], a
-	ld hl, wTempTrainerEventFlag
+	ld hl, wTempTrainerEventFlag ; wTempTalkerEventFlag
 	ld e, [hl]
 	inc hl
 	ld d, [hl]

@@ -28,7 +28,7 @@ DebugLevel5_Map1_MapEvents:
 .DebugLevel5_Map1TrainerYoungsterMikey2:
 	trainer YOUNGSTER, MIKEY, EVENT_LEVEL_SCOPED_2, .YoungsterMikeySeenText, .YoungsterMikeyBeatenText, 0, .Script
 
-; talker EVENT_STEP_SCOPED_*, OPTIONAL/MANDATORY | TEXT/MODAL_TEXT/SCRIPT, .Data
+; talker EVENT_TURN_SCOPED_*, OPTIONAL/MANDATORY | TEXT/MODAL_TEXT/SCRIPT, .Data
 ; .Data: ; Text
 ; 	db .Text
 ; .Data: ; Modal text

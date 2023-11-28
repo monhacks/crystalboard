@@ -459,7 +459,7 @@ CheckTrainerOrTalkerEvent:
 	call CheckTrainerBattleOrTalkerPrompt
 	jr nc, .nope
 
-	ld a, [wTrainerOrTalkerIsTalker]
+	ld a, [wSeenTrainerOrTalkerIsTalker]
 	and a ; cp FALSE
 	ld a, PLAYEREVENT_SEENBYTRAINER
 	jr z, .done

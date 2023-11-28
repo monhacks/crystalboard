@@ -632,9 +632,9 @@ MACRO trainertext
 	db \1 ; text_id
 ENDM
 
-	const trainerflagaction_command ; $63
-MACRO trainerflagaction
-	db trainerflagaction_command
+	const trainerortalkerflagaction_command ; $63
+MACRO trainerortalkerflagaction
+	db trainerortalkerflagaction_command
 	db \1 ; action
 ENDM
 

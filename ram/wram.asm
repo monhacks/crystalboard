@@ -1551,7 +1551,7 @@ SECTION UNION "Miscellaneous WRAM 1", WRAMX
 
 UNION
 ; trainer and talker data
-wTrainerOrTalkerIsTalker:: db ; TRUE means talker; FALSE means trainer
+wSeenTrainerOrTalkerIsTalker:: db ; TRUE means talker; FALSE means trainer
 wSeenTrainerOrTalkerBank:: db
 wSeenTrainerOrTalkerDistance:: db
 wSeenTrainerOrTalkerDirection:: db
