@@ -45,3 +45,13 @@ DEF CONTEXT_USE        EQU 1 << CONTEXT_USE_F
 	const TRAINERTYPE_MOVES
 	const TRAINERTYPE_ITEM
 	const TRAINERTYPE_ITEM_MOVES
+
+; talker events (from talker macro and high bit of wTempTalkerType)
+DEF TALKER_OPTIONAL  EQU %0
+DEF TALKER_MANDATORY EQU %1
+
+; talker types (from talker macro and low seven bits of wTempTalkerType)
+	const_def
+	const TALKERTYPE_TEXT
+	const TALKERTYPE_MODAL_TEXT
+	const TALKERTYPE_SCRIPT

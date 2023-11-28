@@ -232,7 +232,7 @@ ENDM
 MACRO trainer
 ;\1: trainer group
 ;\2: trainer id
-;\3: flag: an EVENT_BEAT_* constant
+;\3: flag: an EVENT_* constant
 ;\4: seen text
 ;\5: win text
 ;\6: loss text
@@ -240,6 +240,16 @@ MACRO trainer
 	dw \3
 	db \1, \2
 	dw \4, \5, \6, \7
+ENDM
+
+MACRO talker
+;\1: flag: an EVENT_* constant
+;\2: OPTIONAL or MANDATORY
+;\3: talker type: TEXT, MODAL_TEXT, SCRIPT
+;\4: pointer to talker data
+	dw \1
+	db \2 | \3
+	dw \4
 ENDM
 
 MACRO itemball

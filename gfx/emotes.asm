@@ -1,4 +1,5 @@
 ShockEmote:     INCBIN "gfx/emotes/shock.2bpp"
+TalkEmote:      INCBIN "gfx/emotes/talk.2bpp"
 QuestionEmote:  INCBIN "gfx/emotes/question.2bpp"
 HappyEmote:     INCBIN "gfx/emotes/happy.2bpp"
 SadEmote:       INCBIN "gfx/emotes/sad.2bpp"

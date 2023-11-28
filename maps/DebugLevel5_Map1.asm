@@ -28,6 +28,16 @@ DebugLevel5_Map1_MapEvents:
 .DebugLevel5_Map1TrainerYoungsterMikey2:
 	trainer YOUNGSTER, MIKEY, EVENT_LEVEL_SCOPED_2, .YoungsterMikeySeenText, .YoungsterMikeyBeatenText, 0, .Script
 
+; talker EVENT_STEP_SCOPED_*, OPTIONAL/MANDATORY | TEXT/MODAL_TEXT/SCRIPT, .Data
+; .Data: ; Text
+; 	db .Text
+; .Data: ; Modal text
+; 	dw EVENT_*,      .Text1
+; 	dw EVENT_*,      .Text2
+; 	dw DEFAULT_TEXT, .DefaultText
+; .Data: ; Script
+; 	end
+
 .Script:
 	endifjustbattled
 	opentext

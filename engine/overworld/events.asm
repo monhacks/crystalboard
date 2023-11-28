@@ -285,7 +285,7 @@ PlayerEvents:
 	call DisableSpaceEffects ; doesn't alter f
 	jr c, .ok
 
-	call CheckTrainerEvent
+	call CheckTrainerOrTalkerEvent
 	jr c, .ok
 
 	call CheckTileEvent
@@ -451,15 +451,20 @@ CheckBoardEvent:
 	dw UnionSpaceScript    ; COLL_UNION_SPACE
 	assert_table_length NUM_COLL_SPACES
 
-CheckTrainerEvent:
+CheckTrainerOrTalkerEvent:
 	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret z
 
-	call CheckTrainerBattle
+	call CheckTrainerBattleOrTalkerPrompt
 	jr nc, .nope
 
+	ld a, [wTrainerOrTalkerIsTalker]
+	and a ; cp FALSE
 	ld a, PLAYEREVENT_SEENBYTRAINER
+	jr z, .done
+	ld a, PLAYEREVENT_SEENBYTALKER
+.done
 	scf
 	ret
 
@@ -748,7 +753,7 @@ ObjectEventTypeArray:
 	dbw OBJECTTYPE_ITEMBALL, .itemball
 	dbw OBJECTTYPE_TRAINER, .trainer
 	; the remaining four are dummy events
-	dbw OBJECTTYPE_3, .three
+	dbw OBJECTTYPE_TALKER, .three
 	dbw OBJECTTYPE_4, .four
 	dbw OBJECTTYPE_5, .five
 	dbw OBJECTTYPE_6, .six
@@ -1158,6 +1163,7 @@ PlayerEventScriptPointers:
 	dba OverworldWhiteoutScript ; PLAYEREVENT_WHITEOUT
 	dba HatchEggScript          ; PLAYEREVENT_HATCH
 	dba ChangeDirectionScript   ; PLAYEREVENT_JOYCHANGEFACING
+	dba SeenByTalkerScript      ; PLAYEREVENT_SEENBYTALKER
 	dba InvalidEventScript      ; (NUM_PLAYER_EVENTS)
 	assert_table_length NUM_PLAYER_EVENTS + 1
 

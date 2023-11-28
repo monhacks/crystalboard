@@ -1,17 +1,17 @@
-CheckTrainerBattle::
+CheckTrainerBattleOrTalkerPrompt::
 	ldh a, [hROMBank]
 	push af
 
 	call SwitchToMapScriptsBank
-	call _CheckTrainerBattle
+	call _CheckTrainerBattleOrTalkerPrompt
 
 	pop bc
 	ld a, b
 	rst Bankswitch
 	ret
 
-_CheckTrainerBattle::
-; Check if any trainer on the map sees the player and wants to battle.
+_CheckTrainerBattleOrTalkerPrompt::
+; Check if any trainer or talker on the map sees the player and wants to battle or talk.
 
 ; Skip the player object.
 	ld a, 1
@@ -30,14 +30,25 @@ _CheckTrainerBattle::
 	and a
 	jr z, .next
 
-; Is a trainer
+; Is a trainer or a talker
 	ld hl, MAPOBJECT_TYPE
 	add hl, de
 	ld a, [hl]
 	and MAPOBJECT_TYPE_MASK
 	cp OBJECTTYPE_TRAINER
+	jr z, .is_trainer
+	cp OBJECTTYPE_TALKER
 	jr nz, .next
+; also set wTrainerOrTalkerIsTalker accordingly (flag is only relevant if there's actually an event)
+;.is_talker
+	ld a, TRUE
+	ld [wTrainerOrTalkerIsTalker], a
+	jr .go
+.is_trainer
+	xor a ; FALSE
+	ld [wTrainerOrTalkerIsTalker], a
 
+.go
 ; Is visible on the map
 	ld hl, MAPOBJECT_OBJECT_STRUCT_ID
 	add hl, de
@@ -57,7 +68,38 @@ _CheckTrainerBattle::
 	cp b
 	jr c, .next
 
-; And hasn't already been beaten
+	ld a, [wTrainerOrTalkerIsTalker]
+	and a ; TRUE?
+	jr z, .trainer_battle
+
+;.talker_prompt
+	pop de
+	pop af
+	ldh [hLastTalked], a
+	ld a, b
+	ld [wSeenTrainerOrTalkerDistance], a
+	ld a, c
+	ld [wSeenTrainerOrTalkerDirection], a
+	call GetMapScriptsBank
+	ld [wSeenTrainerOrTalkerBank], a
+
+	ldh a, [hLastTalked]
+	call GetMapObject
+
+	ld hl, MAPOBJECT_SCRIPT_POINTER
+	add hl, bc
+	ld a, [wSeenTrainerOrTalkerBank]
+	call GetFarWord
+	ld de, wTempTalker
+	ld bc, wTempTalkerEnd - wTempTalker
+	ld a, [wSeenTrainerOrTalkerBank]
+	call FarCopyBytes
+
+	scf
+	ret
+
+.trainer_battle
+; And hasn't already been beaten if it's a trainer
 	push bc
 	push de
 	ld hl, MAPOBJECT_SCRIPT_POINTER
@@ -86,7 +128,7 @@ _CheckTrainerBattle::
 	pop af
 	inc a
 	cp NUM_OBJECTS
-	jr nz, .loop
+	jp nz, .loop
 	xor a
 	ret
 
@@ -95,31 +137,31 @@ _CheckTrainerBattle::
 	pop af
 	ldh [hLastTalked], a
 	ld a, b
-	ld [wSeenTrainerDistance], a
+	ld [wSeenTrainerOrTalkerDistance], a
 	ld a, c
-	ld [wSeenTrainerDirection], a
+	ld [wSeenTrainerOrTalkerDirection], a
 	jr LoadTrainer_continue
 
 TalkToTrainer::
 	ld a, 1
-	ld [wSeenTrainerDistance], a
+	ld [wSeenTrainerOrTalkerDistance], a
 	ld a, -1
-	ld [wSeenTrainerDirection], a
+	ld [wSeenTrainerOrTalkerDirection], a
 
 LoadTrainer_continue::
 	call GetMapScriptsBank
-	ld [wSeenTrainerBank], a
+	ld [wSeenTrainerOrTalkerBank], a
 
 	ldh a, [hLastTalked]
 	call GetMapObject
 
 	ld hl, MAPOBJECT_SCRIPT_POINTER
 	add hl, bc
-	ld a, [wSeenTrainerBank]
+	ld a, [wSeenTrainerOrTalkerBank]
 	call GetFarWord
 	ld de, wTempTrainer
 	ld bc, wTempTrainerEnd - wTempTrainer
-	ld a, [wSeenTrainerBank]
+	ld a, [wSeenTrainerOrTalkerBank]
 	call FarCopyBytes
 	xor a
 	ld [wRunningTrainerBattleScript], a

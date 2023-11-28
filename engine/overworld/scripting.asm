@@ -671,7 +671,7 @@ Script_trainertext:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [wSeenTrainerBank]
+	ld a, [wSeenTrainerOrTalkerBank]
 	ld b, a
 	call MapTextbox
 	ret
@@ -681,7 +681,7 @@ Script_scripttalkafter:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [wSeenTrainerBank]
+	ld a, [wSeenTrainerOrTalkerBank]
 	ld b, a
 	jp ScriptJump
 

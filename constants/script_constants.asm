@@ -89,6 +89,7 @@ DEF RETVAR_EXECUTE EQU 2 << 6
 	const PLAYEREVENT_WHITEOUT
 	const PLAYEREVENT_HATCH
 	const PLAYEREVENT_JOYCHANGEFACING
+	const PLAYEREVENT_SEENBYTALKER
 DEF NUM_PLAYER_EVENTS EQU const_value
 
 ; PlayerMovementPointers indexes (see engine/overworld/events.asm)
@@ -137,7 +138,7 @@ DEF NUM_BGEVENTS EQU const_value
 	const OBJECTTYPE_SCRIPT
 	const OBJECTTYPE_ITEMBALL
 	const OBJECTTYPE_TRAINER
-	const OBJECTTYPE_3
+	const OBJECTTYPE_TALKER
 	const OBJECTTYPE_4
 	const OBJECTTYPE_5
 	const OBJECTTYPE_6
@@ -188,6 +189,7 @@ DEF NUM_FLOORS EQU const_value
 ; Emotes indexes (see data/sprites/emotes.asm)
 	const_def
 	const EMOTE_SHOCK
+	const EMOTE_TALK
 	const EMOTE_QUESTION
 	const EMOTE_HAPPY
 	const EMOTE_SAD

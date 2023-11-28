@@ -9,6 +9,7 @@ Emotes:
 ; entries correspond to EMOTE_* constants
 	table_width EMOTE_LENGTH, Emotes
 	emote ShockEmote,     4, $f8
+	emote TalkEmote,      4, $f8
 	emote QuestionEmote,  4, $f8
 	emote HappyEmote,     4, $f8
 	emote SadEmote,       4, $f8

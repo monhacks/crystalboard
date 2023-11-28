@@ -1550,10 +1550,15 @@ SECTION UNION "Miscellaneous WRAM 1", WRAMX
 	ds 60
 
 UNION
+; trainer and talker data
+wTrainerOrTalkerIsTalker:: db ; TRUE means talker; FALSE means trainer
+wSeenTrainerOrTalkerBank:: db
+wSeenTrainerOrTalkerDistance:: db
+wSeenTrainerOrTalkerDirection:: db
+
+NEXTU
 ; trainer data
-wSeenTrainerBank:: db
-wSeenTrainerDistance:: db
-wSeenTrainerDirection:: db
+	ds 4
 wTempTrainer::
 wTempTrainerEventFlag:: dw
 wTempTrainerClass:: db
@@ -1564,6 +1569,15 @@ wLossTextPointer:: dw
 wScriptAfterPointer:: dw
 wRunningTrainerBattleScript:: db
 wTempTrainerEnd::
+
+NEXTU
+; talker data
+	ds 4
+wTempTalker::
+wTempTalkerEventFlag:: dw
+wTempTalkerType:: db
+wTempTalkerDataPointer:: dw
+wTempTalkerEnd::
 
 NEXTU
 ; menu items list
@@ -1642,7 +1656,7 @@ wFacingDirection:: db
 wWalkingX:: db
 wWalkingY:: db
 wWalkingTile:: db
-	ds 6
+	ds 7
 wPlayerTurningDirection:: db
 
 NEXTU

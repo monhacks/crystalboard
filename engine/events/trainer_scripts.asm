@@ -11,7 +11,7 @@ SeenByTrainerScript::
 	waitsfx ; wait for any pending space-related sfx
 	encountermusic
 	showemote EMOTE_SHOCK, LAST_TALKED, 30
-	callasm TrainerWalkToPlayer
+	callasm TrainerOrTalkerWalkToPlayer
 	applymovementlasttalked wMovementBuffer
 	writeobjectxy LAST_TALKED
 	faceobject PLAYER, LAST_TALKED
@@ -30,3 +30,12 @@ StartBattleWithMapTrainerScript:
 
 AlreadyBeatenTrainerScript:
 	scripttalkafter
+
+SeenByTalkerScript::
+	waitsfx ; wait for any pending space-related sfx
+	showemote EMOTE_TALK, LAST_TALKED, 20
+	callasm TrainerOrTalkerWalkToPlayer
+	applymovementlasttalked wMovementBuffer
+	writeobjectxy LAST_TALKED
+	faceobject PLAYER, LAST_TALKED
+	end
