@@ -23,12 +23,13 @@ MACRO mapsetup
 ENDM
 
 MapSetupScript_EnterLevel:
-; same as MapSetupScript_Warp, but includes ConstructAndEnableOverworldHUD
+; same as MapSetupScript_Warp, but includes ResetLevelScopedEventFlags and ConstructAndEnableOverworldHUD
 	mapsetup DisableLCD
 	mapsetup InitSound
 	mapsetup EnterMapSpawnPoint
 	mapsetup LoadMapAttributes
 	mapsetup HandleNewMap
+	mapsetup ResetLevelScopedEventFlags
 	mapsetup SpawnPlayer
 	mapsetup RefreshPlayerCoords
 	mapsetup GetMapScreenCoords

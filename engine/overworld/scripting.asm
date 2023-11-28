@@ -1160,6 +1160,8 @@ Script_startbattle:
 	call DisableOverworldHUD
 	ld a, FALSE
 	ld [wText2bpp], a
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
 	call BufferScreen
 	predef StartBattle
 	ld a, [wBattleResult]
@@ -1192,15 +1194,23 @@ Script_reloadmapafterbattle:
 	bit 0, d
 	jr z, .was_wild
 	farcall MomTriesToBuySomething
-	jr .done
+	jr .next
 
 .was_wild
 	ld a, [wBattleResult]
 	bit BATTLERESULT_BOX_FULL, a
-	jr z, .done
+	jr z, .next
 	ld b, BANK(Script_SpecialBillCall)
 	ld de, Script_SpecialBillCall
 	farcall LoadMemScript
+
+.next
+	ld a, [wSpacesLeft]
+	and a
+	jr z, .done
+	farcall LoadBoardMenuDieNumbersGFX
+	ld hl, wDisplaySecondarySprites
+	set SECONDARYSPRITES_SPACES_LEFT_F, [hl]
 .done
 	jp Script_reloadmap
 

@@ -19,6 +19,45 @@ DebugLevel5_Map1_MapEvents:
 	def_bg_events
 
 	def_object_events
+	object_event 10,  2, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 2, .DebugLevel5_Map1TrainerYoungsterMikey1, -1
+	object_event  9,  2, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 2, .DebugLevel5_Map1TrainerYoungsterMikey2, -1
+
+.DebugLevel5_Map1TrainerYoungsterMikey1:
+	trainer YOUNGSTER, MIKEY, EVENT_LEVEL_SCOPED_1, .YoungsterMikeySeenText, .YoungsterMikeyBeatenText, 0, .Script
+
+.DebugLevel5_Map1TrainerYoungsterMikey2:
+	trainer YOUNGSTER, MIKEY, EVENT_LEVEL_SCOPED_2, .YoungsterMikeySeenText, .YoungsterMikeyBeatenText, 0, .Script
+
+.Script:
+	endifjustbattled
+	opentext
+	writetext .YoungsterMikeyAfterText
+	waitbutton
+	closetext
+	end
+
+.YoungsterMikeySeenText:
+	text "You're a #MON"
+	line "trainer, right?"
+
+	para "Then you have to"
+	line "battle!"
+	done
+
+.YoungsterMikeyBeatenText:
+	text "That's strange."
+	line "I won before."
+	done
+
+.YoungsterMikeyAfterText:
+	text "Becoming a good"
+	line "trainer is really"
+	cont "tough."
+
+	para "I'm going to bat-"
+	line "tle other people"
+	cont "to get better."
+	done
 
 DebugLevel5_Map1_MapSpaces:
 	space  2,  4,  $0,  1 ;  0
@@ -70,6 +109,6 @@ DebugLevel5_Map1_MapSpaces:
 	space 16,  4,  $0,  8 ; 43
 
 .BS2:
-	branchdir RIGHT,  3, TECHNIQUE_SURF
+	branchdir RIGHT,  3, 0
 	branchdir UP,    35, 0
 	endbranch

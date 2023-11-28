@@ -82,9 +82,6 @@ LoadMapObjects:
 	farcall InitializeVisibleSprites
 	ret
 
-MapSetup_DummyFunction: ; unreferenced
-	ret
-
 ResetPlayerObjectAction:
 	ld hl, wPlayerSpriteSetupFlags
 	set PLAYERSPRITESETUP_RESET_ACTION_F, [hl]
@@ -194,3 +191,14 @@ ForceMapMusic:
 .notbiking
 	call TryRestartMapMusic
 	ret
+
+ResetLevelScopedEventFlags:
+	ld hl, wEventFlags + EVENT_LEVEL_SCOPED_FLAGS_START / 8
+	ld c, (EVENT_LEVEL_SCOPED_FLAGS_END / 8) - (EVENT_LEVEL_SCOPED_FLAGS_START / 8)
+	xor a
+.loop
+	ld [hli], a
+	dec c
+	jr nz, .loop
+	ret
+

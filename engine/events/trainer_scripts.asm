@@ -8,6 +8,7 @@ TalkToTrainerScript::
 
 SeenByTrainerScript::
 	loadtemptrainer
+	waitsfx ; wait for any pending space-related sfx
 	encountermusic
 	showemote EMOTE_SHOCK, LAST_TALKED, 30
 	callasm TrainerWalkToPlayer
