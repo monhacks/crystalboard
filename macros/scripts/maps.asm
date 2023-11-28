@@ -245,10 +245,10 @@ ENDM
 MACRO talker
 ;\1: flag: an EVENT_* constant
 ;\2: OPTIONAL or MANDATORY
-;\3: talker type: TEXT, MODAL_TEXT, SCRIPT
-;\4: pointer to talker data
+;\3: talker type: TEXT, SCRIPT
+;\4: pointer to talker text or script
 	dw \1
-	db \2 | \3
+	db TALKEREVENTTYPE_\2 | TALKERTYPE_\3
 	dw \4
 ENDM
 

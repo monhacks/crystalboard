@@ -19,7 +19,7 @@ SeenByTrainerScript::
 
 StartBattleWithMapTrainerScript:
 	opentext
-	trainertext TRAINERTEXT_SEEN
+	trainerortalkertext TRAINERORTALKERTEXT_TRAINER_SEEN
 	waitbutton
 	closetext
 	loadtemptrainer
@@ -33,6 +33,7 @@ AlreadyBeatenTrainerScript:
 
 SeenByTalkerScript::
 	waitsfx ; wait for any pending space-related sfx
+;	playsound SFX_
 	showemote EMOTE_TALK, LAST_TALKED, 20
 	callasm .TalkOrSkipTalker
 	iffalse .skipped
@@ -40,15 +41,31 @@ SeenByTalkerScript::
 	applymovementlasttalked wMovementBuffer
 	writeobjectxy LAST_TALKED
 	faceobject PLAYER, LAST_TALKED
+	callasm .GetTalkerType
+	ifequal TALKERTYPE_TEXT,   .Text
+	ifequal TALKERTYPE_SCRIPT, .Script
 .skipped
+	trainerortalkerflagaction SET_FLAG
+	end
+
+.Text
+	opentext
+	trainerortalkertext TRAINERORTALKERTEXT_TALKER
+	waitbutton
+	closetext
+	trainerortalkerflagaction SET_FLAG
+	end
+
+.Script
+	trainerortalkerflagaction SET_FLAG
 	end
 
 .TalkOrSkipTalker:
 	ld a, [wTempTalkerType]
-	and %1
+	and TALKEREVENTTYPE_MASK
 	cp TALKEREVENTTYPE_MANDATORY
 	jr z, .skip
-	call WaitButton
+	call JoyWaitAorB
 	call PlayClickSFX
 	call WaitSFX
 	ldh a, [hJoyPressed]
@@ -59,5 +76,11 @@ SeenByTalkerScript::
 .skip
 	xor a ; FALSE
 .done
+	ld [hScriptVar], a
+	ret
+
+.GetTalkerType:
+	ld a, [wTempTalkerType]
+	and TALKERTYPE_MASK
 	ld [hScriptVar], a
 	ret

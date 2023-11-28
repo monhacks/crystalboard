@@ -20,7 +20,7 @@ DebugLevel5_Map1_MapEvents:
 
 	def_object_events
 	object_event 10,  2, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 2, .DebugLevel5_Map1TrainerYoungsterMikey1, -1
-	object_event  9,  2, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 2, .DebugLevel5_Map1TrainerYoungsterMikey2, -1
+	object_event  9,  2, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TALKER,  2, .DebugLevel5_Map1Talker1, -1
 
 .DebugLevel5_Map1TrainerYoungsterMikey1:
 	trainer YOUNGSTER, MIKEY, EVENT_LEVEL_SCOPED_1, .YoungsterMikeySeenText, .YoungsterMikeyBeatenText, 0, .Script
@@ -28,15 +28,12 @@ DebugLevel5_Map1_MapEvents:
 .DebugLevel5_Map1TrainerYoungsterMikey2:
 	trainer YOUNGSTER, MIKEY, EVENT_LEVEL_SCOPED_2, .YoungsterMikeySeenText, .YoungsterMikeyBeatenText, 0, .Script
 
-; talker EVENT_TURN_SCOPED_*, OPTIONAL/MANDATORY | TEXT/MODAL_TEXT/SCRIPT, .Data
-; .Data: ; Text
-; 	db .Text
-; .Data: ; Modal text
-; 	dw EVENT_*,      .Text1
-; 	dw EVENT_*,      .Text2
-; 	dw DEFAULT_TEXT, .DefaultText
-; .Data: ; Script
-; 	end
+.DebugLevel5_Map1Talker1:
+	talker EVENT_TURN_SCOPED_1, OPTIONAL, TEXT, .Text
+
+.Text:
+	text "I'm a talker!"
+	done
 
 .Script:
 	endifjustbattled

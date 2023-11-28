@@ -162,7 +162,7 @@ ScriptCommandTable:
 	dw Script_startbattle                ; 5f
 	dw Script_reloadmapafterbattle       ; 60
 	dw Script_catchtutorial              ; 61
-	dw Script_trainertext                ; 62
+	dw Script_trainerortalkertext        ; 62
 	dw Script_trainerortalkerflagaction  ; 63
 	dw Script_winlosstext                ; 64
 	dw Script_scripttalkafter            ; 65
@@ -661,13 +661,17 @@ Script_swarm:
 	farcall StoreSwarmMapIndices
 	ret
 
-Script_trainertext:
+Script_trainerortalkertext:
 	call GetScriptByte
+	cp TRAINERORTALKERTEXT_TALKER
+	ld hl, wTempTalkerTextOrScriptPointer
+	jr z, .next
 	ld c, a
 	ld b, 0
 	ld hl, wSeenTextPointer
 	add hl, bc
 	add hl, bc
+.next
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a

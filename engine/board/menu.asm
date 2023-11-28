@@ -28,8 +28,8 @@ BoardMenuScript::
 	ld hl, wCurTurn
 	inc [hl]
 ; reset turn-scoped event flags
-	ld hl, wEventFlags + EVENT_LEVEL_SCOPED_FLAGS_START / 8
-	ld c, (EVENT_LEVEL_SCOPED_FLAGS_END / 8) - (EVENT_LEVEL_SCOPED_FLAGS_START / 8)
+	ld hl, wEventFlags + EVENT_TURN_SCOPED_FLAGS_START / 8
+	ld c, (EVENT_TURN_SCOPED_FLAGS_END / 8) - (EVENT_TURN_SCOPED_FLAGS_START / 8)
 	xor a
 .loop
 	ld [hli], a

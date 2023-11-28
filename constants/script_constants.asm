@@ -36,11 +36,12 @@ DEF STRING_BUFFER_LENGTH EQU 19
 	const PHONE_CONTACTS_FULL   ; 1
 	const PHONE_CONTACT_REFUSED ; 2
 
-; trainertext arguments
+; trainerortalkertext arguments
 	const_def
-	const TRAINERTEXT_SEEN
-	const TRAINERTEXT_WIN
-	const TRAINERTEXT_LOSS
+	const TRAINERORTALKERTEXT_TRAINER_SEEN
+	const TRAINERORTALKERTEXT_TRAINER_WIN
+	const TRAINERORTALKERTEXT_TRAINER_LOSS
+DEF TRAINERORTALKERTEXT_TALKER EQU -1
 
 ; readvar/writevar/loadvar arguments
 ; _GetVarAction.VarActionTable indexes (see engine/overworld/variables.asm)

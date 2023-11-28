@@ -1576,7 +1576,7 @@ NEXTU
 wTempTalker::
 wTempTalkerEventFlag:: dw
 wTempTalkerType:: db
-wTempTalkerDataPointer:: dw
+wTempTalkerTextOrScriptPointer:: dw
 wTempTalkerEnd::
 
 NEXTU
