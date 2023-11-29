@@ -29,12 +29,13 @@ StartBattleWithMapTrainerScript:
 	loadmem wRunningTrainerBattleScript, -1
 
 AlreadyBeatenTrainerScript:
-	scripttalkafter
+	jumptrainerafterbattlescript
 
 SeenByTalkerScript::
 	waitsfx ; wait for any pending space-related sfx
 ;	playsound SFX_
 	showemote EMOTE_TALK, LAST_TALKED, 20
+	trainerortalkerflagaction SET_FLAG
 	callasm .TalkOrSkipTalker
 	iffalse .skipped
 	callasm TrainerOrTalkerWalkToPlayer
@@ -45,7 +46,6 @@ SeenByTalkerScript::
 	ifequal TALKERTYPE_TEXT,   .Text
 	ifequal TALKERTYPE_SCRIPT, .Script
 .skipped
-	trainerortalkerflagaction SET_FLAG
 	end
 
 .Text
@@ -53,12 +53,10 @@ SeenByTalkerScript::
 	trainerortalkertext TRAINERORTALKERTEXT_TALKER
 	waitbutton
 	closetext
-	trainerortalkerflagaction SET_FLAG
 	end
 
 .Script
-	trainerortalkerflagaction SET_FLAG
-	end
+	jumptalkerscript
 
 .TalkOrSkipTalker:
 	ld a, [wTempTalkerType]

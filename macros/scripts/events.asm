@@ -645,9 +645,9 @@ MACRO winlosstext
 	dw \2 ; loss_text_pointer
 ENDM
 
-	const scripttalkafter_command ; $65
-MACRO scripttalkafter
-	db scripttalkafter_command
+	const jumptrainerafterbattlescript_command ; $65
+MACRO jumptrainerafterbattlescript
+	db jumptrainerafterbattlescript_command
 ENDM
 
 	const endifjustbattled_command ; $66
@@ -1074,6 +1074,11 @@ ENDM
 	const reloadmapafterviewmapmode_command ; $ab
 MACRO reloadmapafterviewmapmode
 	db reloadmapafterviewmapmode_command
+ENDM
+
+	const jumptalkerscript_command ; $ac
+MACRO jumptalkerscript
+	db jumptalkerscript_command
 ENDM
 
 DEF NUM_EVENT_COMMANDS EQU const_value

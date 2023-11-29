@@ -29,7 +29,7 @@ DebugLevel5_Map1_MapEvents:
 	trainer YOUNGSTER, MIKEY, EVENT_LEVEL_SCOPED_2, .YoungsterMikeySeenText, .YoungsterMikeyBeatenText, 0, .Script
 
 .DebugLevel5_Map1Talker1:
-	talker EVENT_TURN_SCOPED_1, OPTIONAL, TEXT, .Text
+	talker EVENT_TURN_SCOPED_1, OPTIONAL, SCRIPT, .Script
 
 .Text:
 	text "I'm a talker!"

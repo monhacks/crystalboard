@@ -70,6 +70,11 @@ DisableSpaceEffects:
 	res 4, [hl]
 	ret
 
+DisableTrainerAndTalkerEvents: ; unreferenced
+	ld hl, wScriptFlags2
+	res 5, [hl]
+	ret
+
 EnableWarpsConnxns: ; unreferenced
 	ld hl, wScriptFlags2
 	set 2, [hl]
@@ -95,6 +100,11 @@ EnableSpaceEffects: ; unreferenced
 	set 4, [hl]
 	ret
 
+EnableTrainerAndTalkerEvents: ; unreferenced
+	ld hl, wScriptFlags2
+	set 5, [hl]
+	ret
+
 CheckWarpConnxnScriptFlag:
 	ld hl, wScriptFlags2
 	bit 2, [hl]
@@ -118,6 +128,11 @@ CheckWildEncountersScriptFlag:
 CheckSpaceEffectsScriptFlag:
 	ld hl, wScriptFlags2
 	bit 4, [hl]
+	ret
+
+CheckTrainerAndTalkerEvents:
+	ld hl, wScriptFlags2
+	bit 5, [hl]
 	ret
 
 ; on enter overworld loop
@@ -452,9 +467,11 @@ CheckBoardEvent:
 	assert_table_length NUM_COLL_SPACES
 
 CheckTrainerOrTalkerEvent:
+	call CheckTrainerAndTalkerEvents
+	jr z, .nope
 	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
-	ret z
+	ret z ; nc
 
 	call CheckTrainerBattleOrTalkerPrompt
 	jr nc, .nope
@@ -483,7 +500,7 @@ CheckTileEvent:
 
 	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
-	ret z
+	ret z ; nc
 
 	call CheckWarpTile
 	jr c, .warp_tile
@@ -491,7 +508,7 @@ CheckTileEvent:
 .connections_disabled
 	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
-	ret z
+	ret z ; nc
 
 	call CheckCoordEventScriptFlag
 	jr z, .coord_events_disabled
@@ -570,7 +587,7 @@ SetMinTwoStepWildEncounterCooldown: ; unreferenced
 RunSceneScript:
 	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
-	ret z
+	ret z ; nc
 
 	ld a, [wCurMapSceneScriptCount]
 	and a
@@ -622,7 +639,7 @@ endr
 CheckTimeEvents:
 	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
-	ret z
+	ret z ; nc
 
 	ld a, [wLinkMode]
 	and a
@@ -1214,11 +1231,11 @@ WarpToSpawnPoint::
 RunMemScript::
 	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
-	ret z
+	ret z ; nc
 ; If there is no script here, we don't need to be here.
 	ld a, [wMapReentryScriptQueueFlag]
 	and a
-	ret z
+	ret z ; nc
 ; Execute the script at (wMapReentryScriptBank):(wMapReentryScriptAddress).
 	ld hl, wMapReentryScriptAddress
 	ld a, [hli]

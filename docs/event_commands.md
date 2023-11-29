@@ -348,7 +348,7 @@ If <code><i>item_id</i></code> = `USE_SCRIPT_VAR`, then it uses `[hScriptVar]` i
 ## `$64`: <code>winlosstext <i>win_text_pointer</i>, <i>loss_text_pointer</i></code>
 
 
-## `$65`: `scripttalkafter`
+## `$65`: `jumptrainerafterbattlescript`
 
 
 ## `$66`: `endifjustbattled`
