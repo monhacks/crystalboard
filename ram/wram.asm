@@ -924,6 +924,8 @@ wDebugRoomMonBox:: db
 NEXTU
 ; debug room GB ID values
 wDebugRoomGBID:: dw
+NEXTU
+wDebugRoomSFXID:: db
 ENDU
 
 endc

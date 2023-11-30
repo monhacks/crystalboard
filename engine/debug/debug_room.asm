@@ -28,6 +28,7 @@ DEF DEBUGROOMMENU_NUM_PAGES EQU const_value
 	const DEBUGROOMMENUITEM_RAM_FLAG_CLR ; 12
 	const DEBUGROOMMENUITEM_CHANGE_SEX   ; 13
 	const DEBUGROOMMENUITEM_BT_BUG_POKE  ; 14
+	const DEBUGROOMMENUITEM_SFX_PLAYER   ; 15
 
 _DebugRoom:
 	ldh a, [hJoyDown]
@@ -108,6 +109,7 @@ _DebugRoom:
 	db "RAM FLAG CLR@"
 	db "CHANGE SEX@"
 	db "BT BUG POKE@"
+	db "SFX PLAYER@"
 
 .Jumptable:
 ; entries correspond to DEBUGROOMMENUITEM_* constants
@@ -132,6 +134,7 @@ _DebugRoom:
 	dw DebugRoomMenu_RAMFlagClr
 	dw DebugRoomMenu_ChangeSex
 	dw DebugRoomMenu_BTBugPoke
+	dw DebugRoomMenu_SFXPlayer
 
 .MenuItems:
 ; entries correspond to DEBUGROOMMENU_* constants
@@ -161,12 +164,13 @@ _DebugRoom:
 	db -1
 
 	; DEBUGROOMMENU_PAGE_3
-	db 6
+	db 7
 	db DEBUGROOMMENUITEM_TEL_DEBUG
 	db DEBUGROOMMENUITEM_SUM_RECALC
 	db DEBUGROOMMENUITEM_RAM_FLAG_CLR
 	db DEBUGROOMMENUITEM_CHANGE_SEX
 	db DEBUGROOMMENUITEM_BT_BUG_POKE
+	db DEBUGROOMMENUITEM_SFX_PLAYER
 	db DEBUGROOMMENUITEM_NEXT
 	db -1
 
@@ -1679,6 +1683,30 @@ DebugRoomMenu_BTBugPoke:
 	text "It'", "s bug #MON!"
 	next "No.    Clear flag?"
 	done
+
+DebugRoomMenu_SFXPlayer:
+	ld de, MUSIC_NONE
+	call PlayMusic
+	ld e, 0
+.loop
+	ld d, 0
+	push de
+	ld hl, wDebugRoomSFXID
+	ld [hl], e
+	ld de, wDebugRoomSFXID
+	hlcoord 4, 16
+	ld c, 1
+	call PrintHexNumber
+	pop de
+	call PlaySFX
+	call DebugRoom_JoyWaitABSelect
+	call WaitSFX
+	ld a, [wDebugRoomSFXID]
+	inc a
+	ld e, a
+	cp NUM_SFX
+	jr c, .loop
+	ret
 
 PrintHexNumber:
 ; Print the c-byte value from de to hl as hexadecimal digits.

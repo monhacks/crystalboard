@@ -351,7 +351,7 @@ BoardMenu_BreakDieAnimation:
 	ldh [hUsedSpriteIndex], a
 	farcall _UpdateActiveSpritesAfterOffset
 
-	ld de, SFX_STRENGTH
+	ld de, SFX_PLACE_PUZZLE_PIECE_DOWN
 	call PlaySFX
 
 ; play break die and appear die number animations

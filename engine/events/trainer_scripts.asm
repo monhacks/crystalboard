@@ -33,7 +33,7 @@ AlreadyBeatenTrainerScript:
 
 SeenByTalkerScript::
 	waitsfx ; wait for any pending space-related sfx
-;	playsound SFX_
+	playsound SFX_UNKNOWN_66
 	showemote EMOTE_TALK, LAST_TALKED, 20
 	trainerortalkerflagaction SET_FLAG
 	callasm .TalkOrSkipTalker
