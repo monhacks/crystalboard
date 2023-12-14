@@ -1807,7 +1807,7 @@ CheckAndApplyAnchorPoint::
 ; e = [wYCoord]
 ; hl = [wCurMapAnchorEventsPointer]
 ; if currently at coords of any anchor point, copy its next space byte to wCurSpaceNextSpace.
-; return carry if anchor point matched, nc otherwise.
+; return nc if anchor point matched, carry otherwise.
 	ldh a, [hROMBank]
 	push af
 	call SwitchToMapScriptsBank

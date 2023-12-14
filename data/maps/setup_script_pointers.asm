@@ -53,3 +53,4 @@ MapSetupCommands:
 	add_mapsetup EnableOverworldHUD ; 2e
 	add_mapsetup SpawnInCustomFacing ; 2f
 	add_mapsetup ResetLevelScopedEventFlags ; 30
+	add_mapsetup AnchorPointAfterWarp ; 31

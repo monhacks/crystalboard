@@ -78,6 +78,7 @@ MapSetupScript_Warp:
 	mapsetup FadeInPalettesFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
+	mapsetup AnchorPointAfterWarp
 	db -1 ; end
 
 MapSetupScript_BadWarp:
@@ -102,6 +103,7 @@ MapSetupScript_BadWarp:
 	mapsetup FadeInPalettesFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
+	mapsetup AnchorPointAfterWarp
 	db -1 ; end
 
 MapSetupScript_Connection:
@@ -147,6 +149,7 @@ MapSetupScript_Train:
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup UpdateRoamMons
+	mapsetup AnchorPointAfterWarp
 	db -1 ; end
 
 MapSetupScript_ReloadMap:

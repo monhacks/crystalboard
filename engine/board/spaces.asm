@@ -271,7 +271,7 @@ PromptPlayerToChooseBranchDirection:
 .EnterViewMapMode:
 	ld a, BOARDEVENT_VIEW_MAP_MODE
 	ldh [hCurBoardEvent], a
-	ld a, TRUE
+	ld a, 100
 	ld [wViewMapModeRange], a
 	ld a, [wMapGroup]
 	ld [wBeforeViewMapMapGroup], a
