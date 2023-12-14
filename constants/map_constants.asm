@@ -50,7 +50,7 @@ if DEF(_DEBUG)
 	endgroup
 
 	newgroup DEBUGLEVEL_2
-	map_const DEBUGLEVEL_2_MAP_1,                           5,  4 ;  1
+	map_const DEBUGLEVEL_2_MAP_1,                          15, 10 ;  1
 	endgroup
 
 	newgroup DEBUGLEVEL_3

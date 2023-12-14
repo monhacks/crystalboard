@@ -347,6 +347,8 @@ INCBIN "data/tilesets/aerodactyl_word_room_metatiles.bin"
 
 if DEF(_DEBUG)
 
+SECTION "Tileset Data Debug 1", ROMX
+
 TilesetBoardDebug1GFX::
 INCBIN "gfx/tilesets/board_debug_1.2bpp.lz"
 
@@ -355,5 +357,14 @@ INCBIN "data/tilesets/board_debug_1_metatiles.bin"
 
 TilesetBoardDebug1Coll::
 INCLUDE "data/tilesets/board_debug_1_collision.asm"
+
+TilesetBoardDebug2GFX::
+INCBIN "gfx/tilesets/board_debug_2.2bpp.lz"
+
+TilesetBoardDebug2Meta::
+INCBIN "data/tilesets/board_debug_2_metatiles.bin"
+
+TilesetBoardDebug2Coll::
+INCLUDE "data/tilesets/board_debug_2_collision.asm"
 
 endc

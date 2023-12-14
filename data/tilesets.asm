@@ -53,5 +53,6 @@ Tilesets::
 	tileset TilesetAerodactylWordRoom, 1
 if DEF(_DEBUG)
 	tileset TilesetBoardDebug1, 1
+	tileset TilesetBoardDebug2, 1
 endc
 	assert_table_length NUM_TILESETS + 1

@@ -38,6 +38,7 @@
 	const TILESET_AERODACTYL_WORD_ROOM ; 24
 if DEF(_DEBUG)
 	const TILESET_BOARD_DEBUG_1        ; 25
+	const TILESET_BOARD_DEBUG_2        ; 26
 endc
 DEF NUM_TILESETS EQU const_value - 1
 

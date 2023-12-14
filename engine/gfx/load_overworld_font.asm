@@ -36,12 +36,12 @@ INCBIN "gfx/font/overworld_space.2bpp"
 
 OverworldFrames:
 	table_width OW_TEXTBOX_FRAME_TILES * LEN_2BPP_TILE, OverworldFrames
-INCBIN "gfx/frames/ow1.2bpp"
-INCBIN "gfx/frames/ow2.2bpp"
-INCBIN "gfx/frames/ow3.2bpp"
-INCBIN "gfx/frames/ow4.2bpp"
-INCBIN "gfx/frames/ow5.2bpp"
-INCBIN "gfx/frames/ow6.2bpp"
-INCBIN "gfx/frames/ow7.2bpp"
-INCBIN "gfx/frames/ow8.2bpp"
+INCBIN "gfx/frames/ow1.2bpp" ; OUTDOOR_GRASSY
+INCBIN "gfx/frames/ow2.2bpp" ; OUTDOOR_MOUNTAIN
+INCBIN "gfx/frames/ow3.2bpp" ; OUTDOOR_COAST
+INCBIN "gfx/frames/ow4.2bpp" ; OUTDOOR_SEA
+INCBIN "gfx/frames/ow5.2bpp" ; INDOOR_FOREST
+INCBIN "gfx/frames/ow6.2bpp" ; INDOOR_CAVE
+INCBIN "gfx/frames/ow7.2bpp" ; INDOOR_ICE_CAVE
+INCBIN "gfx/frames/ow8.2bpp" ; INDOOR_BUILDING
 	assert_table_length NUM_ENVIRONMENTS
