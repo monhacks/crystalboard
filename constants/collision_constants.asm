@@ -126,7 +126,7 @@ DEF COLL_UP_LEFT_BUOY      EQU $c7 ; unused
     const COLL_BRANCH_SPACE   ; $d8
     const COLL_UNION_SPACE    ; $d9
 DEF NUM_COLL_SPACES EQU const_value - $d0
-DEF COLL_FF                EQU $ff ; garbage
+DEF COLL_OUT_OF_BOUNDS     EQU $ff
 
 ; collision data type nybbles
 DEF LO_NYBBLE_GRASS      EQU $07

@@ -141,18 +141,60 @@ DoPlayerMovement::
 	ret
 
 .ViewMapMode_CheckCollision:
-; return STANDING into wWalkingDirection if trying to walk
-; off-limits (unless there is a connected map) or off-range
+; return STANDING into wWalkingDirection if trying to walk off-limits or off-range
 
-; as wTileDown, wTileUp, wTileLeft, and wTileRight are not used in this mode,
-; they are borrowed in order to signal valid directions to InitSecondarySprites
+; wTileDown, wTileUp, wTileLeft, and wTileRight are borrowed in this mode
+; to signal valid directions to InitSecondarySprites.
 	xor a
 	ld hl, wTileDown
-	ld [hli], a
+	ld [hli], a ; wTileDown
 	ld [hli], a ; wTileUp
 	ld [hli], a ; wTileLeft
-	ld [hl], a ; wTileRight
+	ld [hl], a  ; wTileRight
 
+; for each direction, check if next tile is COLL_OUT_OF_BOUNDS, which is the only impassable collision in View Map mode
+	xor a
+	ld [wTilePermissions], a
+
+	ld a, [wPlayerMapX]
+	ld d, a
+	ld a, [wPlayerMapY]
+	ld e, a
+	push de
+	inc e
+	call GetCoordTile
+	cp COLL_OUT_OF_BOUNDS
+	jr nz, .next1
+	ld [wTileDown], a
+.next1
+	pop de
+	dec e
+	call GetCoordTile
+	cp COLL_OUT_OF_BOUNDS
+	jr nz, .next2
+	ld [wTileUp], a
+.next2
+
+	ld a, [wPlayerMapX]
+	ld d, a
+	ld a, [wPlayerMapY]
+	ld e, a
+	push de
+	dec d
+	call GetCoordTile
+	cp COLL_OUT_OF_BOUNDS
+	jr nz, .next3
+	ld [wTileLeft], a
+.next3
+	pop de
+	inc d
+	call GetCoordTile
+	cp COLL_OUT_OF_BOUNDS
+	jr nz, .next4
+	ld [wTileRight], a
+.next4
+
+; for each direction, check if trying to go off-limits
 	ld hl, wYCoord
 	ld de, wMapHeight
 	ld bc, wSouthConnectedMapGroup
@@ -174,42 +216,42 @@ DoPlayerMovement::
 	ld a, LEFT
 	call .ViewMapMode_CheckDirectionOffLimits
 
-; now check in which directions the player would be walking off-range
+; for each direction, check if trying to go off-range
 	ld hl, wViewMapModeRange
 	ld de, wViewMapModeDisplacementY
 	ld bc, wTileDown
 	ld a, [de]
 	cp [hl]
-	jr nz, .next1
-	ld a, $ff
+	jr nz, .next5
+	ld a, COLL_OUT_OF_BOUNDS
 	ld [bc], a
-.next1
+.next5
 	inc bc ; wTileUp
 	ld a, [de]
 	xor $ff
 	inc a
 	cp [hl]
-	jr nz, .next2
-	ld a, $ff
+	jr nz, .next6
+	ld a, COLL_OUT_OF_BOUNDS
 	ld [bc], a
-.next2
+.next6
 	ld de, wViewMapModeDisplacementX
 	inc bc ; wTileLeft
 	ld a, [de]
 	xor $ff
 	inc a
 	cp [hl]
-	jr nz, .next3
-	ld a, $ff
+	jr nz, .next7
+	ld a, COLL_OUT_OF_BOUNDS
 	ld [bc], a
-.next3
+.next7
 	inc bc ; wTileRight
 	ld a, [de]
 	cp [hl]
-	jr nz, .next4
-	ld a, $ff
+	jr nz, .next8
+	ld a, COLL_OUT_OF_BOUNDS
 	ld [bc], a
-.next4
+.next8
 
 ; finally return STANDING into wWalkingDirection in the current direction at
 ; wWalkingDirection has had its corresponding wTile* address set to $ff.
@@ -221,8 +263,9 @@ DoPlayerMovement::
 	ld b, 0
 	add hl, bc
 	ld a, [hl]
-	inc a ; cp $ff
+	cp COLL_OUT_OF_BOUNDS
 	ret nz
+
 	ld a, STANDING
 	ld [wWalkingDirection], a
 	ret
@@ -235,6 +278,9 @@ DoPlayerMovement::
 .ViewMapMode_CheckDirectionOffLimits:
 	push af
 
+; connection strips that aren't as large as the map height/width are not accounted for.
+; to avoid viewing map off-limits when there is a partial map connection,
+; use COLL_OUT_OF_BOUNDS in out of bound tiles.
 	ld a, [bc] ; connected map group
 	inc a
 	jr nz, .valid ; it's ok if there's any connected map in this direction

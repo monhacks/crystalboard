@@ -256,5 +256,5 @@ TileCollisionTable::
 	db LAND_TILE         ; fc
 	db LAND_TILE         ; fd
 	db LAND_TILE         ; fe
-	db WALL_TILE         ; COLL_FF
+	db WALL_TILE         ; COLL_OUT_OF_BOUNDS
 	assert_table_length $100

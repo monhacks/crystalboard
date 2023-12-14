@@ -114,9 +114,9 @@ if DEF(_DEBUG)
 
 	map_attributes DebugLevel3_Map1, DEBUGLEVEL_3_MAP_1, $00, 0
 
-	map_attributes DebugLevel4_Map1, DEBUGLEVEL_4_MAP_1, $05, SOUTH
+	map_attributes DebugLevel4_Map1, DEBUGLEVEL_4_MAP_1, $00, SOUTH
 	connection south, DebugLevel5_Map1, DEBUGLEVEL_5_MAP_1, -1
 
-	map_attributes DebugLevel5_Map1, DEBUGLEVEL_5_MAP_1, $05, NORTH
+	map_attributes DebugLevel5_Map1, DEBUGLEVEL_5_MAP_1, $00, NORTH
 	connection north, DebugLevel4_Map1, DEBUGLEVEL_4_MAP_1,  1
 endc

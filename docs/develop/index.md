@@ -131,8 +131,8 @@
       a) If View Map mode was entered from the board menu, ``BOARDEVENT_REDISPLAY_MENU`` is loaded. It is the same as ``BOARDEVENT_DISPLAY_MENU`` but skips ``BoardMenuScript.Upkeep``.
       b) If View Map mode was entered from the branch menu, instead ``BOARDEVENT_RESUME_BRANCH`` is loaded, using ``wPlayerSpriteSetupFlags[PLAYERSPRITESETUP_CUSTOM_FACING_F]`` to maintain the facing direction according to the direction (``SPRITEMOVEDATA_*``) of the mocked player object. ``BOARDEVENT_RESUME_BRANCH`` makes sure to shortcut the branch space script by calling ``BranchSpaceScript_PromptPlayer`` directly and avoiding the recomputation of the branch struct that would cause corruption. ``BOARDEVENT_HANDLE_BOARD`` is loaded immediately by ``BOARDEVENT_RESUME_BRANCH``.
 
-- In View Map mode, regular collisions are ignored whereas going off-limits (based on map dimensions and connected maps) or off-range is accounted for.
+- In View Map mode, regular collisions except for ``COLL_OUT_OF_BOUNDS`` are ignored whereas going off-limits (i.e. outside of the map limits in a direction where there is no connected map) or off-range is accounted for.
 - Events other than warpless connections are ignored in View Map mode (as well as button actions, like while in ``BOARDEVENT_HANDLE_BOARD``).
-- ``wTileDown``, ``wTileUp``, etc., otherwise unused, are borrowed by in order to signal valid directions to ``InitSecondarySprites`` (e.g. ``wTileDown=$ff`` means that DOWN direction is not valid).
+- ``wTileDown``, ``wTileUp``, etc., otherwise unused, are borrowed by in order to signal valid directions to ``InitSecondarySprites`` (e.g. ``wTileDown=COLL_OUT_OF_BOUNDS`` means that DOWN direction is not valid).
 - In View Map mode, the overworld delay is 1 rather than 2.
 - ``UpdatePlayerCoords`` tracks the displacement during View Map mode in the X and Y axes in order to monitor the allowed range.

@@ -1769,7 +1769,7 @@ GetCoordTile::
 	ret
 
 .nope
-	ld a, -1
+	ld a, COLL_OUT_OF_BOUNDS
 	ret
 
 GetBlockLocation::
