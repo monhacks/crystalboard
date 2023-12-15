@@ -358,6 +358,87 @@ CheckIndoorMap::
 	xor a
 	ret ; z
 
+BackupMapObjects::
+; this setup script is called just before the EnterMap* setup script,
+; when wMapGroup and wMapNumber still contain the about-to-leave map.
+; there is no need to backup map objects when going through connections during View Map mode,
+; as during this mode there is no possible interaction that leads to a map objec changing status.
+; BackupMapObjectsOnEnterViewMapMode is called when entering View Map mode.
+	ldh a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret z
+	; fallthrough
+
+BackupMapObjectsOnEnterViewMapMode::
+	ld hl, wMapGroup
+	ld a, [hli]
+	ld d, a    ; d = wMapGroup
+	ld e, [hl] ; e = wMapNumber
+	ld a, BANK(wMapObjectsBackups)
+	ld [rSVBK], a
+	ld hl, wMap1ObjectsBackup
+	ld bc, wMap2ObjectsBackup - wMap1ObjectsBackup - 2
+.find_loop
+	ld a, [hl]
+	cp GROUP_N_A
+	jr z, .found_available_entry
+	and a ; cp $00 (terminator at wMapObjectsBackupsEnd)
+	jr z, .done
+	cp d ; wMap<N>ObjectsBackupMapGroup == wMapGroup?
+	jr nz, .next
+	inc hl
+	ld a, [hl]
+	cp e ; wMap<N>ObjectsBackupMapNumber == wMapNumber?
+	jr nz, .next2
+	inc hl
+	jr .found_matching_entry
+.next
+	inc hl
+.next2
+	inc hl
+	add hl, bc
+	jr .find_loop
+
+.found_available_entry
+	ld [hl], d ; wMapGroup
+	inc hl
+	ld [hl], e ; wMapNumber
+	inc hl
+.found_matching_entry
+	ld a, 1
+	ld [rSVBK], a
+	ld de, wMapObject1
+	ld a, [wCurMapObjectEventCount] ; how many object events are in the about-to-leave map?
+	and a
+	jr z, .done ; return if there's zero object events to be saved
+	sla a
+	sla a
+	sla a
+	sla a
+	ld c, a ; c = [wCurMapObjectEventCount] * MAPOBJECT_LENGTH
+.copy_loop
+	ld a, 1
+	ld [rSVBK], a
+	ld a, c
+	and %00001111
+	ld a, $ff ; StructID (first byte) of each object event must be set to $ff
+	jr z, .got_value
+	ld a, [de]
+.got_value
+	inc de
+	ld b, a
+	ld a, BANK(wMapObjectsBackups)
+	ld [rSVBK], a
+	ld a, b
+	ld [hli], a
+	dec c
+	jr nz, .copy_loop
+
+.done
+	ld a, 1
+	ld [rSVBK], a
+	ret
+
 LoadMapAttributes::
 	call CopyMapPartialAndAttributes
 	call SwitchToMapScriptsBank
@@ -579,8 +660,6 @@ ReadObjectEvents::
 	ld [wCurMapObjectEventsPointer], a
 	ld a, d
 	ld [wCurMapObjectEventsPointer + 1], a
-
-	ld a, [wCurMapObjectEventCount]
 	call CopyMapObjectEvents
 
 ; get NUM_OBJECTS - [wCurMapObjectEventCount] - 1
@@ -591,9 +670,13 @@ ReadObjectEvents::
 	jr z, .skip
 	jr c, .skip
 
-	; could have done "inc hl" instead
-	ld bc, 1
-	add hl, bc
+	push af
+	ld a, [wCurMapObjectEventCount]
+	ld bc, MAPOBJECT_LENGTH
+	call AddNTimes
+	inc hl
+; Fill the remaining MAPOBJECT_SPRITE and MAPOBJECT_Y_COORD with 0 and -1, respectively.
+	pop af ; a = (NUM_OBJECTS - 1) - [wCurMapObjectEventCount], a > 0
 	ld bc, MAPOBJECT_LENGTH
 .loop
 	ld [hl],  0
@@ -610,9 +693,20 @@ ReadObjectEvents::
 	ret
 
 CopyMapObjectEvents::
+	ld a, [wCurMapObjectEventCount]
 	and a
 	ret z
 
+	push hl
+	push de
+	call .FindMapObjectsBackup
+	pop de
+	pop hl
+	ret c
+
+; hl = wMapObject1
+; de = [wCurMapObjectEventsPointer]
+	ld a, [wCurMapObjectEventCount]
 	ld c, a
 .loop
 	push bc
@@ -633,6 +727,77 @@ CopyMapObjectEvents::
 	pop bc
 	dec c
 	jr nz, .loop
+	ret
+
+.FindMapObjectsBackup:
+; this is called from the LoadMapAttributes map setup script.
+; at this point wMapGroup and wMapNumber contain the about-to-enter map.
+; if map is found in wMapObjectsBackups, copy object data from there and return carry.
+; return nc otherwise.
+	ld hl, wMapGroup
+	ld a, [hli]
+	ld d, a    ; d = wMapGroup
+	ld e, [hl] ; e = wMapNumber
+	ld a, BANK(wMapObjectsBackups)
+	ld [rSVBK], a
+	ld hl, wMap1ObjectsBackup
+	ld bc, wMap2ObjectsBackup - wMap1ObjectsBackup - 2
+.find_loop
+	ld a, [hl]
+	cp GROUP_N_A
+	jr z, .no_match
+	and a ; cp $00 (terminator at wMapObjectsBackupsEnd)
+	jr z, .no_match
+	cp d ; wMap<N>ObjectsBackupMapGroup == wMapGroup?
+	jr nz, .next
+	inc hl
+	ld a, [hl]
+	cp e ; wMap<N>ObjectsBackupMapNumber == wMapNumber?
+	jr nz, .next2
+	inc hl
+	jr .found_matching_entry
+.next
+	inc hl
+.next2
+	inc hl
+	add hl, bc
+	jr .find_loop
+
+.found_matching_entry
+	ld a, 1
+	ld [rSVBK], a
+	ld de, wMapObject1
+	ld a, [wCurMapObjectEventCount]
+	and a
+	jr z, .done ; return if there's zero object events to be read
+	sla a
+	sla a
+	sla a
+	sla a
+	ld c, a ; c = [wCurMapObjectEventCount] * OBJECT_LENGTH
+.copy_loop
+	ld a, BANK(wMapObjectsBackups)
+	ld [rSVBK], a
+	ld a, [hli]
+	ld b, a
+	ld a, 1
+	ld [rSVBK], a
+	ld a, b
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .copy_loop
+
+.done
+	ld a, 1
+	ld [rSVBK], a
+	scf
+	ret
+
+.no_match
+	ld a, 1
+	ld [rSVBK], a
+	xor a
 	ret
 
 ClearObjectStructs::

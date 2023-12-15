@@ -289,6 +289,7 @@ SaveGameData:
 	call SaveOptions
 	call SavePlayerData
 	call SavePokemonData
+	call SaveMapObjectsBackupsData
 	call SaveBox
 	call SaveChecksum
 	call ValidateBackupSave
@@ -446,6 +447,22 @@ SavePokemonData:
 	call CloseSRAM
 	ret
 
+SaveMapObjectsBackupsData:
+	ldh a, [rSVBK]
+	push af
+	ld a, BANK(wMapObjectsBackups)
+	ldh [rSVBK], a
+	ld a, BANK(sMapObjectsBackups)
+	call OpenSRAM
+	ld hl, wMapObjectsBackups
+	ld de, sMapObjectsBackups
+	ld bc, wMapObjectsBackupsEnd - wMapObjectsBackups
+	call CopyBytes
+	call CloseSRAM
+	pop af
+	ldh [rSVBK], a
+	ret
+
 SaveBox:
 	call GetBoxAddress
 	call SaveBoxAddress
@@ -526,6 +543,7 @@ TryLoadSaveFile:
 	jr nz, .backup
 	call LoadPlayerData
 	call LoadPokemonData
+	call LoadMapObjectsBackupsData
 	call LoadBox
 	farcall RestorePartyMonMail
 	call ValidateBackupSave
@@ -541,6 +559,7 @@ TryLoadSaveFile:
 	jr nz, .corrupt
 	call LoadBackupPlayerData
 	call LoadBackupPokemonData
+	call LoadMapObjectsBackupsData
 	call LoadBox
 	farcall RestorePartyMonMail
 	call ValidateSave
@@ -675,6 +694,22 @@ LoadPokemonData:
 	ld bc, wPokemonDataEnd - wPokemonData
 	call CopyBytes
 	call CloseSRAM
+	ret
+
+LoadMapObjectsBackupsData:
+	ldh a, [rSVBK]
+	push af
+	ld a, BANK(wMapObjectsBackups)
+	ldh [rSVBK], a
+	ld a, BANK(sMapObjectsBackups)
+	call OpenSRAM
+	ld hl, sMapObjectsBackups
+	ld de, wMapObjectsBackups
+	ld bc, wMapObjectsBackupsEnd - wMapObjectsBackups
+	call CopyBytes
+	call CloseSRAM
+	pop af
+	ldh [rSVBK], a
 	ret
 
 LoadBox:

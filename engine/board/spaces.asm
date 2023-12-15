@@ -269,6 +269,7 @@ PromptPlayerToChooseBranchDirection:
 	jp PlayClickSFX
 
 .EnterViewMapMode:
+	call BackupMapObjectsOnEnterViewMapMode
 	ld a, BOARDEVENT_VIEW_MAP_MODE
 	ldh [hCurBoardEvent], a
 	ld a, 100

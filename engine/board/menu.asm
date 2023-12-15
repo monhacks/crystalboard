@@ -89,6 +89,7 @@ BoardMenuScript::
 	end
 
 .EnterViewMapMode:
+	call BackupMapObjectsOnEnterViewMapMode
 	ld hl, wVramState
 	res 2, [hl]
 	ld a, BOARDEVENT_VIEW_MAP_MODE

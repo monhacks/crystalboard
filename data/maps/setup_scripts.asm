@@ -58,6 +58,7 @@ MapSetupScript_Fly:
 MapSetupScript_Warp:
 	mapsetup DisableLCD
 	mapsetup InitSound
+	mapsetup BackupMapObjects
 	mapsetup EnterMapSpawnPoint
 	mapsetup LoadMapAttributes
 	mapsetup HandleNewMap
@@ -82,6 +83,7 @@ MapSetupScript_Warp:
 	db -1 ; end
 
 MapSetupScript_BadWarp:
+	mapsetup BackupMapObjects
 	mapsetup EnterMapSpawnPoint
 	mapsetup LoadMapAttributes
 	mapsetup HandleNewMap
@@ -108,6 +110,7 @@ MapSetupScript_BadWarp:
 
 MapSetupScript_Connection:
 	mapsetup SuspendMapAnims
+	mapsetup BackupMapObjects
 	mapsetup EnterMapConnection
 	mapsetup LoadMapAttributes
 	mapsetup HandleNewMap
@@ -129,6 +132,7 @@ MapSetupScript_Fall:
 MapSetupScript_Door:
 	mapsetup FadeOutPalettesToWhite
 MapSetupScript_Train:
+	mapsetup BackupMapObjects
 	mapsetup EnterMapWarp
 	mapsetup LoadMapAttributes
 	mapsetup GetWarpDestCoords

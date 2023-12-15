@@ -135,7 +135,7 @@ CheckTrainerAndTalkerEvents:
 	bit 5, [hl]
 	ret
 
-; on enter overworld loop
+; on enter overworld loop (MAPSETUP_ENTERLEVEL or MAPSETUP_CONTINUE)
 StartMap:
 	xor a
 	ldh [hScriptVar], a
@@ -147,13 +147,39 @@ StartMap:
 	farcall InitCallReceiveDelay
 	call ClearJoypad
 
-; initialize board state
 	ld a, [hMapEntryMethod]
 	cp MAPSETUP_ENTERLEVEL
 	jr nz, .not_starting_level
+
+; initialize board state
 	xor a
 	ld [wCurTurn], a
 	ld [wCurSpace], a
+
+; initialize overworld state
+	ld hl, wNextWarp
+	xor a
+	ld [hli], a ; wNextWarp
+	ld [hli], a ; wNextMapGroup
+	ld [hli], a ; wNextMapNumber
+	ld [hli], a ; wPrevWarp
+	ld [hli], a ; wPrevMapGroup
+	ld [hl], a  ; wPrevMapNumber
+	ld a, BANK(wMapObjectsBackups)
+	ld [rSVBK], a
+	ld e, NUM_MAP_OBJECTS_BACKUPS
+	ld hl, wMapObjectsBackups
+	ld bc, wMap2ObjectsBackup - wMap1ObjectsBackup
+.loop
+	ld a, GROUP_N_A
+	ld [hl], a
+	add hl, bc
+	dec e
+	jr nz, .loop
+	ld [hl], $00 ; list terminator
+	ld a, 1
+	ld [rSVBK], a
+
 .not_starting_level
 	ld a, BOARDEVENT_DISPLAY_MENU
 	ldh [hCurBoardEvent], a

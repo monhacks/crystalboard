@@ -2693,6 +2693,7 @@ wMapObjectsBackups::
 ; wMap1ObjectsBackup* - wMap10ObjectsBackup*
 ; ds (2 + MAPOBJECT_LENGTH * (NUM_OBJECTS - 1)) * NUM_MAP_OBJECTS_BACKUPS
 for n, 1, NUM_MAP_OBJECTS_BACKUPS
+	wMap{d:n}ObjectsBackup::
 	wMap{d:n}ObjectsBackupMapGroup:: db
 	wMap{d:n}ObjectsBackupMapNumber:: db
 	wMap{d:n}ObjectsBackupData::
