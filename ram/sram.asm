@@ -135,3 +135,8 @@ SECTION "Boxes 8-14", SRAM
 ; All 14 boxes fit exactly within 2 SRAM banks
 	assert box_n == NUM_BOXES, \
 		"boxes: Expected {d:NUM_BOXES} total boxes, got {d:box_n}"
+
+
+SECTION "SRAM Map Objects Backups", SRAM
+
+sMapObjectsBackups:: ds wMapObjectsBackupsEnd - wMapObjectsBackups

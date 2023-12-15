@@ -133,8 +133,6 @@ wPrinterConnectionOpen:: db
 wPrinterOpcode:: db
 wPrevDexEntry:: db
 wDisableTextAcceleration:: db
-wPrevLandmark:: db
-wCurLandmark:: db
 
 wLinkMode::
 ; a LINK_* value for the link type
@@ -2340,10 +2338,10 @@ endr
 wCmdQueue:: ds CMDQUEUE_CAPACITY * CMDQUEUE_ENTRY_SIZE
 
 wMapObjects::
-wPlayerObject:: map_object wPlayer ; player is map object 0
-; wMap1Object - wMap15Object
+wPlayerObject:: map_object wPlayerObject ; player is map object 0
+; wMapObject1 - wMapObject15
 for n, 1, NUM_OBJECTS
-wMap{d:n}Object:: map_object wMap{d:n}
+wMapObject{d:n}:: map_object wMapObject{d:n}
 endr
 
 wObjectMasks:: ds NUM_OBJECTS
@@ -2687,6 +2685,22 @@ wPokeAnimBitmaskCurBit:: db
 wPokeAnimBitmaskBuffer:: ds 7
 	ds 2
 wPokeAnimStructEnd::
+
+
+SECTION "Map Objects Backups", WRAMX
+
+wMapObjectsBackups::
+; wMap1ObjectsBackup* - wMap10ObjectsBackup*
+; ds (2 + MAPOBJECT_LENGTH * (NUM_OBJECTS - 1)) * NUM_MAP_OBJECTS_BACKUPS
+for n, 1, NUM_MAP_OBJECTS_BACKUPS
+	wMap{d:n}ObjectsBackupMapGroup:: db
+	wMap{d:n}ObjectsBackupMapNumber:: db
+	wMap{d:n}ObjectsBackupData::
+	for m, 1, NUM_OBJECTS
+		wMap{d:n}ObjectsBackupObject{d:m}:: map_object wMap{d:n}ObjectsBackupObject{d:m}
+	endr
+endr
+wMapObjectsBackupsEnd:: db ; list terminator
 
 
 SECTION "GBC Video", WRAMX, ALIGN[8]

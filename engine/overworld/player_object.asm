@@ -225,7 +225,7 @@ CopyMapObjectToObjectStruct:
 	ret
 
 InitializeVisibleSprites:
-	ld bc, wMap1Object
+	ld bc, wMapObject1
 	ld a, 1
 .loop
 	ldh [hMapObjectIndex], a
@@ -312,7 +312,7 @@ CheckObjectEnteringVisibleRange::
 	ld d, a
 	ld a, [wXCoord]
 	ld e, a
-	ld bc, wMap1Object
+	ld bc, wMapObject1
 	ld a, 1
 .loop_v
 	ldh [hMapObjectIndex], a
@@ -368,7 +368,7 @@ CheckObjectEnteringVisibleRange::
 	ld e, a
 	ld a, [wYCoord]
 	ld d, a
-	ld bc, wMap1Object
+	ld bc, wMapObject1
 	ld a, 1
 .loop_h
 	ldh [hMapObjectIndex], a
@@ -861,7 +861,7 @@ MockPlayerObject::
 	farcall RefreshPlayerCoords
 ; copy default sprite object to the last object struct
 	ld hl, .DefaultPlayerObject
-	ld de, wMap{d:LAST_OBJECT}Object
+	ld de, wMapObject{d:LAST_OBJECT}
 	ld bc, OBJECT_EVENT_SIZE + 1
 	call CopyBytes
 
@@ -878,9 +878,9 @@ MockPlayerObject::
 	jr nz, .next2
 ; found a match
 	ld a, [hli] ; sprite
-	ld [wMap{d:LAST_OBJECT}ObjectSprite], a
+	ld [wMapObject{d:LAST_OBJECT}Sprite], a
 	ld a, [hl] ; palette | objecttype
-	ld [wMap{d:LAST_OBJECT}ObjectPalette], a ; also wMap{d:LAST_OBJECT}ObjectType
+	ld [wMapObject{d:LAST_OBJECT}Palette], a ; also wMapObject{d:LAST_OBJECT}Type
 	jr .copy_player_coords
 .next1
 	inc hl
@@ -894,12 +894,12 @@ MockPlayerObject::
 .copy_player_coords
 ; copy player's coordinates
 	ld hl, wPlayerObjectYCoord
-	ld de, wMap{d:LAST_OBJECT}ObjectYCoord
+	ld de, wMapObject{d:LAST_OBJECT}YCoord
 	ld a, [hli]
 	ld [de], a
 	inc de
 	ld a, [hl] ; wPlayerObjectXCoord
-	ld [de], a ; wMap{d:LAST_OBJECT}ObjectXCoord
+	ld [de], a ; wMapObject{d:LAST_OBJECT}XCoord
 ; set facing direction
 	ld a, [wPlayerDirection]
 	srl a
@@ -907,7 +907,7 @@ MockPlayerObject::
 	maskbits NUM_DIRECTIONS
 	ld b, SPRITEMOVEDATA_STANDING_DOWN
 	add b
-	ld [wMap{d:LAST_OBJECT}ObjectMovement], a
+	ld [wMapObject{d:LAST_OBJECT}Movement], a
 
 ; display mocked player object
 ; it will go to the last wMapObjects slot and to whichever wObjectStructs slot

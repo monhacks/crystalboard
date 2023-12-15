@@ -1246,7 +1246,7 @@ Script_reloadmapafterviewmapmode:
 	set SECONDARYSPRITES_BRANCH_ARROWS_F, [hl]
 	ld hl, wPlayerSpriteSetupFlags
 ; get the facing direction from the mocked object's facing direction
-	ld a, [wMap{d:LAST_OBJECT}ObjectMovement]
+	ld a, [wMapObject{d:LAST_OBJECT}Movement]
 	sub SPRITEMOVEDATA_STANDING_DOWN
 	ld [hl], a
 	set PLAYERSPRITESETUP_CUSTOM_FACING_F, [hl]

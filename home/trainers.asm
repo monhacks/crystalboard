@@ -15,7 +15,7 @@ _CheckTrainerBattleOrTalkerPrompt::
 
 ; Skip the player object.
 	ld a, 1
-	ld de, wMap1Object
+	ld de, wMapObject1
 
 .loop
 

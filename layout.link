@@ -263,6 +263,8 @@ WRAMX 1
 	"Party"
 WRAMX 2
 	"Pic Animations"
+WRAMX 3
+	"Map Objects Backups"
 WRAMX 5
 	align 8
 	"GBC Video"
@@ -291,6 +293,8 @@ SRAM $02
 	"Boxes 1-7"
 SRAM $03
 	"Boxes 8-14"
+SRAM $04
+	"SRAM Map Objects Backups"
 HRAM
 	"OAM DMA"
 	"HRAM"

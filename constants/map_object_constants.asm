@@ -124,6 +124,12 @@ DEF PLAYER_OBJECT EQU 0
 DEF MAPOBJECT_PALETTE_MASK EQU %11110000
 DEF MAPOBJECT_TYPE_MASK    EQU %00001111
 
+; number of entries in MapObjectsBackups.
+; this sets a limit to the maximum number of different maps that can be reentered during a level.
+; map groups with more than NUM_MAP_OBJECTS_BACKUPS maps are only ok if no more than
+; NUM_MAP_OBJECTS_BACKUPS can be possibly accesed during the same level play.
+DEF NUM_MAP_OBJECTS_BACKUPS EQU 10
+
 ; SpriteMovementData struct members (see data/sprites/map_objects.asm)
 rsreset
 DEF SPRITEMOVEATTR_MOVEMENT rb ; 0
