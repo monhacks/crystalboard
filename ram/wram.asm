@@ -2687,6 +2687,18 @@ wPokeAnimBitmaskBuffer:: ds 7
 wPokeAnimStructEnd::
 
 
+SECTION "Disabled Spaces Backups", WRAMX
+
+wDisabledSpacesBackups::
+for n, 1, NUM_DISABLED_SPACES_BACKUPS
+	wMap{d:n}DisabledSpacesBackup::
+	wMap{d:n}DisabledSpacesBackupMapGroup:: db
+	wMap{d:n}DisabledSpacesBackupMapNumber:: db
+	wMap{d:n}DisabledSpacesBackupData:: flag_array MAX_SPACES_PER_MAP
+endr
+wDisabledSpacesBackupsEnd:: db ; list terminator
+
+
 SECTION "Map Objects Backups", WRAMX
 
 wMapObjectsBackups::

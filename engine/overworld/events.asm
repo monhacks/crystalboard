@@ -165,18 +165,37 @@ StartMap:
 	ld [hli], a ; wPrevWarp
 	ld [hli], a ; wPrevMapGroup
 	ld [hl], a  ; wPrevMapNumber
+
+	ld a, BANK(wDisabledSpacesBackups)
+	ld [rSVBK], a
+	ld hl, wDisabledSpacesBackups
+	ld bc, wDisabledSpacesBackupsEnd - wDisabledSpacesBackups
+	xor a
+	call ByteFill
+	ld e, NUM_DISABLED_SPACES_BACKUPS
+	ld hl, wDisabledSpacesBackups
+	ld bc, wMap2DisabledSpacesBackup - wMap1DisabledSpacesBackup
+.loop1
+	ld a, GROUP_N_A
+	ld [hl], a
+	add hl, bc
+	dec e
+	jr nz, .loop1
+	ld [hl], $00 ; list terminator
+
 	ld a, BANK(wMapObjectsBackups)
 	ld [rSVBK], a
 	ld e, NUM_MAP_OBJECTS_BACKUPS
 	ld hl, wMapObjectsBackups
 	ld bc, wMap2ObjectsBackup - wMap1ObjectsBackup
-.loop
+.loop2
 	ld a, GROUP_N_A
 	ld [hl], a
 	add hl, bc
 	dec e
-	jr nz, .loop
+	jr nz, .loop2
 	ld [hl], $00 ; list terminator
+
 	ld a, 1
 	ld [rSVBK], a
 

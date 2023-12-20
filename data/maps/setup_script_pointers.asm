@@ -55,3 +55,4 @@ MapSetupCommands:
 	add_mapsetup ResetLevelScopedEventFlags ; 30
 	add_mapsetup AnchorPointAfterWarp ; 31
 	add_mapsetup BackupMapObjects ; 32
+	add_mapsetup LoadDisabledSpaces ; 33

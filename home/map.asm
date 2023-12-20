@@ -359,10 +359,10 @@ CheckIndoorMap::
 	ret ; z
 
 BackupMapObjects::
-; this setup script is called just before the EnterMap* setup script,
+; this map setup command is called just before the EnterMap* map setup command,
 ; when wMapGroup and wMapNumber still contain the about-to-leave map.
 ; there is no need to backup map objects when going through connections during View Map mode,
-; as during this mode there is no possible interaction that leads to a map objec changing status.
+; as during this mode there is no possible interaction that leads to a map object changing status.
 ; BackupMapObjectsOnEnterViewMapMode is called when entering View Map mode.
 	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
@@ -730,7 +730,7 @@ CopyMapObjectEvents::
 	ret
 
 .FindMapObjectsBackup:
-; this is called from the LoadMapAttributes map setup script.
+; this is called from the LoadMapAttributes map map setup command.
 ; at this point wMapGroup and wMapNumber contain the about-to-enter map.
 ; if map is found in wMapObjectsBackups, copy object data from there and return carry.
 ; return nc otherwise.

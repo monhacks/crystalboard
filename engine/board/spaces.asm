@@ -131,6 +131,8 @@ LandedInRegularSpaceScript_AfterSpaceEffect:
 	and UNIQUE_SPACE_METATILES_MASK
 	add FIRST_GREY_SPACE_METATILE
 	ld [hl], a
+; backup the disabled space to preserve it on map reload
+	call BackupDisabledSpace
 ; trigger end of turn
 	ld a, BOARDEVENT_END_TURN
 	ldh [hCurBoardEvent], a
@@ -309,4 +311,145 @@ UnionSpaceScript::
 	ld a, [wCurSpaceNextSpace]
 	ld [wCurSpace], a
 	call LoadCurSpaceData
-	end
+	ret
+
+BackupDisabledSpace::
+; unlike map objects which are backed up when leaving a map,
+; a disabled space is backed up immediately when it is disabled.
+	ld a, [wCurSpace]
+	push af
+
+	ld hl, wMapGroup
+	ld d, [hl]
+	inc hl ; wMapNumber
+	ld e, [hl]
+
+	ld a, BANK(wDisabledSpacesBackups)
+	ld [rSVBK], a
+
+	ld hl, wMap1DisabledSpacesBackup
+	ld bc, wMap2DisabledSpacesBackup - wMap1DisabledSpacesBackup - 2
+.loop
+	ld a, [hl]
+	cp GROUP_N_A
+	jr z, .found_available_entry
+	and a ; cp $00 (terminator found at wDisabledSpacesBackupsEnd, no more room)
+	jr z, .done_pop_af
+	cp d ; wMap<N>DisabledSpacesMapGroup == wMapGroup?
+	jr nz, .next
+	inc hl
+	ld a, [hl]
+	cp e ; wMap<N>DisabledSpacesMapNumber == wMapNumber?
+	jr nz, .next2
+	inc hl
+	jr .found_matching_entry
+.next
+	inc hl
+.next2
+	inc hl
+	add hl, bc
+	jr .loop
+
+.found_available_entry
+	ld [hl], d ; wMapGroup
+	inc hl
+	ld [hl], e ; wMapNumber
+	inc hl
+.found_matching_entry
+; mark the space at wCurSpace as disabled in the entry with <wMapGroup, wMapNumber>
+	pop af
+	ld e, a
+	ld d, 0
+	ld b, SET_FLAG
+	call FlagAction
+	jr .done
+
+.done_pop_af
+	pop af
+.done
+	ld a, 1
+	ld [rSVBK], a
+	ret
+
+LoadDisabledSpaces:
+; map setup command (called after the map setup command LoadBlockData)
+	ld hl, wMapGroup
+	ld d, [hl]
+	inc hl
+	ld e, [hl] ; wMapNumber
+	ld a, BANK(wDisabledSpacesBackups)
+	ld [rSVBK], a
+
+	ld hl, wMap1DisabledSpacesBackup
+	ld bc, wMap2DisabledSpacesBackup - wMap1DisabledSpacesBackup - 2
+.find_loop
+	ld a, [hl]
+	cp GROUP_N_A
+	jr z, .no_match
+	and a ; cp $00 (terminator found at wDisabledSpacesBackupsEnd)
+	jr z, .no_match
+	cp d
+	jr nz, .next
+	inc hl
+	ld a, [hl]
+	cp e
+	jr nz, .next2
+	inc hl
+	jr .found_matching_entry
+.next
+	inc hl
+.next2
+	inc hl
+	add hl, bc
+	jr .find_loop
+
+.found_matching_entry
+; loop through all MAX_SPACES_PER_MAP flags and call .ApplyDisabledSpace in the disabled spaces.
+	xor a
+.apply_loop_2
+	ld e, [hl]
+	inc hl
+.apply_loop_1
+	srl e
+	call c, .ApplyDisabledSpace
+	inc a
+	cp MAX_SPACES_PER_MAP
+	jr z, .done ; return when all MAX_SPACES_PER_MAP flags checked
+	ld d, a
+	and %111
+	ld a, d
+	jr z, .apply_loop_2 ; jump if done with current batch of 8 flags
+	jr .apply_loop_1
+
+.done
+.no_match
+	ld a, 1
+	ld [rSVBK], a
+	ret
+
+.ApplyDisabledSpace:
+	push af
+	push de
+	push hl
+	ld e, a
+	ld a, 1
+	ld [rSVBK], a
+	ld a, e ; a = space to apply as disabled
+	call LoadTempSpaceData
+	ld a, [wTempSpaceXCoord]
+	add 4
+	ld d, a
+	ld a, [wTempSpaceYCoord]
+	add 4
+	ld e, a
+	call GetBlockLocation
+	ld a, [hl]
+	and UNIQUE_SPACE_METATILES_MASK
+	add FIRST_GREY_SPACE_METATILE
+	ld [hl], a
+	ld a, BANK(wDisabledSpacesBackups)
+	ld [rSVBK], a
+	pop hl
+	pop de
+	pop af
+	ret

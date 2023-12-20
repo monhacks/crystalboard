@@ -289,6 +289,7 @@ SaveGameData:
 	call SaveOptions
 	call SavePlayerData
 	call SavePokemonData
+	call SaveDisabledSpacesBackupsData
 	call SaveMapObjectsBackupsData
 	call SaveBox
 	call SaveChecksum
@@ -447,6 +448,22 @@ SavePokemonData:
 	call CloseSRAM
 	ret
 
+SaveDisabledSpacesBackupsData:
+	ldh a, [rSVBK]
+	push af
+	ld a, BANK(wDisabledSpacesBackups)
+	ldh [rSVBK], a
+	ld a, BANK(sDisabledSpacesBackups)
+	call OpenSRAM
+	ld hl, wDisabledSpacesBackups
+	ld de, sDisabledSpacesBackups
+	ld bc, wDisabledSpacesBackupsEnd - wDisabledSpacesBackups
+	call CopyBytes
+	call CloseSRAM
+	pop af
+	ldh [rSVBK], a
+	ret
+
 SaveMapObjectsBackupsData:
 	ldh a, [rSVBK]
 	push af
@@ -543,6 +560,7 @@ TryLoadSaveFile:
 	jr nz, .backup
 	call LoadPlayerData
 	call LoadPokemonData
+	call LoadDisabledSpacesBackupsData
 	call LoadMapObjectsBackupsData
 	call LoadBox
 	farcall RestorePartyMonMail
@@ -559,6 +577,7 @@ TryLoadSaveFile:
 	jr nz, .corrupt
 	call LoadBackupPlayerData
 	call LoadBackupPokemonData
+	call LoadDisabledSpacesBackupsData
 	call LoadMapObjectsBackupsData
 	call LoadBox
 	farcall RestorePartyMonMail
@@ -694,6 +713,22 @@ LoadPokemonData:
 	ld bc, wPokemonDataEnd - wPokemonData
 	call CopyBytes
 	call CloseSRAM
+	ret
+
+LoadDisabledSpacesBackupsData:
+	ldh a, [rSVBK]
+	push af
+	ld a, BANK(wDisabledSpacesBackups)
+	ldh [rSVBK], a
+	ld a, BANK(sDisabledSpacesBackups)
+	call OpenSRAM
+	ld hl, sDisabledSpacesBackups
+	ld de, wDisabledSpacesBackups
+	ld bc, wDisabledSpacesBackupsEnd - wDisabledSpacesBackups
+	call CopyBytes
+	call CloseSRAM
+	pop af
+	ldh [rSVBK], a
 	ret
 
 LoadMapObjectsBackupsData:

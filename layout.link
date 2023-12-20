@@ -263,6 +263,7 @@ WRAMX 1
 	"Party"
 WRAMX 2
 	"Pic Animations"
+	"Disabled Spaces Backups"
 WRAMX 3
 	"Map Objects Backups"
 WRAMX 5
@@ -289,6 +290,7 @@ SRAM $01
 	"Active Box"
 	"Link Battle Data"
 	"SRAM Hall of Fame"
+	"SRAM Disabled Spaces Backups"
 SRAM $02
 	"Boxes 1-7"
 SRAM $03

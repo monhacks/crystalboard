@@ -137,6 +137,11 @@ SECTION "Boxes 8-14", SRAM
 		"boxes: Expected {d:NUM_BOXES} total boxes, got {d:box_n}"
 
 
+SECTION "SRAM Disabled Spaces Backups", SRAM
+
+sDisabledSpacesBackups:: ds wDisabledSpacesBackupsEnd - wDisabledSpacesBackups
+
+
 SECTION "SRAM Map Objects Backups", SRAM
 
 sMapObjectsBackups:: ds wMapObjectsBackupsEnd - wMapObjectsBackups

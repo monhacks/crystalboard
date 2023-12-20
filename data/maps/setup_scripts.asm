@@ -66,6 +66,7 @@ MapSetupScript_Warp:
 	mapsetup RefreshPlayerCoords
 	mapsetup GetMapScreenCoords
 	mapsetup LoadBlockData
+	mapsetup LoadDisabledSpaces
 	mapsetup BufferScreen
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
@@ -91,6 +92,7 @@ MapSetupScript_BadWarp:
 	mapsetup RefreshPlayerCoords
 	mapsetup GetMapScreenCoords
 	mapsetup LoadBlockData
+	mapsetup LoadDisabledSpaces
 	mapsetup BufferScreen
 	mapsetup DisableLCD
 	mapsetup LoadMapGraphics
@@ -116,6 +118,7 @@ MapSetupScript_Connection:
 	mapsetup HandleNewMap
 	mapsetup RefreshPlayerCoords
 	mapsetup LoadBlockData
+	mapsetup LoadDisabledSpaces
 	mapsetup LoadMapTileset
 	mapsetup SaveScreen
 	mapsetup LoadMapObjects
@@ -139,6 +142,7 @@ MapSetupScript_Train:
 	mapsetup HandleNewMap
 	mapsetup RefreshPlayerCoords
 	mapsetup LoadBlockData
+	mapsetup LoadDisabledSpaces
 	mapsetup BufferScreen
 	mapsetup DisableLCD
 	mapsetup LoadMapGraphics
@@ -163,6 +167,7 @@ MapSetupScript_ReloadMap:
 	mapsetup InitSound
 	mapsetup LoadBlockData
 	mapsetup LoadConnectionBlockData
+	mapsetup LoadDisabledSpaces
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
 	mapsetup EnableOverworldHUD
@@ -184,6 +189,7 @@ MapSetupScript_ExitViewMap:
 	mapsetup RefreshPlayerCoords
 	mapsetup GetMapScreenCoords
 	mapsetup LoadBlockData
+	mapsetup LoadDisabledSpaces
 	mapsetup BufferScreen
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
@@ -204,6 +210,7 @@ MapSetupScript_LinkReturn:
 	mapsetup InitSound
 	mapsetup HandleNewMap
 	mapsetup LoadBlockData
+	mapsetup LoadDisabledSpaces
 	mapsetup BufferScreen
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
@@ -225,6 +232,7 @@ MapSetupScript_Continue:
 	mapsetup HandleContinueMap
 	mapsetup LoadBlockData
 	mapsetup LoadConnectionBlockData
+	mapsetup LoadDisabledSpaces
 	mapsetup BufferScreen
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
@@ -241,4 +249,5 @@ MapSetupScript_Continue:
 MapSetupScript_Submenu:
 	mapsetup LoadBlockData
 	mapsetup LoadConnectionBlockData
+	mapsetup LoadDisabledSpaces
 	db -1 ; end
