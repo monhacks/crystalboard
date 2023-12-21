@@ -569,6 +569,17 @@ _LoadDisabledSpaces:
 	ret
 
 .WestConnectedMap:
+	ld a, [wTempSpaceXCoord]
+	ld d, a
+	ld a, [wTempSpaceYCoord]
+	ld e, a
+	call GetWestConnectedBlockLocation
+	ret
+
 .EastConnectedMap:
-	xor a
+	ld a, [wTempSpaceXCoord]
+	ld d, a
+	ld a, [wTempSpaceYCoord]
+	ld e, a
+	call GetEastConnectedBlockLocation
 	ret

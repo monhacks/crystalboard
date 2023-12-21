@@ -464,6 +464,7 @@ CopyMapPartialAndAttributes::
 	ret
 
 CopyMapPartialAndAttributesPartial::
+; used by LoadDisabledSpaces only
 	ld a, [hROMBank]
 	push af
 	call CopyMapPartial
@@ -2061,7 +2062,80 @@ GetNorthConnectedBlockLocation::
 .done
 	scf
 	ret ; c
+.nope
+	xor a
+	ret ; nc
 
+GetEastConnectedBlockLocation::
+; xcoord / 2 <= 2
+	ld a, d
+	srl a
+	cp 3
+	ret nc
+; [wEastConnectionStripLocation]
+	ld hl, wEastConnectionStripLocation
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+; + (xcoord / 2)
+	srl d
+	ld b, 0
+	ld c, d
+	add hl, bc
+; + ([wMapWidth] + 6) * ycoord / 2
+	ld a, [wMapWidth]
+	add 6
+	ld c, a
+	ld b, 0
+	srl e
+	ld a, e
+	and a
+	jr z, .done
+.loop
+	add hl, bc
+	dec a
+	jr nz, .loop
+.done
+	scf
+	ret ; c
+
+GetWestConnectedBlockLocation::
+; wWestConnectedMapWidth >= 3
+; xcoord / 2 >= ([wWestConnectedMapWidth] - 3)
+	ld a, [wWestConnectedMapWidth]
+	sub 3
+	jr c, .nope
+	ld c, a
+	ld a, d
+	srl a
+	sub c
+	jr c, .nope
+	ld d, a ; d = xcoord / 2 - ([wWestConnectedMapWidth] - 3)
+; [wWestConnectionStripLocation]
+	ld hl, wWestConnectionStripLocation
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+; + xcoord / 2 - ([wWestConnectedMapWidth] - 3) --> + d
+	ld c, d
+	ld b, 0
+	add hl, bc
+; + ([wMapWidth] + 6) * ycoord / 2
+	ld a, [wMapWidth]
+	add 6
+	ld c, a
+	ld b, 0
+	srl e
+	ld a, e
+	and a
+	jr z, .done
+.loop
+	add hl, bc
+	dec a
+	jr nz, .loop
+.done
+	scf
+	ret ; c
 .nope
 	xor a
 	ret ; nc
