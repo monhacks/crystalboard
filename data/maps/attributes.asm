@@ -111,7 +111,11 @@ if DEF(_DEBUG)
 	connection south, DebugLevel1_Map1, DEBUGLEVEL_1_MAP_1, 0
 	connection north, DebugLevel1_Map1, DEBUGLEVEL_1_MAP_1, 0
 
-	map_attributes DebugLevel2_Map1, DEBUGLEVEL_2_MAP_1, $00, 0
+	map_attributes DebugLevel2_Map1, DEBUGLEVEL_2_MAP_1, $00, WEST
+	connection west, DebugLevel2_Map2, DEBUGLEVEL_2_MAP_2, 3
+
+	map_attributes DebugLevel2_Map2, DEBUGLEVEL_2_MAP_2, $00, EAST
+	connection east, DebugLevel2_Map1, DEBUGLEVEL_2_MAP_1, -3
 
 	map_attributes DebugLevel3_Map1, DEBUGLEVEL_3_MAP_1, $00, 0
 

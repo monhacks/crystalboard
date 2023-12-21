@@ -30,7 +30,7 @@ DebugLevel2_Map1_MapEvents:
 DebugLevel2_Map1_MapSpaces:
 	space  6, 16,  $0,  1 ;  0
 	space  6, 14,  $0,  2 ;  1
-	space  6, 12,  $0,  3 ;  2
+	space  6, 12,  .BS1   ;  2 .BS1
 	space  6, 10,  $0,  GO_UP ;  3
 	space 20,  2,  $0,  5 ;  4
 	space 22,  2,  $0,  6 ;  5
@@ -41,3 +41,12 @@ DebugLevel2_Map1_MapSpaces:
 	space 20, 14,  $0, 11 ; 10
 	space 20, 16,  $0, 12 ; 11
 	space 20, 18,  $0, 12 ; 12
+
+	space  4, 12,  $0, 14 ; 13
+	space  2, 12,  $0, 15 ; 14
+	space  0, 12,  $0, GO_LEFT ; 15
+
+.BS1:
+	branchdir LEFT,   13, 0
+	branchdir UP,      3, 0
+	endbranch

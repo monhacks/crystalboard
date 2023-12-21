@@ -51,6 +51,7 @@ if DEF(_DEBUG)
 
 	newgroup DEBUGLEVEL_2
 	map_const DEBUGLEVEL_2_MAP_1,                          15, 10 ;  1
+	map_const DEBUGLEVEL_2_MAP_2,                           5,  5 ;  2
 	endgroup
 
 	newgroup DEBUGLEVEL_3

@@ -123,7 +123,7 @@
 	tilecoll WATER, WATER, WATER, WATER ; 7a
 	tilecoll WALL, WALL, WALL, WALL ; 7b
 	tilecoll WALL, WALL, WALL, WALL ; 7c
-	tilecoll WALL, WALL, WALL, WALL ; 7d
+	tilecoll BRANCH_SPACE, FLOOR, FLOOR, FLOOR ; 7d
 	tilecoll BRANCH_SPACE, FLOOR, FLOOR, FLOOR ; 7e
 	tilecoll UNION_SPACE, FLOOR, FLOOR, FLOOR ; 7f
 	tilecoll BLUE_SPACE, FLOOR, FLOOR, FLOOR ; 80
