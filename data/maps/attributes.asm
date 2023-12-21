@@ -91,6 +91,7 @@ MACRO connection
 	dw wOverworldMapBlocks + _map
 	db _len - _src
 	db \3_WIDTH
+	db \3_HEIGHT
 	db _y, _x
 	dw wOverworldMapBlocks + _win
 

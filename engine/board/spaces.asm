@@ -373,10 +373,63 @@ BackupDisabledSpace::
 
 LoadDisabledSpaces:
 ; map setup command (called after the map setup command LoadBlockData)
+; load blocks with disabled spaces in the active map, and in each of its connected maps.
+; for connected maps, only blocks that are in visible range from the active map,
+; i.e. those that appear in wOverworldMapBlocks while in the active map.
 	ld hl, wMapGroup
 	ld d, [hl]
 	inc hl
 	ld e, [hl] ; wMapNumber
+	xor a ; active map
+	ld [wTempByteValue], a
+	call _LoadDisabledSpaces
+
+	ld hl, wNorthConnectedMapGroup
+	ld a, [hli]
+	cp GROUP_N_A
+	jr z, .south
+	ld d, a    ; wNorthConnectedMapGroup
+	ld e, [hl] ; wNorthConnectedMapNumber
+	ld a, 1 ; north connected map
+	ld [wTempByteValue], a
+	call _LoadDisabledSpaces
+.south
+
+	ld hl, wSouthConnectedMapGroup
+	ld a, [hli]
+	cp GROUP_N_A
+	jr z, .west
+	ld d, a    ; wSouthConnectedMapGroup
+	ld e, [hl] ; wSouthConnectedMapNumber
+	ld a, 2 ; south connected map
+	ld [wTempByteValue], a
+	call _LoadDisabledSpaces
+.west
+
+	ld hl, wWestConnectedMapGroup
+	ld a, [hli]
+	cp GROUP_N_A
+	jr z, .east
+	ld d, a    ; wWestConnectedMapGroup
+	ld e, [hl] ; wWestConnectedMapNumber
+	ld a, 3 ; west connected map
+	ld [wTempByteValue], a
+	call _LoadDisabledSpaces
+.east
+
+	ld hl, wEastConnectedMapGroup
+	ld a, [hli]
+	cp GROUP_N_A
+	jr z, .done
+	ld d, a    ; wEastConnectedMapGroup
+	ld e, [hl] ; wEastConnectedMapNumber
+	ld a, 4 ; east connected map
+	ld [wTempByteValue], a
+	call _LoadDisabledSpaces
+.done
+	ret
+
+_LoadDisabledSpaces:
 	ld a, BANK(wDisabledSpacesBackups)
 	ld [rSVBK], a
 
@@ -404,6 +457,24 @@ LoadDisabledSpaces:
 	jr .find_loop
 
 .found_matching_entry
+; temporarily load wMapScriptsBank, wMapSpacesPointer for this map,
+; so that we can later can call LoadTempSpaceData in the context of this map.
+	ld a, 1
+	ld [rSVBK], a
+	ld a, [wMapGroup]
+	push af
+	ld a, [wMapNumber]
+	push af
+	ld a, d
+	ld [wMapGroup], a
+	ld a, e
+	ld [wMapNumber], a
+	push hl
+	call CopyMapPartialAndAttributesPartial
+	pop hl
+	ld a, BANK(wDisabledSpacesBackups)
+	ld [rSVBK], a
+
 ; loop through all MAX_SPACES_PER_MAP flags and call .ApplyDisabledSpace in the disabled spaces.
 	xor a
 .apply_loop_2
@@ -422,6 +493,16 @@ LoadDisabledSpaces:
 	jr .apply_loop_1
 
 .done
+	ld a, 1
+	ld [rSVBK], a
+; restore active map attributes
+	pop af
+	ld [wMapNumber], a
+	pop af
+	ld [wMapGroup], a
+	call CopyMapPartialAndAttributesPartial
+	ret
+
 .no_match
 	ld a, 1
 	ld [rSVBK], a
@@ -436,6 +517,31 @@ LoadDisabledSpaces:
 	ld [rSVBK], a
 	ld a, e ; a = space to apply as disabled
 	call LoadTempSpaceData
+	ld hl, .return
+	push hl
+	jumptable .Jumptable, wTempByteValue
+.return
+	jr nc, .connected_block_not_in_range
+	ld a, [hl]
+	and UNIQUE_SPACE_METATILES_MASK
+	add FIRST_GREY_SPACE_METATILE
+	ld [hl], a
+.connected_block_not_in_range
+	ld a, BANK(wDisabledSpacesBackups)
+	ld [rSVBK], a
+	pop hl
+	pop de
+	pop af
+	ret
+
+.Jumptable:
+	dw .ActiveMap
+	dw .NorthConnectedMap
+	dw .SouthConnectedMap
+	dw .WestConnectedMap
+	dw .EastConnectedMap
+
+.ActiveMap:
 	ld a, [wTempSpaceXCoord]
 	add 4
 	ld d, a
@@ -443,13 +549,26 @@ LoadDisabledSpaces:
 	add 4
 	ld e, a
 	call GetBlockLocation
-	ld a, [hl]
-	and UNIQUE_SPACE_METATILES_MASK
-	add FIRST_GREY_SPACE_METATILE
-	ld [hl], a
-	ld a, BANK(wDisabledSpacesBackups)
-	ld [rSVBK], a
-	pop hl
-	pop de
-	pop af
+	scf
+	ret
+
+.NorthConnectedMap:
+	ld a, [wTempSpaceXCoord]
+	ld d, a
+	ld a, [wTempSpaceYCoord]
+	ld e, a
+	call GetNorthConnectedBlockLocation
+	ret
+
+.SouthConnectedMap:
+	ld a, [wTempSpaceXCoord]
+	ld d, a
+	ld a, [wTempSpaceYCoord]
+	ld e, a
+	call GetSouthConnectedBlockLocation
+	ret
+
+.WestConnectedMap:
+.EastConnectedMap:
+	xor a
 	ret

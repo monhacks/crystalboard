@@ -463,6 +463,17 @@ CopyMapPartialAndAttributes::
 	call GetMapConnections
 	ret
 
+CopyMapPartialAndAttributesPartial::
+	ld a, [hROMBank]
+	push af
+	call CopyMapPartial
+	call SwitchToMapAttributesBank
+	call GetMapAttributesPointer
+	call CopyMapAttributesPartial
+	pop af
+	rst Bankswitch
+	ret
+
 ReadMapEvents::
 	push af
 	ld hl, wMapEventsPointer
@@ -495,6 +506,20 @@ ReadMapScripts::
 CopyMapAttributes::
 	ld de, wMapAttributes
 	ld c, wMapAttributesEnd - wMapAttributes
+.loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .loop
+	ret
+
+CopyMapAttributesPartial::
+; copy only: wMapScriptsBank, wMapScriptsPointer, wMapEventsPointer, wMapSpacesPointer
+	ld bc, wMapScriptsBank - wMapAttributes
+	add hl, bc
+	ld de, wMapScriptsBank
+	ld c, wMapSpacesPointer + $2 - wMapScriptsBank
 .loop
 	ld a, [hli]
 	ld [de], a
@@ -1965,6 +1990,81 @@ GetBlockLocation::
 	ld b, 0
 	add hl, bc
 	ret
+
+GetSouthConnectedBlockLocation::
+; ycoord / 2 <= 2
+	ld a, e
+	srl a
+	cp 3
+	ret nc
+; [wSouthConnectionStripLocation]
+	ld hl, wSouthConnectionStripLocation
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+; + (xcoord / 2)
+	srl d
+	ld b, 0
+	ld c, d
+	add hl, bc
+; + ([wMapWidth] + 6) * ycoord / 2
+	ld a, [wMapWidth]
+	add 6
+	ld c, a
+	ld b, 0
+	srl e
+	ld a, e
+	and a
+	jr z, .done
+.loop
+	add hl, bc
+	dec a
+	jr nz, .loop
+.done
+	scf
+	ret ; c
+
+GetNorthConnectedBlockLocation::
+; wNorthConnectedMapHeight >= 3
+; ycoord / 2 >= ([wNorthConnectedMapHeight] - 3)
+	ld a, [wNorthConnectedMapHeight]
+	sub 3
+	jr c, .nope
+	ld c, a
+	ld a, e
+	srl a
+	sub c
+	jr c, .nope
+	ld e, a ; e = ycoord / 2 - ([wNorthConnectedMapHeight] - 3)
+; [wNorthConnectionStripLocation]
+	ld hl, wNorthConnectionStripLocation
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+; + (xcoord / 2)
+	srl d
+	ld b, 0
+	ld c, d
+	add hl, bc
+; + ([wMapWidth] + 6) * {ycoord / 2 - ([wNorthConnectedMapHeight] - 3)} --> + ([wMapWidth] + 6) * e
+	ld a, [wMapWidth]
+	add 6
+	ld c, a
+	ld b, 0
+	ld a, e
+	and a
+	jr z, .done
+.loop
+	add hl, bc
+	dec a
+	jr nz, .loop
+.done
+	scf
+	ret ; c
+
+.nope
+	xor a
+	ret ; nc
 
 CheckAndApplyAnchorPoint::
 ; c = [wCurMapAnchorEventCount] (non-0)

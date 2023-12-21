@@ -129,6 +129,7 @@ MACRO map_connection_struct
 \1ConnectionStripLocation:: dw
 \1ConnectionStripLength::   db
 \1ConnectedMapWidth::       db
+\1ConnectedMapHeight::      db
 \1ConnectionStripYOffset::  db
 \1ConnectionStripXOffset::  db
 \1ConnectionWindow::        dw
