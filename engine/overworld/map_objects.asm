@@ -3112,10 +3112,12 @@ InitSecondarySprites:
 	call nz, InitDieRollSprites
 	bit SECONDARYSPRITES_SPACES_LEFT_F, a
 	call nz, InitSpacesLeftNumberSprites
-	bit SECONDARYSPRITES_BRANCH_ARROWS_F, a
+	bit SECONDARYSPRITES_BRANCH_SPACE_F, a
 	call nz, InitBranchArrowsSprites
 	bit SECONDARYSPRITES_VIEW_MAP_MODE_F, a
 	call nz, InitViewMapModeSprites
+	bit SECONDARYSPRITES_TALKER_EVENT_F, a
+	call nz, InitTalkerEventSprites
 	ret
 
 InitBoardMenuSprites:
@@ -3200,6 +3202,7 @@ InitSpacesLeftNumberSprites:
 InitBranchArrowsSprites:
 	push af
 
+;; arrows
 ; find the beginning of free space in OAM, and assure there's space for 4 objects
 	ldh a, [hUsedSpriteIndex]
 	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (NUM_DIRECTIONS * SPRITEOAMSTRUCT_LENGTH) + 1
@@ -3252,6 +3255,35 @@ InitBranchArrowsSprites:
 	dec c
 	jr nz, .loop
 
+;; legend
+; find the beginning of free space in OAM, and assure there's space for 8 objects
+	ldh a, [hUsedSpriteIndex]
+	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (8 * SPRITEOAMSTRUCT_LENGTH) + 1
+	jr nc, .oam_full
+; copy the sprite data of the legend to the available space in OAM.
+; the palette byte overrides that data as it matches the player's color palette.
+	ld e, a
+	ld d, HIGH(wShadowOAM)
+	gender_to_pal
+	ld b, a
+	ld c, 8 ; number of objects
+	ld hl, BranchLegendOAM
+.loop2
+	push bc
+	ld bc, SPRITEOAMSTRUCT_LENGTH - 1
+	call CopyBytes
+	pop bc
+	ld a, b ; palette
+	ld [de], a
+	inc hl
+	inc de
+	dec c
+	jr nz, .loop2
+
+	ldh a, [hUsedSpriteIndex]
+	add (8 * SPRITEOAMSTRUCT_LENGTH)
+	ldh [hUsedSpriteIndex], a
+
 .oam_full
 	pop af
 	ret
@@ -3259,6 +3291,7 @@ InitBranchArrowsSprites:
 InitViewMapModeSprites:
 	push af
 
+;; arrows
 ; find the beginning of free space in OAM, and assure there's space for 4 objects
 	ldh a, [hUsedSpriteIndex]
 	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (NUM_DIRECTIONS * SPRITEOAMSTRUCT_LENGTH) + 1
@@ -3306,6 +3339,68 @@ InitViewMapModeSprites:
 	inc de
 	dec c
 	jr nz, .loop
+
+;; legend
+; find the beginning of free space in OAM, and assure there's space for 8 objects
+	ldh a, [hUsedSpriteIndex]
+	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (8 * SPRITEOAMSTRUCT_LENGTH) + 1
+	jr nc, .oam_full
+; copy the sprite data of the legend to the available space in OAM.
+; the palette byte overrides that data as it matches the player's color palette.
+	ld e, a
+	ld d, HIGH(wShadowOAM)
+	gender_to_pal
+	ld b, a
+	ld c, 8 ; number of objects
+	ld hl, ViewMapModeLegendOAM
+.loop2
+	push bc
+	ld bc, SPRITEOAMSTRUCT_LENGTH - 1
+	call CopyBytes
+	pop bc
+	ld a, b ; palette
+	ld [de], a
+	inc hl
+	inc de
+	dec c
+	jr nz, .loop2
+
+	ldh a, [hUsedSpriteIndex]
+	add (8 * SPRITEOAMSTRUCT_LENGTH)
+	ldh [hUsedSpriteIndex], a
+
+.oam_full
+	pop af
+	ret
+
+InitTalkerEventSprites:
+; find the beginning of free space in OAM, and assure there's space for 8 objects
+	ldh a, [hUsedSpriteIndex]
+	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (8 * SPRITEOAMSTRUCT_LENGTH) + 1
+	jr nc, .oam_full
+; copy the sprite data of the legend to the available space in OAM.
+; the palette byte overrides that data as it matches the player's color palette.
+	ld e, a
+	ld d, HIGH(wShadowOAM)
+	gender_to_pal
+	ld b, a
+	ld c, 8 ; number of objects
+	ld hl, TalkerEventLegendOAM
+.loop2
+	push bc
+	ld bc, SPRITEOAMSTRUCT_LENGTH - 1
+	call CopyBytes
+	pop bc
+	ld a, b ; palette
+	ld [de], a
+	inc hl
+	inc de
+	dec c
+	jr nz, .loop2
+
+	ldh a, [hUsedSpriteIndex]
+	add (8 * SPRITEOAMSTRUCT_LENGTH)
+	ldh [hUsedSpriteIndex], a
 
 .oam_full
 	pop af

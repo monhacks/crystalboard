@@ -176,9 +176,9 @@ ArriveToBranchSpaceScript:
 	call LoadTempSpaceBranchData
 	call .DisableDirectionsRequiringLockedTechniques
 ; draw arrows for valid directions
-	farcall LoadBranchArrowsGFX
+	farcall LoadBranchSpaceGFX
 	ld hl, wDisplaySecondarySprites
-	set SECONDARYSPRITES_BRANCH_ARROWS_F, [hl]
+	set SECONDARYSPRITES_BRANCH_SPACE_F, [hl]
 ; update sprites
 	jp UpdateActiveSprites
 
@@ -260,7 +260,7 @@ PromptPlayerToChooseBranchDirection:
 	ld a, [hl]
 	ld [wCurSpaceNextSpace], a
 	ld hl, wDisplaySecondarySprites
-	res SECONDARYSPRITES_BRANCH_ARROWS_F, [hl]
+	res SECONDARYSPRITES_BRANCH_SPACE_F, [hl]
 	ld a, TRUE
 	ldh [hScriptVar], a
 	jp PlayClickSFX
@@ -292,7 +292,7 @@ PromptPlayerToChooseBranchDirection:
 	set INVISIBLE_F, [hl]
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
-	res SECONDARYSPRITES_BRANCH_ARROWS_F, [hl]
+	res SECONDARYSPRITES_BRANCH_SPACE_F, [hl]
 	farcall MockPlayerObject
 	call UpdateSprites
 	farcall LoadViewMapModeGFX

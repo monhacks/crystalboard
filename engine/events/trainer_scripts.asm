@@ -63,9 +63,15 @@ SeenByTalkerScript::
 	and TALKEREVENTTYPE_MASK
 	cp TALKEREVENTTYPE_MANDATORY
 	jr z, .skip
+	farcall LoadTalkerEventLegendGFX
+	ld hl, wDisplaySecondarySprites
+	set SECONDARYSPRITES_TALKER_EVENT_F, [hl]
+	call UpdateActiveSprites
 	call JoyWaitAorB
 	call PlayClickSFX
 	call WaitSFX
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_TALKER_EVENT_F, [hl]
 	ldh a, [hJoyPressed]
 	bit A_BUTTON_F, a
 	jr z, .skip ; jump if b was pressed

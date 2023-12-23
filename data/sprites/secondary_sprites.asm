@@ -1,3 +1,45 @@
+; OAM tile grid
+/*
+  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 2
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 3
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 4
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 5
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 6
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 7
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 8
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | 9
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |10
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |11
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |12
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |13
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |14
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |15
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |16
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |17
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |18
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |19
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+*/
+
 BoardMenuOAM:
 ; BOARDMENUITEM_DIE
 	dbsprite  2, 16, 4, 0, BOARD_MENU_OAM_FIRST_TILE,      PAL_OW_MISC
@@ -121,9 +163,42 @@ BranchArrowsOAM:
 	dbsprite  9,  8, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 2, PAL_OW_RED ; up
 	dbsprite  9, 12, 4, 0, BRANCH_ARROWS_OAM_FIRST_TILE + 3, PAL_OW_RED ; down
 
+BranchLegendOAM:
+; the PAL_ argument is unused (actual palette comes from the player gender)
+	dbsprite  2, 16, 0, 4, BRANCH_LEGEND_OAM_FIRST_TILE +  2, PAL_OW_RED ; dpad icon
+	dbsprite  3, 16, 0, 4, BRANCH_LEGEND_OAM_FIRST_TILE +  5, PAL_OW_RED ; "choose" icon
+	dbsprite  4, 16, 0, 4, BRANCH_LEGEND_OAM_FIRST_TILE +  6, PAL_OW_RED ;
+	dbsprite  5, 16, 0, 4, BRANCH_LEGEND_OAM_FIRST_TILE +  7, PAL_OW_RED ;
+	dbsprite  2, 18, 0, 0, BRANCH_LEGEND_OAM_FIRST_TILE +  3, PAL_OW_RED ; select icon
+	dbsprite  3, 18, 0, 0, BRANCH_LEGEND_OAM_FIRST_TILE +  8, PAL_OW_RED ; "view" icon
+	dbsprite  4, 18, 0, 0, BRANCH_LEGEND_OAM_FIRST_TILE +  9, PAL_OW_RED ;
+	dbsprite  5, 18, 0, 0, BRANCH_LEGEND_OAM_FIRST_TILE + 10, PAL_OW_RED ;
+
 ViewMapModeArrowsOAM:
 ; the PAL_ argument is unused (actual palette comes from the player gender)
-	dbsprite 10, 18, 4, 4, VIEW_MAP_MODE_OAM_FIRST_TILE + 3, PAL_OW_RED ; down
-	dbsprite 10,  2, 4, 4, VIEW_MAP_MODE_OAM_FIRST_TILE + 2, PAL_OW_RED ; up
-	dbsprite  1, 10, 4, 0, VIEW_MAP_MODE_OAM_FIRST_TILE + 1, PAL_OW_RED ; left
-	dbsprite 19, 10, 4, 0, VIEW_MAP_MODE_OAM_FIRST_TILE,     PAL_OW_RED ; right
+	dbsprite 10, 18, 4, 4, VIEW_MAP_MODE_ARROWS_OAM_FIRST_TILE + 3, PAL_OW_RED ; down
+	dbsprite 10,  2, 4, 4, VIEW_MAP_MODE_ARROWS_OAM_FIRST_TILE + 2, PAL_OW_RED ; up
+	dbsprite  1, 10, 4, 0, VIEW_MAP_MODE_ARROWS_OAM_FIRST_TILE + 1, PAL_OW_RED ; left
+	dbsprite 19, 10, 4, 0, VIEW_MAP_MODE_ARROWS_OAM_FIRST_TILE,     PAL_OW_RED ; right
+
+ViewMapModeLegendOAM:
+; the PAL_ argument is unused (actual palette comes from the player gender)
+	dbsprite  2, 16, 0, 4, VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE +  2, PAL_OW_RED ; dpad icon
+	dbsprite  3, 16, 0, 4, VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE +  5, PAL_OW_RED ; "move" icon
+	dbsprite  4, 16, 0, 4, VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE +  6, PAL_OW_RED ;
+	dbsprite  5, 16, 0, 4, VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE +  7, PAL_OW_RED ;
+	dbsprite  2, 18, 0, 0, VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE +  1, PAL_OW_RED ; B icon
+	dbsprite  3, 18, 0, 0, VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE +  8, PAL_OW_RED ; "back" icon
+	dbsprite  4, 18, 0, 0, VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE +  9, PAL_OW_RED ;
+	dbsprite  5, 18, 0, 0, VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE + 10, PAL_OW_RED ;
+
+TalkerEventLegendOAM:
+; the PAL_ argument is unused (actual palette comes from the player gender)
+	dbsprite  2, 16, 0, 4, TALKER_EVENT_LEGEND_OAM_FIRST_TILE +  0, PAL_OW_RED ; A icon
+	dbsprite  3, 16, 0, 4, TALKER_EVENT_LEGEND_OAM_FIRST_TILE +  5, PAL_OW_RED ; "talk" icon
+	dbsprite  4, 16, 0, 4, TALKER_EVENT_LEGEND_OAM_FIRST_TILE +  6, PAL_OW_RED ;
+	dbsprite  5, 16, 0, 4, TALKER_EVENT_LEGEND_OAM_FIRST_TILE +  7, PAL_OW_RED ;
+	dbsprite  2, 18, 0, 0, TALKER_EVENT_LEGEND_OAM_FIRST_TILE +  1, PAL_OW_RED ; B icon
+	dbsprite  3, 18, 0, 0, TALKER_EVENT_LEGEND_OAM_FIRST_TILE +  8, PAL_OW_RED ; "skip" icon
+	dbsprite  4, 18, 0, 0, TALKER_EVENT_LEGEND_OAM_FIRST_TILE +  9, PAL_OW_RED ;
+	dbsprite  5, 18, 0, 0, TALKER_EVENT_LEGEND_OAM_FIRST_TILE + 10, PAL_OW_RED ;

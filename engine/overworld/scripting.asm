@@ -1241,9 +1241,15 @@ Script_reloadmapafterviewmapmode:
 	jr z, .in_board_menu
 
 ; .in_branch_space
+; load branch space gfx (overwritten by view map mode gfx)
+; refresh sprites first without view map mode objects to avoid visual glitch
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_VIEW_MAP_MODE_F, [hl]
+	call UpdateActiveSprites
+	farcall LoadBranchSpaceGFX
 	ld hl, wDisplaySecondarySprites
 	set SECONDARYSPRITES_SPACES_LEFT_F, [hl]
-	set SECONDARYSPRITES_BRANCH_ARROWS_F, [hl]
+	set SECONDARYSPRITES_BRANCH_SPACE_F, [hl]
 	ld hl, wPlayerSpriteSetupFlags
 ; get the facing direction from the mocked object's facing direction
 	ld a, [wMapObject{d:LAST_OBJECT}Movement]

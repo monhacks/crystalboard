@@ -39,10 +39,20 @@ LoadBoardMenuDieNumbersGFX::
 .DieNumbersOAMGFX:
 INCBIN "gfx/board/die_numbers.2bpp"
 
-LoadBranchArrowsGFX::
+LoadBranchSpaceGFX::
 	ld de, .BranchArrowsOAMGFX
 	ld hl, vTiles0 + BRANCH_ARROWS_OAM_FIRST_TILE * LEN_2BPP_TILE
 	lb bc, BANK(.BranchArrowsOAMGFX), NUM_DIRECTIONS
+	call Get2bppViaHDMA
+	ld hl, vTiles0 + BRANCH_LEGEND_OAM_FIRST_TILE * LEN_2BPP_TILE
+	call LoadLegendButtonsGFX
+	ld de, LegendChooseOAMGFX
+	ld hl, vTiles0 + (BRANCH_LEGEND_OAM_FIRST_TILE + 5) * LEN_2BPP_TILE
+	lb bc, BANK(LegendChooseOAMGFX), 3
+	call Get2bppViaHDMA
+	ld de, LegendViewOAMGFX
+	ld hl, vTiles0 + (BRANCH_LEGEND_OAM_FIRST_TILE + 8) * LEN_2BPP_TILE
+	lb bc, BANK(LegendViewOAMGFX), 3
 	call Get2bppViaHDMA
 	ret
 
@@ -51,10 +61,60 @@ INCBIN "gfx/board/branch_arrows.2bpp"
 
 LoadViewMapModeGFX::
 	ld de, .ViewMapModeArrowsOAMGFX
-	ld hl, vTiles0 + VIEW_MAP_MODE_OAM_FIRST_TILE * LEN_2BPP_TILE
+	ld hl, vTiles0 + VIEW_MAP_MODE_ARROWS_OAM_FIRST_TILE * LEN_2BPP_TILE
 	lb bc, BANK(.ViewMapModeArrowsOAMGFX), NUM_DIRECTIONS
+	call Get2bppViaHDMA
+	ld hl, vTiles0 + VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE * LEN_2BPP_TILE
+	call LoadLegendButtonsGFX
+	ld de, LegendMoveOAMGFX
+	ld hl, vTiles0 + (VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE + 5) * LEN_2BPP_TILE
+	lb bc, BANK(LegendMoveOAMGFX), 3
+	call Get2bppViaHDMA
+	ld de, LegendBackOAMGFX
+	ld hl, vTiles0 + (VIEW_MAP_MODE_LEGEND_OAM_FIRST_FILE + 8) * LEN_2BPP_TILE
+	lb bc, BANK(LegendBackOAMGFX), 3
 	call Get2bppViaHDMA
 	ret
 
 .ViewMapModeArrowsOAMGFX:
 INCBIN "gfx/board/view_map_arrows.2bpp"
+
+LoadTalkerEventLegendGFX::
+	ld hl, vTiles0 + TALKER_EVENT_LEGEND_OAM_FIRST_TILE * LEN_2BPP_TILE
+	call LoadLegendButtonsGFX
+	ld de, LegendTalkOAMGFX
+	ld hl, vTiles0 + (TALKER_EVENT_LEGEND_OAM_FIRST_TILE + 5) * LEN_2BPP_TILE
+	lb bc, BANK(LegendTalkOAMGFX), 3
+	call Get2bppViaHDMA
+	ld de, LegendSkipOAMGFX
+	ld hl, vTiles0 + (TALKER_EVENT_LEGEND_OAM_FIRST_TILE + 8) * LEN_2BPP_TILE
+	lb bc, BANK(LegendTalkOAMGFX), 3
+	call Get2bppViaHDMA
+	ret
+
+LoadLegendButtonsGFX:
+	ld de, .LegendButtonsOAMGFX
+	lb bc, BANK(.LegendButtonsOAMGFX), 5
+	call Get2bppViaHDMA
+	ret
+
+.LegendButtonsOAMGFX:
+INCBIN "gfx/legend/buttons.2bpp"
+
+LegendTalkOAMGFX:
+INCBIN "gfx/legend/talk.2bpp"
+
+LegendSkipOAMGFX:
+INCBIN "gfx/legend/skip.2bpp"
+
+LegendChooseOAMGFX:
+INCBIN "gfx/legend/choose.2bpp"
+
+LegendViewOAMGFX:
+INCBIN "gfx/legend/view.2bpp"
+
+LegendMoveOAMGFX:
+INCBIN "gfx/legend/move.2bpp"
+
+LegendBackOAMGFX:
+INCBIN "gfx/legend/back.2bpp"
