@@ -4,6 +4,8 @@ BlueSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
 	scall LandedInRegularSpaceScript_BeforeSpaceEffect
+	givecoins CUR_LEVEL_COINS, BLUE_RED_SPACE_COINS
+	playsound SFX_TRANSACTION
 	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
@@ -12,6 +14,8 @@ RedSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
 	scall LandedInRegularSpaceScript_BeforeSpaceEffect
+	takecoins CUR_LEVEL_COINS, BLUE_RED_SPACE_COINS
+	playsound SFX_TRANSACTION
 	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
@@ -77,9 +81,7 @@ EndSpaceScript::
 GreySpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
-	wait 300
-	turnobject PLAYER, DOWN
-	wait 100
+	scall LandedInRegularSpaceScript_BeforeSpaceEffect
 	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end

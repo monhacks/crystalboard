@@ -1874,13 +1874,18 @@ GetCoinsAccount:
 	and a
 	ld de, wCoins ; YOUR_COINS
 	ret z
+	dec a
+	ld de, wCurLevelCoins ; CUR_LEVEL_COINS
+	ret z
 	ld de, wMomsCoins ; MOMS_COINS
 	ret
 
 LoadCoinsAmountToMem:
 	ld bc, hCoinsTemp
-	push bc
 	call GetScriptByte
+	cp HIGH(BLUE_RED_SPACE_COINS)
+	jr z, .blue_red_space_coins
+	push bc
 	ld [bc], a
 	inc bc
 	call GetScriptByte
@@ -1889,6 +1894,38 @@ LoadCoinsAmountToMem:
 	call GetScriptByte
 	ld [bc], a
 	pop bc
+	ret
+
+.blue_red_space_coins
+	push de
+	call GetScriptByte
+	call GetScriptByte
+; return [hCoinsTemp] = MAP_BASECOINS * [wDieRoll]
+	ld de, MAP_BASECOINS
+	call GetMapField
+	ld a, [wDieRoll]
+	dec a
+	ld e, a
+	ld a, c
+	ld b, 0 ; c = ba = MAP_BASECOINS
+	jr z, .go
+.loop
+	add c
+	jr nc, .ok
+	inc b
+.ok
+	dec e
+	jr nz, .loop
+.go
+; ba = MAP_BASECOINS * [wDieRoll]
+	ld hl, hCoinsTemp + 2
+	ld [hld], a
+	ld a, b
+	ld [hld], a
+	xor a
+	ld [hl], a
+	ld bc, hCoinsTemp
+	pop de
 	ret
 
 Script_givechips:
@@ -1904,7 +1941,7 @@ Script_takechips:
 Script_checkchips:
 	call LoadChipAmountToMem
 	farcall CheckChips
-	jr CompareCoinsAction
+	jp CompareCoinsAction
 
 LoadChipAmountToMem:
 	call GetScriptByte

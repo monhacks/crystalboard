@@ -153,8 +153,15 @@ StartMap:
 
 ; initialize board state
 	xor a
-	ld [wCurTurn], a
-	ld [wCurSpace], a
+	ld hl, wCurTurn
+	ld [hli], a ; wCurTurn
+	ld [hli], a ; wCurSpace
+	ld [hli], a ; wCurLevelCoins
+	ld [hli], a ;
+	ld [hli], a ;
+	ld [hli], a ; wCurLevelExp
+	ld [hli], a ;
+	ld [hl], a  ;
 
 ; initialize overworld state
 	ld hl, wNextWarp

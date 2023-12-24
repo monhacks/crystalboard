@@ -1,12 +1,12 @@
 GiveCoins::
 	ld a, 3
 	call AddCoins
-	ld bc, MaxCoins
+	call LoadMaxCoins_bc
 	ld a, 3
 	call CompareCoins
 	jr z, .not_maxed_out
 	jr c, .not_maxed_out
-	ld hl, MaxCoins
+	call LoadMaxCoins_hl
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -22,8 +22,25 @@ GiveCoins::
 	and a
 	ret
 
+LoadMaxCoins_bc:
+	ld a, d
+	cp HIGH(wCurLevelCoins)
+	ld bc, MaxCurLevelCoins ; CUR_LEVEL_COINS
+	ret z
+	ld bc, MaxCoins ; YOUR_COINS or MOMS_COINS
+	ret
+
+LoadMaxCoins_hl:
+	call LoadMaxCoins_bc
+	ld h, b
+	ld l, c
+	ret
+
 MaxCoins:
 	dt MAX_COINS
+
+MaxCurLevelCoins:
+	dt MAX_LEVEL_COINS
 
 TakeCoins::
 	ld a, 3

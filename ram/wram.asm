@@ -2548,6 +2548,8 @@ wScreenSave:: ds SCREEN_META_WIDTH * SCREEN_META_HEIGHT
 
 wCurTurn:: db
 wCurSpace:: db
+wCurLevelCoins:: ds 3
+wCurLevelExp:: ds 3
 
 wCurSpaceStruct:: space_struct wCurSpace
 wCurSpaceStructEnd::
@@ -2646,6 +2648,8 @@ wMagikarpRecordHoldersName:: ds NAME_LENGTH
 wPokemonDataEnd::
 wGameDataEnd::
 
+; requirement of GiveCoins
+	assert HIGH(wCoins) != HIGH(wCurLevelCoins)
 
 SECTION "Pic Animations", WRAMX
 

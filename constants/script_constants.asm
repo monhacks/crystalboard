@@ -13,14 +13,18 @@ DEF STRING_BUFFER_LENGTH EQU 19
 
 ; checkcoins/takecoins accounts
 	const_def
-	const YOUR_COINS ; 0
-	const MOMS_COINS ; 1
+	const YOUR_COINS      ; 0
+	const CUR_LEVEL_COINS ; 1
+	const MOMS_COINS      ; 2
 
 ; checkcoins/checkchips return values
 	const_def
 	const HAVE_MORE   ; 0
 	const HAVE_AMOUNT ; 1
 	const HAVE_LESS   ; 2
+
+; givecoins/takecoins/checkcoins special amount values
+DEF BLUE_RED_SPACE_COINS EQU $ffffff
 
 ; checkpokemail return values
 	const_def
