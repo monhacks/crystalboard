@@ -36,6 +36,6 @@ _ConstructOverworldHUDTilemap::
 	ret
 
 .Tilemap:
-	db "▶- ▶-   ▶     ▶     "
+	db "<TURN><N_A>  <DIE><N_A> <COIN>0     <XP>0    "
 .TilemapEnd:
 	assert .TilemapEnd - .Tilemap == wOverworldHUDTilesEnd - wOverworldHUDTiles

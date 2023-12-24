@@ -128,6 +128,12 @@
 	charmap "′",         $c7
 	charmap "″",         $c8
 	charmap "<COIN>",    $c9
+	charmap "<PLUS>",    $ca
+	charmap "<MINUS>",   $cb
+	charmap "<DIE>",     $cc
+	charmap "<TURN>",    $cd
+	charmap "<N_A>",     $ce
+	charmap "<XP>",      $cf
 	charmap "'",         $d0
 	charmap "<PK>",      $d1
 	charmap "<MN>",      $d2
