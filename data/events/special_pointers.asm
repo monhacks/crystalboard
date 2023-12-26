@@ -113,6 +113,8 @@ SpecialsPointers::
 	add_special FadeOutMusic
 	add_special Diploma
 	add_special PrintDiploma
+	add_special PrintGainCoins
+	add_special PrintLoseCoins
 
 ; Crystal only
 	add_special Reset ; bank 0

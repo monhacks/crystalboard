@@ -3118,6 +3118,8 @@ InitSecondarySprites:
 	call nz, InitViewMapModeSprites
 	bit SECONDARYSPRITES_TALKER_EVENT_F, a
 	call nz, InitTalkerEventSprites
+	bit SECONDARYSPRITES_GAIN_OR_LOSE_COINS_F, a
+	call nz, InitGainOrLoseCoinsSprites
 	ret
 
 InitBoardMenuSprites:
@@ -3374,6 +3376,8 @@ InitViewMapModeSprites:
 	ret
 
 InitTalkerEventSprites:
+	push af
+
 ; find the beginning of free space in OAM, and assure there's space for 8 objects
 	ldh a, [hUsedSpriteIndex]
 	cp (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (8 * SPRITEOAMSTRUCT_LENGTH) + 1
@@ -3401,6 +3405,76 @@ InitTalkerEventSprites:
 	ldh a, [hUsedSpriteIndex]
 	add (8 * SPRITEOAMSTRUCT_LENGTH)
 	ldh [hUsedSpriteIndex], a
+
+.oam_full
+	pop af
+	ret
+
+InitGainOrLoseCoinsSprites:
+	push af
+
+; print string at wStringBuffer1 as OAM
+; get string length
+	ld hl, wStringBuffer1
+	ld c, 0
+.get_length_loop
+	ld a, [hli]
+	cp "@"
+	jr z, .got_length
+	inc c
+	ld a, c
+	cp $2 + MAX_DELTA_COINS_DIGITS + 1
+	jr nz, .get_length_loop
+
+.got_length
+	ld e, c
+; find the beginning of free space in OAM, and assure there's space for c objects
+	ld a, (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) + 1
+	sla c ;
+	sla c ; c *= SPRITEOAMSTRUCT_LENGTH
+	sub c
+	ld b, a ; b = (NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH) - (c * SPRITEOAMSTRUCT_LENGTH) + 1
+	ldh a, [hUsedSpriteIndex]
+	cp b
+	jr nc, .oam_full
+
+; align OAM in the X axis according to the string length (e)
+	ld a, 10 * TILE_WIDTH
+	ld c, TILE_WIDTH / 2
+.x_coord_loop
+	sub c
+	dec e
+	jr nz, .x_coord_loop
+; b = SPRITEOAMSTRUCT_XCOORD
+	ld b, a
+; c = SPRITEOAMSTRUCT_YCOORD
+	ld c, 8 * TILE_WIDTH
+; de = address within wShadowOAM
+	ld a, [hUsedSpriteIndex]
+	ld e, a
+	ld d, HIGH(wShadowOAM)
+	ld hl, wStringBuffer1
+.print_oam_loop
+	ld a, c
+	ld [de], a ; SPRITEOAMSTRUCT_YCOORD
+	inc de
+	ld a, b
+	ld [de], a ; SPRITEOAMSTRUCT_XCOORD
+	inc de
+	add 1 * TILE_WIDTH
+	ld b, a
+	ld a, [hli]
+	ld [de], a ; SPRITEOAMSTRUCT_TILE_ID
+	inc de
+	ld a, PAL_OW_MISC
+	ld [de], a ; SPRITEOAMSTRUCT_ATTRIBUTES
+	inc de
+	ld a, [hl]
+	cp "@"
+	jr nz, .print_oam_loop
+
+	ld a, e
+	ld [hUsedSpriteIndex], a
 
 .oam_full
 	pop af

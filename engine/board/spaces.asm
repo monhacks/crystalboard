@@ -6,6 +6,7 @@ BlueSpaceScript::
 	scall LandedInRegularSpaceScript_BeforeSpaceEffect
 	givecoins CUR_LEVEL_COINS, BLUE_RED_SPACE_COINS
 	playsound SFX_TRANSACTION
+	special PrintGainCoins
 	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
@@ -16,6 +17,7 @@ RedSpaceScript::
 	scall LandedInRegularSpaceScript_BeforeSpaceEffect
 	takecoins CUR_LEVEL_COINS, BLUE_RED_SPACE_COINS
 	playsound SFX_TRANSACTION
+	special PrintLoseCoins
 	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
@@ -313,6 +315,45 @@ UnionSpaceScript::
 	ld a, [wCurSpaceNextSpace]
 	ld [wCurSpace], a
 	call LoadCurSpaceData
+	ret
+
+PrintGainCoins:
+	ld hl, wStringBuffer1
+	ld a, "<COIN>"
+	ld [hli], a
+	ld a, "<PLUS>"
+	ld [hli], a
+	jr PrintGainOrLoseCoins
+
+PrintLoseCoins:
+	ld hl, wStringBuffer1
+	ld a, "<COIN>"
+	ld [hli], a
+	ld a, "<MINUS>"
+	ld [hli], a
+	; fallthrough
+
+PrintGainOrLoseCoins:
+	push hl
+ ; fill string space with "@" to ensure that it is terminated with at least one "@"
+	ld a, "@"
+	ld c, MAX_DELTA_COINS_DIGITS + 1
+.loop
+	ld [hli], a
+	dec c
+	jr nz, .loop
+	pop hl
+; copy coins amount string to wStringBuffer1 + $2
+	ld de, hCoinsTemp
+	lb bc, 3 | 1 << 6, MAX_DELTA_COINS_DIGITS ; 3 bytes, left aligned, no leading zeros, 5 digits
+	call PrintNum
+	ld hl, wDisplaySecondarySprites
+	set SECONDARYSPRITES_GAIN_OR_LOSE_COINS_F, [hl]
+	call UpdateActiveSprites
+	ld c, 45 ; 750 ms
+	call DelayFrames
+	ld hl, wDisplaySecondarySprites
+	res SECONDARYSPRITES_GAIN_OR_LOSE_COINS_F, [hl]
 	ret
 
 INCLUDE "engine/board/disabled_spaces.asm"
