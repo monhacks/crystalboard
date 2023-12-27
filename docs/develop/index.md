@@ -82,20 +82,35 @@
   - **wDieRoll**
   - **wSpacesLeft**
 
-- Addresses within *wCurMapData* ~ *wCurMapDataEnd*: preserved on save. Includes:
+- Addresses within *wCurMapData* ~ *wCurMapDataEnd*: preserved on save. Initialized when entering a level, and updated accordingly throughout the level. Includes:
   - **wCurTurn**
   - **wCurSpace**
+  - **wCurLevelCoins**
+  - **wCurLevelExp**
   - **wCurSpaceStruct**:
     - **wCurSpaceXCoord**
     - **wCurSpaceYCoord**
     - **wCurSpaceEffect** for non-branch spaces, or **wCurSpaceBranchStructPtr** (two bytes) for branch spaces
     - **wCurSpaceNextSpace** for non-branch spaces
 
+- Addresses within *wPlayerData* ~ *wPlayerDataEnd*: preserved on save. Includes:
+  - **wUnlockedLevels**: flag array that tracks progression regarding which levels have been unlocked.
+  - **wUnlockedTechniques**: flag array that tracks progression regarding which techniques have been unlocked.
+
 - These addresses share memory region with string buffers from *wStringBuffer3* onwards. They are placed in memory in the following order.
-- **wTempSpaceStruct**: Temporary scope. Same structure as *wCurSpaceStruct*
-- **wTempSpaceBranchStruct**: Temporary scope. The structure is four bytes for next space for each direction (R/L/U/D; -1 if unavailable direction) followed by four bytes for required techniques for each direction (R/L/U/D)
-- **wViewMapModeRange**, **wViewMapModeDisplacementY**, **wViewMapModeDisplacementX**: Temporary scope during a Vew Map mode session.
-- **wBeforeViewMapYCoord**, **wBeforeViewMapXCoord**, **wBeforeViewMapMapGroup**, **wBeforeViewMapMapNumber**: Temporary scope during a Vew Map mode session. Used to preserve previous player state.
+  - **wTempSpaceStruct**: Temporary scope. Same structure as *wCurSpaceStruct*
+  - **wTempSpaceBranchStruct**: Temporary scope. The structure is four bytes for next space for each direction (R/L/U/D; -1 if unavailable direction) followed by four bytes for required techniques for each direction (R/L/U/D)
+  - **wViewMapModeRange**, **wViewMapModeDisplacementY**, **wViewMapModeDisplacementX**: Temporary scope during a Vew Map mode session.
+  - **wBeforeViewMapYCoord**, **wBeforeViewMapXCoord**, **wBeforeViewMapMapGroup**, **wBeforeViewMapMapNumber**: Temporary scope during a Vew Map mode session. Used to preserve previous player state.
+
+- Addresses for talker events:
+  - *wSeenTrainer** addresses have been repurposed as **wSeenTrainerOrTalker***
+  - **wSeenTrainerOrTalkerIsTalker**: added right before *wSeenTrainerOrTalker**.
+  - **wTempTalker** ~ **wTempTalkerEnd**: allocated to the same address space as *wTempTrainer*. Same scope as *wTempTrainer*, but for talker events.
+
+- Address spaces for backing up the map state (disabled spaces and map objects). Located outside of WRAM banks 0 and 1.
+  - **wDisabledSpacesBackups**: preserved on save to **sDisabledSpacesBackups**.
+  - **wMapObjectsBackups**: preserved on save to **sMapObjectsBackups**.
 
 ### Overworld workflow
 
