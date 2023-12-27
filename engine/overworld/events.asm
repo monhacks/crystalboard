@@ -155,6 +155,7 @@ StartMap:
 	xor a
 	ld hl, wCurTurn
 	ld [hli], a ; wCurTurn
+	ld [hli], a ;
 	ld [hli], a ; wCurSpace
 	ld [hli], a ; wCurLevelCoins
 	ld [hli], a ;

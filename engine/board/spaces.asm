@@ -349,7 +349,9 @@ PrintGainOrLoseCoins:
 	call PrintNum
 	ld hl, wDisplaySecondarySprites
 	set SECONDARYSPRITES_GAIN_OR_LOSE_COINS_F, [hl]
+; refresh overworld HUD, and show coins string 750 ms
 	call UpdateActiveSprites
+	call RefreshOverworldHUD
 	ld c, 45 ; 750 ms
 	call DelayFrames
 	ld hl, wDisplaySecondarySprites

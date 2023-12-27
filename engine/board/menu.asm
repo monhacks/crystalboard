@@ -26,7 +26,21 @@ BoardMenuScript::
 	xor a
 	call ByteFill
 	ld hl, wCurTurn
+	ld a, [hli]
+	cp MAX_TURNS / $100
+	jr nz, .not_max_turns
+	ld a, [hl]
+	cp MAX_TURNS % $100
+	jr z, .next
+.not_max_turns
 	inc [hl]
+	jr nz, .next
+	dec hl
+	inc [hl]
+	jr .next
+.next
+; apply wCurTurn and wDieRoll in overworld HUD
+	call RefreshOverworldHUD
 ; reset turn-scoped event flags
 	ld hl, wEventFlags + EVENT_TURN_SCOPED_FLAGS_START / 8
 	ld c, (EVENT_TURN_SCOPED_FLAGS_END / 8) - (EVENT_TURN_SCOPED_FLAGS_START / 8)
@@ -305,6 +319,7 @@ DIE_MAX_NUMBER EQU 6
 
 BoardMenu_BreakDieAnimation:
 	farcall LoadBoardMenuDieNumbersGFX
+	call RefreshOverworldHUD ; apply wDieRoll in overworld HUD
 	ld a, [wDieRoll]
 	dec a
 	add a

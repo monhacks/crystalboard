@@ -42,6 +42,9 @@ DEF MAX_LEVEL_COINS        EQU 99999
 DEF MAX_DELTA_COINS_DIGITS EQU 5
 DEF MAX_CHIPS              EQU 9999
 
+; significant turns values
+DEF MAX_TURNS EQU 999
+
 ; link record
 DEF MAX_LINK_RECORD EQU 9999
 

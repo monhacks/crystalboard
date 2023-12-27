@@ -2546,7 +2546,7 @@ wYCoord:: db
 wXCoord:: db
 wScreenSave:: ds SCREEN_META_WIDTH * SCREEN_META_HEIGHT
 
-wCurTurn:: db
+wCurTurn:: dw
 wCurSpace:: db
 wCurLevelCoins:: ds 3
 wCurLevelExp:: ds 3
