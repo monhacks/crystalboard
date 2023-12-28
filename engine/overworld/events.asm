@@ -360,6 +360,9 @@ PlayerEvents:
 	call DisableTileEvents ; preserves f
 	jr c, .ok
 
+	call CheckFacingTileEvent
+	jr c, .ok
+
 	call RunMemScript
 	jr c, .ok
 
@@ -637,6 +640,86 @@ SetMinTwoStepWildEncounterCooldown: ; unreferenced
 	ld [wWildEncounterCooldown], a
 	ret
 
+CheckFacingTileEvent:
+	ldh a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	jr z, .NoAction
+
+	call .TryObjectEvent
+	jr c, .Action
+	; fallthrough
+
+.NoAction:
+	xor a
+	ret
+
+.Action:
+	push af
+	farcall StopPlayerForEvent
+	pop af
+	scf
+	ret
+
+.TryObjectEvent:
+	farcall CheckFacingObject
+	jr c, .IsObject
+	xor a
+	ret
+
+.IsObject:
+	ldh a, [hObjectStructIndex]
+	call GetObjectStruct
+	ld hl, OBJECT_MAP_OBJECT_INDEX
+	add hl, bc
+	ld a, [hl]
+	ldh [hLastTalked], a
+
+	ldh a, [hLastTalked]
+	call GetMapObject
+	ld hl, MAPOBJECT_TYPE
+	add hl, bc
+	ld a, [hl]
+	and MAPOBJECT_TYPE_MASK
+
+	push bc
+	ld de, 3
+	ld hl, .ObjectEventTypeArray
+	call IsInArray
+	pop bc
+	jr nc, .nope
+
+	inc hl
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	jp hl
+
+.nope
+	xor a
+	ret
+
+.ObjectEventTypeArray:
+	table_width 3, .ObjectEventTypeArray
+	dbw OBJECTTYPE_SCRIPT, .none
+	dbw OBJECTTYPE_ITEMBALL, .none
+	dbw OBJECTTYPE_TRAINER, .none
+	dbw OBJECTTYPE_TALKER, .none
+	dbw OBJECTTYPE_ROCK, .rock_smash
+	dbw OBJECTTYPE_5, .none
+	dbw OBJECTTYPE_6, .none
+	assert_table_length NUM_OBJECT_TYPES
+	db -1 ; end
+
+.none
+	xor a
+	ret ; nc
+
+.rock_smash
+	ld a, BANK(RockSmashAutoScript)
+	ld hl, RockSmashAutoScript
+	call CallScript
+	ret ; c
+
 RunSceneScript:
 	ldh a, [hCurBoardEvent]
 	cp BOARDEVENT_VIEW_MAP_MODE
@@ -824,7 +907,7 @@ ObjectEventTypeArray:
 	dbw OBJECTTYPE_TRAINER, .trainer
 	; the remaining four are dummy events
 	dbw OBJECTTYPE_TALKER, .three
-	dbw OBJECTTYPE_4, .four
+	dbw OBJECTTYPE_ROCK, .four
 	dbw OBJECTTYPE_5, .five
 	dbw OBJECTTYPE_6, .six
 	assert_table_length NUM_OBJECT_TYPES

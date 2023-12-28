@@ -2750,6 +2750,21 @@ ResetObject:
 	db SPRITEMOVEDATA_STANDING_LEFT
 	db SPRITEMOVEDATA_STANDING_RIGHT
 
+; Used to make the last talked object remain hidden.
+; This is done by setting its event flag to special value ALWAYS_HIDDEN.
+; Otherwise when data is read from wMapObjectsBackups after entering the map,
+; it would appear by default even if it had been made disappear.
+SetObjectToRemainHidden:
+	ldh a, [hLastTalked]
+	call GetMapObject
+	ld hl, MAPOBJECT_EVENT_FLAG
+	add hl, bc
+	ld de, ALWAYS_HIDDEN
+	ld [hl], e
+	inc hl
+	ld [hl], d
+	ret
+
 _UpdateActiveSpritesAfterOffset::
 	ld a, [wVramState]
 	bit 0, a

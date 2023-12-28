@@ -41,10 +41,10 @@ CheckObjectFlag:
 	ld e, a
 	ld a, [hl]
 	ld d, a
-	cp -1
+	cp HIGH(ALWAYS_SHOWN) ; HIGH(ALWAYS_HIDDEN)
 	jr nz, .check
 	ld a, e
-	cp -1
+	cp LOW(ALWAYS_SHOWN)
 	jr z, .unmasked
 	jr .masked
 .check

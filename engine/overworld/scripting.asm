@@ -1007,15 +1007,13 @@ ApplyEventActionAppearDisappear:
 	ld e, [hl]
 	inc hl
 	ld d, [hl]
-	ld a, -1
-	cp e
-	jr nz, .okay
+	ld a, HIGH(ALWAYS_SHOWN) ; HIGH(ALWAYS_HIDDEN)
 	cp d
-	jr nz, .okay
-	xor a
-	ret
-.okay
+	jr z, .not_a_flag
 	call EventFlagAction
+	ret
+.not_a_flag
+	xor a
 	ret
 
 Script_follow:

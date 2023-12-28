@@ -124,6 +124,11 @@ DEF PLAYER_OBJECT EQU 0
 DEF MAPOBJECT_PALETTE_MASK EQU %11110000
 DEF MAPOBJECT_TYPE_MASK    EQU %00001111
 
+; special MAPOBJECT_EVENT_FLAG values
+DEF ALWAYS_HIDDEN EQU $ff00 ; anything between $ff00 and $fffe
+DEF ALWAYS_SHOWN  EQU $ffff
+assert HIGH(ALWAYS_HIDDEN) == HIGH(ALWAYS_SHOWN)
+
 ; number of entries in MapObjectsBackups.
 ; this sets a limit to the maximum number of different maps that can be reentered during a level.
 ; map groups with more than NUM_MAP_OBJECTS_BACKUPS maps are only ok if no more than

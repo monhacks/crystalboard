@@ -115,6 +115,7 @@ SpecialsPointers::
 	add_special PrintDiploma
 	add_special PrintGainCoins
 	add_special PrintLoseCoins
+	add_special SetObjectToRemainHidden
 
 ; Crystal only
 	add_special Reset ; bank 0

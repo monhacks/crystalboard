@@ -1110,7 +1110,7 @@ LoadMapStatus::
 	ret
 
 CallScript::
-; Call a script at a:hl.
+; Call a script at a:hl and return carry.
 
 	ld [wScriptBank], a
 	ld a, l
