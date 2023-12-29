@@ -29,7 +29,8 @@ Level1GroupSprites:
 	db SPRITE_POKE_BALL
 	db SPRITE_FRUIT_TREE
 	db SPRITE_ROCK
-	; max 3 of 10 still sprites
+	db SPRITE_CUT_TREE
+	; max 4 of 10 still sprites
 	db 0 ; end
 
 ; Level2GroupSprites:
@@ -54,6 +55,7 @@ DebugLevel5GroupSprites:
 	db SPRITE_POKE_BALL
 	db SPRITE_FRUIT_TREE
 	db SPRITE_ROCK
-	; max 3 of 10 still sprites
+	db SPRITE_CUT_TREE
+	; max 4 of 10 still sprites
 	db 0 ; end
 endc

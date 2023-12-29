@@ -21,6 +21,8 @@ DebugLevel5_Map1_MapEvents:
 	def_object_events
 	object_event 10,  2, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TRAINER, 2, .DebugLevel5_Map1TrainerYoungsterMikey1, -1
 	object_event  9,  2, SPRITE_YOUNGSTER, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_BLUE, OBJECTTYPE_TALKER,  2, .DebugLevel5_Map1Talker1, -1
+	object_event  6,  1, SPRITE_CUT_TREE, SPRITEMOVEDATA_CUTTABLE_TREE, 0, 0, -1, -1, PAL_NPC_TREE, OBJECTTYPE_TREE, 0, ObjectEvent, -1
+	object_event  9,  4, SPRITE_CUT_TREE, SPRITEMOVEDATA_CUTTABLE_TREE, 0, 0, -1, -1, PAL_NPC_TREE, OBJECTTYPE_TREE, 0, ObjectEvent, -1
 
 .DebugLevel5_Map1TrainerYoungsterMikey1:
 	trainer YOUNGSTER, MIKEY, EVENT_LEVEL_SCOPED_1, .YoungsterMikeySeenText, .YoungsterMikeyBeatenText, 0, .Script

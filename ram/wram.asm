@@ -205,6 +205,7 @@ wSpriteAnimationStructsEnd::
 wSpriteAnimCount:: db
 wCurSpriteOAMAddr:: db
 
+wCutTreeOAMAddr::
 wCurIcon:: db
 
 wCurIconTile:: db

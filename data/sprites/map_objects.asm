@@ -298,6 +298,14 @@ SpriteMovementData::
 	db 0 ; flags2
 	db SWIMMING ; palette flags
 
+; SPRITEMOVEDATA_CUTTABLE_TREE
+	db SPRITEMOVEFN_STANDING ; movement function
+	db DOWN ; facing
+	db OBJECT_ACTION_STAND ; action
+	db WONT_DELETE | FIXED_FACING | SLIDING | MOVE_ANYWHERE ; flags1
+	db 0 ; flags2
+	db 0 ; palette flags
+
 	assert_table_length NUM_SPRITEMOVEDATA
 
 ; unused

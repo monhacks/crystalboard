@@ -109,6 +109,140 @@ TreeRelativeLocationTable:
 	dwcoord 8 - 2, 8     ; DOWN
 	dwcoord 8 + 2, 8     ; UP
 
+OWCutAnimation_WithCutTreeAsObject:
+	ld a, $a0
+	ld [wCutTreeOAMAddr], a
+	ld de, CutTreeGFX
+	ld hl, vTiles0 tile CUT_TREE_OAM_FIRST_TILE
+	lb bc, BANK(CutTreeGFX), 4
+	call Request2bpp
+	call WaitSFX
+	ld de, SFX_PLACE_PUZZLE_PIECE_DOWN
+	call PlaySFX
+	xor a
+	ld [wJumptableIndex], a
+.loop
+	ld a, [wJumptableIndex]
+	bit 7, a
+	jr nz, .finish
+	call .FindCutTreeOAMAddr
+	ld a, 36 * SPRITEOAMSTRUCT_LENGTH
+	jr nc, .got_oam_addr
+	ld a, l
+.got_oam_addr
+	ld [wCurSpriteOAMAddr], a
+	ld [wCutTreeOAMAddr], a
+	ld hl, wVramState
+	set 2, [hl] ; do not clear wShadowOAM during DoNextFrameForAllSprites
+	callfar DoNextFrameForAllSprites
+	ld hl, wVramState
+	res 2, [hl]
+	call .OWCutJumptable
+	call DelayFrame
+	jr .loop
+
+.finish
+	farcall ClearSpriteAnims
+	ret
+
+; find the sprite in wShadowOAM with coordinates that match exactly the tile facing the player.
+; if found, return in l its location within wShadowOAM and return carry.
+; if it has already been found during this animation and thus copied into wCutTreeOAMAddr, return that value instead.
+; otherwise return nc.
+.FindCutTreeOAMAddr:
+	ld a, [wCutTreeOAMAddr]
+	cp $a0
+	ld l, a
+	scf
+	ret nz ; c
+	call .GetPixelFacing
+	; .GetPixelFacing returns the coordinates of the bottom right object.
+	; convert them to the top left object.
+	ld a, d
+	sub TILE_WIDTH
+	ld d, a
+	ld a, e
+	sub TILE_WIDTH
+	ld e, a
+	ld hl, wShadowOAM
+	ld bc, 4 * SPRITEOAMSTRUCT_LENGTH
+.sprite_loop
+	ld a, [hl]
+	cp d
+	jr nz, .next_sprite
+	inc hl
+	ld a, [hld]
+	cp e
+	scf
+	ret z ; c
+.next_sprite
+	add hl, bc
+	ld a, l
+	cp LOW(wShadowOAMEnd)
+	ret nc
+	jr .sprite_loop
+
+.OWCutJumptable:
+	jumptable .dw, wJumptableIndex
+
+.dw
+	dw .Cut_SpawnAnimateTree
+	dw .Cut_StartWaiting
+	dw .Cut_WaitAnimSFX
+
+.Cut_SpawnAnimateTree:
+	call .GetPixelFacing
+	ld a, SPRITE_ANIM_OBJ_CUT_TREE
+	call InitSpriteAnimStruct
+	ld hl, SPRITEANIMSTRUCT_TILE_ID
+	add hl, bc
+	ld [hl], CUT_TREE_OAM_FIRST_TILE
+	ld a, 32
+	ld [wFrameCounter], a
+; .Cut_StartWaiting
+	ld hl, wJumptableIndex
+	inc [hl]
+	ret
+
+.GetPixelFacing:
+	ld a, [wPlayerDirection]
+	and %00001100
+	srl a
+	ld e, a
+	ld d, 0
+	ld hl, .Coords
+	add hl, de
+	ld e, [hl]
+	inc hl
+	ld d, [hl]
+	ret
+
+.Coords:
+	dbpixel 10, 12, 0, 4
+	dbpixel 10,  8, 0, 4
+	dbpixel  8, 10, 0, 4
+	dbpixel 12, 10, 0, 4
+
+.Cut_StartWaiting:
+	ld a, 1
+	ldh [hBGMapMode], a
+; .Cut_WaitAnimSFX
+	ld hl, wJumptableIndex
+	inc [hl]
+
+.Cut_WaitAnimSFX:
+	ld hl, wFrameCounter
+	ld a, [hl]
+	and a
+	jr z, .finished
+	dec [hl]
+	ret
+
+.finished
+	ld hl, wJumptableIndex
+	set 7, [hl]
+	ret
+
 OWCutAnimation:
 	; Animation index in e
 	; 0: Split tree in half

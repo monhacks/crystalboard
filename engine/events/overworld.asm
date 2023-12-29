@@ -233,6 +233,18 @@ CutDownTreeOrGrass:
 	call LoadStandardFont
 	ret
 
+Script_CutAuto::
+	refreshscreen
+	callasm CutDownTreeObject
+	disappear LAST_TALKED
+	special SetObjectToRemainHidden
+	reloadmappart
+	end
+
+CutDownTreeObject:
+	farcall OWCutAnimation_WithCutTreeAsObject
+	ret
+
 CheckOverworldTileArrays:
 	; Input: c contains the tile you're facing
 	; Output: Replacement tile in b and effect on wild encounters in c, plus carry set.
@@ -1370,7 +1382,7 @@ RockSmashScript:
 	end
 
 RockSmashAutoScript::
-	special WaitSFX
+	waitsfx
 	playsound SFX_STRENGTH
 	earthquake 84
 	applymovementlasttalked MovementData_RockSmash

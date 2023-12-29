@@ -647,6 +647,8 @@ CheckFacingTileEvent:
 
 	call .TryObjectEvent
 	jr c, .Action
+	call .TryTileCollisionEvent
+	jr c, .Action
 	; fallthrough
 
 .NoAction:
@@ -704,8 +706,8 @@ CheckFacingTileEvent:
 	dbw OBJECTTYPE_ITEMBALL, .none
 	dbw OBJECTTYPE_TRAINER, .none
 	dbw OBJECTTYPE_TALKER, .none
-	dbw OBJECTTYPE_ROCK, .rock_smash
-	dbw OBJECTTYPE_5, .none
+	dbw OBJECTTYPE_ROCK, .rock
+	dbw OBJECTTYPE_TREE, .tree
 	dbw OBJECTTYPE_6, .none
 	assert_table_length NUM_OBJECT_TYPES
 	db -1 ; end
@@ -714,11 +716,21 @@ CheckFacingTileEvent:
 	xor a
 	ret ; nc
 
-.rock_smash
+.rock
 	ld a, BANK(RockSmashAutoScript)
 	ld hl, RockSmashAutoScript
 	call CallScript
 	ret ; c
+
+.tree
+	ld a, BANK(Script_CutAuto)
+	ld hl, Script_CutAuto
+	call CallScript
+	ret ; c
+
+.TryTileCollisionEvent:
+	xor a
+	ret ; nc
 
 RunSceneScript:
 	ldh a, [hCurBoardEvent]
@@ -908,7 +920,7 @@ ObjectEventTypeArray:
 	; the remaining four are dummy events
 	dbw OBJECTTYPE_TALKER, .three
 	dbw OBJECTTYPE_ROCK, .four
-	dbw OBJECTTYPE_5, .five
+	dbw OBJECTTYPE_TREE, .five
 	dbw OBJECTTYPE_6, .six
 	assert_table_length NUM_OBJECT_TYPES
 	db -1 ; end
@@ -1456,7 +1468,7 @@ TryTileCollisionEvent::
 
 .done
 	call PlayClickSFX
-	ld a, $ff
+	ld a, PLAYEREVENT_MAPSCRIPT
 	scf
 	ret
 

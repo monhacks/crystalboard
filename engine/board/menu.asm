@@ -409,6 +409,7 @@ BoardMenu_BreakDieAnimation:
 .done
 	ld hl, wVramState
 	res 2, [hl]
+	farcall ClearSpriteAnims
 	ld hl, wDisplaySecondarySprites
 	set SECONDARYSPRITES_SPACES_LEFT_F, [hl]
 	ld a, [wDieRoll]
