@@ -1,6 +1,7 @@
 ; collision permissions (see data/collision/collision_permissions.asm)
 DEF LAND_TILE  EQU $00
 DEF WATER_TILE EQU $01
+DEF SPACE_TILE EQU $03 ; acts as WATER_TILE while on PLAYER_SURF or PLAYER_SURF_PIKA state, as LAND_TILE otherwise
 DEF WALL_TILE  EQU $0f
 DEF TALK       EQU $10
 

@@ -641,9 +641,23 @@ SetMinTwoStepWildEncounterCooldown: ; unreferenced
 	ret
 
 CheckFacingTileEvent:
+; no tile events if not in BOARDEVENT_HANDLE_BOARD (e.g. after player lands in space)
 	ldh a, [hCurBoardEvent]
-	cp BOARDEVENT_VIEW_MAP_MODE
+	cp BOARDEVENT_HANDLE_BOARD
+	jr nz, .NoAction
+
+; no facing-tile events until player has turned to the walking direction.
+; if the player has to perform a STEP_TURN first, the facing tile is not the right one.
+	ld a, [wWalkingDirection]
+	cp STANDING
 	jr z, .NoAction
+	ld e, a
+	ld a, [wPlayerDirection]
+	rrca
+	rrca
+	maskbits NUM_DIRECTIONS
+	cp e
+	jr nz, .NoAction
 
 	call .TryObjectEvent
 	jr c, .Action
@@ -729,6 +743,33 @@ CheckFacingTileEvent:
 	ret ; c
 
 .TryTileCollisionEvent:
+	call GetFacingTileCoord
+	ld [wFacingTileID], a
+
+;; Surf
+; Don't surf if already surfing.
+	ld a, [wPlayerState]
+	cp PLAYER_SURF_PIKA
+	jr z, .next_event_1
+	cp PLAYER_SURF
+	jr z, .next_event_1
+
+; Must be facing water.
+	ld a, [wFacingTileID]
+	call GetTileCollision
+	cp WATER_TILE
+	jr nz, .next_event_1
+
+	ld a, PLAYER_SURF
+	ld [wSurfingPlayerState], a
+
+	ld a, BANK(SurfAutoScript)
+	ld hl, SurfAutoScript
+	call CallScript
+	ret ; c
+
+.next_event_1
+.no_event
 	xor a
 	ret ; nc
 

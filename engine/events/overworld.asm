@@ -408,6 +408,16 @@ SurfFunction:
 	ld a, $80
 	ret
 
+SurfAutoScript::
+	readmem wSurfingPlayerState
+	writevar VAR_MOVEMENT
+	special UpdatePlayerSprite
+	special PlayMapMusic
+; step into the water (slow_step DIR, step_end)
+	special SurfStartStep
+	applymovement PLAYER, wMovementBuffer
+	end
+
 SurfFromMenuScript:
 	special UpdateTimePals
 
@@ -456,7 +466,7 @@ GetSurfType:
 	ld a, PLAYER_SURF
 	ret
 
-CheckDirection:
+CheckDirection::
 ; Return carry if a tile permission prevents you
 ; from moving in the direction you're facing.
 

@@ -929,6 +929,8 @@ ENDM
 	call GetTileCollision
 	and a ; LAND_TILE
 	ret z
+	cp SPACE_TILE
+	ret z
 	scf
 	ret
 
@@ -938,6 +940,10 @@ ENDM
 
 	call GetTileCollision
 	cp WATER_TILE
+	jr z, .Water
+	; because this is called during PLAYER_SURF or PLAYER_SURF_PIKA state,
+	; SPACE_TILE is considered still water. Do not stop surfing on a space tile.
+	cp SPACE_TILE
 	jr z, .Water
 
 ; Can walk back onto land from water.

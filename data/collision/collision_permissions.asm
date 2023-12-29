@@ -209,22 +209,22 @@ TileCollisionTable::
 	db WATER_TILE        ; cd
 	db WATER_TILE        ; ce
 	db WATER_TILE        ; cf
-	db LAND_TILE         ; COLL_BLUE_SPACE
-	db LAND_TILE         ; COLL_RED_SPACE
-	db LAND_TILE         ; COLL_GREEN_SPACE
-	db LAND_TILE         ; COLL_ITEM_SPACE
-	db LAND_TILE         ; COLL_POKEMON_SPACE
-	db LAND_TILE         ; COLL_MINIGAME_SPACE
-	db LAND_TILE         ; COLL_END_SPACE
-	db LAND_TILE         ; COLL_GREY_SPACE
-	db LAND_TILE         ; COLL_BRANCH_SPACE
-	db LAND_TILE         ; COLL_UNION_SPACE
-	db LAND_TILE         ; da
-	db LAND_TILE         ; db
-	db LAND_TILE         ; dc
-	db LAND_TILE         ; dd
-	db LAND_TILE         ; de
-	db LAND_TILE         ; df
+	db SPACE_TILE        ; COLL_BLUE_SPACE
+	db SPACE_TILE        ; COLL_RED_SPACE
+	db SPACE_TILE        ; COLL_GREEN_SPACE
+	db SPACE_TILE        ; COLL_ITEM_SPACE
+	db SPACE_TILE        ; COLL_POKEMON_SPACE
+	db SPACE_TILE        ; COLL_MINIGAME_SPACE
+	db SPACE_TILE        ; COLL_END_SPACE
+	db SPACE_TILE        ; COLL_GREY_SPACE
+	db SPACE_TILE        ; COLL_BRANCH_SPACE
+	db SPACE_TILE        ; COLL_UNION_SPACE
+	db SPACE_TILE        ; da
+	db SPACE_TILE        ; db
+	db SPACE_TILE        ; dc
+	db SPACE_TILE        ; dd
+	db SPACE_TILE        ; de
+	db SPACE_TILE        ; df
 	db LAND_TILE         ; e0
 	db LAND_TILE         ; e1
 	db LAND_TILE         ; e2
