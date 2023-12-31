@@ -76,6 +76,9 @@ EndSpaceScript::
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_SPACES_LEFT_F, [hl]
 	call UpdateActiveSprites
+; stop map anims
+	xor a
+	ld [hMapAnims], a
 ; fade out slow to white
 	ld b, RGBFADE_TO_WHITE_8BGP_8OBP
 	jp DoRGBFadeEffect
