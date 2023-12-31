@@ -769,6 +769,22 @@ CheckFacingTileEvent:
 	ret ; c
 
 .next_event_1
+;; Waterfall
+	ld a, [wFacingTileID]
+	call CheckWaterfallTile
+	jr nz, .next_event_2
+
+; Must be facing up and facing a waterfall tile to trigger the waterfall up sequence.
+; Otherwise HI_NYBBLE_CURRENT collision (forced walking in walking direction) applies.
+	farcall CheckMapCanWaterfall
+	jr c, .next_event_2
+
+	ld a, BANK(Script_WaterfallAuto)
+	ld hl, Script_WaterfallAuto
+	call CallScript
+	ret ; c
+
+.next_event_2
 .no_event
 	xor a
 	ret ; nc

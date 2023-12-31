@@ -340,7 +340,7 @@ DoPlayerMovement::
 	add hl, bc
 	ld a, [hl]
 	ld [wWalkingDirection], a
-	jr .continue_walk
+	jr .continue_fast_slide
 
 .water_table
 	db RIGHT ; COLL_WATERFALL_RIGHT
@@ -414,8 +414,15 @@ DoPlayerMovement::
 	xor a
 	ret
 
+.continue_fast_slide
+	ld a, STEP_ICE
+	jr .continue_step
+
 .continue_walk
 	ld a, STEP_WALK
+	; fallthrough
+
+.continue_step
 	call .DoStep
 	ld a, PLAYERMOVEMENT_CONTINUE
 	scf

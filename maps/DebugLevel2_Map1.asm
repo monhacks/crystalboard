@@ -26,7 +26,7 @@ DebugLevel2_Map1_MapEvents:
 	def_bg_events
 
 	def_object_events
-	object_event  4, 13, SPRITE_ROCK, SPRITEMOVEDATA_SMASHABLE_ROCK, 0, 0, -1, -1, 0, OBJECTTYPE_ROCK, 0, ObjectEvent, -1
+	object_event  6, 13, SPRITE_ROCK, SPRITEMOVEDATA_SMASHABLE_ROCK, 0, 0, -1, -1, 0, OBJECTTYPE_ROCK, 0, ObjectEvent, -1
 	object_event  5, 12, SPRITE_ROCK, SPRITEMOVEDATA_SMASHABLE_ROCK, 0, 0, -1, -1, 0, OBJECTTYPE_ROCK, 0, ObjectEvent, -1
 
 DebugLevel2_Map1_MapSpaces:

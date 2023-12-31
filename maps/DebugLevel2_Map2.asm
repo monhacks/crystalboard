@@ -11,7 +11,7 @@ DebugLevel2_Map2_MapEvents:
 	def_warp_events
 
 	def_anchor_events
-	anchor_event  9,  6,  0
+	anchor_event  9, 12,  0
 
 	def_coord_events
 
@@ -20,8 +20,14 @@ DebugLevel2_Map2_MapEvents:
 	def_object_events
 
 DebugLevel2_Map2_MapSpaces:
-	space  8,  6,  $0,  1 ;  0
-	space  6,  6,  $0,  2 ;  1
-	space  4,  6,  $0,  3 ;  2
-	space  2,  6,  $0,  4 ;  3
-	space  0,  6,  $0,  4 ;  4
+	space  8, 12,  $0,  1 ;  0
+	space  6, 12,  $0,  2 ;  1
+	space  4, 12,  $0,  3 ;  2
+	space  2, 12,  $0,  4 ;  3
+	space  2, 10,  $0,  5 ;  4
+	space  2,  8,  $0,  6 ;  5
+	space  2,  2,  $0,  7 ;  6
+	space  4,  2,  $0,  8 ;  7
+	space  6,  2,  $0,  9 ;  8
+	space  6,  6,  $0, 10 ;  9
+	space  6,  8,  $0, 10 ; 10

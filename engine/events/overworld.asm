@@ -667,7 +667,7 @@ WaterfallFunction:
 	ld a, $80
 	ret
 
-CheckMapCanWaterfall:
+CheckMapCanWaterfall::
 	ld a, [wPlayerDirection]
 	and $c
 	cp FACE_UP
@@ -682,6 +682,19 @@ CheckMapCanWaterfall:
 	scf
 	ret
 
+Script_WaterfallAuto::
+.loop
+	playsound SFX_SURF
+	applymovement PLAYER, .SlowStepUp
+	callasm CheckContinueWaterfall
+	iffalse .loop
+	callasm SFXChannelsOff ; end SFX_SURF if still playing
+	end
+
+.SlowStepUp:
+	slow_step UP
+	step_end
+
 Script_WaterfallFromMenu:
 	reloadmappart
 	special UpdateTimePals
@@ -693,12 +706,16 @@ Script_UsedWaterfall:
 	closetext
 	playsound SFX_BUBBLEBEAM
 .loop
-	applymovement PLAYER, .WaterfallStep
-	callasm .CheckContinueWaterfall
+	applymovement PLAYER, WaterfallStep
+	callasm CheckContinueWaterfall
 	iffalse .loop
 	end
 
-.CheckContinueWaterfall:
+.UseWaterfallText:
+	text_far _UseWaterfallText
+	text_end
+
+CheckContinueWaterfall:
 	xor a
 	ldh [hScriptVar], a
 	ld a, [wPlayerTile]
@@ -708,13 +725,9 @@ Script_UsedWaterfall:
 	ldh [hScriptVar], a
 	ret
 
-.WaterfallStep:
+WaterfallStep:
 	turn_waterfall UP
 	step_end
-
-.UseWaterfallText:
-	text_far _UseWaterfallText
-	text_end
 
 TryWaterfallOW::
 	ld d, WATERFALL
