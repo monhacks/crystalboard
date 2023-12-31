@@ -4,6 +4,11 @@ DebugLevel2_Map1_MapScripts:
 	def_scene_scripts
 
 	def_callbacks
+	callback MAPCALLBACK_ENDMAPSETUP, .FlashAutoScript
+
+.FlashAutoScript:
+	callasm UseFlashAuto
+	endcallback
 
 DebugLevel2_Map1_MapEvents:
 	db 0, 0 ; filler

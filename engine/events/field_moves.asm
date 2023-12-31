@@ -9,6 +9,23 @@ PlayWhirlpoolSound:
 	call WaitSFX
 	ret
 
+UseFlashAuto::
+	; ReplaceTimeOfDayPals in map setup command LoadMapTimeOfDay sets wTimeOfDayPalset to DARKNESS_PALSET
+	; only if wStatusFlags[STATUSFLAGS_FLASH_F] has not been set.
+	ld a, [wTimeOfDayPalset]
+	cp DARKNESS_PALSET
+	ret nz
+	ld c, 30 ; 500 ms
+	call DelayFrames
+	call WaitSFX
+	ld de, SFX_FLASH
+	call PlaySFX
+	call BlindingFlash
+	ld c, 30 ; 500 ms
+	call DelayFrames
+	call WaitSFX
+	ret
+
 BlindingFlash:
 	farcall FadeOutPalettesToWhite
 	ld hl, wStatusFlags

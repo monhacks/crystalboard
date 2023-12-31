@@ -48,6 +48,7 @@ MapSetupScript_EnterLevel:
 	mapsetup FadeInPalettesFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
+	mapsetup MapCallbackAtEndMapSetup
 	db -1 ; end
 
 MapSetupScript_Teleport:
@@ -81,6 +82,7 @@ MapSetupScript_Warp:
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup AnchorPointAfterWarp
+	mapsetup MapCallbackAtEndMapSetup
 	db -1 ; end
 
 MapSetupScript_BadWarp:
@@ -108,6 +110,7 @@ MapSetupScript_BadWarp:
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup AnchorPointAfterWarp
+	mapsetup MapCallbackAtEndMapSetup
 	db -1 ; end
 
 MapSetupScript_Connection:
@@ -128,6 +131,7 @@ MapSetupScript_Connection:
 	mapsetup LoadWildMonData
 	mapsetup UpdateRoamMons
 	mapsetup ActivateMapAnims
+	mapsetup MapCallbackAtEndMapSetup
 	db -1 ; end
 
 MapSetupScript_Fall:
@@ -158,6 +162,7 @@ MapSetupScript_Train:
 	mapsetup LoadWildMonData
 	mapsetup UpdateRoamMons
 	mapsetup AnchorPointAfterWarp
+	mapsetup MapCallbackAtEndMapSetup
 	db -1 ; end
 
 MapSetupScript_ReloadMap:
@@ -178,6 +183,7 @@ MapSetupScript_ReloadMap:
 	mapsetup FadeInPalettesFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
+	mapsetup MapCallbackAtEndMapSetup
 	db -1 ; end
 
 MapSetupScript_ExitViewMap:
@@ -202,6 +208,7 @@ MapSetupScript_ExitViewMap:
 	mapsetup FadeInPalettesFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
+	mapsetup MapCallbackAtEndMapSetup
 	db -1 ; end
 
 MapSetupScript_LinkReturn:
@@ -222,6 +229,7 @@ MapSetupScript_LinkReturn:
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup EnableTextAcceleration
+	mapsetup MapCallbackAtEndMapSetup
 	db -1 ; end
 
 MapSetupScript_Continue:
@@ -244,6 +252,7 @@ MapSetupScript_Continue:
 	mapsetup FadeInPalettesFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
+	mapsetup MapCallbackAtEndMapSetup
 	db -1 ; end
 
 MapSetupScript_Submenu:

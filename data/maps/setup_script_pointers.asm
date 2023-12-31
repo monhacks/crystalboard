@@ -56,3 +56,4 @@ MapSetupCommands:
 	add_mapsetup AnchorPointAfterWarp ; 31
 	add_mapsetup BackupMapObjects ; 32
 	add_mapsetup LoadDisabledSpaces ; 33
+	add_mapsetup MapCallbackAtEndMapSetup ; 34

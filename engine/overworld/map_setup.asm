@@ -202,3 +202,6 @@ ResetLevelScopedEventFlags:
 	jr nz, .loop
 	ret
 
+MapCallbackAtEndMapSetup:
+	ld a, MAPCALLBACK_ENDMAPSETUP
+	jp RunMapCallback
