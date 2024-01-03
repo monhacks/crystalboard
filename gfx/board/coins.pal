@@ -1,0 +1,11 @@
+; gain coins
+	RGB 31, 31, 31
+	RGB 19, 23, 31
+	RGB 27, 17, 03
+	RGB 00, 00, 00
+
+; lose coins
+	RGB 31, 31, 31
+	RGB 31, 20, 18
+	RGB 27, 17, 03
+	RGB 00, 00, 00

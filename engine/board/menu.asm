@@ -201,21 +201,12 @@ DrawBoardMenuTilesAndClearPriorityAttr:
 	jp FillBoxWithByte
 
 ApplyBoardMenuSpritePalette:
-	ld hl, BoardMenuItemPals
 	ld a, [wBoardMenuCursorPosition]
-	ld bc, PALETTE_SIZE
-	call AddNTimes
+	or PAL_OW_MISC_BOARD_MENU_ITEMS
+	ld [wCurOverworldMiscPal], a
 ; write to wOBPals2 directly as well to avoid calling ApplyPals and overwriting other overworld pals
 ; writing to wOBPals1 is still necessary to make fading animations consistent
-	ld de, wOBPals1 palette PAL_OW_MISC
-	ld bc, PALETTE_SIZE
-	ld a, BANK(wOBPals1)
-	call FarCopyWRAM
-	ld hl, wOBPals1 palette PAL_OW_MISC
-	ld de, wOBPals2 palette PAL_OW_MISC
-	ld bc, PALETTE_SIZE
-	ld a, BANK(wOBPals1)
-	call FarCopyWRAM
+	farcall LoadOverworldMiscObjPal_ToObPals1And2
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a
 	ret
@@ -487,6 +478,3 @@ BoardMenu_CloseSubmenu:
 	farcall FadeInPalettesFromWhite
 	call EnableSpriteUpdates
 	ret
-
-BoardMenuItemPals:
-INCLUDE "gfx/board/menu.pal"

@@ -72,7 +72,7 @@
 - **refreshscreen**: RefreshScreen
 - **reloadmappart**: LoadScreenTilemapAndAttrmapPals + GetMovementPermissions + HDMATransferTilemapAndAttrmap_OverworldEffect + UpdateSprites. Similar to refreshscreen, but does not reanchor. On the other hand, it refreshes movement permissions. Often used after a block change or field move, which can affect collisions.
 
-## Board behavior
+## Changes
 
 ### RAM addresses
 
@@ -96,6 +96,7 @@
 - Addresses within *wPlayerData* ~ *wPlayerDataEnd*: preserved on save. Includes:
   - **wUnlockedLevels**: flag array that tracks progression regarding which levels have been unlocked.
   - **wUnlockedTechniques**: flag array that tracks progression regarding which techniques have been unlocked.
+  - **wCurOverworldMiscPal**
 
 - These addresses share memory region with string buffers from *wStringBuffer3* onwards. They are placed in memory in the following order.
   - **wTempSpaceStruct**: Temporary scope. Same structure as *wCurSpaceStruct*

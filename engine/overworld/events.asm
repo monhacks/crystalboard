@@ -173,6 +173,7 @@ StartMap:
 	ld [hli], a ; wPrevWarp
 	ld [hli], a ; wPrevMapGroup
 	ld [hl], a  ; wPrevMapNumber
+	ld [wCurOverworldMiscPal], a
 
 	ld a, BANK(wDisabledSpacesBackups)
 	ld [rSVBK], a

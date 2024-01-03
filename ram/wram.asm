@@ -2521,6 +2521,8 @@ wRepelEffect:: db ; If a Repel is in use, it contains the nr of steps it's still
 wBikeStep:: dw
 wKurtApricornQuantity:: db
 
+wCurOverworldMiscPal:: db
+
 wPlayerDataEnd::
 
 wCurMapData::

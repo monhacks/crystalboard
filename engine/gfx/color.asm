@@ -699,7 +699,8 @@ LoadMapPals:
 	ld de, wOBPals1
 	ld hl, MapObjectDarknessPals
 	ld bc, 7 palettes ; all but PAL_OW_MISC
-	jp FarCopyWRAM
+	call FarCopyWRAM
+	jp LoadOverworldMiscObjPal_ToObPals1 ; PAL_OW_MISC
 
 .not_darkness
 	ld a, [wTimeOfDayPal]
@@ -711,6 +712,7 @@ LoadMapPals:
 	ld bc, 7 palettes ; all but PAL_OW_MISC
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
+	call LoadOverworldMiscObjPal_ToObPals1 ; PAL_OW_MISC
 
 	ld a, [wEnvironment]
 	cp INDOOR_ENVIRONMENT
@@ -763,6 +765,53 @@ LoadDarknessPalette:
 	ld bc, 8 palettes
 	jp FarCopyWRAM
 
+LoadOverworldMiscObjPal_ToObPals1:
+	call GetOverworldMiscObjPal
+	ld de, wOBPals1 palette PAL_OW_MISC
+	ld bc, PALETTE_SIZE
+	ld a, BANK(wOBPals1)
+	jp FarCopyWRAM
+
+LoadOverworldMiscObjPal_ToObPals2:
+	call GetOverworldMiscObjPal
+	ld de, wOBPals2 palette PAL_OW_MISC
+	ld bc, PALETTE_SIZE
+	ld a, BANK(wOBPals1)
+	jp FarCopyWRAM
+
+LoadOverworldMiscObjPal_ToObPals1And2:
+	call LoadOverworldMiscObjPal_ToObPals1
+	ld hl, wOBPals1 palette PAL_OW_MISC
+	ld de, wOBPals2 palette PAL_OW_MISC
+	ld bc, PALETTE_SIZE
+	ld a, BANK(wOBPals1)
+	jp FarCopyWRAM
+
+GetOverworldMiscObjPal:
+	ld a, [wCurOverworldMiscPal]
+	and PAL_OW_MISC_PAL_GROUP_MASK
+	swap a
+	ld hl, .OverworldMiscPalGroups
+	ld bc, .pal_group_2 - .pal_group_1
+	call AddNTimes
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	ld a, [wCurOverworldMiscPal]
+	and ~PAL_OW_MISC_PAL_GROUP_MASK
+	ld bc, PALETTE_SIZE
+	call AddNTimes
+	ret
+
+.OverworldMiscPalGroups:
+	table_width 2, .OverworldMiscPalGroups
+.pal_group_1
+	dw BoardMenuItemsPals
+.pal_group_2
+	dw BoardDicePals
+	dw BoardCoinsPals
+	assert_table_length NUM_PAL_OW_MISC_PAL_GROUPS
+
 INCLUDE "data/maps/environment_colors.asm"
 
 PartyMenuBGMobilePalette:
@@ -782,6 +831,15 @@ INCLUDE "gfx/overworld/npc_sprites_darkness.pal"
 
 MapObjectPals::
 INCLUDE "gfx/overworld/npc_sprites.pal"
+
+BoardMenuItemsPals:
+INCLUDE "gfx/board/menu.pal"
+
+BoardDicePals:
+INCLUDE "gfx/board/dice.pal"
+
+BoardCoinsPals:
+INCLUDE "gfx/board/coins.pal"
 
 RoofPals:
 	table_width PAL_COLOR_SIZE * 4 * 2, RoofPals

@@ -321,6 +321,8 @@ UnionSpaceScript::
 	ret
 
 PrintGainCoins:
+	ld a, PAL_OW_MISC_BOARD_COINS | 0
+	ld [wCurOverworldMiscPal], a
 	ld hl, wStringBuffer1
 	ld a, "<COIN>"
 	ld [hli], a
@@ -329,6 +331,8 @@ PrintGainCoins:
 	jr PrintGainOrLoseCoins
 
 PrintLoseCoins:
+	ld a, PAL_OW_MISC_BOARD_COINS | 1
+	ld [wCurOverworldMiscPal], a
 	ld hl, wStringBuffer1
 	ld a, "<COIN>"
 	ld [hli], a
@@ -338,7 +342,12 @@ PrintLoseCoins:
 
 PrintGainOrLoseCoins:
 	push hl
+	farcall LoadOverworldMiscObjPal_ToObPals2
+	ld a, TRUE
+	ldh [hCGBPalUpdate], a
+	pop hl
  ; fill string space with "@" to ensure that it is terminated with at least one "@"
+	push hl
 	ld a, "@"
 	ld c, MAX_DELTA_COINS_DIGITS + 1
 .loop
