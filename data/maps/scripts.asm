@@ -10,3 +10,5 @@ INCLUDE "maps/DebugLevel3_Map1.asm"
 INCLUDE "maps/DebugLevel4_Map1.asm"
 INCLUDE "maps/DebugLevel5_Map1.asm"
 endc
+
+ENDSECTION

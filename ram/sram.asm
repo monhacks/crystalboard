@@ -145,3 +145,5 @@ sDisabledSpacesBackups:: ds wDisabledSpacesBackupsEnd - wDisabledSpacesBackups
 SECTION "SRAM Map Objects Backups", SRAM
 
 sMapObjectsBackups:: ds wMapObjectsBackupsEnd - wMapObjectsBackups
+
+ENDSECTION

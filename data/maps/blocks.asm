@@ -22,3 +22,5 @@ INCBIN "maps/DebugLevel4_Map1.blk"
 DebugLevel5_Map1_Blocks:
 INCBIN "maps/DebugLevel5_Map1.blk"
 endc
+
+ENDSECTION

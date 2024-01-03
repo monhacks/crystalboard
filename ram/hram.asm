@@ -158,3 +158,5 @@ hWindowHUDLY::
 	db
 
 hCurBoardEvent:: db
+
+ENDSECTION
