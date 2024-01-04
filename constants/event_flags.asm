@@ -14,13 +14,13 @@
 	const EVENT_TEMPORARY_UNTIL_MAP_RELOAD_8
 
 if (const_value % 8) != 0
-const_value = const_value + 8 - (const_value % 8)
+DEF const_value = const_value + 8 - (const_value % 8)
 endc
-EVENT_TEMPORARY_UNTIL_MAP_RELOAD_FLAGS_END EQU const_value
+DEF EVENT_TEMPORARY_UNTIL_MAP_RELOAD_FLAGS_END EQU const_value
 
 
 ;; The next flags are reset upon entering a new level (for e.g. trainers)
-EVENT_LEVEL_SCOPED_FLAGS_START EQU EVENT_TEMPORARY_UNTIL_MAP_RELOAD_FLAGS_END
+DEF EVENT_LEVEL_SCOPED_FLAGS_START EQU EVENT_TEMPORARY_UNTIL_MAP_RELOAD_FLAGS_END
 
 	const EVENT_LEVEL_SCOPED_1
 	const EVENT_LEVEL_SCOPED_2
@@ -44,13 +44,13 @@ EVENT_LEVEL_SCOPED_FLAGS_START EQU EVENT_TEMPORARY_UNTIL_MAP_RELOAD_FLAGS_END
 	const EVENT_LEVEL_SCOPED_20
 
 if (const_value % 8) != 0
-const_value = const_value + 8 - (const_value % 8)
+DEF const_value = const_value + 8 - (const_value % 8)
 endc
-EVENT_LEVEL_SCOPED_FLAGS_END EQU const_value
+DEF EVENT_LEVEL_SCOPED_FLAGS_END EQU const_value
 
 
 ;; The next flags are reset upon taking a step (for e.g. talker)
-EVENT_TURN_SCOPED_FLAGS_START EQU EVENT_LEVEL_SCOPED_FLAGS_END
+DEF EVENT_TURN_SCOPED_FLAGS_START EQU EVENT_LEVEL_SCOPED_FLAGS_END
 
 	const EVENT_TURN_SCOPED_1
 	const EVENT_TURN_SCOPED_2
@@ -74,13 +74,13 @@ EVENT_TURN_SCOPED_FLAGS_START EQU EVENT_LEVEL_SCOPED_FLAGS_END
 	const EVENT_TURN_SCOPED_20
 
 if (const_value % 8) != 0
-const_value = const_value + 8 - (const_value % 8)
+DEF const_value = const_value + 8 - (const_value % 8)
 endc
-EVENT_TURN_SCOPED_FLAGS_END EQU const_value
+DEF EVENT_TURN_SCOPED_FLAGS_END EQU const_value
 
 
 ;; The remaining flags are only reset explicitly
-EVENT_REGULAR_FLAGS_START EQU EVENT_TURN_SCOPED_FLAGS_END
+DEF EVENT_REGULAR_FLAGS_START EQU EVENT_TURN_SCOPED_FLAGS_END
 
 	const EVENT_INITIALIZED_EVENTS
 

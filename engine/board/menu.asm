@@ -264,7 +264,7 @@ GetBoardMenuSelection:
 	ret ; nc
 
 BoardMenu_Die:
-DIE_MAX_NUMBER EQU 6
+DEF DIE_MAX_NUMBER EQU 6
 	ld hl, wDisplaySecondarySprites
 	set SECONDARYSPRITES_DIE_ROLL_F, [hl]
 	ld a, 1
