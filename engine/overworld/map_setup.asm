@@ -93,12 +93,11 @@ SkipUpdateMapSprites:
 	ret
 
 CheckUpdatePlayerSprite:
-	nop
-	call .CheckBiking
+	call .CheckForcedBiking
 	jr c, .ok
 	call .CheckSurfing
 	jr c, .ok
-	call .CheckSurfing2
+	call .ResetSurfingOrBikingState
 	jr c, .ok
 	ret
 
@@ -106,7 +105,7 @@ CheckUpdatePlayerSprite:
 	call UpdatePlayerSprite
 	ret
 
-.CheckBiking:
+.CheckForcedBiking:
 	and a
 	ld hl, wBikeFlags
 	bit BIKEFLAGS_ALWAYS_ON_BIKE_F, [hl]
@@ -116,7 +115,7 @@ CheckUpdatePlayerSprite:
 	scf
 	ret
 
-.CheckSurfing2:
+.ResetSurfingOrBikingState:
 	ld a, [wPlayerState]
 	cp PLAYER_NORMAL
 	jr z, .nope

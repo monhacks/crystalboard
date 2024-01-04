@@ -78,11 +78,23 @@ GetPlayerTile::
 	ret
 
 CheckOnWater::
+; return z if on water, nz otherwise.
+; if tile permission is SPACE_TILE, wPlayerState dictates whether player is on water or not.
+; otherwise the current tile permission being LAND_TILE or WATER_TILE dictates it.
 	ld a, [wPlayerTile]
 	call GetTileCollision
+	cp SPACE_TILE
+	jr z, .check_player_state
 	sub WATER_TILE
 	ret z
 	and a
+	ret
+
+.check_player_state
+	ld a, [wPlayerState]
+	cp PLAYER_SURF
+	ret z
+	cp PLAYER_SURF_PIKA
 	ret
 
 GetTileCollision::
