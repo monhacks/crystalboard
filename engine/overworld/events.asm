@@ -173,7 +173,8 @@ StartMap:
 	ld [hli], a ; wPrevWarp
 	ld [hli], a ; wPrevMapGroup
 	ld [hl], a  ; wPrevMapNumber
-	ld [wCurOverworldMiscPal], a
+	ld [wPlayerState], a ; PLAYER_NORMAL
+	ld [wCurOverworldMiscPal], a ; OW_MISC_BOARD_MENU_ITEMS | BOARDMENUITEM_DIE
 
 	ld a, BANK(wDisabledSpacesBackups)
 	ld [rSVBK], a
