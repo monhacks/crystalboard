@@ -27,6 +27,23 @@ endc
 	jp hl
 ENDM
 
+MACRO jumptable_bc
+if STRIN("\2", "h") == 1
+	ldh a, [\2]
+else
+	ld a, [\2]
+endc
+	ld c, a
+	ld b, 0
+	ld hl, \1
+	add hl, bc
+	add hl, bc
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+	jp hl
+ENDM
+
 MACRO maskbits
 ; masks just enough bits to cover values 0 to \1 - 1
 ; \2 is an optional shift amount

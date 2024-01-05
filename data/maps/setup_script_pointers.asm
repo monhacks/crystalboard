@@ -57,3 +57,4 @@ MapSetupCommands:
 	add_mapsetup BackupMapObjects ; 32
 	add_mapsetup LoadDisabledSpaces ; 33
 	add_mapsetup MapCallbackAtEndMapSetup ; 34
+	add_mapsetup RepositionMockedPlayerObject ; 35

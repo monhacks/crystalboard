@@ -118,6 +118,8 @@ BoardMenuScript::
 	ld [wBeforeViewMapXCoord], a
 	ld a, [wYCoord]
 	ld [wBeforeViewMapYCoord], a
+	ld a, [wPlayerDirection]
+	ld [wBeforeViewMapDirection], a
 	xor a
 	ld [wViewMapModeDisplacementY], a
 	ld [wViewMapModeDisplacementX], a

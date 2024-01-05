@@ -856,8 +856,90 @@ QueueFollowerFirstStep:
 	scf
 	ret
 
+RepositionMockedPlayerObject::
+; map setup command called by map setup script MAPSETUP_CONNECTION after LoadBlockData,
+; once the new map blocks have been loaded to wOverworldMapBlocks.
+; Only applies during BOARDEVENT_VIEW_MAP_MODE
+	ldh a, [hCurBoardEvent]
+	cp BOARDEVENT_VIEW_MAP_MODE
+	ret nz
+
+; if map at wBeforeViewMapMapGroup, wBeforeViewMapMapNumber is not the current map,
+; or a map connected to the current map, we are done.
+	ld hl, wBeforeViewMapMapGroup
+	ld a, [hli]
+	ld b, a
+	ld c, [hl] ; wBeforeViewMapMapNumber
+	ld a, [wMapGroup]
+	cp b
+	jr nz, .next_map_1
+	ld a, [wMapNumber]
+	cp c
+	jr z, MockPlayerObject
+.next_map_1
+	ld a, [wNorthConnectedMapGroup]
+	cp b
+	jr nz, .next_map_2
+	ld a, [wNorthConnectedMapNumber]
+	cp c
+	ld a, 0 ; north connected map
+	jr z, .is_connected_map
+.next_map_2
+	ld a, [wSouthConnectedMapGroup]
+	cp b
+	jr nz, .next_map_3
+	ld a, [wSouthConnectedMapNumber]
+	cp c
+	ld a, 1 ; south connected map
+	jr z, .is_connected_map
+.next_map_3
+	ld a, [wWestConnectedMapGroup]
+	cp b
+	jr nz, .next_map_4
+	ld a, [wWestConnectedMapNumber]
+	cp c
+	ld a, 2 ; west connected map
+	jr z, .is_connected_map
+.next_map_4
+	ld a, [wEastConnectedMapGroup]
+	cp b
+	ret nz
+	ld a, [wEastConnectedMapNumber]
+	cp c
+	ld a, 3 ; east connected map
+	ret nz
+
+.is_connected_map
+	ld [wTempByteValue], a
+	ld hl, .got_sprite_coords
+	push hl
+	ld a, [wBeforeViewMapXCoord]
+	ld d, a
+	ld a, [wBeforeViewMapYCoord]
+	ld e, a
+	jumptable_bc .Jumptable, wTempByteValue
+
+.Jumptable:
+	dw GetNorthConnectedSpriteCoords
+	dw GetSouthConnectedSpriteCoords
+	dw GetWestConnectedSpriteCoords
+	dw GetEastConnectedSpriteCoords
+
+.got_sprite_coords
+	ret nc ; return if sprite is not in visible part of connected map
+	jr MockPlayerObject.loaded_player_mock_coords
+
 MockPlayerObject::
-; refresh wPlayerObjectYCoord and wPlayerObjectXCoord
+	ld hl, wBeforeViewMapYCoord
+	ld de, wPlayerMockYCoord
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hl]
+	ld [de], a
+
+.loaded_player_mock_coords
+; refresh wPlayerObjectYCoord and wPlayerObjectXCoord (not strictly necessary)
 	farcall RefreshPlayerCoords
 ; copy default sprite object to the last object struct
 	ld hl, .DefaultPlayerObject
@@ -893,15 +975,17 @@ MockPlayerObject::
 
 .copy_player_coords
 ; copy player's coordinates
-	ld hl, wPlayerObjectYCoord
+	ld hl, wPlayerMockYCoord
 	ld de, wMapObject{d:LAST_OBJECT}YCoord
 	ld a, [hli]
+	add 4
 	ld [de], a
 	inc de
-	ld a, [hl] ; wPlayerObjectXCoord
+	ld a, [hl] ; wPlayerMockXCoord
+	add 4
 	ld [de], a ; wMapObject{d:LAST_OBJECT}XCoord
 ; set facing direction
-	ld a, [wPlayerDirection]
+	ld a, [wBeforeViewMapDirection]
 	srl a
 	srl a
 	maskbits NUM_DIRECTIONS
@@ -929,3 +1013,207 @@ MockPlayerObject::
 	db 0,                          PLAYER_BIKE,   SPRITE_CHRIS_BIKE, PAL_NPC_RED << 4 | OBJECTTYPE_SCRIPT
 	db 1 << PLAYERGENDER_FEMALE_F, PLAYER_BIKE,   SPRITE_KRIS_BIKE,  PAL_NPC_BLUE << 4 | OBJECTTYPE_SCRIPT
 	db -1
+
+GetSouthConnectedSpriteCoords:
+; ycoord / 2 <= 2
+	ld a, e
+	srl a
+	cp 3
+	ret nc
+; [wSouthConnectionStripLocation]
+	ld hl, wSouthConnectionStripLocation
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+; + (xcoord / 2)
+	srl d
+	ld b, 0
+	ld c, d
+	add hl, bc
+; + ([wMapWidth] + 6) * ycoord / 2
+	ld a, [wMapWidth]
+	add 6
+	ld c, a
+	ld b, 0
+	srl e
+	ld a, e
+	and a
+	jr z, .done
+.loop
+	add hl, bc
+	dec a
+	jr nz, .loop
+.done
+	call ConvertConnectedOverworldMapBlockAddressToXYCoords
+	ret
+
+GetNorthConnectedSpriteCoords:
+; wNorthConnectedMapHeight >= 3
+; ycoord / 2 >= ([wNorthConnectedMapHeight] - 3)
+	ld a, [wNorthConnectedMapHeight]
+	sub 3
+	jr c, .nope
+	ld c, a
+	ld a, e
+	srl a
+	sub c
+	jr c, .nope
+	ld e, a ; e = ycoord / 2 - ([wNorthConnectedMapHeight] - 3)
+; [wNorthConnectionStripLocation]
+	ld hl, wNorthConnectionStripLocation
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+; + (xcoord / 2)
+	srl d
+	ld b, 0
+	ld c, d
+	add hl, bc
+; + ([wMapWidth] + 6) * {ycoord / 2 - ([wNorthConnectedMapHeight] - 3)} --> + ([wMapWidth] + 6) * e
+	ld a, [wMapWidth]
+	add 6
+	ld c, a
+	ld b, 0
+	ld a, e
+	and a
+	jr z, .done
+.loop
+	add hl, bc
+	dec a
+	jr nz, .loop
+.done
+	call ConvertConnectedOverworldMapBlockAddressToXYCoords
+	ret
+.nope
+	xor a
+	ret ; nc
+
+GetEastConnectedSpriteCoords:
+; xcoord / 2 <= 2
+	ld a, d
+	srl a
+	cp 3
+	ret nc
+; [wEastConnectionStripLocation]
+	ld hl, wEastConnectionStripLocation
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+; + (xcoord / 2)
+	srl d
+	ld b, 0
+	ld c, d
+	add hl, bc
+; + ([wMapWidth] + 6) * ycoord / 2
+	ld a, [wMapWidth]
+	add 6
+	ld c, a
+	ld b, 0
+	srl e
+	ld a, e
+	and a
+	jr z, .done
+.loop
+	add hl, bc
+	dec a
+	jr nz, .loop
+.done
+	call ConvertConnectedOverworldMapBlockAddressToXYCoords
+	ret
+
+GetWestConnectedSpriteCoords:
+; wWestConnectedMapWidth >= 3
+; xcoord / 2 >= ([wWestConnectedMapWidth] - 3)
+	ld a, [wWestConnectedMapWidth]
+	sub 3
+	jr c, .nope
+	ld c, a
+	ld a, d
+	srl a
+	sub c
+	jr c, .nope
+	ld d, a ; d = xcoord / 2 - ([wWestConnectedMapWidth] - 3)
+; [wWestConnectionStripLocation]
+	ld hl, wWestConnectionStripLocation
+	ld a, [hli]
+	ld h, [hl]
+	ld l, a
+; + xcoord / 2 - ([wWestConnectedMapWidth] - 3) --> + d
+	ld c, d
+	ld b, 0
+	add hl, bc
+; + ([wMapWidth] + 6) * ycoord / 2
+	ld a, [wMapWidth]
+	add 6
+	ld c, a
+	ld b, 0
+	srl e
+	ld a, e
+	and a
+	jr z, .done
+.loop
+	add hl, bc
+	dec a
+	jr nz, .loop
+.done
+	call ConvertConnectedOverworldMapBlockAddressToXYCoords
+	ret
+.nope
+	xor a
+	ret ; nc
+
+; load into wPlayerMockYCoord and wPlayerMockXCoord the coordinates
+; that correspond to wOverworldMapBlocks address at hl.
+ConvertConnectedOverworldMapBlockAddressToXYCoords:
+	ld bc, -wOverworldMapBlocks + $10000
+	add hl, bc
+	ld a, [wMapWidth]
+	add 6
+	xor $ff
+	inc a
+	ld c, a
+	ld b, $ff
+	ld d, -2 ;
+.calc_y_coord_loop
+	inc d    ;
+	inc d    ; each block in wOverworldMapBlocks occupies two half-blocks
+	add hl, bc
+	ld a, h
+	cp $ff
+	jr nz, .calc_y_coord_loop
+; for X, we want the value of l in the second-to-last iteration of the previous loop,
+; so undo the last iteration in l by adding [wMapWidth]+6 to it
+	ld a, [wMapWidth]
+	add 6
+	add l
+	add a ; each block in wOverworldMapBlocks occupies two half-blocks
+; substract 6 tiles from y, substract 6 tiles from x.
+; the '6's correspond to the 3 extra blocks in each margin of wOverworldMapBlocks.
+	sub 6
+	ld [wPlayerMockXCoord], a
+	ld a, d
+	sub 6
+	ld [wPlayerMockYCoord], a
+	call CheckPlayerMockSpriteOutOfScreen
+	ret ; c or nc
+
+; return nc if either X or Y coord is too negative to be visible in the screen.
+; this corresponds to half-block coords -5 and -6, which are visible by wOverworldMapBlocks,
+; but not by the map sprite engine when it adds 4 to X and to Y to obtain wPlayerObject coords.
+CheckPlayerMockSpriteOutOfScreen:
+	ld a, [wPlayerMockXCoord]
+	ld b, a
+	ld a, [wPlayerMockYCoord]
+	ld c, a
+	ld a, -5
+	cp b
+	ret z ; nc
+	cp c
+	ret z ; nc
+	dec a ; -6
+	cp b
+	ret z ; nc
+	cp c
+	ret z ; nc
+	scf
+	ret

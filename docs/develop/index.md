@@ -102,7 +102,10 @@
   - **wTempSpaceStruct**: Temporary scope. Same structure as *wCurSpaceStruct*
   - **wTempSpaceBranchStruct**: Temporary scope. The structure is four bytes for next space for each direction (R/L/U/D; -1 if unavailable direction) followed by four bytes for required techniques for each direction (R/L/U/D)
   - **wViewMapModeRange**, **wViewMapModeDisplacementY**, **wViewMapModeDisplacementX**: Temporary scope during a Vew Map mode session.
-  - **wBeforeViewMapYCoord**, **wBeforeViewMapXCoord**, **wBeforeViewMapMapGroup**, **wBeforeViewMapMapNumber**: Temporary scope during a Vew Map mode session. Used to preserve previous player state.
+  - **wBeforeViewMapYCoord**, **wBeforeViewMapXCoord**, **wBeforeViewMapMapGroup**, **wBeforeViewMapMapNumber**, **wBeforeViewMapDirection**: Temporary scope during a Vew Map mode session. Used to preserve player state before entering View Map mode.
+
+- Additional addresses for View Map mode, that share memory region with *wCurBattleMon* and *wCurMoveNum*, which are not used outside of battle:
+  - **wPlayerMockYCoord**, **wPlayerMockXCoord**: Used to handle the player mock sprite through map connections during View Map mode.
 
 - Addresses for talker events:
   - *wSeenTrainer** addresses have been repurposed as **wSeenTrainerOrTalker***

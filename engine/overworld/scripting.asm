@@ -1248,10 +1248,12 @@ Script_reloadmapafterviewmapmode:
 	ld hl, wDisplaySecondarySprites
 	set SECONDARYSPRITES_SPACES_LEFT_F, [hl]
 	set SECONDARYSPRITES_BRANCH_SPACE_F, [hl]
+; load the saved facing direction to wPlayerSpriteSetupFlags
 	ld hl, wPlayerSpriteSetupFlags
-; get the facing direction from the mocked object's facing direction
-	ld a, [wMapObject{d:LAST_OBJECT}Movement]
-	sub SPRITEMOVEDATA_STANDING_DOWN
+	ld a, [wBeforeViewMapDirection]
+	srl a
+	srl a
+	maskbits NUM_DIRECTIONS
 	ld [hl], a
 	set PLAYERSPRITESETUP_CUSTOM_FACING_F, [hl]
 	ld a, BOARDEVENT_RESUME_BRANCH

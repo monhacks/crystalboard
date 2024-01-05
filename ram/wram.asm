@@ -1715,6 +1715,7 @@ wViewMapModeDisplacementX:: db
 ; coords and map backup to know where to spawn after returning from View Map mode
 wBeforeViewMapYCoord::    db
 wBeforeViewMapXCoord::    db
+wBeforeViewMapDirection:: db
 wBeforeViewMapMapGroup::  db
 wBeforeViewMapMapNumber:: db
 ENDU
@@ -1724,11 +1725,19 @@ wStartMenuLastCursorPosition::
 wBoardMenuLastCursorPosition::
 	db
 
+UNION
+
 wCurBattleMon::
 ; index of the player's mon currently in battle (0-5)
 	db
 
 wCurMoveNum:: db
+
+NEXTU
+; temp variables used within MockPlayerObject during View Map mode
+wPlayerMockYCoord:: db
+wPlayerMockXCoord:: db
+ENDU
 
 wLastPocket:: db
 

@@ -122,6 +122,7 @@ MapSetupScript_Connection:
 	mapsetup RefreshPlayerCoords
 	mapsetup LoadBlockData
 	mapsetup LoadDisabledSpaces
+	mapsetup RepositionMockedPlayerObject
 	mapsetup LoadMapTileset
 	mapsetup SaveScreen
 	mapsetup LoadMapObjects
