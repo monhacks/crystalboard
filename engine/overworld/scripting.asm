@@ -1883,7 +1883,9 @@ GetCoinsAccount:
 LoadCoinsAmountToMem:
 	ld bc, hCoinsTemp
 	call GetScriptByte
-	cp HIGH(BLUE_RED_SPACE_COINS)
+	cp COINS_FROM_RAM >> 16
+	jr z, .coins_from_ram
+	cp BLUE_RED_SPACE_COINS >> 16
 	jr z, .blue_red_space_coins
 	push bc
 	ld [bc], a
@@ -1895,6 +1897,26 @@ LoadCoinsAmountToMem:
 	ld [bc], a
 	pop bc
 	ret
+
+.coins_from_ram
+; if the highest byte was COINS_FROM_RAM, the lowest two bytes are a RAM address.
+; but the script argument is dt, which is big endian rather than little endian like dw.
+	call GetScriptByte
+	ld h, a
+	call GetScriptByte
+	ld l, a
+	push bc
+	ld a, [hli]
+	ld [bc], a
+	inc bc
+	ld a, [hli]
+	ld [bc], a
+	inc bc
+	ld a, [hl]
+	ld [bc], a
+	pop bc
+	ret
+
 
 .blue_red_space_coins
 	push de
@@ -2435,6 +2457,7 @@ ReturnFromCredits:
 
 Script_exitoverworld:
 	call GetScriptByte
+	ld [wExitOverworldReason], a
 	call Script_endall
 	ld a, MAPSTATUS_DONE
 	call LoadMapStatus

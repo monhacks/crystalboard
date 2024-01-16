@@ -116,6 +116,11 @@
   - **wDisabledSpacesBackups**: preserved on save to **sDisabledSpacesBackups**.
   - **wMapObjectsBackups**: preserved on save to **sMapObjectsBackups**.
 
+- Other WRAM 0 addresses (not preserved on save):
+  - **wText2bpp**
+  - **wWhichHUD**
+  - **wExitOverworldReason**
+
 ### Overworld workflow
 
 1) ``OverworldLoop`` is called from ``GameMenu_WorldMap`` with either ``hMapEntryMethod`` = ``MAPSETUP_ENTERLEVEL`` or ``hMapEntryMethod`` = ``MAPSETUP_CONTINUE``.

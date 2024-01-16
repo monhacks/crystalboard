@@ -24,7 +24,8 @@ DEF STRING_BUFFER_LENGTH EQU 19
 	const HAVE_LESS   ; 2
 
 ; givecoins/takecoins/checkcoins special amount values
-DEF BLUE_RED_SPACE_COINS EQU $ffffff
+DEF BLUE_RED_SPACE_COINS EQU $ff0000
+DEF COINS_FROM_RAM       EQU $fe0000
 
 ; checkpokemail return values
 	const_def
@@ -342,7 +343,7 @@ DEF NUM_UNOWN_PUZZLES EQU const_value
 	const BOARDEVENT_RESUME_BRANCH  ; 6
 DEF NUM_BOARD_EVENTS EQU const_value - 1
 
-; exitoverworld arguments
+; exitoverworld arguments (wExitOverworldReason)
 	const_def
 	const ABANDONED_LEVEL     ; 0
 	const CLEARED_LEVEL       ; 1

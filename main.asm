@@ -240,6 +240,11 @@ SECTION "Level Selection Menu", ROMX
 INCLUDE "engine/menus/level_selection_menu.asm"
 
 
+SECTION "Level Transition", ROMX
+
+INCLUDE "engine/menus/cleared_level_screen.asm"
+
+
 SECTION "Board 1", ROMX
 
 INCLUDE "engine/board/menu.asm"

@@ -1248,6 +1248,8 @@ wWhichHUD::
 ; index to LoadHUD
 	db
 
+wExitOverworldReason:: db
+
 wOptions::
 ; bit 0-2: number of frames to delay when printing text
 ;   fast 1; mid 3; slow 5

@@ -82,6 +82,7 @@ ROMX $15
 	"Map Scripts 1"
 ROMX $1d
 	"Level Selection Menu"
+	"Level Transition"
 ROMX $1e
 	"Board 1"
 ROMX $20

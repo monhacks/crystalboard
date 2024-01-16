@@ -133,6 +133,12 @@ GameMenu_WorldMap:
 	call ClearObjectStructs
 	call ClearBGPalettes
 	call ClearSprites
+	ld a, [wExitOverworldReason]
+	cp CLEARED_LEVEL
+	jr nz, .save_and_return
+	call AdvanceTimeOfDay
+	farcall ClearedLevelScreen
+.save_and_return
 	farcall AutoSaveGameOutsideOverworld
 	ret
 
