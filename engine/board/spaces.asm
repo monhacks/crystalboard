@@ -34,6 +34,9 @@ ItemSpaceScript::
 	scall ArriveToRegularSpaceScript
 	iftrue .not_landed
 	scall LandedInRegularSpaceScript_BeforeSpaceEffect
+	opentext
+	verbosegiveitem POTION
+	closetext
 	scall LandedInRegularSpaceScript_AfterSpaceEffect
 .not_landed
 	end
