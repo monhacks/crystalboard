@@ -107,10 +107,7 @@ _SlotMachine:
 	call PlayMusic
 	call DelayFrame
 	call DisableLCD
-	hlbgcoord 0, 0
-	ld bc, vBGMap1 - vBGMap0
-	ld a, " "
-	call ByteFill
+	call ClearBGMap0or2
 	ld b, CGB_SLOT_MACHINE
 	call GetCGBLayout
 	callfar ClearSpriteAnims

@@ -4,13 +4,16 @@ ClearedLevelScreen:
 	ldh [hSCY], a
 	ld a, -$4
 	ldh [hSCX], a
+	call DisableLCD
 	call ClearTilemap
+	call ClearBGMap0or2
 	call LoadFrame
 	call LoadStandardFont
 	call ClearMenuAndWindowData
 	ld b, CGB_DIPLOMA
 	call GetCGBLayout
 	call SetPalettes
+	call EnableLCD
 	ld hl, .LevelCleared1Text
 	bccoord 3, 1
 	call PrintHLTextAtBC

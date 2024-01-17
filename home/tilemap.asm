@@ -1,3 +1,10 @@
+ClearBGMap0or2::
+	ld a, " "
+FillBGMap0or2::
+	hlbgcoord 0, 0
+	ld bc, vBGMap1 - vBGMap0
+	jp ByteFill
+
 ClearBGPalettes::
 	call ClearPalettes
 WaitBGMap::

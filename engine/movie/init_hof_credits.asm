@@ -5,10 +5,7 @@ InitDisplayForHallOfFame:
 	call DisableLCD
 	call LoadStandardFont
 	call LoadFontsBattleExtra
-	hlbgcoord 0, 0
-	ld bc, vBGMap1 - vBGMap0
-	ld a, " "
-	call ByteFill
+	call ClearBGMap0or2
 	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	xor a
@@ -34,10 +31,7 @@ InitDisplayForRedCredits:
 	call DisableLCD
 	call LoadStandardFont
 	call LoadFontsBattleExtra
-	hlbgcoord 0, 0
-	ld bc, vBGMap1 - vBGMap0
-	ld a, " "
-	call ByteFill
+	call ClearBGMap0or2
 	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	xor a

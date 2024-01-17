@@ -14,11 +14,12 @@ GameMenu:
 GameMenu_KeepMusic:
 	xor a
 	ldh [hMapAnims], a
-	ldh [hSCX], a
-	ldh [hSCY], a
 	call ClearTilemap
 	call LoadFrame
 	call LoadStandardFont
+	xor a
+	ldh [hSCX], a
+	ldh [hSCY], a
 	call ClearMenuAndWindowData
 	ld b, CGB_DIPLOMA
 	call GetCGBLayout
