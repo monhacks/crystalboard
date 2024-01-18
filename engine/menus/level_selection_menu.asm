@@ -4,8 +4,6 @@ LevelSelectionMenu::
 	ldh [hMapAnims], a
 	ld a, 1 << 2 ; do not clear wShadowOAM during DoNextFrameForAllSprites
 	ld [wVramState], a
-	ld a, -1
-	ld [wUnlockedLevels], a ; debug
 
 	call ClearBGPalettes
 	call ClearTilemap
@@ -598,6 +596,12 @@ LevelSelectionMenu_GetValidDirections:
 ; the landmark byte of this transition is two bytes back
 	dec hl
 	dec hl
+; use LandmarkToLevelTable to find the level that this landmark belongs to
+	ld e, [hl]
+	ld d, 0
+	ld hl, LandmarkToLevelTable
+	add hl, de
+; find if said level has been unlocked
 	ld e, [hl]
 	ld b, CHECK_FLAG
 	call UnlockedLevelsFlagAction

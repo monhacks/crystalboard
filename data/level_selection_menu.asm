@@ -17,6 +17,7 @@ MACRO level_selection_menu_landmark
 ENDM
 
 LevelSelectionMenu_Landmarks:
+	table_width 6, LevelSelectionMenu_Landmarks
 .landmark1
 	level_selection_menu_landmark 0, 16, 12, .Level1LandmarkName, SPAWN_LEVEL_1 ; LANDMARK_LEVEL_1
 .landmark2
@@ -27,6 +28,7 @@ if DEF(_DEBUG)
 	level_selection_menu_landmark 1, 16, 11, .DebugLevel4LandmarkName, SPAWN_DEBUGLEVEL_4 ; LANDMARK_DEBUGLEVEL_4
 	level_selection_menu_landmark 2,  9,  5, .DebugLevel5LandmarkName, SPAWN_DEBUGLEVEL_5 ; LANDMARK_DEBUGLEVEL_5
 endc
+	assert_table_length NUM_LANDMARKS
 
 .Level1LandmarkName: db "LEVEL 1@"
 if DEF(_DEBUG)
@@ -108,3 +110,17 @@ LevelSelectionMenu_PageGrid:
 
 DEF LEVELSELECTIONMENU_PAGE_GRID_WIDTH  EQU 4
 DEF LEVELSELECTIONMENU_PAGE_GRID_HEIGHT EQU 4
+
+LandmarkToLevelTable:
+; the usual level:landmark relation is expected to be 1:1, but 1:n is
+; also supported, for levels that may have alternative starting points.
+	table_width 1, LandmarkToLevelTable
+	db LEVEL_1 ; LANDMARK_LEVEL_1
+if DEF(_DEBUG)
+	db DEBUGLEVEL_1 ; LANDMARK_DEBUGLEVEL_1
+	db DEBUGLEVEL_2 ; LANDMARK_DEBUGLEVEL_2
+	db DEBUGLEVEL_3 ; LANDMARK_DEBUGLEVEL_3
+	db DEBUGLEVEL_4 ; LANDMARK_DEBUGLEVEL_4
+	db DEBUGLEVEL_5 ; LANDMARK_DEBUGLEVEL_5
+endc
+	assert_table_length NUM_LANDMARKS

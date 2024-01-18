@@ -23,6 +23,8 @@ if DEF(_DEBUG)
 	ld a, 100
 	ld [wCurPartyLevel], a
 	predef TryAddMonToParty
+	ld a, -1
+	ld [wUnlockedLevels], a ; debug
 endc
 	farcall AutoSaveGameOutsideOverworld
 	jp GameMenu
