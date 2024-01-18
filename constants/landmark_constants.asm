@@ -1,4 +1,4 @@
-; Landmarks indexes (see data/level_selection_menu.asm)
+; Landmarks indexes (see data/levels/level_selection_menu.asm)
 	const_def
 	const LANDMARK_LEVEL_1           ; 00
 if DEF(_DEBUG)
@@ -9,6 +9,7 @@ if DEF(_DEBUG)
 	const LANDMARK_DEBUGLEVEL_5      ; 05
 endc
 DEF NUM_LANDMARKS EQU const_value
+assert NUM_LANDMARKS <= 254
 
 ; used in CaughtData (legacy)
 	const_def $7f, -1

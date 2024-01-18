@@ -105,7 +105,7 @@ DebugLevel5_Map1_MapSpaces:
 	space  8,  8,  $0, 32 ; 31
 	space 10,  8,  $0, 33 ; 32
 	space 12,  8,  $0, 34 ; 33
-	space 14,  8,  $0, 34 ; 34
+	space 14,  8, ES1, 34 ; 34
 
 	space  6,  2,  $0, 36 ; 35
 	space  6,  0,  .BS36  ; 36

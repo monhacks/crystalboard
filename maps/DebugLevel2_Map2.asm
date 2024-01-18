@@ -30,4 +30,4 @@ DebugLevel2_Map2_MapSpaces:
 	space  4,  2,  $0,  8 ;  7
 	space  6,  2,  $0,  9 ;  8
 	space  6,  6,  $0, 10 ;  9
-	space  6,  8,  $0, 10 ; 10
+	space  6,  8, ES2, 10 ; 10

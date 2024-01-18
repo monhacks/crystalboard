@@ -2441,7 +2441,11 @@ wMooMooBerries:: db
 wUndergroundSwitchPositions:: db
 wFarfetchdPosition:: db
 
-wUnlockedLevels:: flag_array NUM_LANDMARKS
+wUnlockedLevels:: flag_array NUM_LEVELS
+wClearedLevelsStage1:: flag_array NUM_LEVELS
+wClearedLevelsStage2:: flag_array NUM_LEVELS
+wClearedLevelsStage3:: flag_array NUM_LEVELS
+wClearedLevelsStage4:: flag_array NUM_LEVELS
 
 wUnlockedTechniques:: flag_array NUM_TECHNIQUES
 
@@ -2560,6 +2564,7 @@ wYCoord:: db
 wXCoord:: db
 wScreenSave:: ds SCREEN_META_WIDTH * SCREEN_META_HEIGHT
 
+wCurLevel:: db
 wCurTurn:: dw
 wCurSpace:: db
 wCurLevelCoins:: ds 3

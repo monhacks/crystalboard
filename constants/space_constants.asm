@@ -3,6 +3,13 @@ DEF FIRST_SPACE_METATILE        EQU $80
 DEF FIRST_GREY_SPACE_METATILE   EQU $e0
 DEF UNIQUE_SPACE_METATILES_MASK EQU %11111
 
+; End Space effect constants (denotes which stage of the level is cleared by this space; equivalent to STAGE_* constants)
+	const_def
+	const ES1 ; 0
+	const ES2 ; 1
+	const ES3 ; 2
+	const ES4 ; 3
+
 ; Branch Space special direction values
 	const_def 255, -1
 	const BRANCH_DIRECTION_INVALID     ; -1

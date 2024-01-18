@@ -119,6 +119,13 @@ LevelSelectionMenu::
 
 .enter_level
 	ld a, [wLevelSelectionMenuCurrentLandmark]
+	ld e, a
+	ld d, 0
+	ld hl, LandmarkToLevelTable
+	add hl, de
+	ld a, [hl]
+	ld [wCurLevel], a
+	ld a, [wLevelSelectionMenuCurrentLandmark]
 	call LevelSelectionMenu_GetLandmarkSpawnPoint
 	ld [wDefaultSpawnpoint], a
 	call LevelSelectionMenu_Delay10Frames
@@ -521,12 +528,10 @@ LevelSelectionMenu_GetLandmarkName::
 
 LevelSelectionMenu_GetLandmarkSpawnPoint:
 ; Return SPAWN_* (a) of landmark a.
-	push hl
 	ld hl, LevelSelectionMenu_Landmarks + $5
 	ld bc, LevelSelectionMenu_Landmarks.landmark2 - LevelSelectionMenu_Landmarks.landmark1
 	call AddNTimes
 	ld a, [hl]
-	pop hl
 	ret
 
 LevelSelectionMenu_GetValidKeys:
@@ -744,7 +749,7 @@ _LevelSelectionMenuHandleTransition:
 	xor a
 	ret
 
-INCLUDE "data/level_selection_menu.asm"
+INCLUDE "data/levels/level_selection_menu.asm"
 
 LevelSelectionMenuGFX:
 INCBIN "gfx/level_selection_menu/background.2bpp.lz"

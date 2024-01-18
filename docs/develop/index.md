@@ -82,7 +82,8 @@
   - **wDieRoll**
   - **wSpacesLeft**
 
-- Addresses within *wCurMapData* ~ *wCurMapDataEnd*: preserved on save. Initialized when entering a level, and updated accordingly throughout the level. Includes:
+- Addresses within *wCurMapData* ~ *wCurMapDataEnd*: preserved on save. Initialized when entering a level (in StartMap), and updated accordingly throughout the level. Includes:
+  - **wCurLevel**: this one is not initialized in StartMap, but in LevelSelectionMenu, and stays static during the level.
   - **wCurTurn**
   - **wCurSpace**
   - **wCurLevelCoins**
@@ -95,6 +96,7 @@
 
 - Addresses within *wPlayerData* ~ *wPlayerDataEnd*: preserved on save. Includes:
   - **wUnlockedLevels**: flag array that tracks progression regarding which levels have been unlocked.
+  - **wClearedLevelsStage<N>**: flag array that tracks progression regarding which levels have been cleared. Each level can have up to four clearable endings (N).
   - **wUnlockedTechniques**: flag array that tracks progression regarding which techniques have been unlocked.
   - **wCurOverworldMiscPal**
 
