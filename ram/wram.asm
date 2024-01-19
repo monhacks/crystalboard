@@ -713,6 +713,13 @@ wOverworldMapBlocksEnd::
 
 SECTION UNION "Overworld Map", WRAM0
 
+; temporary list of unlocked levels during post-level screen
+wNumTempUnlockedLevels:: db
+wTempUnlockedLevels:: ds NUM_LEVELS
+
+
+SECTION UNION "Overworld Map", WRAM0
+
 ; GB Printer data
 wGameboyPrinterRAM::
 wGameboyPrinter2bppSource:: ds 40 tiles

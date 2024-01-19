@@ -14,9 +14,10 @@ elif !STRCMP("\1", "NUMBER_OF_LEVELS_CLEARED")
 	db UNLOCK_WHEN_\1
 	db \2
 
-; a list of techniques that must be cleared
+; a bitfield list of techniques that must be cleared
 elif !STRCMP("\1", "TECHNIQUES_CLEARED")
 	db UNLOCK_WHEN_\1
+	assert (_NARG - 1) == (NUM_TECHNIQUES + 7) / 8
 	rept _NARG - 1
 		db \2
 		shift
@@ -35,7 +36,9 @@ if DEF(_DEBUG)
 	level_unlock_req NONE ; DEBUGLEVEL_1
 	level_unlock_req LEVELS_CLEARED, DEBUGLEVEL_1, STAGE_1 ; DEBUGLEVEL_2
 	level_unlock_req LEVELS_CLEARED, DEBUGLEVEL_2, STAGE_1 ; DEBUGLEVEL_3
-	level_unlock_req LEVELS_CLEARED, DEBUGLEVEL_3, STAGE_1 ; DEBUGLEVEL_4
-	level_unlock_req LEVELS_CLEARED, DEBUGLEVEL_4, STAGE_1 ; DEBUGLEVEL_5
+;	level_unlock_req LEVELS_CLEARED, DEBUGLEVEL_3, STAGE_1 ; DEBUGLEVEL_4
+;	level_unlock_req LEVELS_CLEARED, DEBUGLEVEL_4, STAGE_1 ; DEBUGLEVEL_5
+	level_unlock_req NUMBER_OF_LEVELS_CLEARED, 3 ; DEBUGLEVEL_4
+	level_unlock_req TECHNIQUES_CLEARED, TECHNIQUE_FLASH | TECHNIQUE_WATERFALL ; DEBUGLEVEL_5
 endc
 	assert x == NUM_LEVELS

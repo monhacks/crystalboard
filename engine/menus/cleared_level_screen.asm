@@ -31,6 +31,10 @@ ClearedLevelScreen:
 .exit
 	call AddLevelCoinsToBalance
 	call ClearLevel
+	xor a
+	ld [wNumTempUnlockedLevels], a
+	ld a, $ff
+	ld [wTempUnlockedLevels], a
 	call UnlockLevels
 	ld c, 30
 	jp DelayFrames
@@ -113,7 +117,9 @@ UnlockLevels:
 	cp UNLOCK_WHEN_LEVELS_CLEARED
 	jr z, .check_levels_cleared_loop
 	cp UNLOCK_WHEN_NUMBER_OF_LEVELS_CLEARED
+	jr z, .check_number_of_levels_cleared
 	cp UNLOCK_WHEN_TECHNIQUES_CLEARED
+	jr .check_techniques_cleared
 
 .check_levels_cleared_loop
 	ld a, [hli] ; which level
@@ -130,8 +136,51 @@ UnlockLevels:
 	jr z, .reqs_not_met ; if this level is not cleared, requirements aren't met
 	jr .check_levels_cleared_loop ; otherwise check next level in list
 
+.check_number_of_levels_cleared
+	push hl
+	ld hl, wClearedLevelsStage1
+	ld b, ((NUM_LEVELS + 7) / 8) * 4
+	call CountSetBits
+	pop hl
+	ld a, [hli]
+	cp c
+	jr c, .reqs_met
+	jr z, .reqs_met
+	jr .reqs_not_met
+
+.check_techniques_cleared
+	ld bc, 0
+.check_techniques_cleared_loop
+	ld a, [hli]
+	ld e, a
+	push hl
+	ld hl, wUnlockedTechniques
+	add hl, bc
+	and [hl]
+	cp e
+	pop hl
+	jr nz, .reqs_not_met
+	inc c
+	ld a, c
+	cp (NUM_TECHNIQUES + 7) / 8
+	jr nc, .reqs_met
+	jr .check_techniques_cleared_loop
+
 .reqs_met
-	pop bc
+; add level to wTempUnlockedLevels
+	pop bc ; b = which level
+	push hl
+	ld a, [wNumTempUnlockedLevels]
+	ld e, a
+	ld d, 0
+	ld hl, wTempUnlockedLevels
+	add hl, de
+	ld [hl], b
+	inc hl
+	ld [hl], $ff
+	inc a
+	ld [wNumTempUnlockedLevels], a
+	pop hl
 	pop de
 	ret
 
