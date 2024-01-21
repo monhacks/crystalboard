@@ -19,14 +19,14 @@ ENDM
 LevelSelectionMenu_Landmarks:
 	table_width 6, LevelSelectionMenu_Landmarks
 .landmark1
-	level_selection_menu_landmark 0, 16, 12, .Level1LandmarkName, SPAWN_LEVEL_1 ; LANDMARK_LEVEL_1
+	level_selection_menu_landmark 0, 16, 11, .Level1LandmarkName, SPAWN_LEVEL_1 ; LANDMARK_LEVEL_1
 .landmark2
 if DEF(_DEBUG)
-	level_selection_menu_landmark 0, 16, 11, .DebugLevel1LandmarkName, SPAWN_DEBUGLEVEL_1 ; LANDMARK_DEBUGLEVEL_1
-	level_selection_menu_landmark 0, 11,  9, .DebugLevel2LandmarkName, SPAWN_DEBUGLEVEL_2 ; LANDMARK_DEBUGLEVEL_2
-	level_selection_menu_landmark 0,  9, 11, .DebugLevel3LandmarkName, SPAWN_DEBUGLEVEL_3 ; LANDMARK_DEBUGLEVEL_3
-	level_selection_menu_landmark 1, 16, 11, .DebugLevel4LandmarkName, SPAWN_DEBUGLEVEL_4 ; LANDMARK_DEBUGLEVEL_4
-	level_selection_menu_landmark 2,  9,  5, .DebugLevel5LandmarkName, SPAWN_DEBUGLEVEL_5 ; LANDMARK_DEBUGLEVEL_5
+	level_selection_menu_landmark 0, 16, 10, .DebugLevel1LandmarkName, SPAWN_DEBUGLEVEL_1 ; LANDMARK_DEBUGLEVEL_1
+	level_selection_menu_landmark 0, 11,  8, .DebugLevel2LandmarkName, SPAWN_DEBUGLEVEL_2 ; LANDMARK_DEBUGLEVEL_2
+	level_selection_menu_landmark 0,  9, 10, .DebugLevel3LandmarkName, SPAWN_DEBUGLEVEL_3 ; LANDMARK_DEBUGLEVEL_3
+	level_selection_menu_landmark 1, 16, 10, .DebugLevel4LandmarkName, SPAWN_DEBUGLEVEL_4 ; LANDMARK_DEBUGLEVEL_4
+	level_selection_menu_landmark 2,  9,  4, .DebugLevel5LandmarkName, SPAWN_DEBUGLEVEL_5 ; LANDMARK_DEBUGLEVEL_5
 endc
 	assert_table_length NUM_LANDMARKS
 
@@ -82,7 +82,7 @@ if DEF(_DEBUG)
 	level_selection_menu_landmark_transition RIGHT, FALSE
 
 ; LANDMARK_DEBUGLEVEL_3
-	level_selection_menu_landmark_transition DOWN, 7, DOWN, 1, LANDMARK_DEBUGLEVEL_5
+	level_selection_menu_landmark_transition DOWN, 7, LANDMARK_DEBUGLEVEL_5
 	level_selection_menu_landmark_transition UP, 5, RIGHT, 2, DOWN, 3, LANDMARK_DEBUGLEVEL_2
 	level_selection_menu_landmark_transition LEFT, 7, LEFT, 4, LANDMARK_DEBUGLEVEL_4
 	level_selection_menu_landmark_transition RIGHT, 7, LANDMARK_DEBUGLEVEL_1
@@ -95,7 +95,7 @@ if DEF(_DEBUG)
 
 ; LANDMARK_DEBUGLEVEL_5
 	level_selection_menu_landmark_transition DOWN, FALSE
-	level_selection_menu_landmark_transition UP, 7, UP, 1, LANDMARK_DEBUGLEVEL_3
+	level_selection_menu_landmark_transition UP, 7, LANDMARK_DEBUGLEVEL_3
 	level_selection_menu_landmark_transition LEFT, FALSE
 	level_selection_menu_landmark_transition RIGHT, FALSE
 endc

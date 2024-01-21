@@ -395,14 +395,14 @@ LevelSelectionMenu_DoPageChangeEvent:
 ; =------------------=
 ; =------------------=
 ; =------------------=
-; =------------------=
 ; =========DD=========
 ; =========DD=========
+; ====================
 ; ====================
 ; for movements spanning two pages, when one edge is reached, the page change occurs
 ; and the player appears in the other page at the coordinate of the new edge.
 ; hence, for calculating movement length, it's as if both pages were adjacent without the border frame.
-DEF PAGE_EDGE_DOWN  EQU $90
+DEF PAGE_EDGE_DOWN  EQU $88
 DEF PAGE_EDGE_UP    EQU $10
 DEF PAGE_EDGE_LEFT  EQU $08
 DEF PAGE_EDGE_RIGHT EQU $a8
