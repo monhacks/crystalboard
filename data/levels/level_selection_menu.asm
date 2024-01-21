@@ -16,6 +16,12 @@ MACRO level_selection_menu_landmark
 	db \5
 ENDM
 
+MACRO level_selection_menu_landmark_name
+	assert STRLEN(\1) == LSMTEXTBOX_MAX_TEXT_ROW_LENGTH
+	assert STRLEN(\2) == LSMTEXTBOX_MAX_TEXT_ROW_LENGTH
+	db STRRPL(\1, " ", "<LSMTEXTBOX_BLACK_TILE>"), STRRPL(\2, " ", "<LSMTEXTBOX_BLACK_TILE>"),
+ENDM
+
 LevelSelectionMenu_Landmarks:
 	table_width 6, LevelSelectionMenu_Landmarks
 .landmark1
@@ -30,13 +36,13 @@ if DEF(_DEBUG)
 endc
 	assert_table_length NUM_LANDMARKS
 
-.Level1LandmarkName: db "LEVEL 1@"
+.Level1LandmarkName: level_selection_menu_landmark_name "  THE FIRST  ", "    LEVEL    "
 if DEF(_DEBUG)
-.DebugLevel1LandmarkName: db "DEBUG LEVEL 1@"
-.DebugLevel2LandmarkName: db "DEBUG LEVEL 2@"
-.DebugLevel3LandmarkName: db "DEBUG LEVEL 3@"
-.DebugLevel4LandmarkName: db "DEBUG LEVEL 4@"
-.DebugLevel5LandmarkName: db "DEBUG LEVEL 5@"
+.DebugLevel1LandmarkName: level_selection_menu_landmark_name "    DEBUG    ", "    DUMMY    "
+.DebugLevel2LandmarkName: level_selection_menu_landmark_name "    DEBUG    ", "    CAVE     "
+.DebugLevel3LandmarkName: level_selection_menu_landmark_name "    DEBUG    ", "   FOREST    "
+.DebugLevel4LandmarkName: level_selection_menu_landmark_name "    DEBUG    ", "    TEST2    "
+.DebugLevel5LandmarkName: level_selection_menu_landmark_name "    DEBUG    ", "    TEST1    "
 endc
 
 MACRO level_selection_menu_landmark_transition

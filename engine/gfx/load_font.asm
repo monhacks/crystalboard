@@ -100,3 +100,29 @@ LoadStatsScreenPageTilesGFX:
 	lb bc, BANK(StatsScreenPageTilesGFX), 17
 	call Get2bppViaHDMA
 	ret
+
+LoadInversedFont::
+	ld de, FontInversed
+	ld hl, vTiles1
+	lb bc, BANK(FontInversed), 112 ; "A" to "9"
+	ldh a, [rLCDC]
+	bit rLCDC_ENABLE, a
+	jp z, Copy1bpp
+
+	ld de, FontInversed
+	ld hl, vTiles1
+	lb bc, BANK(FontInversed), 32 ; "A" to...
+	call Get1bppViaHDMA
+	ld de, FontInversed + 32 * LEN_1BPP_TILE
+	ld hl, vTiles1 tile $20
+	lb bc, BANK(FontInversed), 32
+	call Get1bppViaHDMA
+	ld de, FontInversed + 64 * LEN_1BPP_TILE
+	ld hl, vTiles1 tile $40
+	lb bc, BANK(FontInversed), 32
+	call Get1bppViaHDMA
+	ld de, FontInversed + 96 * LEN_1BPP_TILE
+	ld hl, vTiles1 tile $60
+	lb bc, BANK(FontInversed), 16 ; ..."9"
+	call Get1bppViaHDMA
+	ret

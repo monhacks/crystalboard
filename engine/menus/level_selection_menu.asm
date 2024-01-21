@@ -40,6 +40,7 @@ LevelSelectionMenu::
 	ld a, [wLevelSelectionMenuCurrentLandmark]
 	call LevelSelectionMenu_InitPlayerSprite
 	call LevelSelectionMenu_InitLandmark
+	call LevelSelectionMenu_PrintLevelAndLandmarkName
 	call LevelSelectionMenu_DrawDirectionalArrows
 
 .main_loop
@@ -78,8 +79,8 @@ LevelSelectionMenu::
 	jr .start_movement
 
 .start_movement
+	ld e, c ; copy direction to e for later (for LevelSelectionMenu_SetAnimSeqAndFrameset)
 ; make hl point to the beginning of the transition data for the chosen direction at c
-	ld e, c ; also copy direction to e for later
 	ld hl, wLevelSelectionMenuLandmarkTransitionsPointer
 	ld a, [hli]
 	ld h, [hl]
@@ -93,8 +94,10 @@ LevelSelectionMenu::
 	ld a, h
 	ld [bc], a
 
-; begin transition
+; clear textbox as we are about to move out of current landmark
 	call LevelSelectionMenu_Delay10Frames
+	call LevelSelectionMenu_ClearTextbox ; preserves e
+; begin transition
 	xor a ; FALSE
 	ld [wLevelSelectionMenuStandingStill], a
 	ld a, 1 << 7 ; "first step of movement" flag
@@ -114,8 +117,9 @@ LevelSelectionMenu::
 	jr z, .wait_transition_loop
 
 	call LevelSelectionMenu_InitLandmark
+	call LevelSelectionMenu_PrintLevelAndLandmarkName
 	call LevelSelectionMenu_DrawDirectionalArrows
-	jr .main_loop
+	jp .main_loop
 
 .enter_level
 	ld a, [wLevelSelectionMenuCurrentLandmark]
@@ -151,6 +155,8 @@ LevelSelectionMenu::
 	ret ; nc
 
 LevelSelectionMenu_LoadGFX:
+; load inverted font
+	farcall LoadInversedFont
 ; load gfx for the background tiles, and for the player and directional arrow sprites
 	ld hl, LevelSelectionMenuGFX
 	ld de, vTiles2
@@ -260,6 +266,71 @@ endr
 	inc de
 	ld a, h
 	ld [de], a
+	ret
+
+LevelSelectionMenu_PrintLevelAndLandmarkName:
+; level indicator and level numbers are 8x16.
+; botton half of their graphics are $10 tiles after the top half.
+	hlcoord LSMTEXTBOX_X_COORD, LSMTEXTBOX_Y_COORD
+	ld a, LSMTEXTBOX_LEVEL_INDICATOR_TILE
+	ld [hl], a
+	add $10
+	ld bc, SCREEN_WIDTH
+	add hl, bc
+	ld [hl], a
+	ld a, [wLevelSelectionMenuCurrentLandmark]
+	ld e, a
+	ld d, 0
+	ld hl, LandmarkToLevelTable
+	add hl, de
+	ld a, [hl]
+	ld c, 0
+.loop1
+	ld e, a
+	sub 10
+	jr c, .next1
+	inc c
+	jr .loop1
+.next1
+	; c = first digit ; e = second digit
+	hlcoord LSMTEXTBOX_X_COORD + 1, LSMTEXTBOX_Y_COORD
+	ld a, LSMTEXTBOX_LEVEL_NUMBERS_FIRST_TILE
+	add c
+	ld [hli], a
+	ld a, LSMTEXTBOX_LEVEL_NUMBERS_FIRST_TILE
+	add e
+	ld [hl], a
+	hlcoord LSMTEXTBOX_X_COORD + 1, LSMTEXTBOX_Y_COORD + 1
+	ld a, LSMTEXTBOX_LEVEL_NUMBERS_FIRST_TILE + $10
+	add c
+	ld [hli], a
+	ld a, LSMTEXTBOX_LEVEL_NUMBERS_FIRST_TILE + $10
+	add e
+	ld [hl], a
+
+	call LevelSelectionMenu_GetLandmarkName
+	ld hl, wStringBuffer1
+	decoord LSMTEXTBOX_X_COORD + 4, LSMTEXTBOX_Y_COORD
+	ld bc, LSMTEXTBOX_MAX_TEXT_ROW_LENGTH
+	call CopyBytes
+	ld hl, wStringBuffer2
+	decoord LSMTEXTBOX_X_COORD + 4, LSMTEXTBOX_Y_COORD + 1
+	ld bc, LSMTEXTBOX_MAX_TEXT_ROW_LENGTH
+	call CopyBytes
+
+	call WaitBGMap
+	xor a
+	ld [hBGMapMode], a
+	ret
+
+LevelSelectionMenu_ClearTextbox:
+	hlcoord LSMTEXTBOX_X_COORD, LSMTEXTBOX_Y_COORD
+	ld a, LSMTEXTBOX_BLACK_TILE
+	lb bc, LSMTEXTBOX_HEIGHT, LSMTEXTBOX_WIDTH
+	call FillBoxWithByte
+	call WaitBGMap
+	xor a
+	ld [hBGMapMode], a
 	ret
 
 LevelSelectionMenu_DrawDirectionalArrows:
@@ -499,7 +570,7 @@ LevelSelectionMenu_GetLandmarkCoords::
 	ret
 
 LevelSelectionMenu_GetLandmarkName::
-; Copy the name of landmark e to wStringBuffer1.
+; Copy the name of landmark e to wStringBuffer1 (tow row) and wStringBuffer2 (bottom row).
 	push hl
 	push de
 	push bc
@@ -513,17 +584,23 @@ LevelSelectionMenu_GetLandmarkName::
 	ld l, a
 
 	ld de, wStringBuffer1
-	ld c, 18
-.copy
-	ld a, [hli]
-	ld [de], a
-	inc de
-	dec c
-	jr nz, .copy
+	call .copy
+	ld de, wStringBuffer2
+	call .copy
 
 	pop bc
 	pop de
 	pop hl
+	ret
+
+.copy
+	ld c, LSMTEXTBOX_MAX_TEXT_ROW_LENGTH
+.copy_loop
+	ld a, [hli]
+	ld [de], a
+	inc de
+	dec c
+	jr nz, .copy_loop
 	ret
 
 LevelSelectionMenu_GetLandmarkSpawnPoint:

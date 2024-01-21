@@ -175,6 +175,9 @@
 	charmap "└",         $f4
 	charmap "┘",         $f5
 
+; level selection menu
+	charmap "<LSMTEXTBOX_BLACK_TILE>", $1f
+
 ; ASCII charmap, for mobile functions
 pushc
 	newcharmap ascii
