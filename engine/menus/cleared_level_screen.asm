@@ -76,6 +76,10 @@ ClearLevel:
 	ret
 
 UnlockLevels:
+	call ComputeLevelsToUnlock
+	jp SaveUnlockedLevels
+
+ComputeLevelsToUnlock:
 	ld hl, LevelUnlockRequirements
 	ld de, wUnlockedLevels - 1
 	ld b, 0
@@ -202,5 +206,18 @@ GetClearedLevelsStageAddress:
 	ret z
 	ld hl, wClearedLevelsStage4
 	ret
+
+SaveUnlockedLevels:
+	ld hl, wTempUnlockedLevels
+.loop
+	ld a, [hli]
+	ld e, a
+	inc a ; cp $ff
+	ret z
+	push hl
+	ld b, SET_FLAG
+	call UnlockedLevelsFlagAction
+	pop hl
+	jr .loop
 
 INCLUDE "data/levels/levels.asm"
