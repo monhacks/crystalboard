@@ -21,6 +21,20 @@ ResetFlashIfOutOfCave::
 	res STATUSFLAGS_FLASH_F, [hl]
 	ret
 
+GetClearedLevelsStageAddress::
+; Return hl = wClearedLevelsStage* given STAGE_*_F constant in a
+	ld hl, wClearedLevelsStage1
+	cp ES1 ; cp STAGE_1_F
+	ret z
+	ld hl, wClearedLevelsStage2
+	cp ES2 ; cp STAGE_2_F
+	ret z
+	ld hl, wClearedLevelsStage3
+	cp ES3 ; cp STAGE_3_F
+	ret z
+	ld hl, wClearedLevelsStage4
+	ret
+
 UnlockedLevelsFlagAction::
 ; Perform action b on bit e in flag array wUnlockedLevels.
 	ld hl, wUnlockedLevels

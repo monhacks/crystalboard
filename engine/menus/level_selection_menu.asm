@@ -40,8 +40,9 @@ LevelSelectionMenu::
 	ld a, [wLevelSelectionMenuCurrentLandmark]
 	call LevelSelectionMenu_InitPlayerSprite
 	call LevelSelectionMenu_InitLandmark
-	call LevelSelectionMenu_PrintLevelAndLandmarkName
+	call LevelSelectionMenu_PrintLevelAndLandmarkNameAndStageIndicators
 	call LevelSelectionMenu_DrawDirectionalArrows
+	call LevelSelectionMenu_DrawStageTrophies
 
 .main_loop
 	farcall PlaySpriteAnimations
@@ -94,16 +95,16 @@ LevelSelectionMenu::
 	ld a, h
 	ld [bc], a
 
-; clear textbox as we are about to move out of current landmark
+; clear textbox and non-player sprites, as we are about to move out of current landmark
 	call LevelSelectionMenu_Delay10Frames
 	call LevelSelectionMenu_ClearTextbox ; preserves e
+	call LevelSelectionMenu_ClearNonPlayerSpriteOAM ; preserves e
 ; begin transition
 	xor a ; FALSE
 	ld [wLevelSelectionMenuStandingStill], a
 	ld a, 1 << 7 ; "first step of movement" flag
 	ld [wLevelSelectionMenuMovementStepsLeft], a
 	call LevelSelectionMenu_SetAnimSeqAndFrameset
-	call LevelSelectionMenu_ClearNonPlayerSpriteOAM
 
 ; perform all movements to transition to the new landmark
 .wait_transition_loop
@@ -117,18 +118,12 @@ LevelSelectionMenu::
 	jr z, .wait_transition_loop
 
 	call LevelSelectionMenu_InitLandmark
-	call LevelSelectionMenu_PrintLevelAndLandmarkName
+	call LevelSelectionMenu_PrintLevelAndLandmarkNameAndStageIndicators
 	call LevelSelectionMenu_DrawDirectionalArrows
+	call LevelSelectionMenu_DrawStageTrophies
 	jp .main_loop
 
 .enter_level
-	ld a, [wLevelSelectionMenuCurrentLandmark]
-	ld e, a
-	ld d, 0
-	ld hl, LandmarkToLevelTable
-	add hl, de
-	ld a, [hl]
-	ld [wCurLevel], a
 	ld a, [wLevelSelectionMenuCurrentLandmark]
 	call LevelSelectionMenu_GetLandmarkSpawnPoint
 	ld [wDefaultSpawnpoint], a
@@ -170,7 +165,11 @@ LevelSelectionMenu_LoadGFX:
 	call FarCopyBytes
 	ld hl, LevelSelectionMenuDirectionalArrowsGFX
 ;	ld de, vTiles0 + 24 tiles
-	ld bc, 4 tiles
+	ld bc, NUM_DIRECTIONS tiles
+	call FarCopyBytes
+	ld hl, LevelSelectionMenuStageTrophiesGFX
+;	ld de, vTiles0 + (24 + NUM_DIRECTIONS) tiles
+	ld bc, NUM_LEVEL_STAGES * 2 tiles
 	call FarCopyBytes
 	ret
 
@@ -268,7 +267,7 @@ endr
 	ld [de], a
 	ret
 
-LevelSelectionMenu_PrintLevelAndLandmarkName:
+LevelSelectionMenu_PrintLevelAndLandmarkNameAndStageIndicators:
 ; level indicator and level numbers are 8x16.
 ; botton half of their graphics are $10 tiles after the top half.
 	hlcoord LSMTEXTBOX_X_COORD, LSMTEXTBOX_Y_COORD
@@ -278,12 +277,14 @@ LevelSelectionMenu_PrintLevelAndLandmarkName:
 	ld bc, SCREEN_WIDTH
 	add hl, bc
 	ld [hl], a
+; get level from landmark and copy it to wCurLevel
 	ld a, [wLevelSelectionMenuCurrentLandmark]
 	ld e, a
 	ld d, 0
 	ld hl, LandmarkToLevelTable
 	add hl, de
 	ld a, [hl]
+	ld [wCurLevel], a
 	ld c, 0
 .loop1
 	ld e, a
@@ -308,6 +309,7 @@ LevelSelectionMenu_PrintLevelAndLandmarkName:
 	add e
 	ld [hl], a
 
+	ld a, [wLevelSelectionMenuCurrentLandmark]
 	call LevelSelectionMenu_GetLandmarkName
 	ld hl, wStringBuffer1
 	decoord LSMTEXTBOX_X_COORD + 4, LSMTEXTBOX_Y_COORD
@@ -318,9 +320,42 @@ LevelSelectionMenu_PrintLevelAndLandmarkName:
 	ld bc, LSMTEXTBOX_MAX_TEXT_ROW_LENGTH
 	call CopyBytes
 
+	ld de, 0 ; e tracks number of already printed stages, to know where to print current one (in descending order)
+	ld a, [wLevelSelectionMenuCurrentLandmark]
+	call LevelSelectionMenu_GetLandmarkLevelStages
+	bit STAGE_4_F, a
+	push af
+	ld a, LSMTEXTBOX_STAGE_4_INDICATOR_TILE
+	call nz, .PrintStageTile
+	pop af
+	bit STAGE_3_F, a
+	push af
+	ld a, LSMTEXTBOX_STAGE_3_INDICATOR_TILE
+	call nz, .PrintStageTile
+	pop af
+	bit STAGE_2_F, a
+	push af
+	ld a, LSMTEXTBOX_STAGE_2_INDICATOR_TILE
+	call nz, .PrintStageTile
+	pop af
+	bit STAGE_1_F, a
+	ld a, LSMTEXTBOX_STAGE_1_INDICATOR_TILE
+	call nz, .PrintStageTile
+
 	call WaitBGMap
 	xor a
 	ld [hBGMapMode], a
+	ret
+
+.PrintStageTile:
+	hlcoord LSMTEXTBOX_X_COORD + (LSMTEXTBOX_WIDTH - 1), LSMTEXTBOX_Y_COORD
+	add hl, de
+	ld [hl], a
+	ld bc, SCREEN_WIDTH
+	add hl, bc
+	add $10
+	ld [hl], a
+	dec de
 	ret
 
 LevelSelectionMenu_ClearTextbox:
@@ -385,6 +420,127 @@ LevelSelectionMenu_DrawDirectionalArrows:
 	db -16,  -4, 24 + UP
 	db  -4, -16, 24 + LEFT
 	db  -4,   8, 24 + RIGHT
+
+LevelSelectionMenu_DrawStageTrophies:
+; Draw stage trophies OAM of cleared level stages.
+; These objects go after player sprite and arrows in OAM.
+	ld de, wShadowOAM + ($4 + NUM_DIRECTIONS + $0) * SPRITEOAMSTRUCT_LENGTH
+	bccoord LSMTEXTBOX_X_COORD + (LSMTEXTBOX_WIDTH - 1), LSMTEXTBOX_Y_COORD
+	ld a, 6
+	call .draw_stage_trophy
+	ret c
+	ld de, wShadowOAM + ($4 + NUM_DIRECTIONS + $2) * SPRITEOAMSTRUCT_LENGTH
+	bccoord LSMTEXTBOX_X_COORD + (LSMTEXTBOX_WIDTH - 2), LSMTEXTBOX_Y_COORD
+	ld a, 4
+	call .draw_stage_trophy
+	ret c
+	ld de, wShadowOAM + ($4 + NUM_DIRECTIONS + $4) * SPRITEOAMSTRUCT_LENGTH
+	bccoord LSMTEXTBOX_X_COORD + (LSMTEXTBOX_WIDTH - 3), LSMTEXTBOX_Y_COORD
+	ld a, 2
+	call .draw_stage_trophy
+	ret c
+	ld de, wShadowOAM + ($4 + NUM_DIRECTIONS + $6) * SPRITEOAMSTRUCT_LENGTH
+	bccoord LSMTEXTBOX_X_COORD + (LSMTEXTBOX_WIDTH - 4), LSMTEXTBOX_Y_COORD
+	xor a
+	call .draw_stage_trophy
+	ret
+
+.draw_stage_trophy:
+; input:
+; - de: wShadowOAM address
+; - bc: current tile address in wTilemap
+; -  a: .BaseOAMCoords entry to use
+; if current tile is not a stage indicator tile, return carry to signal to not keep going
+	push af
+	ld a, [bc]
+	sub LSMTEXTBOX_STAGE_1_INDICATOR_TILE
+	jr c, .ret_c
+	cp STAGE_4_F + 1
+	jr nc, .ret_c
+	call .IsLevelStageCleared
+	jr z, .ret_nc ; this level has not been cleared, but there are more levels yet to check, so return nc
+	add a
+	add a
+	ld c, a
+	ld b, 0
+	ld hl, .BaseOAMTilesAttrs
+	add hl, bc
+	pop af
+	push hl
+	add a
+	ld c, a
+	ld b, 0
+	ld hl, .BaseOAMCoords
+	add hl, bc
+	pop bc
+	call .CopyOAM
+	call .CopyOAM
+	xor a
+	ret ; nc
+
+.ret_c:
+	pop af
+	scf
+	ret
+
+.ret_nc
+	pop af
+	xor a
+	ret
+
+.IsLevelStageCleared:
+; return nz if [wCurLevel]'s stage in a has been cleared, z otherwise.
+; preserve a and de.
+	ld c, a
+	push bc
+	push de
+	call GetClearedLevelsStageAddress
+	ld b, CHECK_FLAG
+	ld d, 0
+	ld a, [wCurLevel]
+	ld e, a
+	call FlagAction
+	pop de
+	pop bc
+	ld a, c
+	ret
+
+.CopyOAM:
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [bc]
+	ld [de], a
+	inc bc
+	inc de
+	ld a, [bc]
+	ld [de], a
+	inc bc
+	inc de
+	ret
+
+.BaseOAMCoords:
+	db 17 * TILE_WIDTH, 16 * TILE_WIDTH
+	db 18 * TILE_WIDTH, 16 * TILE_WIDTH
+	db 17 * TILE_WIDTH, 17 * TILE_WIDTH
+	db 18 * TILE_WIDTH, 17 * TILE_WIDTH
+	db 17 * TILE_WIDTH, 18 * TILE_WIDTH
+	db 18 * TILE_WIDTH, 18 * TILE_WIDTH
+	db 17 * TILE_WIDTH, 19 * TILE_WIDTH
+	db 18 * TILE_WIDTH, 19 * TILE_WIDTH
+
+.BaseOAMTilesAttrs:
+	db 24 + NUM_DIRECTIONS + 0, 2
+	db 24 + NUM_DIRECTIONS + 1, 2
+	db 24 + NUM_DIRECTIONS + 2, 3
+	db 24 + NUM_DIRECTIONS + 3, 3
+	db 24 + NUM_DIRECTIONS + 4, 4
+	db 24 + NUM_DIRECTIONS + 5, 4
+	db 24 + NUM_DIRECTIONS + 6, 5
+	db 24 + NUM_DIRECTIONS + 7, 5
 
 LevelSelectionMenu_ClearNonPlayerSpriteOAM:
 	ld hl, wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH
@@ -570,14 +726,13 @@ LevelSelectionMenu_GetLandmarkCoords::
 	ret
 
 LevelSelectionMenu_GetLandmarkName::
-; Copy the name of landmark e to wStringBuffer1 (tow row) and wStringBuffer2 (bottom row).
+; Copy the name of landmark a to wStringBuffer1 (tow row) and wStringBuffer2 (bottom row).
 	push hl
 	push de
 	push bc
 
 	ld hl, LevelSelectionMenu_Landmarks + $3
 	ld bc, LevelSelectionMenu_Landmarks.landmark2 - LevelSelectionMenu_Landmarks.landmark1
-	ld a, e
 	call AddNTimes
 	ld a, [hli]
 	ld h, [hl]
@@ -606,6 +761,14 @@ LevelSelectionMenu_GetLandmarkName::
 LevelSelectionMenu_GetLandmarkSpawnPoint:
 ; Return SPAWN_* (a) of landmark a.
 	ld hl, LevelSelectionMenu_Landmarks + $5
+	ld bc, LevelSelectionMenu_Landmarks.landmark2 - LevelSelectionMenu_Landmarks.landmark1
+	call AddNTimes
+	ld a, [hl]
+	ret
+
+LevelSelectionMenu_GetLandmarkLevelStages:
+; Return STAGE_* flags (a) of landmark a.
+	ld hl, LevelSelectionMenu_Landmarks + $6
 	ld bc, LevelSelectionMenu_Landmarks.landmark2 - LevelSelectionMenu_Landmarks.landmark1
 	call AddNTimes
 	ld a, [hl]
@@ -848,3 +1011,6 @@ INCLUDE "gfx/level_selection_menu/attrmap.asm"
 
 LevelSelectionMenuDirectionalArrowsGFX:
 INCBIN "gfx/level_selection_menu/directional_arrows.2bpp"
+
+LevelSelectionMenuStageTrophiesGFX:
+;INCBIN "gfx/level_selection_menu/stage_trophies.2bpp"

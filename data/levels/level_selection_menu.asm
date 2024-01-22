@@ -4,7 +4,7 @@ DEF LEVELSELECTIONMENU_LANDMARK_OFFSET_X EQU TILE_WIDTH +  $8 + 4
 DEF LEVELSELECTIONMENU_LANDMARK_OFFSET_Y EQU TILE_WIDTH + $10 + 4
 
 MACRO level_selection_menu_landmark
-; page number, xcoord (in tiles), ycoord (in tiles), ptr to name, spawn point (SPAWN_*)
+; page number, xcoord (in tiles), ycoord (in tiles), ptr to name, spawn point (SPAWN_*), level stages
 ; xcoord ranges between 0 and 17 (SCREEN_WIDTH points minus two)
 ;  when crossing pages, x=17 and x=0 are adjacent (one tile apart)
 ; ycoord ranges between 0 and 13 (SCREEN_HEIGH points minus four)
@@ -14,6 +14,7 @@ MACRO level_selection_menu_landmark
 	db LEVELSELECTIONMENU_LANDMARK_OFFSET_Y + \3 * TILE_WIDTH
 	dw \4
 	db \5
+	db \6 ; note: level stages are inherent to level rather than landmark, but they are shown as part of a landmark.
 ENDM
 
 MACRO level_selection_menu_landmark_name
@@ -23,16 +24,16 @@ MACRO level_selection_menu_landmark_name
 ENDM
 
 LevelSelectionMenu_Landmarks:
-	table_width 6, LevelSelectionMenu_Landmarks
+	table_width 7, LevelSelectionMenu_Landmarks
 .landmark1
-	level_selection_menu_landmark 0, 16, 11, .Level1LandmarkName, SPAWN_LEVEL_1 ; LANDMARK_LEVEL_1
+	level_selection_menu_landmark 0, 16, 11, .Level1LandmarkName, SPAWN_LEVEL_1, STAGE_1 ; LANDMARK_LEVEL_1
 .landmark2
 if DEF(_DEBUG)
-	level_selection_menu_landmark 0, 16, 10, .DebugLevel1LandmarkName, SPAWN_DEBUGLEVEL_1 ; LANDMARK_DEBUGLEVEL_1
-	level_selection_menu_landmark 0, 11,  8, .DebugLevel2LandmarkName, SPAWN_DEBUGLEVEL_2 ; LANDMARK_DEBUGLEVEL_2
-	level_selection_menu_landmark 0,  9, 10, .DebugLevel3LandmarkName, SPAWN_DEBUGLEVEL_3 ; LANDMARK_DEBUGLEVEL_3
-	level_selection_menu_landmark 1, 16, 10, .DebugLevel4LandmarkName, SPAWN_DEBUGLEVEL_4 ; LANDMARK_DEBUGLEVEL_4
-	level_selection_menu_landmark 2,  9,  4, .DebugLevel5LandmarkName, SPAWN_DEBUGLEVEL_5 ; LANDMARK_DEBUGLEVEL_5
+	level_selection_menu_landmark 0, 16, 10, .DebugLevel1LandmarkName, SPAWN_DEBUGLEVEL_1, STAGE_1 | STAGE_3 | STAGE_4 ; LANDMARK_DEBUGLEVEL_1
+	level_selection_menu_landmark 0, 11,  8, .DebugLevel2LandmarkName, SPAWN_DEBUGLEVEL_2, STAGE_1 | STAGE_2 ; LANDMARK_DEBUGLEVEL_2
+	level_selection_menu_landmark 0,  9, 10, .DebugLevel3LandmarkName, SPAWN_DEBUGLEVEL_3, STAGE_1 | STAGE_2 | STAGE_3 | STAGE_4 ; LANDMARK_DEBUGLEVEL_3
+	level_selection_menu_landmark 1, 16, 10, .DebugLevel4LandmarkName, SPAWN_DEBUGLEVEL_4, STAGE_1 ; LANDMARK_DEBUGLEVEL_4
+	level_selection_menu_landmark 2,  9,  4, .DebugLevel5LandmarkName, SPAWN_DEBUGLEVEL_5, STAGE_1 ; LANDMARK_DEBUGLEVEL_5
 endc
 	assert_table_length NUM_LANDMARKS
 

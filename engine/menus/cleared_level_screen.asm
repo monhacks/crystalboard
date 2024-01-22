@@ -66,7 +66,7 @@ AddLevelCoinsToBalance:
 	ret
 
 ClearLevel:
-	ld a, [wCurSpaceEffect] ; End Space effect byte contains STAGE_*
+	ld a, [wCurSpaceEffect] ; End Space effect byte contains STAGE_*_F
 	call GetClearedLevelsStageAddress
 	ld b, SET_FLAG
 	ld d, 0
@@ -191,20 +191,6 @@ ComputeLevelsToUnlock:
 .reqs_not_met
 	pop bc
 	pop de
-	ret
-
-; return hl = wClearedLevelsStage* given STAGE_ constant in a
-GetClearedLevelsStageAddress:
-	ld hl, wClearedLevelsStage1
-	cp ES1
-	ret z
-	ld hl, wClearedLevelsStage2
-	cp ES2
-	ret z
-	ld hl, wClearedLevelsStage3
-	cp ES3
-	ret z
-	ld hl, wClearedLevelsStage4
 	ret
 
 SaveUnlockedLevels:

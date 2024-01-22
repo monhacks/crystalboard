@@ -13,10 +13,16 @@ assert NUM_LEVELS <= 254
 
 ; Level stages
 	const_def
-	const STAGE_1 ; 00
-	const STAGE_2 ; 01
-	const STAGE_3 ; 02
-	const STAGE_4 ; 03
+	const STAGE_1_F ; 00
+	const STAGE_2_F ; 01
+	const STAGE_3_F ; 02
+	const STAGE_4_F ; 03
+DEF NUM_LEVEL_STAGES EQU const_value
+
+DEF STAGE_1 EQU 1 << STAGE_1_F
+DEF STAGE_2 EQU 1 << STAGE_2_F
+DEF STAGE_3 EQU 1 << STAGE_3_F
+DEF STAGE_4 EQU 1 << STAGE_4_F
 
 ; requirement types to unlock a given level
 	const_def

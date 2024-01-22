@@ -83,7 +83,7 @@
   - **wSpacesLeft**
 
 - Addresses within *wCurMapData* ~ *wCurMapDataEnd*: preserved on save. Initialized when entering a level (in StartMap), and updated accordingly throughout the level. Includes:
-  - **wCurLevel**: this one is not initialized in StartMap, but in LevelSelectionMenu, and stays static during the level.
+  - **wCurLevel**: this one is not initialized in StartMap, but in LevelSelectionMenu (where it is also used), and stays static during the level.
   - **wCurTurn**
   - **wCurSpace**
   - **wCurLevelCoins**
