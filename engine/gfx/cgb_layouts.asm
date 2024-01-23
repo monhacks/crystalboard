@@ -582,6 +582,11 @@ _CGB_LevelSelectionMenu:
 	ld bc, 2 palettes
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
+; load stage trophy pals (pal2 to pal5)
+	ld hl, LevelSelectionMenuStageTrophyPals
+	ld bc, 4 palettes
+	ld a, BANK(wOBPals1)
+	call FarCopyWRAM
 
 ; load daytime and gender-based background pals
 	ld a, [wPlayerGender]

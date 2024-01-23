@@ -43,6 +43,7 @@ LevelSelectionMenu::
 	call LevelSelectionMenu_PrintLevelAndLandmarkNameAndStageIndicators
 	call LevelSelectionMenu_DrawDirectionalArrows
 	call LevelSelectionMenu_DrawStageTrophies
+	call LevelSelectionMenu_RefreshTextboxAttrs
 
 .main_loop
 	farcall PlaySpriteAnimations
@@ -97,8 +98,9 @@ LevelSelectionMenu::
 
 ; clear textbox and non-player sprites, as we are about to move out of current landmark
 	call LevelSelectionMenu_Delay10Frames
-	call LevelSelectionMenu_ClearTextbox ; preserves e
 	call LevelSelectionMenu_ClearNonPlayerSpriteOAM ; preserves e
+	call LevelSelectionMenu_ClearTextbox ; preserves e
+	call LevelSelectionMenu_RefreshTextboxAttrs ; preserves e
 ; begin transition
 	xor a ; FALSE
 	ld [wLevelSelectionMenuStandingStill], a
@@ -121,6 +123,7 @@ LevelSelectionMenu::
 	call LevelSelectionMenu_PrintLevelAndLandmarkNameAndStageIndicators
 	call LevelSelectionMenu_DrawDirectionalArrows
 	call LevelSelectionMenu_DrawStageTrophies
+	call LevelSelectionMenu_RefreshTextboxAttrs
 	jp .main_loop
 
 .enter_level
@@ -342,7 +345,11 @@ LevelSelectionMenu_PrintLevelAndLandmarkNameAndStageIndicators:
 	ld a, LSMTEXTBOX_STAGE_1_INDICATOR_TILE
 	call nz, .PrintStageTile
 
-	call WaitBGMap
+	ld a, 2
+	ld [hBGMapThird], a
+	dec a ; ld a ,1
+	ld [hBGMapMode], a
+	call DelayFrame
 	xor a
 	ld [hBGMapMode], a
 	ret
@@ -363,9 +370,31 @@ LevelSelectionMenu_ClearTextbox:
 	ld a, LSMTEXTBOX_BLACK_TILE
 	lb bc, LSMTEXTBOX_HEIGHT, LSMTEXTBOX_WIDTH
 	call FillBoxWithByte
-	call WaitBGMap
+	ld a, 2
+	ld [hBGMapThird], a
+	dec a ; ld a, 1
+	ld [hBGMapMode], a
+	call DelayFrame
 	xor a
 	ld [hBGMapMode], a
+	ret
+
+LevelSelectionMenu_RefreshTextboxAttrs:
+; OAM priority changes in the textbox depending on whether a landmark is shown
+; (stage trophies OAM has priority) or player is moving (all BG has priority).
+; Assumes affected tiles are only in the textbox, which is in the bottom third of screen.
+	push de
+	hlcoord LSMTEXTBOX_X_COORD, LSMTEXTBOX_Y_COORD
+	decoord LSMTEXTBOX_X_COORD, LSMTEXTBOX_Y_COORD, wAttrmap
+	ld bc, SCREEN_WIDTH * (SCREEN_HEIGHT - LSMTEXTBOX_Y_COORD)
+	call LevelSelectionMenu_InitAttrmap.loop
+	ld a, 2
+	ld [hBGMapThird], a
+	ld [hBGMapMode], a
+	call DelayFrame
+	xor a
+	ld [hBGMapMode], a
+	pop de
 	ret
 
 LevelSelectionMenu_DrawDirectionalArrows:
@@ -534,12 +563,12 @@ LevelSelectionMenu_DrawStageTrophies:
 
 .BaseOAMTilesAttrs:
 	db 24 + NUM_DIRECTIONS + 0, 2
-	db 24 + NUM_DIRECTIONS + 1, 2
-	db 24 + NUM_DIRECTIONS + 2, 3
-	db 24 + NUM_DIRECTIONS + 3, 3
-	db 24 + NUM_DIRECTIONS + 4, 4
-	db 24 + NUM_DIRECTIONS + 5, 4
-	db 24 + NUM_DIRECTIONS + 6, 5
+	db 24 + NUM_DIRECTIONS + 4, 2
+	db 24 + NUM_DIRECTIONS + 1, 3
+	db 24 + NUM_DIRECTIONS + 5, 3
+	db 24 + NUM_DIRECTIONS + 2, 4
+	db 24 + NUM_DIRECTIONS + 6, 4
+	db 24 + NUM_DIRECTIONS + 3, 5
 	db 24 + NUM_DIRECTIONS + 7, 5
 
 LevelSelectionMenu_ClearNonPlayerSpriteOAM:
@@ -1013,4 +1042,4 @@ LevelSelectionMenuDirectionalArrowsGFX:
 INCBIN "gfx/level_selection_menu/directional_arrows.2bpp"
 
 LevelSelectionMenuStageTrophiesGFX:
-;INCBIN "gfx/level_selection_menu/stage_trophies.2bpp"
+INCBIN "gfx/level_selection_menu/stage_trophies.2bpp"
