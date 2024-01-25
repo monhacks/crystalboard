@@ -29,6 +29,7 @@ LevelSelectionMenu::
 	call WaitBGMap2
 	xor a
 	ldh [hBGMapMode], a
+	call LevelSelectionMenu_DrawTimeOfDaySymbol
 	ld b, CGB_LEVEL_SELECTION_MENU
 	call GetCGBLayout ; apply and commit pals
 	call SetPalettes
@@ -98,7 +99,7 @@ LevelSelectionMenu::
 
 ; clear textbox and non-player sprites, as we are about to move out of current landmark
 	call LevelSelectionMenu_Delay10Frames
-	call LevelSelectionMenu_ClearNonPlayerSpriteOAM ; preserves e
+	call LevelSelectionMenu_ClearTextboxOAM ; preserves e
 	call LevelSelectionMenu_ClearTextbox ; preserves e
 	call LevelSelectionMenu_RefreshTextboxAttrs ; preserves e
 ; begin transition
@@ -139,7 +140,7 @@ LevelSelectionMenu::
 	ret
 
 .EnterLevelFadeOut:
-	ld b, RGBFADE_TO_WHITE_6BGP_2OBP
+	ld b, RGBFADE_TO_WHITE_6BGP_3OBP
 	jp DoRGBFadeEffect
 
 .exit
@@ -401,13 +402,47 @@ LevelSelectionMenu_RefreshTextboxAttrs:
 	pop de
 	ret
 
+LevelSelectionMenu_DrawTimeOfDaySymbol:
+	ld hl, .OAM
+	ld de, wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH ; always goes after player sprite
+	ld a, [wTimeOfDay]
+	add a
+	ld c, a
+	call .CopyObject
+	call .CopyObject
+	call .CopyObject
+	call .CopyObject
+	ret
+
+.CopyObject:
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hli]
+	add c
+	ld [de], a
+	inc de
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ret
+
+.OAM:
+	db 3 * TILE_WIDTH, 2 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 0, 2
+	db 3 * TILE_WIDTH, 3 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 1, 2
+	db 4 * TILE_WIDTH, 2 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 8, 2
+	db 4 * TILE_WIDTH, 3 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 9, 2
+
 LevelSelectionMenu_DrawDirectionalArrows:
 ; Draw directional arrows OAM around player sprite for the valid directions.
 ; Objects are drawn in OAM after player sprite objects in wWalkingDirection order.
 ; Depends on wLevelSelectionMenuLandmarkTransitionsPointer being initialized.
 	call LevelSelectionMenu_GetValidDirections
 	ld hl, .OAM
-	ld de, wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH ; always goes after player sprite
+	ld de, wShadowOAM + ($4 + $4) * SPRITEOAMSTRUCT_LENGTH ; always goes after player sprite and ToD symbol
 	bit D_DOWN_F, c
 	jr z, .next1
 	call .DrawArrow
@@ -456,23 +491,23 @@ LevelSelectionMenu_DrawDirectionalArrows:
 
 LevelSelectionMenu_DrawStageTrophies:
 ; Draw stage trophies OAM of cleared level stages.
-; These objects go after player sprite and arrows in OAM.
-	ld de, wShadowOAM + ($4 + NUM_DIRECTIONS + $0) * SPRITEOAMSTRUCT_LENGTH
+; These objects go after player sprite, ToD symbol, and arrows in OAM.
+	ld de, wShadowOAM + ($4 + $4 + NUM_DIRECTIONS + $0) * SPRITEOAMSTRUCT_LENGTH
 	bccoord LSMTEXTBOX_X_COORD + (LSMTEXTBOX_WIDTH - 1), LSMTEXTBOX_Y_COORD
 	ld a, 6
 	call .draw_stage_trophy
 	ret c
-	ld de, wShadowOAM + ($4 + NUM_DIRECTIONS + $2) * SPRITEOAMSTRUCT_LENGTH
+	ld de, wShadowOAM + ($4 + $4 + NUM_DIRECTIONS + $2) * SPRITEOAMSTRUCT_LENGTH
 	bccoord LSMTEXTBOX_X_COORD + (LSMTEXTBOX_WIDTH - 2), LSMTEXTBOX_Y_COORD
 	ld a, 4
 	call .draw_stage_trophy
 	ret c
-	ld de, wShadowOAM + ($4 + NUM_DIRECTIONS + $4) * SPRITEOAMSTRUCT_LENGTH
+	ld de, wShadowOAM + ($4 + $4 + NUM_DIRECTIONS + $4) * SPRITEOAMSTRUCT_LENGTH
 	bccoord LSMTEXTBOX_X_COORD + (LSMTEXTBOX_WIDTH - 3), LSMTEXTBOX_Y_COORD
 	ld a, 2
 	call .draw_stage_trophy
 	ret c
-	ld de, wShadowOAM + ($4 + NUM_DIRECTIONS + $6) * SPRITEOAMSTRUCT_LENGTH
+	ld de, wShadowOAM + ($4 + $4 + NUM_DIRECTIONS + $6) * SPRITEOAMSTRUCT_LENGTH
 	bccoord LSMTEXTBOX_X_COORD + (LSMTEXTBOX_WIDTH - 4), LSMTEXTBOX_Y_COORD
 	xor a
 	call .draw_stage_trophy
@@ -506,8 +541,8 @@ LevelSelectionMenu_DrawStageTrophies:
 	ld hl, .BaseOAMCoords
 	add hl, bc
 	pop bc
-	call .CopyOAM
-	call .CopyOAM
+	call .CopyObject
+	call .CopyObject
 	xor a
 	ret ; nc
 
@@ -538,7 +573,7 @@ LevelSelectionMenu_DrawStageTrophies:
 	ld a, c
 	ret
 
-.CopyOAM:
+.CopyObject:
 	ld a, [hli]
 	ld [de], a
 	inc de
@@ -566,18 +601,18 @@ LevelSelectionMenu_DrawStageTrophies:
 	db 18 * TILE_WIDTH, 19 * TILE_WIDTH
 
 .BaseOAMTilesAttrs:
-	db 24 + NUM_DIRECTIONS + 0, 2
-	db 24 + NUM_DIRECTIONS + 4, 2
-	db 24 + NUM_DIRECTIONS + 1, 3
-	db 24 + NUM_DIRECTIONS + 5, 3
-	db 24 + NUM_DIRECTIONS + 2, 4
-	db 24 + NUM_DIRECTIONS + 6, 4
-	db 24 + NUM_DIRECTIONS + 3, 5
-	db 24 + NUM_DIRECTIONS + 7, 5
+	db 24 + NUM_DIRECTIONS + 0, 3
+	db 24 + NUM_DIRECTIONS + 4, 3
+	db 24 + NUM_DIRECTIONS + 1, 4
+	db 24 + NUM_DIRECTIONS + 5, 4
+	db 24 + NUM_DIRECTIONS + 2, 5
+	db 24 + NUM_DIRECTIONS + 6, 5
+	db 24 + NUM_DIRECTIONS + 3, 6
+	db 24 + NUM_DIRECTIONS + 7, 6
 
-LevelSelectionMenu_ClearNonPlayerSpriteOAM:
-	ld hl, wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH
-	ld bc, wShadowOAMEnd - (wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH)
+LevelSelectionMenu_ClearTextboxOAM:
+	ld hl, wShadowOAM + $8 * SPRITEOAMSTRUCT_LENGTH
+	ld bc, wShadowOAMEnd - (wShadowOAM + $8 * SPRITEOAMSTRUCT_LENGTH)
 	xor a
 	jp ByteFill
 
@@ -726,11 +761,11 @@ ENDM
 	ret
 
 .PageChangeFadeOut:
-	ld b, RGBFADE_TO_BLACK_6BGP
+	ld b, RGBFADE_TO_BLACK_6BGP_1OBP2
 	jp DoRGBFadeEffect
 
 .PageChangeFadeIn:
-	ld b, RGBFADE_TO_LIGHTER_6BGP
+	ld b, RGBFADE_TO_LIGHTER_6BGP_1OBP2
 	jp DoRGBFadeEffect
 
 LevelSelectionMenu_GetLandmarkPage:

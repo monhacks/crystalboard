@@ -275,10 +275,12 @@ _DoRGBFadeEffect::
 RGBFadeEffectJumptable:
 ; entries correspond to RGBFADE_* constants (see constants/cgb_pal_constants.asm)
 	table_width 2, RGBFadeEffectJumptable
-	dw _RGBFadeToBlack_6BGP      ; RGBFADE_TO_BLACK_6BGP
-	dw _RGBFadeToLighter_6BGP    ; RGBFADE_TO_LIGHTER_6BGP
-	dw _RGBFadeToWhite_6BGP_2OBP ; RGBFADE_TO_WHITE_6BGP_2OBP
-	dw _RGBFadeToWhite_8BGP_8OBP ; RGBFADE_TO_WHITE_8BGP_8OBP
+	dw _RGBFadeToBlack_6BGP         ; RGBFADE_TO_BLACK_6BGP
+	dw _RGBFadeToLighter_6BGP       ; RGBFADE_TO_LIGHTER_6BGP
+	dw _RGBFadeToWhite_6BGP_3OBP    ; RGBFADE_TO_WHITE_6BGP_3OBP
+	dw _RGBFadeToWhite_8BGP_8OBP    ; RGBFADE_TO_WHITE_8BGP_8OBP
+	dw _RGBFadeToBlack_6BGP_1OBP2   ; RGBFADE_TO_BLACK_6BGP_1OBP2
+	dw _RGBFadeToLighter_6BGP_1OBP2 ; RGBFADE_TO_LIGHTER_6BGP_1OBP2
 	assert_table_length NUM_RGB_FADE_EFFECTS
 
 _RGBFadeToBlack_6BGP:
@@ -289,6 +291,31 @@ _RGBFadeToBlack_6BGP:
 ; fade BGP to black
 	ld de, wBGPals2
 	ld c, 6 * NUM_PAL_COLORS
+	call FadeStepColorsToBlack
+
+; commit pals
+	ld a, TRUE
+	ldh [hCGBPalUpdate], a
+	call DelayFrame
+
+	pop bc
+	dec c
+	jr nz, .loop
+	ret
+
+_RGBFadeToBlack_6BGP_1OBP2:
+	ld c, 32 / 2
+.loop
+	push bc
+
+; fade BGP to black
+	ld de, wBGPals2
+	ld c, 6 * NUM_PAL_COLORS
+	call FadeStepColorsToBlack
+
+; fade OBP to black
+	ld de, wOBPals2 + 2 palettes
+	ld c, NUM_PAL_COLORS
 	call FadeStepColorsToBlack
 
 ; commit pals
@@ -322,7 +349,34 @@ _RGBFadeToLighter_6BGP:
 	jr nz, .loop
 	ret
 
-_RGBFadeToWhite_6BGP_2OBP:
+_RGBFadeToLighter_6BGP_1OBP2:
+	ld c, 32 / 2
+.loop
+	push bc
+
+; fade BGP to lighter (towards wBGPals1)
+	ld de, wBGPals2
+	ld hl, wBGPals1
+	ld c, 6 * NUM_PAL_COLORS
+	call FadeStepColorsToLighter
+
+; fade OBP to lighter (towards wOBPals1)
+	ld de, wOBPals2 + 2 palettes
+	ld hl, wOBPals1 + 2 palettes
+	ld c, NUM_PAL_COLORS
+	call FadeStepColorsToLighter
+
+; commit pals
+	ld a, TRUE
+	ldh [hCGBPalUpdate], a
+	call DelayFrame
+
+	pop bc
+	dec c
+	jr nz, .loop
+	ret
+
+_RGBFadeToWhite_6BGP_3OBP:
 	ld c, 32 / 2
 .loop
 	push bc
@@ -334,7 +388,7 @@ _RGBFadeToWhite_6BGP_2OBP:
 
 ; fade OBP to white
 	ld de, wOBPals2
-	ld c, 2 * NUM_PAL_COLORS
+	ld c, 3 * NUM_PAL_COLORS
 	call FadeStepColorsToWhite
 
 ; commit pals
