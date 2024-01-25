@@ -174,6 +174,10 @@ LevelSelectionMenu_LoadGFX:
 ;	ld de, vTiles0 + (24 + NUM_DIRECTIONS) tiles
 	ld bc, NUM_LEVEL_STAGES * 2 tiles
 	call FarCopyBytes
+	ld hl, LevelSelectionMenuTimeOfDaySymbolsGFX
+;	ld de, vTiles0 + (24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2) tiles
+	ld bc, NUM_DAYTIMES * 4 tiles
+	call FarCopyBytes
 	ret
 
 LevelSelectionMenu_InitTilemap:
@@ -1044,3 +1048,6 @@ INCBIN "gfx/level_selection_menu/directional_arrows.2bpp"
 
 LevelSelectionMenuStageTrophiesGFX:
 INCBIN "gfx/level_selection_menu/stage_trophies.2bpp"
+
+LevelSelectionMenuTimeOfDaySymbolsGFX:
+INCBIN "gfx/level_selection_menu/time_of_day_symbols.2bpp"

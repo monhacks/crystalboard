@@ -583,8 +583,17 @@ _CGB_LevelSelectionMenu:
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
 ; load stage trophy pals (pal2 to pal5)
-	ld hl, LevelSelectionMenuStageTrophyPals
+	ld hl, LevelSelectionMenuStageTrophiesPals
 	ld bc, 4 palettes
+	ld a, BANK(wOBPals1)
+	call FarCopyWRAM
+; load daytime-based ToD symbol pals (pal 6)
+	ld a, [wTimeOfDay]
+	maskbits NUM_DAYTIMES
+	ld bc, 1 palettes
+	ld hl, LevelSelectionMenuTimeOfDaySymbolsPals
+	call AddNTimes
+	ld bc, 1 palettes
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
 

@@ -880,7 +880,10 @@ LevelSelectionMenuFemalePals:
 INCLUDE "gfx/level_selection_menu/background_female.pal"
 	assert_table_length NUM_DAYTIMES
 
-LevelSelectionMenuStageTrophyPals:
+LevelSelectionMenuStageTrophiesPals:
 INCLUDE "gfx/level_selection_menu/stage_trophies.pal"
+
+LevelSelectionMenuTimeOfDaySymbolsPals:
+INCLUDE "gfx/level_selection_menu/time_of_day_symbols.pal"
 
 INCLUDE "engine/gfx/rgb_fade.asm"
