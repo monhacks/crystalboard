@@ -83,7 +83,6 @@
   - **wSpacesLeft**
 
 - Addresses within *wCurMapData* ~ *wCurMapDataEnd*: preserved on save. Initialized when entering a level (in StartMap), and updated accordingly throughout the level. Includes:
-  - **wCurLevel**: this one is not initialized in StartMap, but in LevelSelectionMenu (where it is also used), and stays static during the level.
   - **wCurTurn**
   - **wCurSpace**
   - **wCurLevelCoins**
@@ -98,6 +97,8 @@
   - **wUnlockedLevels**: flag array that tracks progression regarding which levels have been unlocked.
   - **wClearedLevelsStage<N>**: flag array that tracks progression regarding which levels have been cleared. Each level can have up to four clearable endings (N).
   - **wUnlockedTechniques**: flag array that tracks progression regarding which techniques have been unlocked.
+  - **wCurLevel**: initialized in LevelSelectionMenu (where it is also used), and stays static during the level.
+  - **wDefaultLevelSelectionMenuLandmark**: used to know in which landmark to place the player when entering level selection menu.
   - **wCurOverworldMiscPal**
 
 - These addresses share memory region with string buffers from *wStringBuffer3* onwards. They are placed in memory in the following order.

@@ -26,6 +26,8 @@ if DEF(_DEBUG)
 	ld a, -1
 	ld [wUnlockedLevels], a ; debug
 endc
+	xor a ; LANDMARK_LEVEL_1
+	ld [wDefaultLevelSelectionMenuLandmark], a
 	farcall AutoSaveGameOutsideOverworld
 	jp GameMenu
 

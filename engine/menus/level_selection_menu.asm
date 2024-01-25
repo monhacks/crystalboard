@@ -17,7 +17,7 @@ LevelSelectionMenu::
 	ld a, LCDC_DEFAULT
 	ldh [rLCDC], a
 
-	xor a
+	ld a, [wDefaultLevelSelectionMenuLandmark]
 	ld [wLevelSelectionMenuCurrentLandmark], a
 	call LevelSelectionMenu_GetLandmarkPage
 	ld [wLevelSelectionMenuCurrentPage], a
@@ -1002,6 +1002,7 @@ _LevelSelectionMenuHandleTransition:
 ; set new landmark
 	ld a, [de]
 	ld [wLevelSelectionMenuCurrentLandmark], a
+	ld [wDefaultLevelSelectionMenuLandmark], a
 ; make the player sprite face down as the default state
 	ld hl, SPRITEANIMSTRUCT_ANIM_SEQ_ID
 	add hl, bc
