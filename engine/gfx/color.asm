@@ -873,12 +873,12 @@ INCLUDE "gfx/slots/slots.pal"
 LevelSelectionMenuMalePals:
 	table_width PAL_COLOR_SIZE * 4 * 6, LevelSelectionMenuMalePals
 INCLUDE "gfx/level_selection_menu/background_male.pal"
-	assert_table_length NUM_DAYTIMES
+	assert_table_length (NUM_DAYTIMES + NUM_DAYTIMES * 2)
 
 LevelSelectionMenuFemalePals:
 	table_width PAL_COLOR_SIZE * 4 * 6, LevelSelectionMenuFemalePals
 INCLUDE "gfx/level_selection_menu/background_female.pal"
-	assert_table_length NUM_DAYTIMES
+	assert_table_length (NUM_DAYTIMES + NUM_DAYTIMES * 2)
 
 LevelSelectionMenuStageTrophiesPals:
 INCLUDE "gfx/level_selection_menu/stage_trophies.pal"
