@@ -2546,6 +2546,7 @@ wKurtApricornQuantity:: db
 wCurLevel:: db
 wDefaultLevelSelectionMenuLandmark:: db
 wCurOverworldMiscPal:: db
+wLevelSelectionMenuEntryEventQueue:: flag_array NUM_LSM_EVENTS
 
 wPlayerDataEnd::
 

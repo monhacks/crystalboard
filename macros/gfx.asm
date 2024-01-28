@@ -55,14 +55,6 @@ MACRO rgbpals_fade_apply
 	PURGE fade_from, fade_to, rgbch_red, rgbch_green, rgbch_blue, palred_value, palgreen_value, palblue_value
 ENDM
 
-/* MACRO rgbpals_fade_end
-	rept _NARG
-		for i,
-		endr
-		shift
-	endr
-ENDM */
-
 DEF palettes EQUS "* PALETTE_SIZE"
 DEF palette  EQUS "+ PALETTE_SIZE *"
 DEF color    EQUS "+ PAL_COLOR_SIZE *"

@@ -100,6 +100,7 @@
   - **wCurLevel**: initialized in LevelSelectionMenu (where it is also used), and stays static during the level.
   - **wDefaultLevelSelectionMenuLandmark**: used to know in which landmark to place the player when entering level selection menu.
   - **wCurOverworldMiscPal**
+  - **wLevelSelectionMenuEntryEventQueue**: which events have to be triggered the next time the player enters the level selection menu.
 
 - These addresses share memory region with string buffers from *wStringBuffer3* onwards. They are placed in memory in the following order.
   - **wTempSpaceStruct**: Temporary scope. Same structure as *wCurSpaceStruct*
@@ -118,6 +119,8 @@
 - Address spaces for backing up the map state (disabled spaces and map objects). Located outside of WRAM banks 0 and 1.
   - **wDisabledSpacesBackups**: preserved on save to **sDisabledSpacesBackups**.
   - **wMapObjectsBackups**: preserved on save to **sMapObjectsBackups**.
+
+- **wLevelSelectionMenu\*** addresses, union under the *"Miscellaneous WRAM 1"* section. Temporary scope during level selection menu, except for *wLevelSelectionMenuEntryEventQueue*.
 
 - Other WRAM 0 addresses (not preserved on save):
   - **wText2bpp**

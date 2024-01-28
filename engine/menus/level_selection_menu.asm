@@ -2,6 +2,8 @@ LevelSelectionMenu::
 	xor a
 	ldh [hInMenu], a
 	ldh [hMapAnims], a
+	ldh [hSCY], a
+	ldh [hSCX], a
 	ld a, 1 << 2 ; do not clear wShadowOAM during DoNextFrameForAllSprites
 	ld [wVramState], a
 
@@ -17,6 +19,59 @@ LevelSelectionMenu::
 	ld a, LCDC_DEFAULT
 	ldh [rLCDC], a
 
+	ld a, [wLevelSelectionMenuEntryEventQueue]
+	bit LSMEVENT_SHOW_UNLOCKED_LEVELS, a
+	jr z, .load_default_landmark
+
+	ld hl, wTempUnlockedLevels
+.show_unlocked_levels_loop
+	ld a, [hli]
+	cp $ff
+	jr z, .load_default_landmark
+
+	push hl
+; perform level-to-landmark lookup of wTempUnlockedLevels[i] in $ff-terminated LandmarkToLevelTable.
+; stop at the first match and load it to wLevelSelectionMenuCurrentLandmark.
+	ld hl, LandmarkToLevelTable
+	ld c, 0
+.level_to_landmark_loop
+	ld b, [hl]
+	inc b
+	jr z, .invalid_level ; if reached $ff byte of LandmarkToLevelTable
+	cp [hl]
+	jr z, .match
+	inc hl
+	inc c
+	jr .level_to_landmark_loop
+.match
+	ld a, c
+	ld [wLevelSelectionMenuCurrentLandmark], a
+	call LevelSelectionMenu_GetLandmarkPage
+	ld [wLevelSelectionMenuCurrentPage], a
+
+	call LevelSelectionMenu_DrawTilemapAndAttrmap
+	call LevelSelectionMenu_DrawTimeOfDaySymbol
+	ld b, CGB_LEVEL_SELECTION_MENU
+	call GetCGBLayout ; apply and commit pals
+	call SetPalettes
+	ld c, 20         ;
+	call DelayFrames ; page shown --> page and textbox shown
+
+	call LevelSelectionMenu_PrintLevelAndLandmarkNameAndStageIndicators
+	call LevelSelectionMenu_DrawStageTrophies
+	call LevelSelectionMenu_RefreshTextboxAttrs
+
+	ld c, 60
+	call DelayFrames
+	ld b, RGBFADE_TO_BLACK_6BGP_1OBP2
+	call DoRGBFadeEffect
+	ld c, 30         ;
+	call DelayFrames ; black screen --> next landmark shown
+.invalid_level
+	pop hl
+	jr .show_unlocked_levels_loop
+
+.load_default_landmark
 	ld a, [wDefaultLevelSelectionMenuLandmark]
 	ld [wLevelSelectionMenuCurrentLandmark], a
 	call LevelSelectionMenu_GetLandmarkPage
@@ -24,11 +79,7 @@ LevelSelectionMenu::
 	ld a, TRUE
 	ld [wLevelSelectionMenuStandingStill], a
 
-	call LevelSelectionMenu_InitTilemap
-	call LevelSelectionMenu_InitAttrmap
-	call WaitBGMap2
-	xor a
-	ldh [hBGMapMode], a
+	call LevelSelectionMenu_DrawTilemapAndAttrmap
 	call LevelSelectionMenu_DrawTimeOfDaySymbol
 	ld b, CGB_LEVEL_SELECTION_MENU
 	call GetCGBLayout ; apply and commit pals
@@ -38,7 +89,6 @@ LevelSelectionMenu::
 	call PlayMusic
 	call DelayFrame ; wait for pal update
 
-	ld a, [wLevelSelectionMenuCurrentLandmark]
 	call LevelSelectionMenu_InitPlayerSprite
 	call LevelSelectionMenu_InitLandmark
 	call LevelSelectionMenu_PrintLevelAndLandmarkNameAndStageIndicators
@@ -136,6 +186,7 @@ LevelSelectionMenu::
 	call PlaySFX
 	call LevelSelectionMenu_Delay10Frames
 	call .EnterLevelFadeOut
+	call WaitSFX
 	scf
 	ret
 
@@ -231,10 +282,17 @@ LevelSelectionMenu_InitAttrmap:
 	jr nz, .loop
 	ret
 
+LevelSelectionMenu_DrawTilemapAndAttrmap:
+	call LevelSelectionMenu_InitTilemap
+	call LevelSelectionMenu_InitAttrmap
+	call WaitBGMap2
+	xor a
+	ldh [hBGMapMode], a
+	ret
+
 LevelSelectionMenu_InitPlayerSprite:
 ; initialize the anim struct of the player's sprite.
 ; because ClearSpriteAnims was called before, it's always loaded to wSpriteAnim1
-	push af
 	depixel 0, 0
 ; all the SPRITE_ANIM_* related to the level selection menu are sorted by direction, then by gender
 	ld b, SPRITE_ANIM_OBJ_LEVEL_SELECTION_MENU_MALE_WALK_DOWN
@@ -244,7 +302,7 @@ LevelSelectionMenu_InitPlayerSprite:
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
 	ld [hl], $00
-	pop af
+	ld a, [wLevelSelectionMenuCurrentLandmark]
 	ld e, a
 	call LevelSelectionMenu_GetLandmarkCoords
 ; wSpriteAnim1*Coord contain the coord of the bottom right object of the player sprite
@@ -747,11 +805,7 @@ ENDM
 ; set new page and redraw screen
 	call LevelSelectionMenu_GetNewPage
 	ld [wLevelSelectionMenuCurrentPage], a
-	call LevelSelectionMenu_InitTilemap
-	call LevelSelectionMenu_InitAttrmap
-	call WaitBGMap2
-	xor a
-	ldh [hBGMapMode], a
+	call LevelSelectionMenu_DrawTilemapAndAttrmap
 	call .PageChangeFadeIn
 ; adjust steps left for the "duplicate" movement of the player leaving and entering a page
 	ld hl, wLevelSelectionMenuMovementStepsLeft

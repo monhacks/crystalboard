@@ -131,3 +131,4 @@ if DEF(_DEBUG)
 	db DEBUGLEVEL_5 ; LANDMARK_DEBUGLEVEL_5
 endc
 	assert_table_length NUM_LANDMARKS
+	db $ff

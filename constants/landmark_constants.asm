@@ -27,6 +27,12 @@ DEF LSMTEXTBOX_LEVEL_NUMBERS_FIRST_TILE EQU $31 ; and $41
 	const LSMTEXTBOX_STAGE_3_INDICATOR_TILE ; $3d (and $4d)
 	const LSMTEXTBOX_STAGE_4_INDICATOR_TILE ; $3e (and $4e)
 
+; events when entering Level Selection menu (wLevelSelectionMenuEntryEventQueue)
+	const_def
+	const LSMEVENT_SHOW_UNLOCKED_LEVELS ; 0
+	const LSMEVENT_ANIMATE_TIME_OF_DAY  ; 1
+DEF NUM_LSM_EVENTS EQU const_value
+
 ; used in CaughtData (legacy)
 	const_def $7f, -1
 	const LANDMARK_EVENT             ; $7f

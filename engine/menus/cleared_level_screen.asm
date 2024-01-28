@@ -35,9 +35,7 @@ ClearedLevelScreen:
 	ld [wNumTempUnlockedLevels], a
 	ld a, $ff
 	ld [wTempUnlockedLevels], a
-	call UnlockLevels
-	ld c, 30
-	jp DelayFrames
+	jp UnlockLevels
 
 .LevelCleared1Text:
 	text "  L E V E L"

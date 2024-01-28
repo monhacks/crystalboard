@@ -93,6 +93,22 @@ GameMenuJoypadLoop:
 	ret
 
 GameMenu_WorldMap:
+; the following 500ms fading delay applies:
+; - from post-level screen to level selection menu
+; - from overworld to level selection menu
+; - from selecting "WORLD MAP" in game menu to level selection menu (save outside ow)
+; - from selecting "WORLD MAP" in game menu to overworld (save in ow)
+	ld a, 8
+	ld [wMusicFade], a
+	ld a, LOW(MUSIC_NONE)
+	ld [wMusicFadeID], a
+	ld a, HIGH(MUSIC_NONE)
+	ld [wMusicFadeID + 1], a
+	call ClearBGPalettes
+	call ClearTilemap
+	ld c, 30 - 8
+	call DelayFrames
+
 	ld a, [wSaveFileInOverworld]
 	and a
 	jr z, .not_in_overworld
@@ -102,6 +118,11 @@ GameMenu_WorldMap:
 
 .not_in_overworld
 	farcall LevelSelectionMenu
+; dequeue all level selection menu events (which triggered during call above if set).
+; game is not saved until player enters a level, so if game is turned off in the middle of
+; an event or in the menu, the player will be able to replay the events when they come back.
+	ld a, 0
+	ld [wLevelSelectionMenuEntryEventQueue], a
 	ret nc ; if pressed B, go back to Game Menu
 
 	farcall ClearSpriteAnims
@@ -111,16 +132,6 @@ GameMenu_WorldMap:
 
 .SpawnToMap:
 	ldh [hMapEntryMethod], a
-	ld a, $8
-	ld [wMusicFade], a
-	ld a, LOW(MUSIC_NONE)
-	ld [wMusicFadeID], a
-	ld a, HIGH(MUSIC_NONE)
-	ld [wMusicFadeID + 1], a
-	call ClearBGPalettes
-	call ClearTilemap
-	ld c, 20
-	call DelayFrames
 	farcall JumpRoamMons
 	xor a
 	ld [wDontPlayMapMusicOnReload], a ; play map music
@@ -137,11 +148,17 @@ GameMenu_WorldMap:
 	ld a, [wExitOverworldReason]
 	cp CLEARED_LEVEL
 	jr nz, .save_and_return
-	call AdvanceTimeOfDay
 	farcall ClearedLevelScreen
+	call AdvanceTimeOfDay
+	ld hl, wLevelSelectionMenuEntryEventQueue
+	set LSMEVENT_ANIMATE_TIME_OF_DAY, [hl]
+	ld a, [wNumTempUnlockedLevels]
+	and a
+	jr z, .save_and_return
+	set LSMEVENT_SHOW_UNLOCKED_LEVELS, [hl]
 .save_and_return
 	farcall AutoSaveGameOutsideOverworld
-	ret
+	jp GameMenu_WorldMap
 
 GameMenu_Shop:
 	ret
