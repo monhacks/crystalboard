@@ -29,3 +29,7 @@ DEF STAGE_4 EQU 1 << STAGE_4_F
 	const UNLOCK_WHEN_LEVELS_CLEARED             ; 00
 	const UNLOCK_WHEN_NUMBER_OF_LEVELS_CLEARED   ; 01
 	const UNLOCK_WHEN_TECHNIQUES_CLEARED         ; 02
+
+; maximum amount of levels that can be unlocked in a single level cleared run.
+; levels to unlock are processed in level order.
+DEF MAX_UNLOCK_LEVELS_AT_ONCE EQU 10

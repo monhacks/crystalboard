@@ -145,14 +145,22 @@ GameMenu_WorldMap:
 	call ClearObjectStructs
 	call ClearBGPalettes
 	call ClearSprites
+; clear unlocked levels
+	xor a
+	ld [wLastUnlockedLevelsCount], a
+	ld a, $ff
+	ld [wLastUnlockedLevels], a
+; handle overworld exit
 	ld a, [wExitOverworldReason]
 	cp CLEARED_LEVEL
 	jr nz, .save_and_return
+; if CLEARED_LEVEL:
+; show post-level screen, clear level, unlock levels, advance ToD, request appropriate LSM events
 	farcall ClearedLevelScreen
 	call AdvanceTimeOfDay
 	ld hl, wLevelSelectionMenuEntryEventQueue
 	set LSMEVENT_ANIMATE_TIME_OF_DAY, [hl]
-	ld a, [wNumTempUnlockedLevels]
+	ld a, [wLastUnlockedLevelsCount]
 	and a
 	jr z, .save_and_return
 	set LSMEVENT_SHOW_UNLOCKED_LEVELS, [hl]

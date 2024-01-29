@@ -23,14 +23,18 @@ LevelSelectionMenu::
 	bit LSMEVENT_SHOW_UNLOCKED_LEVELS, a
 	jr z, .load_default_landmark
 
-	ld hl, wTempUnlockedLevels
+	ld a, [wLastUnlockedLevelsCount]
+	and a
+	jr z, .load_default_landmark
+
+	ld hl, wLastUnlockedLevels
 .show_unlocked_levels_loop
 	ld a, [hli]
 	cp $ff
 	jr z, .load_default_landmark
 
 	push hl
-; perform level-to-landmark lookup of wTempUnlockedLevels[i] in $ff-terminated LandmarkToLevelTable.
+; perform level-to-landmark lookup of wLastUnlockedLevels[i] in $ff-terminated LandmarkToLevelTable.
 ; stop at the first match and load it to wLevelSelectionMenuCurrentLandmark.
 	ld hl, LandmarkToLevelTable
 	ld c, 0

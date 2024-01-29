@@ -31,10 +31,6 @@ ClearedLevelScreen:
 .exit
 	call AddLevelCoinsToBalance
 	call ClearLevel
-	xor a
-	ld [wNumTempUnlockedLevels], a
-	ld a, $ff
-	ld [wTempUnlockedLevels], a
 	jp UnlockLevels
 
 .LevelCleared1Text:
@@ -92,7 +88,10 @@ ComputeLevelsToUnlock:
 	inc b
 	ld a, b
 	cp NUM_LEVELS
-	jr z, .done
+	jr z, .done ; done if went through all existing levels
+	ld a, [wLastUnlockedLevelsCount]
+	cp MAX_UNLOCK_LEVELS_AT_ONCE
+	jr nc, .done ; done if reached the capacity of wLastUnlockedLevels
 ; advance hl to next level in LevelUnlockRequirements
 .loop
 	ld a, [hli]
@@ -169,19 +168,19 @@ ComputeLevelsToUnlock:
 	jr .check_techniques_cleared_loop
 
 .reqs_met
-; add level to wTempUnlockedLevels
+; add level to wLastUnlockedLevels
 	pop bc ; b = which level
 	push hl
-	ld a, [wNumTempUnlockedLevels]
+	ld a, [wLastUnlockedLevelsCount]
 	ld e, a
 	ld d, 0
-	ld hl, wTempUnlockedLevels
+	ld hl, wLastUnlockedLevels
 	add hl, de
 	ld [hl], b
 	inc hl
 	ld [hl], $ff
 	inc a
-	ld [wNumTempUnlockedLevels], a
+	ld [wLastUnlockedLevelsCount], a
 	pop hl
 	pop de
 	ret
@@ -192,7 +191,7 @@ ComputeLevelsToUnlock:
 	ret
 
 SaveUnlockedLevels:
-	ld hl, wTempUnlockedLevels
+	ld hl, wLastUnlockedLevels
 .loop
 	ld a, [hli]
 	ld e, a
