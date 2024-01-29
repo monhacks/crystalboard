@@ -195,7 +195,7 @@ LevelSelectionMenu::
 	ret
 
 .EnterLevelFadeOut:
-	ld b, RGBFADE_TO_WHITE_6BGP_3OBP
+	ld b, RGBFADE_TO_WHITE_6BGP_7OBP
 	jp DoRGBFadeEffect
 
 .exit

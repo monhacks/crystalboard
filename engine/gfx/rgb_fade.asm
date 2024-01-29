@@ -277,11 +277,15 @@ RGBFadeEffectJumptable:
 	table_width 2, RGBFadeEffectJumptable
 	dw _RGBFadeToBlack_6BGP         ; RGBFADE_TO_BLACK_6BGP
 	dw _RGBFadeToLighter_6BGP       ; RGBFADE_TO_LIGHTER_6BGP
-	dw _RGBFadeToWhite_6BGP_3OBP    ; RGBFADE_TO_WHITE_6BGP_3OBP
+	dw _RGBFadeToWhite_6BGP_7OBP    ; RGBFADE_TO_WHITE_6BGP_7OBP
 	dw _RGBFadeToWhite_8BGP_8OBP    ; RGBFADE_TO_WHITE_8BGP_8OBP
 	dw _RGBFadeToBlack_6BGP_1OBP2   ; RGBFADE_TO_BLACK_6BGP_1OBP2
 	dw _RGBFadeToLighter_6BGP_1OBP2 ; RGBFADE_TO_LIGHTER_6BGP_1OBP2
 	assert_table_length NUM_RGB_FADE_EFFECTS
+
+; in RGBFadeEffectJumptable functions, use DelayFrame calls appropriately
+; inside the loop to adjust loop duration, accounting for whether a loop
+; takes up less or more than one frame.
 
 _RGBFadeToBlack_6BGP:
 	ld c, 32 / 2
@@ -376,7 +380,7 @@ _RGBFadeToLighter_6BGP_1OBP2:
 	jr nz, .loop
 	ret
 
-_RGBFadeToWhite_6BGP_3OBP:
+_RGBFadeToWhite_6BGP_7OBP:
 	ld c, 32 / 2
 .loop
 	push bc
@@ -388,13 +392,12 @@ _RGBFadeToWhite_6BGP_3OBP:
 
 ; fade OBP to white
 	ld de, wOBPals2
-	ld c, 3 * NUM_PAL_COLORS
+	ld c, 7 * NUM_PAL_COLORS
 	call FadeStepColorsToWhite
 
 ; commit pals
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a
-	call DelayFrame
 
 	pop bc
 	dec c
