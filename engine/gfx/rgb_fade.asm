@@ -277,10 +277,10 @@ RGBFadeEffectJumptable:
 	table_width 2, RGBFadeEffectJumptable
 	dw _RGBFadeToBlack_6BGP         ; RGBFADE_TO_BLACK_6BGP
 	dw _RGBFadeToLighter_6BGP       ; RGBFADE_TO_LIGHTER_6BGP
-	dw _RGBFadeToWhite_6BGP_7OBP    ; RGBFADE_TO_WHITE_6BGP_7OBP
+	dw _RGBFadeToWhite_6BGP_6OBP    ; RGBFADE_TO_WHITE_6BGP_6OBP
 	dw _RGBFadeToWhite_8BGP_8OBP    ; RGBFADE_TO_WHITE_8BGP_8OBP
-	dw _RGBFadeToBlack_6BGP_1OBP2   ; RGBFADE_TO_BLACK_6BGP_1OBP2
-	dw _RGBFadeToLighter_6BGP_1OBP2 ; RGBFADE_TO_LIGHTER_6BGP_1OBP2
+	dw _RGBFadeToBlack_6BGP_1OBP1   ; RGBFADE_TO_BLACK_6BGP_1OBP1
+	dw _RGBFadeToLighter_6BGP_1OBP1 ; RGBFADE_TO_LIGHTER_6BGP_1OBP1
 	assert_table_length NUM_RGB_FADE_EFFECTS
 
 ; in RGBFadeEffectJumptable functions, use DelayFrame calls appropriately
@@ -307,7 +307,7 @@ _RGBFadeToBlack_6BGP:
 	jr nz, .loop
 	ret
 
-_RGBFadeToBlack_6BGP_1OBP2:
+_RGBFadeToBlack_6BGP_1OBP1:
 	ld c, 32 / 2
 .loop
 	push bc
@@ -318,7 +318,7 @@ _RGBFadeToBlack_6BGP_1OBP2:
 	call FadeStepColorsToBlack
 
 ; fade OBP to black
-	ld de, wOBPals2 + 2 palettes
+	ld de, wOBPals2 + 1 palettes
 	ld c, NUM_PAL_COLORS
 	call FadeStepColorsToBlack
 
@@ -353,7 +353,7 @@ _RGBFadeToLighter_6BGP:
 	jr nz, .loop
 	ret
 
-_RGBFadeToLighter_6BGP_1OBP2:
+_RGBFadeToLighter_6BGP_1OBP1:
 	ld c, 32 / 2
 .loop
 	push bc
@@ -365,8 +365,8 @@ _RGBFadeToLighter_6BGP_1OBP2:
 	call FadeStepColorsToLighter
 
 ; fade OBP to lighter (towards wOBPals1)
-	ld de, wOBPals2 + 2 palettes
-	ld hl, wOBPals1 + 2 palettes
+	ld de, wOBPals2 + 1 palettes
+	ld hl, wOBPals1 + 1 palettes
 	ld c, NUM_PAL_COLORS
 	call FadeStepColorsToLighter
 
@@ -380,7 +380,7 @@ _RGBFadeToLighter_6BGP_1OBP2:
 	jr nz, .loop
 	ret
 
-_RGBFadeToWhite_6BGP_7OBP:
+_RGBFadeToWhite_6BGP_6OBP:
 	ld c, 32 / 2
 .loop
 	push bc
@@ -392,7 +392,7 @@ _RGBFadeToWhite_6BGP_7OBP:
 
 ; fade OBP to white
 	ld de, wOBPals2
-	ld c, 7 * NUM_PAL_COLORS
+	ld c, 6 * NUM_PAL_COLORS
 	call FadeStepColorsToWhite
 
 ; commit pals

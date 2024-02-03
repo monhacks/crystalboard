@@ -85,7 +85,7 @@ LevelSelectionMenu::
 	farcall ClearSpriteAnims
 
 ; fade to the next unlocked level, or to the regular level selection menu
-	ld b, RGBFADE_TO_BLACK_6BGP_1OBP2
+	ld b, RGBFADE_TO_BLACK_6BGP_1OBP1
 	call DoRGBFadeEffect
 	ld c, 30         ;
 	call DelayFrames ; black screen --> next landmark shown
@@ -213,7 +213,7 @@ LevelSelectionMenu::
 	ret
 
 .EnterLevelFadeOut:
-	ld b, RGBFADE_TO_WHITE_6BGP_7OBP
+	ld b, RGBFADE_TO_WHITE_6BGP_6OBP
 	jp DoRGBFadeEffect
 
 .exit
@@ -321,9 +321,7 @@ LevelSelectionMenu_InitPlayerSprite:
 ; because ClearSpriteAnims was called before, it's always loaded to wSpriteAnim1
 	depixel 0, 0
 ; all the SPRITE_ANIM_* related to the level selection menu are sorted by direction, then by gender
-	ld b, SPRITE_ANIM_OBJ_LEVEL_SELECTION_MENU_MALE_WALK_DOWN
-	ld a, [wPlayerGender]
-	add b
+	ld a, SPRITE_ANIM_OBJ_LEVEL_SELECTION_MENU_WALK_DOWN
 	call InitSpriteAnimStruct
 	ld hl, SPRITEANIMSTRUCT_TILE_ID
 	add hl, bc
@@ -514,10 +512,10 @@ LevelSelectionMenu_DrawTimeOfDaySymbol:
 	ret
 
 .OAM:
-	db 3 * TILE_WIDTH, 2 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 0, 2
-	db 3 * TILE_WIDTH, 3 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 1, 2
-	db 4 * TILE_WIDTH, 2 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 8, 2
-	db 4 * TILE_WIDTH, 3 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 9, 2
+	db 3 * TILE_WIDTH, 2 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 0, PAL_LSM_TOD
+	db 3 * TILE_WIDTH, 3 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 1, PAL_LSM_TOD
+	db 4 * TILE_WIDTH, 2 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 8, PAL_LSM_TOD
+	db 4 * TILE_WIDTH, 3 * TILE_WIDTH, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + 9, PAL_LSM_TOD
 
 LevelSelectionMenu_DrawDirectionalArrows:
 ; Draw directional arrows OAM around player sprite for the valid directions.
@@ -559,8 +557,8 @@ LevelSelectionMenu_DrawDirectionalArrows:
 	ld a, [hli]
 	ld [de], a ; tile id
 	inc de
-	gender_to_pal
-	ld [de], a ; attr (use the same pal as player sprite)
+	xor a ; PAL_LSM_PLAYER
+	ld [de], a ; attr (uses the same pal as player sprite)
 	inc de
 	ret
 
@@ -684,14 +682,14 @@ LevelSelectionMenu_DrawStageTrophies:
 	db 18 * TILE_WIDTH, 19 * TILE_WIDTH
 
 .BaseOAMTilesAttrs:
-	db 24 + NUM_DIRECTIONS + 0, 3
-	db 24 + NUM_DIRECTIONS + 4, 3
-	db 24 + NUM_DIRECTIONS + 1, 4
-	db 24 + NUM_DIRECTIONS + 5, 4
-	db 24 + NUM_DIRECTIONS + 2, 5
-	db 24 + NUM_DIRECTIONS + 6, 5
-	db 24 + NUM_DIRECTIONS + 3, 6
-	db 24 + NUM_DIRECTIONS + 7, 6
+	db 24 + NUM_DIRECTIONS + 0, PAL_LSM_TROPHY_1
+	db 24 + NUM_DIRECTIONS + 4, PAL_LSM_TROPHY_1
+	db 24 + NUM_DIRECTIONS + 1, PAL_LSM_TROPHY_2
+	db 24 + NUM_DIRECTIONS + 5, PAL_LSM_TROPHY_2
+	db 24 + NUM_DIRECTIONS + 2, PAL_LSM_TROPHY_3
+	db 24 + NUM_DIRECTIONS + 6, PAL_LSM_TROPHY_3
+	db 24 + NUM_DIRECTIONS + 3, PAL_LSM_TROPHY_4
+	db 24 + NUM_DIRECTIONS + 7, PAL_LSM_TROPHY_4
 
 LevelSelectionMenu_ClearTextboxOAM:
 	ld hl, wShadowOAM + $8 * SPRITEOAMSTRUCT_LENGTH
@@ -710,12 +708,8 @@ LevelSelectionMenu_SetAnimSeqAndFrameset:
 	ld [hl], a
 	ld hl, SPRITEANIMSTRUCT_FRAMESET_ID
 	add hl, bc
-	ld a, [wPlayerGender]
-	ld d, a
-	ld a, SPRITE_ANIM_FRAMESET_LEVEL_SELECTION_MENU_MALE_WALK_DOWN
-	add e
+	ld a, SPRITE_ANIM_FRAMESET_LEVEL_SELECTION_MENU_WALK_DOWN
 	add e ; add direction
-	add d ; add gender
 	ld [hl], a
 	ret
 
@@ -840,11 +834,11 @@ ENDM
 	ret
 
 .PageChangeFadeOut:
-	ld b, RGBFADE_TO_BLACK_6BGP_1OBP2
+	ld b, RGBFADE_TO_BLACK_6BGP_1OBP1
 	jp DoRGBFadeEffect
 
 .PageChangeFadeIn:
-	ld b, RGBFADE_TO_LIGHTER_6BGP_1OBP2
+	ld b, RGBFADE_TO_LIGHTER_6BGP_1OBP1
 	jp DoRGBFadeEffect
 
 LevelSelectionMenu_GetLandmarkPage:
@@ -1127,10 +1121,7 @@ _LevelSelectionMenuHandleTransition:
 	ld [hl], a
 	ld hl, SPRITEANIMSTRUCT_FRAMESET_ID
 	add hl, bc
-	ld a, [wPlayerGender]
-	ld d, a
-	ld a, SPRITE_ANIM_FRAMESET_LEVEL_SELECTION_MENU_MALE_WALK_DOWN
-	add d
+	ld a, SPRITE_ANIM_FRAMESET_LEVEL_SELECTION_MENU_WALK_DOWN
 	ld [hl], a
 ; return nc to signal back not to apply a displacement during this frame
 	xor a

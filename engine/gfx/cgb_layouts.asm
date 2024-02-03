@@ -572,17 +572,20 @@ _CGB_GSTitleScreen:
 	ret
 
 _CGB_LevelSelectionMenu:
-; load daytime-based player sprite pals (male and female)
+; load daytime-based player sprite pal (male or female)
 	ld a, [wTimeOfDay]
 	maskbits NUM_DAYTIMES
 	ld bc, 8 palettes
 	ld hl, MapObjectPals
 	call AddNTimes
+	gender_to_pal
+	ld bc, 1 palettes
+	call AddNTimes
 	ld de, wOBPals1
-	ld bc, 2 palettes
+	ld bc, 1 palettes
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
-	; load daytime-based ToD symbol pals (pal2)
+	; load daytime-based ToD symbol pals (pal1)
 	ld a, [wTimeOfDay]
 	maskbits NUM_DAYTIMES
 	ld bc, 1 palettes
@@ -591,7 +594,7 @@ _CGB_LevelSelectionMenu:
 	ld bc, 1 palettes
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
-; load stage trophy pals (pal3 to pal6)
+; load stage trophy pals (pal2 to pal5)
 	ld hl, LevelSelectionMenuStageTrophiesPals
 	ld bc, 4 palettes
 	ld a, BANK(wOBPals1)

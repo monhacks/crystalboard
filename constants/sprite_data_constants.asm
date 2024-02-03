@@ -35,3 +35,12 @@ DEF NUM_SPRITEDATA_FIELDS EQU _RS
 	const PAL_NPC_TREE   ; d
 	const PAL_NPC_ROCK   ; e
 	const PAL_NPC_MISC   ; f
+
+; level selection menu sprite palettes
+	const_def
+	const PAL_LSM_PLAYER   ; 0
+	const PAL_LSM_TOD      ; 1
+	const PAL_LSM_TROPHY_1 ; 2
+	const PAL_LSM_TROPHY_2 ; 3
+	const PAL_LSM_TROPHY_3 ; 4
+	const PAL_LSM_TROPHY_4 ; 5
