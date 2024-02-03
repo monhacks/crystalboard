@@ -21,17 +21,17 @@ LevelSelectionMenu::
 
 	ld a, [wLevelSelectionMenuEntryEventQueue]
 	bit LSMEVENT_SHOW_UNLOCKED_LEVELS, a
-	jr z, .load_default_landmark
+	jp z, .load_default_landmark
 
 	ld a, [wLastUnlockedLevelsCount]
 	and a
-	jr z, .load_default_landmark
+	jp z, .load_default_landmark
 
 	ld hl, wLastUnlockedLevels
 .show_unlocked_levels_loop
 	ld a, [hli]
 	cp $ff
-	jr z, .load_default_landmark
+	jp z, .load_default_landmark
 
 	push hl
 ; perform level-to-landmark lookup of wLastUnlockedLevels[i] in $ff-terminated LandmarkToLevelTable.
@@ -53,6 +53,7 @@ LevelSelectionMenu::
 	call LevelSelectionMenu_GetLandmarkPage
 	ld [wLevelSelectionMenuCurrentPage], a
 
+; load and draw gfx involved in the show unlocked levels event
 	call LevelSelectionMenu_DrawTilemapAndAttrmap
 	call LevelSelectionMenu_DrawTimeOfDaySymbol
 	ld b, CGB_LEVEL_SELECTION_MENU
@@ -65,15 +66,32 @@ LevelSelectionMenu::
 	call LevelSelectionMenu_DrawStageTrophies
 	call LevelSelectionMenu_RefreshTextboxAttrs
 
-	ld c, 60
-	call DelayFrames
+; play animation that highlights landmark of unlocked level
+	ld a, [wLevelSelectionMenuCurrentLandmark]
+	call LevelSelectionMenu_GetLandmarkCoords
+	ld a, SPRITE_ANIM_OBJ_LEVEL_SELECTION_MENU_HIGHLIGHT_LEVEL
+	call InitSpriteAnimStruct
+	ld a, (15 + 1) * 6 ; %01100000
+.highlight_level_anim_loop
+	ld [wFrameCounter], a
+	ld a, [wFrameCounter]
+	and %11111
+	ld de, SFX_POKEBALLS_PLACED_ON_TABLE
+	call z, PlaySFX
+	farcall PlaySpriteAnimationsAndDelayFrame
+	ld a, [wFrameCounter]
+	dec a
+	jr nz, .highlight_level_anim_loop
+	farcall ClearSpriteAnims
+
+; fade to the next unlocked level, or to the regular level selection menu
 	ld b, RGBFADE_TO_BLACK_6BGP_1OBP2
 	call DoRGBFadeEffect
 	ld c, 30         ;
 	call DelayFrames ; black screen --> next landmark shown
 .invalid_level
 	pop hl
-	jr .show_unlocked_levels_loop
+	jp .show_unlocked_levels_loop
 
 .load_default_landmark
 	ld a, [wDefaultLevelSelectionMenuLandmark]
@@ -234,6 +252,10 @@ LevelSelectionMenu_LoadGFX:
 ;	ld de, vTiles0 + (24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2) tiles
 	ld bc, NUM_DAYTIMES * 4 tiles
 	call FarCopyBytes
+	ld hl, LevelSelectionMenuLevelHighlighterGFX
+;	ld de, vTiles0 + (24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + NUM_DAYTIMES * 4) tiles
+	ld bc, 8 tiles
+	call FarCopyBytes
 	ret
 
 LevelSelectionMenu_InitTilemap:
@@ -307,7 +329,6 @@ LevelSelectionMenu_InitPlayerSprite:
 	add hl, bc
 	ld [hl], $00
 	ld a, [wLevelSelectionMenuCurrentLandmark]
-	ld e, a
 	call LevelSelectionMenu_GetLandmarkCoords
 ; wSpriteAnim1*Coord contain the coord of the bottom right object of the player sprite
 	ld hl, SPRITEANIMSTRUCT_XCOORD
@@ -837,12 +858,11 @@ LevelSelectionMenu_GetLandmarkPage:
 	ret
 
 LevelSelectionMenu_GetLandmarkCoords::
-; Return coordinates (d, e) of landmark e.
+; Return coordinates (d, e) of landmark a.
 	push hl
 	push bc
 	ld hl, LevelSelectionMenu_Landmarks + $1
 	ld bc, LevelSelectionMenu_Landmarks.landmark2 - LevelSelectionMenu_Landmarks.landmark1
-	ld a, e
 	call AddNTimes
 	ld a, [hli]
 	ld e, a
@@ -1144,3 +1164,6 @@ INCBIN "gfx/level_selection_menu/stage_trophies.2bpp"
 
 LevelSelectionMenuTimeOfDaySymbolsGFX:
 INCBIN "gfx/level_selection_menu/time_of_day_symbols.2bpp"
+
+LevelSelectionMenuLevelHighlighterGFX:
+INCBIN "gfx/level_selection_menu/level_highlighter.2bpp"

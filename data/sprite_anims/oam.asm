@@ -168,6 +168,8 @@ SpriteAnimOAMData:
 	spriteanimoam $00, .OAMData_BreakDie3                ; SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_3
 	spriteanimoam $00, .OAMData_BreakDie4                ; SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_4
 	spriteanimoam $00, .OAMData_DieNumber                ; SPRITE_ANIM_OAMSET_BOARD_MENU_DIE_NUMBER
+	spriteanimoam $00, .OAMData_HighlightLevel1          ; SPRITE_ANIM_OAMSET_LSM_HIGHLIGHT_LEVEL_1
+	spriteanimoam $00, .OAMData_HighlightLevel2          ; SPRITE_ANIM_OAMSET_LSM_HIGHLIGHT_LEVEL_2
 
 	assert_table_length NUM_SPRITE_ANIM_OAMSETS
 
@@ -1186,3 +1188,17 @@ SpriteAnimOAMData:
 	dbsprite -1,  0,  4,  0, $51, 1
 	dbsprite  0,  0,  4,  0, $52, 1
 	dbsprite  1,  0,  4,  0, $53, 1
+
+.OAMData_HighlightLevel1:
+	db 4
+	dbsprite -1, -1,  0,  0, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + NUM_DAYTIMES * 4 + 0, 0
+	dbsprite  0, -1,  0,  0, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + NUM_DAYTIMES * 4 + 1, 0
+	dbsprite -1,  0,  0,  0, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + NUM_DAYTIMES * 4 + 2, 0
+	dbsprite  0,  0,  0,  0, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + NUM_DAYTIMES * 4 + 3, 0
+
+.OAMData_HighlightLevel2:
+	db 4
+	dbsprite -1, -1,  0,  0, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + NUM_DAYTIMES * 4 + 4, 0
+	dbsprite  0, -1,  0,  0, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + NUM_DAYTIMES * 4 + 5, 0
+	dbsprite -1,  0,  0,  0, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + NUM_DAYTIMES * 4 + 6, 0
+	dbsprite  0,  0,  0,  0, 24 + NUM_DIRECTIONS + NUM_LEVEL_STAGES * 2 + NUM_DAYTIMES * 4 + 7, 0

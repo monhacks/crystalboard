@@ -20,7 +20,6 @@ DEF SPRITEANIMSTRUCT_LENGTH EQU _RS
 DEF NUM_SPRITE_ANIM_STRUCTS EQU 10 ; see wSpriteAnimationStructs
 
 ; wSpriteAnimDict keys (see wram.asm)
-; UnusedSpriteAnimGFX indexes (see data/sprite_anims/unused_gfx.asm)
 	const_def
 	const SPRITE_ANIM_DICT_DEFAULT      ; 0
 	const SPRITE_ANIM_DICT_BOARD_MENU   ; 1
@@ -92,6 +91,7 @@ DEF NUM_SPRITEANIMDICT_ENTRIES EQU 10
 	const SPRITE_ANIM_OBJ_BOARD_MENU_BREAK_DIE                   ; 35
 	const SPRITE_ANIM_OBJ_BOARD_MENU_APPEAR_DIE_NUMBER           ; 36
 	const SPRITE_ANIM_OBJ_BOARD_MENU_MOVE_DIE_NUMBER             ; 37
+	const SPRITE_ANIM_OBJ_LEVEL_SELECTION_MENU_HIGHLIGHT_LEVEL   ; 38
 DEF NUM_SPRITE_ANIM_OBJS EQU const_value
 
 ; DoSpriteAnimFrame.Jumptable indexes (see engine/sprite_anims/functions.asm)
@@ -217,6 +217,7 @@ DEF NUM_SPRITE_ANIM_FUNCS EQU const_value
 	const SPRITE_ANIM_FRAMESET_BOARD_MENU_BREAK_DIE         ; 50
 	const SPRITE_ANIM_FRAMESET_BOARD_MENU_APPEAR_DIE_NUMBER ; 51
 	const SPRITE_ANIM_FRAMESET_BOARD_MENU_MOVE_DIE_NUMBER   ; 52
+	const SPRITE_ANIM_FRAMESET_LEVEL_SELECTION_MENU_HIGHLIGHT_LEVEL ; 53
 DEF NUM_SPRITE_ANIM_FRAMESETS EQU const_value
 
 ; SpriteAnimOAMData indexes (see data/sprite_anims/oam.asm)
@@ -382,6 +383,8 @@ DEF NUM_SPRITE_ANIM_FRAMESETS EQU const_value
 	const SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_3              ; 9e
 	const SPRITE_ANIM_OAMSET_BOARD_MENU_BREAK_DIE_4              ; 9f
 	const SPRITE_ANIM_OAMSET_BOARD_MENU_DIE_NUMBER               ; a0
+	const SPRITE_ANIM_OAMSET_LSM_HIGHLIGHT_LEVEL_1               ; a1
+	const SPRITE_ANIM_OAMSET_LSM_HIGHLIGHT_LEVEL_2               ; a2
 DEF NUM_SPRITE_ANIM_OAMSETS EQU const_value
 
 assert NUM_SPRITE_ANIM_OAMSETS <= FIRST_OAM_CMD, \

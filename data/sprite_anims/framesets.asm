@@ -78,6 +78,7 @@ SpriteAnimFrameData:
 	dw .Frameset_BoardMenuBreakDie
 	dw .Frameset_BoardMenuAppearDieNumber
 	dw .Frameset_BoardMenuMoveDieNumber
+	dw .Frameset_LevelSelectionMenuHighlightLevel
 	assert_table_length NUM_SPRITE_ANIM_FRAMESETS
 
 .Frameset_00:
@@ -585,4 +586,13 @@ SpriteAnimFrameData:
 
 .Frameset_BoardMenuMoveDieNumber:
 	oamframe SPRITE_ANIM_OAMSET_BOARD_MENU_DIE_NUMBER, 42
+	oamdelete
+
+.Frameset_LevelSelectionMenuHighlightLevel:
+	oamframe SPRITE_ANIM_OAMSET_LSM_HIGHLIGHT_LEVEL_1, 15
+	oamframe SPRITE_ANIM_OAMSET_LSM_HIGHLIGHT_LEVEL_2, 15
+	oamframe SPRITE_ANIM_OAMSET_LSM_HIGHLIGHT_LEVEL_1, 15
+	oamframe SPRITE_ANIM_OAMSET_LSM_HIGHLIGHT_LEVEL_2, 15
+	oamframe SPRITE_ANIM_OAMSET_LSM_HIGHLIGHT_LEVEL_1, 15
+	oamframe SPRITE_ANIM_OAMSET_LSM_HIGHLIGHT_LEVEL_2, 15
 	oamdelete
