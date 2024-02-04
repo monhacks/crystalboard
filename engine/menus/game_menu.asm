@@ -155,9 +155,8 @@ GameMenu_WorldMap:
 	cp CLEARED_LEVEL
 	jr nz, .save_and_return
 ; if CLEARED_LEVEL:
-; show post-level screen, clear level, unlock levels, advance ToD, request appropriate LSM events
+; show post-level screen, clear level, unlock levels, request appropriate LSM events
 	farcall ClearedLevelScreen
-	call AdvanceTimeOfDay
 	ld hl, wLevelSelectionMenuEntryEventQueue
 	set LSMEVENT_ANIMATE_TIME_OF_DAY, [hl]
 	ld a, [wLastUnlockedLevelsCount]

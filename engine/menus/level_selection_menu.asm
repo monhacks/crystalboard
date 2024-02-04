@@ -118,6 +118,89 @@ LevelSelectionMenu::
 	call LevelSelectionMenu_DrawStageTrophies
 	call LevelSelectionMenu_RefreshTextboxAttrs
 
+	ld a, [wLevelSelectionMenuEntryEventQueue]
+	bit LSMEVENT_ANIMATE_TIME_OF_DAY, a
+	jp z, .main_loop
+
+	call LevelSelectionMenu_Delay10Frames
+
+	ld bc, SPRITEOAMSTRUCT_LENGTH
+	ld e, 3 * TILE_WIDTH
+.tod_symbol_upwards_loop
+	farcall PlaySpriteAnimationsAndDelayFrame
+	ld hl, wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH + SPRITEOAMSTRUCT_YCOORD
+	dec [hl]
+	add hl, bc
+	dec [hl]
+	add hl, bc
+	dec [hl]
+	add hl, bc
+	dec [hl]
+	dec e
+	jr nz, .tod_symbol_upwards_loop
+
+	ld a, [wTimeOfDay]
+	ld [wLevelSelectionMenuStartingToD], a
+
+	cp NITE_F
+	ld e, -4
+	jr z, .change_tod_symbol
+	cp EVE_F
+	ld e, -2
+	jr z, .change_tod_symbol
+	cp DAY_F
+	ld e, 4
+	jr z, .change_tod_symbol
+	ld e, 2
+.change_tod_symbol
+	ld hl, wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH + SPRITEOAMSTRUCT_TILE_ID
+	ld bc, SPRITEOAMSTRUCT_LENGTH
+	ld d, 2 * 2
+.change_tod_symbol_loop
+	ld a, [hl]
+	add e
+	ld [hl], a
+	add hl, bc
+	dec d
+	jr nz, .change_tod_symbol_loop
+
+	call AdvanceTimeOfDay
+
+	xor a
+	ld [wLevelSelectionMenuToDFadeStep], a
+	ld b, CGB_LEVEL_SELECTION_MENU_TOD_CHANGE
+	call GetCGBLayout
+	call LevelSelectionMenu_Delay4Frames
+	ld a, 1
+	ld [wLevelSelectionMenuToDFadeStep], a
+	ld b, CGB_LEVEL_SELECTION_MENU_TOD_CHANGE
+	call GetCGBLayout
+	call LevelSelectionMenu_Delay4Frames
+	ld a, 2
+	ld [wLevelSelectionMenuToDFadeStep], a
+	ld b, CGB_LEVEL_SELECTION_MENU_TOD_CHANGE
+	call GetCGBLayout
+	call LevelSelectionMenu_Delay4Frames
+	ld a, 3
+	ld [wLevelSelectionMenuToDFadeStep], a
+	ld b, CGB_LEVEL_SELECTION_MENU_TOD_CHANGE
+	call GetCGBLayout
+
+	ld bc, SPRITEOAMSTRUCT_LENGTH
+	ld e, 3 * TILE_WIDTH
+.tod_symbol_downwards_loop
+	farcall PlaySpriteAnimationsAndDelayFrame
+	ld hl, wShadowOAM + $4 * SPRITEOAMSTRUCT_LENGTH + SPRITEOAMSTRUCT_YCOORD
+	inc [hl]
+	add hl, bc
+	inc [hl]
+	add hl, bc
+	inc [hl]
+	add hl, bc
+	inc [hl]
+	dec e
+	jr nz, .tod_symbol_downwards_loop
+
 .main_loop
 	farcall PlaySpriteAnimations
 	call DelayFrame
@@ -1030,13 +1113,16 @@ LevelSelectionMenu_GetNewPage:
 	ld a, 1
 	ret
 
+LevelSelectionMenu_Delay4Frames:
+	ld a, 4
+	jr LevelSelectionMenu_Delay10Frames.loop
+
 LevelSelectionMenu_Delay10Frames:
 ; Delay 10 frames while playing sprite anims
 	ld a, 10
 .loop
 	push af
-	farcall PlaySpriteAnimations
-	call DelayFrame
+	farcall PlaySpriteAnimationsAndDelayFrame
 	pop af
 	dec a
 	jr nz, .loop

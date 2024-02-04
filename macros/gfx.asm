@@ -41,14 +41,14 @@ MACRO rgbpals_fade_apply
 	DEF fade_from EQUS \1
 	DEF fade_to EQUS \2
 	assert {fade_from}_len == {fade_to}_len, "fade_from pals and fade_to pals must be same length"
-	for i, \3
+	for i, 0, \3
 		for j, 0, {fade_from}_len, 3
 			DEF rgbch_red = {j} + 0
 			DEF rgbch_green = {j} + 1
 			DEF rgbch_blue = {j} + 2
-			DEF palred_value = {fade_from}_{d:rgbch_red} + ({fade_to}_{d:rgbch_red} - {fade_from}_{d:rgbch_red}) * i / \3
-			DEF palgreen_value = {fade_from}_{d:rgbch_green} + ({fade_to}_{d:rgbch_green} - {fade_from}_{d:rgbch_green}) * i / \3
-			DEF palblue_value = {fade_from}_{d:rgbch_blue} + ({fade_to}_{d:rgbch_blue} - {fade_from}_{d:rgbch_blue}) * i / \3
+			DEF palred_value = {fade_from}_{d:rgbch_red} + ({fade_to}_{d:rgbch_red} - {fade_from}_{d:rgbch_red}) * (i + 1) / (\3 + 1)
+			DEF palgreen_value = {fade_from}_{d:rgbch_green} + ({fade_to}_{d:rgbch_green} - {fade_from}_{d:rgbch_green}) * (i + 1) / (\3 + 1)
+			DEF palblue_value = {fade_from}_{d:rgbch_blue} + ({fade_to}_{d:rgbch_blue} - {fade_from}_{d:rgbch_blue}) * (i + 1) / (\3 + 1)
 			dw palred (palred_value) + palgreen (palgreen_value) + palblue (palblue_value)
 		endr
 	endr

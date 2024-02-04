@@ -35,7 +35,7 @@ AdvanceTimeOfDay::
 .set_days
 	ld [wCurDay], a
 
-	call ClearDailyTimers
+	farcall ClearDailyTimers
 
 	ret
 

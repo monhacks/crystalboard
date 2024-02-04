@@ -947,6 +947,8 @@ ENDU
 
 wDefaultCGBLayout:: db
 
+UNION
+
 wPlayerHPPal:: db
 wEnemyHPPal:: db
 
@@ -954,6 +956,12 @@ wHPPals:: ds PARTY_LENGTH
 wCurHPPal:: db
 
 wWhichPartyMonHPPal:: db
+
+NEXTU
+wLevelSelectionMenuStartingToD:: db
+wLevelSelectionMenuToDFadeStep:: db
+
+ENDU
 
 wAttrmap::
 ; 20x18 grid of bg tile attributes for 8x8 tiles

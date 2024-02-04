@@ -55,7 +55,7 @@ CGBLayoutJumptable:
 	dw _CGB_PlayerOrMonFrontpicPals
 	dw _CGB_TradeTube
 	dw _CGB_TrainerOrMonFrontpicPals
-	dw _CGB_Unused1D
+	dw _CGB_LevelSelectionMenuToDChange
 	assert_table_length NUM_CGB_LAYOUTS
 
 _CGB_BattleGrayscale:
@@ -585,7 +585,7 @@ _CGB_LevelSelectionMenu:
 	ld bc, 1 palettes
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
-	; load daytime-based ToD symbol pals (pal1)
+; load daytime-based ToD symbol pals (pal1)
 	ld a, [wTimeOfDay]
 	maskbits NUM_DAYTIMES
 	ld bc, 1 palettes
@@ -623,6 +623,86 @@ _CGB_LevelSelectionMenu:
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a
 	ret
+
+_CGB_LevelSelectionMenuToDChange:
+; load daytime-based ToD symbol pals (pal1)
+	ld a, [wTimeOfDay]
+	maskbits NUM_DAYTIMES
+	ld bc, 1 palettes
+	ld hl, LevelSelectionMenuTimeOfDaySymbolsPals
+	call AddNTimes
+	ld de, wOBPals1 + 1 palettes
+	ld bc, 1 palettes
+	ld a, BANK(wOBPals1)
+	call FarCopyWRAM
+
+; load fading background pals
+	ld hl, .PalsOffsets
+	ld a, [wLevelSelectionMenuStartingToD]
+	maskbits NUM_DAYTIMES
+	ld d, a
+	ld a, [wLevelSelectionMenuToDFadeStep]
+	ld e, a
+.loop
+	ld a, [hli]
+	cp d
+	jr nz, .next1
+	inc a ; cp $ff
+	jr z, .done
+	ld a, [hli]
+	cp e
+	jr z, .match
+	jr .next2
+.next1
+	inc hl
+.next2
+	inc hl
+	jr .loop
+
+.match
+	ld e, [hl]
+	ld a, [wPlayerGender]
+	bit PLAYERGENDER_FEMALE_F, a
+	jr z, .male
+	ld hl, LevelSelectionMenuFemalePals
+	jr .got_pals
+.male
+	ld hl, LevelSelectionMenuMalePals
+.got_pals
+	ld a, e
+	ld bc, 6 palettes
+	call AddNTimes
+	ld de, wBGPals1
+	ld bc, 6 palettes
+	ld a, BANK(wBGPals1)
+	call FarCopyWRAM
+
+.done
+; apply and commit pals
+	call ApplyPals
+	ld a, TRUE
+	ldh [hCGBPalUpdate], a
+	ret
+
+.PalsOffsets:
+; wLevelSelectionMenuStartingToD, wLevelSelectionMenuToDFadeStep, offset from LevelSelectionMenu*Pals
+	db MORN_F, 0, 0
+	db DAY_F,  0, 1
+	db NITE_F, 0, 2
+	db EVE_F,  0, 3
+	db MORN_F, 1, 4
+	db MORN_F, 2, 5
+	db MORN_F, 3, 1
+	db DAY_F,  1, 6
+	db DAY_F,  2, 7
+	db DAY_F,  3, 3
+	db EVE_F,  1, 8
+	db EVE_F,  2, 9
+	db EVE_F,  3, 2
+	db NITE_F, 1, 10
+	db NITE_F, 2, 11
+	db NITE_F, 3, 0
+	db $ff
 
 _CGB_UnownPuzzle:
 	ld hl, FourPals_UnownPuzzle
