@@ -37,7 +37,6 @@ MapSetupScript_EnterLevel:
 	mapsetup BufferScreen
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
-	mapsetup ConstructAndEnableOverworldHUD
 	mapsetup LoadMapObjects
 	mapsetup EnableLCD
 	mapsetup LoadMapPalettes
@@ -46,6 +45,7 @@ MapSetupScript_EnterLevel:
 	mapsetup PlayMapMusicBike
 	mapsetup FadeInToMusic
 	mapsetup FadeInPalettesFromWhite
+	mapsetup ConstructAndEnableOverworldHUD
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup MapCallbackAtEndMapSetup
@@ -176,12 +176,12 @@ MapSetupScript_ReloadMap:
 	mapsetup LoadDisabledSpaces
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
-	mapsetup EnableOverworldHUD
 	mapsetup EnableLCD
 	mapsetup LoadMapPalettes
 	mapsetup RefreshMapSprites
 	mapsetup ForceMapMusic
 	mapsetup FadeInPalettesFromWhite
+	mapsetup EnableOverworldHUD
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup MapCallbackAtEndMapSetup
@@ -200,13 +200,13 @@ MapSetupScript_ExitViewMap:
 	mapsetup BufferScreen
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
-	mapsetup EnableOverworldHUD
 	mapsetup LoadMapObjects
 	mapsetup EnableLCD
 	mapsetup LoadMapPalettes
 	mapsetup SpawnInCustomFacing ; restore player's facing if in branch space
 	mapsetup RefreshMapSprites
 	mapsetup FadeInPalettesFromWhite
+	mapsetup EnableOverworldHUD
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup MapCallbackAtEndMapSetup
@@ -245,12 +245,12 @@ MapSetupScript_Continue:
 	mapsetup BufferScreen
 	mapsetup LoadMapGraphics
 	mapsetup LoadMapTimeOfDay
-	mapsetup ConstructAndEnableOverworldHUD
 	mapsetup EnableLCD
 	mapsetup LoadMapPalettes
 	mapsetup RefreshMapSprites
 	mapsetup PlayMapMusicBike
 	mapsetup FadeInPalettesFromWhite
+	mapsetup ConstructAndEnableOverworldHUD
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup MapCallbackAtEndMapSetup
