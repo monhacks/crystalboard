@@ -141,7 +141,7 @@
 9) When the step finishes (i.e. ``PLAYERSTEP_STOP_F`` becomes set) in some ``HandleMap`` iteration, ``CheckPlayerState`` sets ``wEnabledPlayerEvents`` to $ff and ``wMapEventStatus`` to ``MAPEVENTS_ON``.
 10) In the next ``HandleMap`` iteration, ``CheckBoardEvent.board`` is called with ``wEnabledPlayerEvents[4]`` set.
       - If ``wCurSpaceNextSpace`` matches ``NEXT_SPACE_IS_ANCHOR_POINT``: If player is at a tile with an anchor event, ``wCurSpaceNextSpace`` is updated with the next space byte of salid anchor event. ``wEnabledPlayerEvents[4]`` is reset. **Go back to 7**.
-      - If player is not above a tile (``wPlayerTile``) with a space collision: ``wEnabledPlayerEvents[4]`` is reset. **Go back to 7**.
+      - If player is not above a tile (``wPlayerTileCollision``) with a space collision: ``wEnabledPlayerEvents[4]`` is reset. **Go back to 7**.
       - If player is above a tile, the corresponding space script is queued to be executed by ``ScriptEvents`` in the current ``HandleMap`` iteration. ``wEnabledPlayerEvents[4]`` is reset. **Continue to 11**.
 11) The space script loads the value of ``wCurSpaceNextSpace`` into ``wCurSpace``, and loads the new space data to ``wCurSpaceStruct[]``. Unless the space is a Branch Space or a Union Space, ``wSpacesLeft`` is decreased.
       - If the space is a Branch Space, the branch data is loaded to ``wTempSpaceBranchStruct``. Then the player is prompted to choose a valid direction. ``wCurSpaceNextSpace`` is populated with the next space that corresponds to the chosen direction. **Go back to 6**.

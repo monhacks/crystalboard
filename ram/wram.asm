@@ -1666,7 +1666,7 @@ wWalkingDirection:: db
 wFacingDirection:: db
 wWalkingX:: db
 wWalkingY:: db
-wWalkingTile:: db
+wWalkingTileCollision:: db
 	ds 7
 wPlayerTurningDirection:: db
 

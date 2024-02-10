@@ -368,7 +368,7 @@ SurfFunction:
 	cp PLAYER_SURF_PIKA
 	jr z, .alreadyfail
 	call GetFacingTileCoord
-	call GetTileCollision
+	call GetTilePermission
 	cp WATER_TILE
 	jr nz, .cannotsurf
 	call CheckDirection
@@ -510,7 +510,7 @@ TrySurfOW::
 
 ; Must be facing water.
 	ld a, [wFacingTileID]
-	call GetTileCollision
+	call GetTilePermission
 	cp WATER_TILE
 	jr nz, .quit
 
@@ -718,7 +718,7 @@ Script_UsedWaterfall:
 CheckContinueWaterfall:
 	xor a
 	ldh [hScriptVar], a
-	ld a, [wPlayerTile]
+	ld a, [wPlayerTileCollision]
 	call CheckWaterfallTile
 	ret z
 	ld a, $1
@@ -1485,7 +1485,7 @@ FishFunction:
 	cp PLAYER_SURF_PIKA
 	jr z, .fail
 	call GetFacingTileCoord
-	call GetTileCollision
+	call GetTilePermission
 	cp WATER_TILE
 	jr z, .facingwater
 .fail
@@ -1724,7 +1724,7 @@ BikeFunction:
 	jr z, .nope
 
 .ok
-	call GetPlayerTile
+	call GetPlayerTilePermission
 	and $f ; lo nybble only
 	jr nz, .nope ; not FLOOR_TILE
 	xor a

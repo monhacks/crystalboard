@@ -162,14 +162,14 @@ DoPlayerMovement::
 	ld e, a
 	push de
 	inc e
-	call GetCoordTile
+	call GetCoordTileCollision
 	cp COLL_OUT_OF_BOUNDS
 	jr nz, .next1
 	ld [wTileDown], a
 .next1
 	pop de
 	dec e
-	call GetCoordTile
+	call GetCoordTileCollision
 	cp COLL_OUT_OF_BOUNDS
 	jr nz, .next2
 	ld [wTileUp], a
@@ -181,14 +181,14 @@ DoPlayerMovement::
 	ld e, a
 	push de
 	dec d
-	call GetCoordTile
+	call GetCoordTileCollision
 	cp COLL_OUT_OF_BOUNDS
 	jr nz, .next3
 	ld [wTileLeft], a
 .next3
 	pop de
 	inc d
-	call GetCoordTile
+	call GetCoordTileCollision
 	cp COLL_OUT_OF_BOUNDS
 	jr nz, .next4
 	ld [wTileRight], a
@@ -311,7 +311,7 @@ DoPlayerMovement::
 ; Tiles such as waterfalls and warps move the player
 ; in a given direction, overriding input.
 
-	ld a, [wPlayerTile]
+	ld a, [wPlayerTileCollision]
 	ld c, a
 	call CheckWhirlpoolTile
 	jr c, .not_whirlpool
@@ -474,7 +474,7 @@ DoPlayerMovement::
 	cp 2
 	jr z, .bump
 
-	ld a, [wPlayerTile]
+	ld a, [wPlayerTileCollision]
 	call CheckIceTile
 	jr nc, .ice
 
@@ -552,7 +552,7 @@ DoPlayerMovement::
 	ret
 
 .TryJump:
-	ld a, [wPlayerTile]
+	ld a, [wPlayerTileCollision]
 	ld e, a
 	and $f0
 	cp HI_NYBBLE_LEDGES
@@ -598,7 +598,7 @@ DoPlayerMovement::
 	ld d, 0
 	ld hl, .EdgeWarps
 	add hl, de
-	ld a, [wPlayerTile]
+	ld a, [wPlayerTileCollision]
 	cp [hl]
 	jr nz, .not_warp
 
@@ -790,7 +790,7 @@ DoPlayerMovement::
 	ld h, [hl]
 	ld l, a
 	ld a, [hl]
-	ld [wWalkingTile], a
+	ld [wWalkingTileCollision], a
 	ret
 
 MACRO player_action
@@ -801,7 +801,7 @@ ENDM
 
 .action_table:
 .action_table_1
-	player_action STANDING, FACE_CURRENT, 0,  0, wPlayerTile
+	player_action STANDING, FACE_CURRENT, 0,  0, wPlayerTileCollision
 .action_table_1_end
 	player_action RIGHT,    FACE_RIGHT,   1,  0, wTileRight
 	player_action LEFT,     FACE_LEFT,   -1,  0, wTileLeft
@@ -891,7 +891,7 @@ ENDM
 	and d
 	jr nz, .NotWalkable
 
-	ld a, [wWalkingTile]
+	ld a, [wWalkingTileCollision]
 	call .CheckWalkable
 	jr c, .NotWalkable
 
@@ -912,7 +912,7 @@ ENDM
 	and d
 	jr nz, .NotSurfable
 
-	ld a, [wWalkingTile]
+	ld a, [wWalkingTileCollision]
 	call .CheckSurfable
 	jr c, .NotSurfable
 
@@ -933,7 +933,7 @@ ENDM
 .CheckWalkable:
 ; Return 0 if tile a is land. Otherwise, return carry.
 
-	call GetTileCollision
+	call GetTilePermission
 	and a ; LAND_TILE
 	ret z
 	cp SPACE_TILE
@@ -945,7 +945,7 @@ ENDM
 ; Return 0 if tile a is water, or 1 if land.
 ; Otherwise, return carry.
 
-	call GetTileCollision
+	call GetTilePermission
 	cp WATER_TILE
 	jr z, .Water
 	; because this is called during PLAYER_SURF or PLAYER_SURF_PIKA state,
@@ -986,7 +986,7 @@ CheckStandingOnIce::
 	jr z, .not_ice
 	cp $f0
 	jr z, .not_ice
-	ld a, [wPlayerTile]
+	ld a, [wPlayerTileCollision]
 	call CheckIceTile
 	jr nc, .yep
 	ld a, [wPlayerState]

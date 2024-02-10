@@ -71,9 +71,9 @@ DoesSpriteHaveFacings::
 	pop de
 	ret
 
-GetPlayerTile::
-	ld a, [wPlayerTile]
-	call GetTileCollision
+GetPlayerTilePermission::
+	ld a, [wPlayerTileCollision]
+	call GetTilePermission
 	ld b, a
 	ret
 
@@ -81,8 +81,8 @@ CheckOnWater::
 ; return z if on water, nz otherwise.
 ; if tile permission is SPACE_TILE, wPlayerState dictates whether player is on water or not.
 ; otherwise the current tile permission being LAND_TILE or WATER_TILE dictates it.
-	ld a, [wPlayerTile]
-	call GetTileCollision
+	ld a, [wPlayerTileCollision]
+	call GetTilePermission
 	cp SPACE_TILE
 	jr z, .check_player_state
 	sub WATER_TILE
@@ -97,20 +97,20 @@ CheckOnWater::
 	cp PLAYER_SURF_PIKA
 	ret
 
-GetTileCollision::
-; Get the collision type of tile a.
+GetTilePermission::
+; Get the permission of tile collision a.
 
 	push de
 	push hl
 
-	ld hl, TileCollisionTable
+	ld hl, CollisionPermissionTable
 	ld e, a
 	ld d, 0
 	add hl, de
 
 	ldh a, [hROMBank]
 	push af
-	ld a, BANK(TileCollisionTable)
+	ld a, BANK(CollisionPermissionTable)
 	rst Bankswitch
 	ld e, [hl]
 	pop af
@@ -201,7 +201,7 @@ CheckWaterfallTile::
 	ret
 
 CheckStandingOnEntrance::
-	ld a, [wPlayerTile]
+	ld a, [wPlayerTileCollision]
 	cp COLL_DOOR
 	ret z
 	cp COLL_DOOR_79
