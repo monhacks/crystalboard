@@ -2167,7 +2167,7 @@ CopyTempObjectData:
 	ret
 
 UpdateAllObjectsFrozen::
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 0, a
 	ret z
 	ld bc, wObjectStructs
@@ -2766,13 +2766,13 @@ SetObjectToRemainHidden:
 	ret
 
 _UpdateActiveSpritesAfterOffset::
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 0, a
 	ret z
 	jr _UpdateActiveSprites.go
 
 _UpdateActiveSprites::
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 0, a
 	ret z
 	xor a
@@ -2789,7 +2789,7 @@ _UpdateActiveSprites::
 	ret
 
 .fill
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 1, a
 	ld b, NUM_SPRITE_OAM_STRUCTS * SPRITEOAMSTRUCT_LENGTH
 	jr z, .ok
@@ -3095,7 +3095,7 @@ _UpdateSecondarySprites::
 ; which would require to displace primary (NPC) sprites in OAM.
 ; if it is detected that the size of secondary sprites has increased in the end,
 ; fall back to calling _UpdateActiveSprites to avoid corruption.
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 0, a
 	ret z
 	ld a, [hUsedSpriteIndex]

@@ -17,7 +17,7 @@ ReanchorBGMap_NoOAMUpdate::
 	pop af
 	ldh [hOAMUpdate], a
 
-	ld hl, wVramState
+	ld hl, wStateFlags
 	set 6, [hl]
 	ret
 

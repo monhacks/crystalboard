@@ -44,7 +44,7 @@ WaitScript:
 WaitScriptMovement:
 	call StopScript
 
-	ld hl, wVramState
+	ld hl, wStateFlags
 	bit 7, [hl]
 	ret nz
 
@@ -939,7 +939,7 @@ ApplyObjectFacing:
 	pop de
 	ld a, e
 	call SetSpriteDirection
-	ld hl, wVramState
+	ld hl, wStateFlags
 	bit 6, [hl]
 	jr nz, .text_state
 	call .DisableTextTiles

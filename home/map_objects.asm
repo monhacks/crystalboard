@@ -390,7 +390,7 @@ LoadMovementDataPointer::
 	add hl, bc
 	ld [hl], STEP_TYPE_RESET
 
-	ld hl, wVramState
+	ld hl, wStateFlags
 	set 7, [hl]
 	and a
 	ret
@@ -553,7 +553,7 @@ _GetMovementIndex::
 	ret
 
 UpdateSprites::
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 0, a
 	ret z
 	farcall UpdateAllObjectsFrozen
@@ -561,14 +561,14 @@ UpdateSprites::
 	ret
 
 UpdateActiveSprites::
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 0, a
 	ret z
 	farcall _UpdateActiveSprites
 	ret
 
 UpdateSecondarySprites::
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 0, a
 	ret z
 	farcall _UpdateSecondarySprites

@@ -35,7 +35,7 @@ CloseText::
 
 	pop af
 	ldh [hOAMUpdate], a
-	ld hl, wVramState
+	ld hl, wStateFlags
 	res 6, [hl]
 	ret
 

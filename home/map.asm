@@ -2203,7 +2203,7 @@ ReturnToMapWithSpeechTextbox::
 	call ClearSprites
 	call ReloadTilesetAndPalettes
 	call SpeechTextbox ; 1bpp or 2bpp according to wTextboxFlags[TEXT_2BPP_F]
-	ld hl, wVramState
+	ld hl, wStateFlags
 	set 0, [hl]
 	call UpdateSprites
 	call WaitBGMap2

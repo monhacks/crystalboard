@@ -17,7 +17,7 @@ ScrollingMenu::
 	ret
 
 .UpdatePalettes:
-	ld hl, wVramState
+	ld hl, wStateFlags
 	bit 0, [hl]
 	jp nz, UpdateTimePals
 	jp SetDefaultBGPAndOBP

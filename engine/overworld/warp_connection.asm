@@ -213,7 +213,7 @@ EnterMapWarp:
 	ret
 
 LoadMapTimeOfDay:
-	ld hl, wVramState
+	ld hl, wStateFlags
 	res 6, [hl]
 	ld a, $1
 	ld [wSpriteUpdatesEnabled], a
@@ -300,7 +300,7 @@ RefreshMapSprites:
 	ld hl, wPlayerSpriteSetupFlags
 	bit PLAYERSPRITESETUP_SKIP_RELOAD_GFX_F, [hl]
 	jr nz, .skip
-	ld hl, wVramState
+	ld hl, wStateFlags
 	set 0, [hl]
 	call SafeUpdateSprites
 .skip

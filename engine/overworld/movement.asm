@@ -205,7 +205,7 @@ Movement_step_end:
 	add hl, bc
 	ld [hl], $0
 
-	ld hl, wVramState
+	ld hl, wStateFlags
 	res 7, [hl]
 
 	ld hl, OBJECT_STEP_TYPE
@@ -232,7 +232,7 @@ Movement_48:
 	add hl, bc
 	ld [hl], STEP_TYPE_SLEEP
 
-	ld hl, wVramState
+	ld hl, wStateFlags
 	res 7, [hl]
 	ret
 
@@ -245,7 +245,7 @@ Movement_remove_object:
 	ld [hl], -1
 
 .not_leading
-	ld hl, wVramState
+	ld hl, wStateFlags
 	res 7, [hl]
 	ret
 
@@ -258,7 +258,7 @@ Movement_4b:
 	add hl, bc
 	ld [hl], STEP_TYPE_STANDING
 
-	ld hl, wVramState
+	ld hl, wStateFlags
 	res 7, [hl]
 	ret
 

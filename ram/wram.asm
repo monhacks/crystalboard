@@ -1785,13 +1785,12 @@ wBattlePlayerAction::
 wSolvedUnownPuzzle::
 	db
 
-wVramState::
+wStateFlags::
 ; bit 0: overworld sprite updating on/off
-; bit 1: something to do with sprite updates
+; bit 1: last 12 sprite OAM structs reserved
 ; bit 2: do not clear wShadowOAM during DoNextFrameForAllSprites
-; bit 6: something to do with text
-; bit 7: on when surf initiates
-;        flickers when climbing waterfall
+; bit 6: in text state
+; bit 7: in scripted movement
 	db
 
 wBattleResult::

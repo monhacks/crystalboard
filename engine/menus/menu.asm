@@ -614,7 +614,7 @@ _ExitMenu::
 	ret
 
 RestoreOverworldMapTiles: ; unreferenced
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 0, a
 	ret z
 	xor a ; sScratch

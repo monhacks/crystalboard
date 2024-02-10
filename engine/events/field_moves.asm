@@ -149,11 +149,11 @@ OWCutAnimation_WithCutTreeAsObject:
 .got_oam_addr
 	ld [wCurSpriteOAMAddr], a
 	ld [wCutTreeOAMAddr], a
-	ld hl, wVramState
-	set 2, [hl] ; do not clear wShadowOAM during DoNextFrameForAllSprites
+	ld hl, wStateFlags
+	set DONT_CLEAR_SHADOW_OAM_IN_SPRITE_ANIMS_F, [hl]
 	callfar DoNextFrameForAllSprites
-	ld hl, wVramState
-	res 2, [hl]
+	ld hl, wStateFlags
+	res DONT_CLEAR_SHADOW_OAM_IN_SPRITE_ANIMS_F, [hl]
 	call .OWCutJumptable
 	call DelayFrame
 	jr .loop
@@ -448,10 +448,10 @@ Cut_Headbutt_GetPixelFacing:
 
 FlyFromAnim:
 	call DelayFrame
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	push af
 	xor a
-	ld [wVramState], a
+	ld [wStateFlags], a
 	call FlyFunction_InitGFX
 	depixel 10, 10, 4, 0
 	ld a, SPRITE_ANIM_OBJ_RED_WALK
@@ -477,15 +477,15 @@ FlyFromAnim:
 
 .exit
 	pop af
-	ld [wVramState], a
+	ld [wStateFlags], a
 	ret
 
 FlyToAnim:
 	call DelayFrame
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	push af
 	xor a
-	ld [wVramState], a
+	ld [wStateFlags], a
 	call FlyFunction_InitGFX
 	depixel 31, 10, 4, 0
 	ld a, SPRITE_ANIM_OBJ_RED_WALK
@@ -514,7 +514,7 @@ FlyToAnim:
 
 .exit
 	pop af
-	ld [wVramState], a
+	ld [wStateFlags], a
 	call .RestorePlayerSprite_DespawnLeaves
 	ret
 

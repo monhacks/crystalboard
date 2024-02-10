@@ -104,8 +104,8 @@ BoardMenuScript::
 
 .EnterViewMapMode:
 	call BackupMapObjectsOnEnterViewMapMode
-	ld hl, wVramState
-	res 2, [hl]
+	ld hl, wStateFlags
+	res DONT_CLEAR_SHADOW_OAM_IN_SPRITE_ANIMS_F, [hl]
 	ld a, BOARDEVENT_VIEW_MAP_MODE
 	ldh [hCurBoardEvent], a
 	ld a, 100
@@ -347,8 +347,8 @@ BoardMenu_BreakDieAnimation:
 	ld hl, wDisplaySecondarySprites
 	res SECONDARYSPRITES_DIE_ROLL_F, [hl]
 
-	ld hl, wVramState
-	set 2, [hl] ; do not clear wShadowOAM during DoNextFrameForAllSprites
+	ld hl, wStateFlags
+	set DONT_CLEAR_SHADOW_OAM_IN_SPRITE_ANIMS_F, [hl]
 ; animation plays above NPCs so draw the graphics at the beginning of OAM.
 ; begin placing NPC sprites in OAM after all objects allocated to animations.
 	ld a, [wSpriteAnim2Index]
@@ -400,8 +400,8 @@ BoardMenu_BreakDieAnimation:
 	jr .loop2
 
 .done
-	ld hl, wVramState
-	res 2, [hl]
+	ld hl, wStateFlags
+	res DONT_CLEAR_SHADOW_OAM_IN_SPRITE_ANIMS_F, [hl]
 	farcall ClearSpriteAnims
 	ld hl, wDisplaySecondarySprites
 	set SECONDARYSPRITES_SPACES_LEFT_F, [hl]

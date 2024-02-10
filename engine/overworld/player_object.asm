@@ -153,7 +153,7 @@ CopyObjectStruct::
 	ld d, h
 	ld e, l
 	call CopyMapObjectToObjectStruct
-	ld hl, wVramState
+	ld hl, wStateFlags
 	bit 7, [hl]
 	ret z
 

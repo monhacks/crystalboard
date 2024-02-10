@@ -4,8 +4,8 @@ LevelSelectionMenu::
 	ldh [hMapAnims], a
 	ldh [hSCY], a
 	ldh [hSCX], a
-	ld a, 1 << 2 ; do not clear wShadowOAM during DoNextFrameForAllSprites
-	ld [wVramState], a
+	ld a, 1 << DONT_CLEAR_SHADOW_OAM_IN_SPRITE_ANIMS_F
+	ld [wStateFlags], a
 
 	call ClearBGPalettes
 	call ClearTilemap
@@ -306,7 +306,7 @@ LevelSelectionMenu::
 	farcall ClearSpriteAnims
 	call ClearSprites
 	xor a
-	ld [wVramState], a
+	ld [wStateFlags], a
 	ret ; nc
 
 LevelSelectionMenu_LoadGFX:

@@ -7,7 +7,7 @@ UpdateTimeSensitivePals::
 	ret z
 
 ; obj update on?
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 0, a ; obj update
 	ret z
 

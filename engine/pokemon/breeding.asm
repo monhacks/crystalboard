@@ -348,7 +348,7 @@ HatchEggs:
 	; Huh? @ @
 	text_far Text_BreedHuh
 	text_asm
-	ld hl, wVramState
+	ld hl, wStateFlags
 	res 0, [hl]
 	push hl
 	push de

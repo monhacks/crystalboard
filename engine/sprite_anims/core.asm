@@ -55,7 +55,7 @@ DoNextFrameForAllSprites:
 	dec e
 	jr nz, .loop
 
-	ld a, [wVramState]
+	ld a, [wStateFlags]
 	bit 2, a
 	ret nz
 
