@@ -76,7 +76,7 @@ DisplayCaughtContestMonStats:
 	call WaitBGMap
 	ld b, CGB_DIPLOMA
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	ret
 
 .Health:

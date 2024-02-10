@@ -20,7 +20,7 @@ MainMenu:
 	call ClearMenuAndWindowData
 	ld b, CGB_DIPLOMA
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call MainMenu_GetWhichMenu
 	ld [wWhichIndexSet], a
 	call MainMenu_PrintCurrentTimeAndDay

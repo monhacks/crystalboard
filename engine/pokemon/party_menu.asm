@@ -5,7 +5,7 @@ SelectMonFromParty:
 	call ClearBGPalettes
 	call InitPartyMenuLayout
 	call WaitBGMap
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call DelayFrame
 	call PartyMenuSelect
 	call ReturnToMapWithSpeechTextbox
@@ -20,7 +20,7 @@ SelectTradeOrDayCareMon:
 	call WaitBGMap
 	ld b, CGB_PARTY_MENU
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call DelayFrame
 	call PartyMenuSelect
 	call ReturnToMapWithSpeechTextbox

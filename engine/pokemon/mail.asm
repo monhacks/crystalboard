@@ -490,7 +490,7 @@ MailboxPC:
 	farcall WritePartyMenuTilemap
 	farcall PlacePartyMenuText
 	call WaitBGMap
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call DelayFrame
 	farcall PartyMenuSelect
 	jr c, .exit2

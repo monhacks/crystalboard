@@ -2250,7 +2250,7 @@ wMapEventStatus:: db
 wScriptFlags::
 ; bit 3: run deferred script
 	db
-wScriptFlags2::
+wEnabledPlayerEvents::
 ; bit 0: count steps
 ; bit 1: coord events
 ; bit 2: warps and connections
@@ -2773,7 +2773,7 @@ wMagnetTrainHoldPosition:: db
 wMagnetTrainFinalPosition:: db
 wMagnetTrainPlayerSpriteInitX:: db
 
- ; Used by FadeInPalettesFromWhite
+ ; Used by FadeInFromWhite
 wBGPalsRegularWhiteColors:: ds 8 * PAL_COLOR_SIZE
 
 	ds 91

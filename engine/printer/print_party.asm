@@ -225,7 +225,7 @@ PrintPartyMonPage1:
 	call WaitBGMap
 	ld b, CGB_STATS_SCREEN_HP_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	ret
 
 PrintPartyMonPage2:
@@ -276,7 +276,7 @@ PrintPartyMonPage2:
 	call WaitBGMap
 	ld b, CGB_STATS_SCREEN_HP_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	ret
 
 .PrintTempMonStats:

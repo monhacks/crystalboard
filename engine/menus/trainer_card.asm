@@ -67,7 +67,7 @@ TrainerCard:
 	call WaitBGMap
 	ld b, CGB_TRAINER_CARD
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call WaitBGMap
 	ld hl, wJumptableIndex
 	xor a ; TRAINERCARDSTATE_PAGE1_LOADGFX

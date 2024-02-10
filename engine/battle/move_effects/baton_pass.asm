@@ -29,7 +29,7 @@ BattleCommand_BatonPass:
 	call ClearBox
 	ld b, CGB_BATTLE_COLORS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call BatonPass_LinkPlayerSwitch
 
 	ld hl, PassedBattleMonEntrance

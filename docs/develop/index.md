@@ -35,14 +35,14 @@
 
 #### Overworld map scrolling
 
-- **LoadScreenTilemap**: From the metatile-based 24x20 map in wSurroundingTiles, load the corresponding 20x18 tiles to wTilemap. Later, BackupBGMap* from ScrollMap* copies new row/column from wTilemap to wBGMapBuffer. _ScrollBGMapPalettes populates wBGMapPalBuffer based on the tiles at wBGMapBuffer. These are read during vblank by UpdateBGMapBuffer.
-- **LoadScreenAttrmapPals**: Load wAttrmap palette numbers based on the tileset palettes of the current map. Called only by LoadScreenTilemapAndAttrmapPals.
-- **LoadScreenTilemapAndAttrmapPals**: LoadScreenTilemap + LoadScreenAttrmapPals. Often used to reload screen after closing a text box.
+- **LoadOverworldTilemap**: From the metatile-based 24x20 map in wSurroundingTiles, load the corresponding 20x18 tiles to wTilemap. Later, BackupBGMap* from ScrollMap* copies new row/column from wTilemap to wBGMapBuffer. _ScrollBGMapPalettes populates wBGMapPalBuffer based on the tiles at wBGMapBuffer. These are read during vblank by UpdateBGMapBuffer.
+- **LoadOverworldAttrmapPals**: Load wAttrmap palette numbers based on the tileset palettes of the current map. Called only by LoadOverworldTilemapAndAttrmapPals.
+- **LoadOverworldTilemapAndAttrmapPals**: LoadOverworldTilemap + LoadOverworldAttrmapPals. Often used to reload screen after closing a text box.
 
 #### Overworld map anchoring
 
-- **ReanchorBGMap_NoOAMUpdate**: LoadScreenTilemapAndAttrmapPals + HDMATransferTilemapAndAttrmap_OpenAndCloseMenu, then fill BG map with all black while Window is displayed, finally anchor map and objects. Shall by followed by CopyTilemapAtOnce or by a HDMATransferTilemapAndAttrmap_* to redraw the screen.
-- **OpenText1bpp**, **OpenText2bpp**: ClearMenuAndWindowData + ReanchorBGMap_NoOAMUpdate + SpeechTextbox1bpp + HDMATransferTilemapAndAttrmap_OpenAndCloseMenu + hide Window
+- **ReanchorBGMap_NoOAMUpdate**: LoadOverworldTilemapAndAttrmapPals + HDMATransferTilemapAndAttrmap_Menu, then fill BG map with all black while Window is displayed, finally anchor map and objects. Shall by followed by CopyTilemapAtOnce or by a HDMATransferTilemapAndAttrmap_* to redraw the screen.
+- **OpenText1bpp**, **OpenText2bpp**: ClearMenuAndWindowData + ReanchorBGMap_NoOAMUpdate + SpeechTextbox1bpp + HDMATransferTilemapAndAttrmap_Menu + hide Window
   - **OpenText1bpp**: Loads 1bpp font (LoadFont_NoOAMUpdate)
   - **OpenText2bpp**: Doesn't load 2bpp font
 - **RefreshScreen**: Same as OpenText functions but doesn't call any SpeechTextbox
@@ -55,7 +55,7 @@
 - **HDMATransfer1bpp**: Copy 1bpp tiles via HDMA. Maximum 16 tiles per frame
 - **HDMATransfer2bpp**: Copy 2bpp tiles via HDMA. No hardcoded limit. Timing considers 1 tile per hblank
 - **Get1bppViaHDMA**, **Get2bppViaHDMA**: Call Copy1bpp or Copy2bpp if LCD disabled. HDMATransfer1bpp or HDMATransfer2bpp otherwise
-- **HDMATransferTilemapAndAttrmap_OpenAndCloseMenu**, **HDMATransferTilemapAndAttrmap_OverworldEffect**: Similar, but with slightly different scanline timing. So they're essentially like RefreshScreen minus the anchoring part.
+- **HDMATransferTilemapAndAttrmap_Menu**, **HDMATransferTilemapAndAttrmap_Overworld**: Similar, but with slightly different scanline timing. So they're essentially like RefreshScreen minus the anchoring part.
 
 #### HUD
 
@@ -69,8 +69,8 @@
 
 ## Scripts
 
-- **refreshscreen**: RefreshScreen
-- **reloadmappart**: LoadScreenTilemapAndAttrmapPals + GetMovementPermissions + HDMATransferTilemapAndAttrmap_OverworldEffect + UpdateSprites. Similar to refreshscreen, but does not reanchor. On the other hand, it refreshes movement permissions. Often used after a block change or field move, which can affect collisions.
+- **reanchormap**: RefreshScreen
+- **refreshmap**: LoadOverworldTilemapAndAttrmapPals + GetMovementPermissions + HDMATransferTilemapAndAttrmap_Overworld + UpdateSprites. Similar to reanchormap, but does not reanchor. On the other hand, it refreshes movement permissions. Often used after a block change or field move, which can affect collisions.
 
 ## Changes
 
@@ -130,19 +130,19 @@
 ### Overworld workflow
 
 1) ``OverworldLoop`` is called from ``GameMenu_WorldMap`` with either ``hMapEntryMethod`` = ``MAPSETUP_ENTERLEVEL`` or ``hMapEntryMethod`` = ``MAPSETUP_CONTINUE``.
-2) ``StartMap`` resets ``wCurTurn`` and ``wCurSpace`` if ``MAPSETUP_ENTERLEVEL``. ``StartMap`` sets ``hCurBoardEvent`` to ``BOARDEVENT_DISPLAY_MENU``. ``wScriptFlags2`` is cleared. ``wMapStatus`` is set to ``MAPSTATUS_HANDLE`` causing ``HandleMap`` to be called.
+2) ``StartMap`` resets ``wCurTurn`` and ``wCurSpace`` if ``MAPSETUP_ENTERLEVEL``. ``StartMap`` sets ``hCurBoardEvent`` to ``BOARDEVENT_DISPLAY_MENU``. ``wEnabledPlayerEvents`` is cleared. ``wMapStatus`` is set to ``MAPSTATUS_HANDLE`` causing ``HandleMap`` to be called.
 3) ``MapEvents`` (from ``HandleMap``) calls ``PlayerEvents``. ``CheckBoardEvent`` queues ``BoardMenuScript`` which is executed by ``ScriptEvents``.
 4) ``BoardMenuScript.Upkeep`` saves the game, clears ``wTurnData[]``, increases ``wCurTurn``, and loads current space to ``wCurSpaceStruct[]``.
     - If player exits, the ``exitoverworld`` script sets ``wMapStatus`` to ``MAPSTATUS_DONE``. This causes ``OverworldLoop`` to return back to the game menu. **Exit this workflow**.
-5) Player rolls die and the animation plays. After the animation, ``wDisplaySecondarySprites.SECONDARYSPRITES_SPACES_LEFT_F`` is set and ``hCurBoardEvent`` is set to ``BOARDEVENT_HANDLE_BOARD``. At the end of this ``HandleMap`` iteration, ``CheckPlayerState`` sets ``wMapEventStatus`` to ``MAPEVENTS_ON`` (``wScriptFlags2`` is not touched so it remains cleared).
-6) In the next ``HandleMap`` iteration, ``CheckBoardEvent`` from ``PlayerEvents`` jumps to ``.board`` and then to ``.no_space_effect`` due to ``wScriptFlags2[4]`` not being set.
+5) Player rolls die and the animation plays. After the animation, ``wDisplaySecondarySprites.SECONDARYSPRITES_SPACES_LEFT_F`` is set and ``hCurBoardEvent`` is set to ``BOARDEVENT_HANDLE_BOARD``. At the end of this ``HandleMap`` iteration, ``CheckPlayerState`` sets ``wMapEventStatus`` to ``MAPEVENTS_ON`` (``wEnabledPlayerEvents`` is not touched so it remains cleared).
+6) In the next ``HandleMap`` iteration, ``CheckBoardEvent`` from ``PlayerEvents`` jumps to ``.board`` and then to ``.no_space_effect`` due to ``wEnabledPlayerEvents[4]`` not being set.
 7) Execution continues in ``PlayerEvents``; ``OWPlayerInput`` is eventually called, and thus ``DoPlayerMovement``. Here, ``StepTowardsNextSpace`` computes based on ``wCurSpaceNextSpace`` what direction key to write to ``wCurInput``, causing the player to begin a movement in that direction.
 8) The player may need to turn to a different direction through the ``ChangeDirectionScript`` (when ``DoPlayerMovement`` returns with ``PLAYERMOVEMENT_TURN``). Otherwise or after that, ``CheckPlayerState`` sets ``wMapEventStatus`` to ``MAPEVENTS_OFF``,
-9) When the step finishes (i.e. ``PLAYERSTEP_STOP_F`` becomes set) in some ``HandleMap`` iteration, ``CheckPlayerState`` sets ``wScriptFlags2`` to $ff and ``wMapEventStatus`` to ``MAPEVENTS_ON``.
-10) In the next ``HandleMap`` iteration, ``CheckBoardEvent.board`` is called with ``wScriptFlags2[4]`` set.
-      - If ``wCurSpaceNextSpace`` matches ``NEXT_SPACE_IS_ANCHOR_POINT``: If player is at a tile with an anchor event, ``wCurSpaceNextSpace`` is updated with the next space byte of salid anchor event. ``wScriptFlags2[4]`` is reset. **Go back to 7**.
-      - If player is not above a tile (``wPlayerTile``) with a space collision: ``wScriptFlags2[4]`` is reset. **Go back to 7**.
-      - If player is above a tile, the corresponding space script is queued to be executed by ``ScriptEvents`` in the current ``HandleMap`` iteration. ``wScriptFlags2[4]`` is reset. **Continue to 11**.
+9) When the step finishes (i.e. ``PLAYERSTEP_STOP_F`` becomes set) in some ``HandleMap`` iteration, ``CheckPlayerState`` sets ``wEnabledPlayerEvents`` to $ff and ``wMapEventStatus`` to ``MAPEVENTS_ON``.
+10) In the next ``HandleMap`` iteration, ``CheckBoardEvent.board`` is called with ``wEnabledPlayerEvents[4]`` set.
+      - If ``wCurSpaceNextSpace`` matches ``NEXT_SPACE_IS_ANCHOR_POINT``: If player is at a tile with an anchor event, ``wCurSpaceNextSpace`` is updated with the next space byte of salid anchor event. ``wEnabledPlayerEvents[4]`` is reset. **Go back to 7**.
+      - If player is not above a tile (``wPlayerTile``) with a space collision: ``wEnabledPlayerEvents[4]`` is reset. **Go back to 7**.
+      - If player is above a tile, the corresponding space script is queued to be executed by ``ScriptEvents`` in the current ``HandleMap`` iteration. ``wEnabledPlayerEvents[4]`` is reset. **Continue to 11**.
 11) The space script loads the value of ``wCurSpaceNextSpace`` into ``wCurSpace``, and loads the new space data to ``wCurSpaceStruct[]``. Unless the space is a Branch Space or a Union Space, ``wSpacesLeft`` is decreased.
       - If the space is a Branch Space, the branch data is loaded to ``wTempSpaceBranchStruct``. Then the player is prompted to choose a valid direction. ``wCurSpaceNextSpace`` is populated with the next space that corresponds to the chosen direction. **Go back to 6**.
       - If the space is an End Space, a fading out animation plays and then the ``exitoverworld`` script sets ``wMapStatus`` to ``MAPSTATUS_DONE``. This causes ``OverworldLoop`` to return back to the game menu. **Exit this workflow**.

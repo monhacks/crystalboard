@@ -58,7 +58,7 @@ LevelSelectionMenu::
 	call LevelSelectionMenu_DrawTimeOfDaySymbol
 	ld b, CGB_LEVEL_SELECTION_MENU
 	call GetCGBLayout ; apply and commit pals
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	ld c, 20         ;
 	call DelayFrames ; page shown --> page and textbox shown
 
@@ -105,7 +105,7 @@ LevelSelectionMenu::
 	call LevelSelectionMenu_DrawTimeOfDaySymbol
 	ld b, CGB_LEVEL_SELECTION_MENU
 	call GetCGBLayout ; apply and commit pals
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 
 	ld de, MUSIC_GAME_CORNER
 	call PlayMusic

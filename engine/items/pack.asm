@@ -574,7 +574,7 @@ GiveItem:
 	farcall WritePartyMenuTilemap
 	farcall PlacePartyMenuText
 	call WaitBGMap
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call DelayFrame
 	farcall PartyMenuSelect
 	jr c, .finish
@@ -1437,7 +1437,7 @@ Pack_InitColors:
 	call WaitBGMap
 	ld b, CGB_PACKPALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call DelayFrame
 	ret
 

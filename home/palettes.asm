@@ -288,8 +288,8 @@ ReloadSpritesNoPalettes::
 	call DelayFrame
 	ret
 
-LoadScreenAttrmapPals::
-	homecall _LoadScreenAttrmapPals
+LoadOverworldAttrmapPals::
+	homecall _LoadOverworldAttrmapPals
 	ret
 
 ScrollBGMapPalettes::

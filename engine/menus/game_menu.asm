@@ -23,7 +23,7 @@ GameMenu_KeepMusic:
 	call ClearMenuAndWindowData
 	ld b, CGB_DIPLOMA
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	xor a
 	ld [wWhichIndexSet], a
 	ld hl, .MenuHeader

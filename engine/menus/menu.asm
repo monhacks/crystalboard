@@ -624,7 +624,7 @@ RestoreOverworldMapTiles: ; unreferenced
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call CopyBytes
 	call CloseSRAM
-	call LoadScreenTilemapAndAttrmapPals
+	call LoadOverworldTilemapAndAttrmapPals
 	xor a ; sScratch
 	call OpenSRAM
 	ld hl, sScratch

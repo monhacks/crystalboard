@@ -64,7 +64,7 @@ _UnownPrinter:
 
 	ld b, CGB_TRAINER_OR_MON_FRONTPIC_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 
 .joy_loop
 	call JoyTextDelay

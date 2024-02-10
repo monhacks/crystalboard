@@ -35,7 +35,7 @@ ClosePokepic::
 	call GetMemCGBLayout
 	xor a
 	ldh [hBGMapMode], a
-	call LoadScreenTilemapAndAttrmapPals
+	call LoadOverworldTilemapAndAttrmapPals
 	call ApplyTilemap
 	call UpdateSprites
 	call LoadStandardFont

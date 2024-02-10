@@ -1,4 +1,4 @@
-_LoadScreenTilemap::
+_LoadOverworldTilemap::
 	ld hl, wSurroundingTiles
 	ld a, [wPlayerMetatileY]
 	and a

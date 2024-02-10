@@ -6,7 +6,7 @@ RefreshScreen::
 	rst Bankswitch
 
 	call ReanchorBGMap_NoOAMUpdate
-	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu
+	call HDMATransferTilemapAndAttrmap_Menu
 	call HideWindow_EnableLCDInt
 
 	pop af
@@ -22,8 +22,8 @@ CloseText::
 	call ClearMenuAndWindowData
 	xor a
 	ldh [hBGMapMode], a
-	call LoadScreenTilemapAndAttrmapPals
-	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu
+	call LoadOverworldTilemapAndAttrmapPals
+	call HDMATransferTilemapAndAttrmap_Menu
 	xor a
 	ldh [hBGMapMode], a
 	call SafeUpdateSprites
@@ -52,7 +52,7 @@ OpenText2bpp::
 	; assumes that the overworld 2bpp font and frame are loaded when calling this
 	call ReanchorBGMap_NoOAMUpdate ; anchor bgmap
 	call SpeechTextbox2bpp
-	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu ; transfer bgmap
+	call HDMATransferTilemapAndAttrmap_Menu ; transfer bgmap
 	call HideWindow_EnableLCDInt
 
 	pop af
@@ -73,7 +73,7 @@ OpenText1bpp::
 
 	call ReanchorBGMap_NoOAMUpdate ; anchor bgmap
 	call SpeechTextbox1bpp
-	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu ; transfer bgmap
+	call HDMATransferTilemapAndAttrmap_Menu ; transfer bgmap
 	call LoadFont_NoOAMUpdate ; load 1bpp font and frame, hide window
 
 	pop af
@@ -81,13 +81,13 @@ OpenText1bpp::
 
 	ret
 
-HDMATransferTilemapAndAttrmap_OpenAndCloseMenu::
+HDMATransferTilemapAndAttrmap_Menu::
 	ldh a, [hOAMUpdate]
 	push af
 	ld a, $1
 	ldh [hOAMUpdate], a
 
-	farcall _HDMATransferTilemapAndAttrmap_OpenAndCloseMenu
+	farcall _HDMATransferTilemapAndAttrmap_Menu
 
 	pop af
 	ldh [hOAMUpdate], a

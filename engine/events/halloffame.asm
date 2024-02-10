@@ -39,7 +39,7 @@ RedCredits::
 	ld [wMusicFadeID + 1], a
 	ld a, 10
 	ld [wMusicFade], a
-	farcall FadeOutPalettesToWhite
+	farcall FadeOutToWhite
 	xor a
 	ld [wVramState], a
 	ldh [hMapAnims], a
@@ -59,7 +59,7 @@ HallOfFame_FadeOutMusic:
 	ld [wMusicFadeID + 1], a
 	ld a, 10
 	ld [wMusicFade], a
-	farcall FadeOutPalettesToWhite
+	farcall FadeOutToWhite
 	xor a
 	ld [wVramState], a
 	ldh [hMapAnims], a
@@ -252,7 +252,7 @@ AnimateHOFMonEntrance:
 	ldh [hBGMapMode], a
 	ld b, CGB_PLAYER_OR_MON_FRONTPIC_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call HOF_SlideBackpic
 	xor a
 	ld [wBoxAlignment], a
@@ -385,7 +385,7 @@ _HallOfFamePC:
 	call WaitBGMap
 	ld b, CGB_PLAYER_OR_MON_FRONTPIC_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	decoord 6, 5
 	ld c, ANIM_MON_HOF
 	predef HOF_AnimateFrontpic
@@ -535,7 +535,7 @@ HOF_AnimatePlayerPic:
 	ld [wCurPartySpecies], a
 	ld b, CGB_PLAYER_OR_MON_FRONTPIC_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call HOF_SlideBackpic
 	xor a
 	ld [wBoxAlignment], a

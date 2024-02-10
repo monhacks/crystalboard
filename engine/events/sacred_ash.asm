@@ -47,14 +47,14 @@ CheckAnyFaintedMon:
 
 SacredAshScript:
 	special HealParty
-	reloadmappart
+	refreshmap
 	playsound SFX_WARP_TO
-	special FadeOutPalettesToWhite
-	special FadeInPalettesFromWhite
-	special FadeOutPalettesToWhite
-	special FadeInPalettesFromWhite
-	special FadeOutPalettesToWhite
-	special FadeInPalettesFromWhite
+	special FadeOutToWhite
+	special FadeInFromWhite
+	special FadeOutToWhite
+	special FadeInFromWhite
+	special FadeOutToWhite
+	special FadeInFromWhite
 	waitsfx
 	writetext .UseSacredAshText
 	playsound SFX_CAUGHT_MON

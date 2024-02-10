@@ -271,7 +271,7 @@ DEF DIE_MAX_NUMBER EQU 6
 	set SECONDARYSPRITES_DIE_ROLL_F, [hl]
 	ld a, 1
 	ld [wDieRoll], a
-	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu ;
+	call HDMATransferTilemapAndAttrmap_Menu ;
 	call CloseText	                                    ; closetext
 
 .rotate_die_loop
@@ -454,7 +454,7 @@ BoardMenu_OpenSubmenu:
 	ld [wMenuReturn], a
 	ldh [hBGMapMode], a
 	call LoadStandardMenuHeader
-	farcall FadeOutPalettesToWhite
+	farcall FadeOutToWhite
 	call DisableOverworldHUD
 	ld a, FALSE
 	ld [wText2bpp], a
@@ -477,6 +477,6 @@ BoardMenu_CloseSubmenu:
 	ld b, CGB_MAPPALS
 	call GetCGBLayout
 	call WaitBGMap2
-	farcall FadeInPalettesFromWhite
+	farcall FadeInFromWhite
 	call EnableSpriteUpdates
 	ret

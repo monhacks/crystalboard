@@ -208,7 +208,7 @@ BuenaPrintText::
 
 PrintTextboxText::
 	bccoord TEXTBOX_INNERX, TEXTBOX_INNERY
-	call PrintHLTextAtBC
+	call PrintTextboxTextAt
 	ret
 
 PlaceString::
@@ -624,7 +624,7 @@ PokeFluteTerminator::
 .stop:
 	text_end
 
-PrintHLTextAtBC::
+PrintTextboxTextAt::
 	ld a, [wTextboxFlags]
 	push af
 	set TEXT_DELAY_F, a

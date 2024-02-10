@@ -36,7 +36,7 @@ StartMenu::
 	call DrawVariableLengthMenuBox
 	call .DrawBugContestStatusBox
 	call SafeUpdateSprites
-	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu
+	call HDMATransferTilemapAndAttrmap_Menu
 	farcall LoadFont_NoOAMUpdate
 	call .DrawBugContestStatus
 	call UpdateTimePals

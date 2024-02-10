@@ -111,7 +111,7 @@ _UpdateTimePals::
 	call DmgToCgbTimePals
 	ret
 
-FadeInPalettesFromWhite::
+FadeInFromWhite::
 ; fades from white to normal palettes in four steps
 ; all palettes use white color of Pal0 before step 3
 	call BackupWhiteColorFromBGPals1
@@ -127,7 +127,7 @@ FadeInPalettesFromWhite::
 	call ConvertTimePalsDecHL
 	ret
 
-FadeOutPalettesToWhite::
+FadeOutToWhite::
 ; fades from normal palettes to white in four steps
 ; all palettes use white color of Pal0 after step 2
 	ld c, $9
@@ -141,14 +141,14 @@ FadeOutPalettesToWhite::
 	call ConvertTimePalsIncHL
 	ret
 
-FadeInPalettesFromBlack:
+FadeInFromBlack:
 	ld c, $0
 	call GetTimePalFade
 	ld b, $4
 	call ConvertTimePalsIncHL
 	ret
 
-FadeOutPalettesToBlack:
+FadeOutToBlack:
 	ld c, $9
 	call GetTimePalFade
 	ld b, $4

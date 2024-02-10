@@ -84,12 +84,12 @@ GetMapSceneID::
 	pop bc
 	ret
 
-LoadScreenTilemapAndAttrmapPals::
-	call LoadScreenTilemap
-	call LoadScreenAttrmapPals
+LoadOverworldTilemapAndAttrmapPals::
+	call LoadOverworldTilemap
+	call LoadOverworldAttrmapPals
 	ret
 
-LoadScreenTilemap::
+LoadOverworldTilemap::
 	ldh a, [hROMBank]
 	push af
 
@@ -102,9 +102,9 @@ LoadScreenTilemap::
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 	call ByteFill
 
-	ld a, BANK(_LoadScreenTilemap)
+	ld a, BANK(_LoadOverworldTilemap)
 	rst Bankswitch
-	call _LoadScreenTilemap
+	call _LoadOverworldTilemap
 
 	pop af
 	rst Bankswitch
@@ -2170,7 +2170,7 @@ FadeToMenu::
 	xor a
 	ldh [hBGMapMode], a
 	call LoadStandardMenuHeader
-	farcall FadeOutPalettesToWhite
+	farcall FadeOutToWhite
 	call ClearSprites
 	call DisableSpriteUpdates
 	ret
@@ -2191,7 +2191,7 @@ FinishExitMenu::
 	ld b, CGB_MAPPALS
 	call GetCGBLayout
 	call WaitBGMap2
-	farcall FadeInPalettesFromWhite
+	farcall FadeInFromWhite
 	call EnableSpriteUpdates
 	ret
 
@@ -2237,7 +2237,7 @@ ReloadTilesetAndPalettes::
 	ld c, a
 	call SwitchToAnyMapAttributesBank
 	farcall UpdateTimeOfDayPal
-	call LoadScreenTilemapAndAttrmapPals
+	call LoadOverworldTilemapAndAttrmapPals
 	call LoadTilesetGFX
 	ld a, 9
 	call SkipMusic

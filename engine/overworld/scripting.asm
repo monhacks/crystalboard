@@ -136,7 +136,7 @@ ScriptCommandTable:
 	dw Script_itemnotify                   ; 45
 	dw Script_pocketisfull                 ; 46
 	dw Script_opentext                     ; 47
-	dw Script_refreshscreen                ; 48
+	dw Script_reanchormap                  ; 48
 	dw Script_closetext                    ; 49
 	dw Script_writeunusedbyte              ; 4a
 	dw Script_farwritetext                 ; 4b
@@ -188,7 +188,7 @@ ScriptCommandTable:
 	dw Script_changemapblocks              ; 79
 	dw Script_changeblock                  ; 7a
 	dw Script_reloadmap                    ; 7b
-	dw Script_reloadmappart                ; 7c
+	dw Script_refreshmap                   ; 7c
 	dw Script_writecmdqueue                ; 7d
 	dw Script_delcmdqueue                  ; 7e
 	dw Script_playmusic                    ; 7f
@@ -953,7 +953,7 @@ ApplyObjectFacing:
 	ret
 
 .DisableTextTiles:
-	call LoadScreenTilemap
+	call LoadOverworldTilemap
 	hlcoord 0, 0
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
 .loop
@@ -2287,12 +2287,12 @@ Script_changeblock:
 	call BufferScreen
 	ret
 
-Script_reloadmappart::
+Script_refreshmap::
 	xor a
 	ldh [hBGMapMode], a
-	call LoadScreenTilemapAndAttrmapPals
+	call LoadOverworldTilemapAndAttrmapPals
 	call GetMovementPermissions
-	farcall HDMATransferTilemapAndAttrmap_OverworldEffect
+	farcall HDMATransferTilemapAndAttrmap_Overworld
 	call UpdateSprites
 	ret
 
@@ -2322,7 +2322,7 @@ Script_opentext:
 	call OpenText2bpp
 	ret
 
-Script_refreshscreen:
+Script_reanchormap:
 	call RefreshScreen
 	call GetScriptByte
 	ret
@@ -2332,7 +2332,7 @@ Script_writeunusedbyte:
 	ret
 
 Script_closetext:
-	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu
+	call HDMATransferTilemapAndAttrmap_Menu
 	call CloseText
 	ret
 

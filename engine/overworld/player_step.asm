@@ -144,25 +144,25 @@ UpdateOverworldMap:
 
 .step_down
 	call .ScrollOverworldMapDown
-	call LoadScreenTilemap
+	call LoadOverworldTilemap
 	call ScrollMapDown
 	ret
 
 .step_up
 	call .ScrollOverworldMapUp
-	call LoadScreenTilemap
+	call LoadOverworldTilemap
 	call ScrollMapUp
 	ret
 
 .step_left
 	call .ScrollOverworldMapLeft
-	call LoadScreenTilemap
+	call LoadOverworldTilemap
 	call ScrollMapLeft
 	ret
 
 .step_right
 	call .ScrollOverworldMapRight
-	call LoadScreenTilemap
+	call LoadOverworldTilemap
 	call ScrollMapRight
 	ret
 

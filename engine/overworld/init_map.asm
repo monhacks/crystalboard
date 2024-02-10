@@ -29,11 +29,11 @@ ReanchorBGMap_NoOAMUpdate::
 	; draw screen at wTilemap and wAttrmap and then transfer it.
 	ld a, $90
 	ldh [hWY], a
-	call LoadScreenTilemapAndAttrmapPals
+	call LoadOverworldTilemapAndAttrmapPals
 	call LoadWindowHUD
 	ld a, HIGH(vBGMap1)
 	call .LoadBGMapAddrIntoHRAM
-	call HDMATransferTilemapAndAttrmap_OpenAndCloseMenu
+	call HDMATransferTilemapAndAttrmap_Menu
 	farcall ApplyPals
 	ld a, TRUE
 	ldh [hCGBPalUpdate], a

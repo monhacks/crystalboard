@@ -44,7 +44,7 @@ MapSetupScript_EnterLevel:
 	mapsetup RefreshMapSprites
 	mapsetup PlayMapMusicBike
 	mapsetup FadeInToMusic
-	mapsetup FadeInPalettesFromWhite
+	mapsetup FadeInFromWhite
 	mapsetup ConstructAndEnableOverworldHUD
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
@@ -54,7 +54,7 @@ MapSetupScript_EnterLevel:
 MapSetupScript_Teleport:
 	mapsetup ResetPlayerObjectAction
 MapSetupScript_Fly:
-	mapsetup FadeOutPalettesToWhite
+	mapsetup FadeOutToWhite
 	mapsetup JumpRoamMons
 MapSetupScript_Warp:
 	mapsetup DisableLCD
@@ -78,7 +78,7 @@ MapSetupScript_Warp:
 	mapsetup RefreshMapSprites
 	mapsetup PlayMapMusicBike
 	mapsetup FadeInToMusic
-	mapsetup FadeInPalettesFromWhite
+	mapsetup FadeInFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup AnchorPointAfterWarp
@@ -106,7 +106,7 @@ MapSetupScript_BadWarp:
 	mapsetup SpawnInFacingDown
 	mapsetup RefreshMapSprites
 	mapsetup FadeToMapMusic
-	mapsetup FadeInPalettesFromWhite
+	mapsetup FadeInFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup AnchorPointAfterWarp
@@ -138,7 +138,7 @@ MapSetupScript_Connection:
 MapSetupScript_Fall:
 	mapsetup ResetPlayerObjectAction
 MapSetupScript_Door:
-	mapsetup FadeOutPalettesToWhite
+	mapsetup FadeOutToWhite
 MapSetupScript_Train:
 	mapsetup BackupMapObjects
 	mapsetup EnterMapWarp
@@ -158,7 +158,7 @@ MapSetupScript_Train:
 	mapsetup LoadMapPalettes
 	mapsetup RefreshMapSprites
 	mapsetup FadeToMapMusic
-	mapsetup FadeInPalettesFromWhite
+	mapsetup FadeInFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup UpdateRoamMons
@@ -180,7 +180,7 @@ MapSetupScript_ReloadMap:
 	mapsetup LoadMapPalettes
 	mapsetup RefreshMapSprites
 	mapsetup ForceMapMusic
-	mapsetup FadeInPalettesFromWhite
+	mapsetup FadeInFromWhite
 	mapsetup EnableOverworldHUD
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
@@ -205,7 +205,7 @@ MapSetupScript_ExitViewMap:
 	mapsetup LoadMapPalettes
 	mapsetup SpawnInCustomFacing ; restore player's facing if in branch space
 	mapsetup RefreshMapSprites
-	mapsetup FadeInPalettesFromWhite
+	mapsetup FadeInFromWhite
 	mapsetup EnableOverworldHUD
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
@@ -226,7 +226,7 @@ MapSetupScript_LinkReturn:
 	mapsetup LoadMapPalettes
 	mapsetup RefreshMapSprites
 	mapsetup PlayMapMusicBike
-	mapsetup FadeInPalettesFromWhite
+	mapsetup FadeInFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData
 	mapsetup EnableTextAcceleration
@@ -249,7 +249,7 @@ MapSetupScript_Continue:
 	mapsetup LoadMapPalettes
 	mapsetup RefreshMapSprites
 	mapsetup PlayMapMusicBike
-	mapsetup FadeInPalettesFromWhite
+	mapsetup FadeInFromWhite
 	mapsetup ConstructAndEnableOverworldHUD
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData

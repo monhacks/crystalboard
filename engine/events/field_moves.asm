@@ -27,14 +27,14 @@ UseFlashAuto::
 	ret
 
 BlindingFlash:
-	farcall FadeOutPalettesToWhite
+	farcall FadeOutToWhite
 	ld hl, wStatusFlags
 	set STATUSFLAGS_FLASH_F, [hl]
 	farcall ReplaceTimeOfDayPals
 	farcall UpdateTimeOfDayPal
 	ld b, CGB_MAPPALS
 	call GetCGBLayout
-	farcall FadeInPalettesFromWhite
+	farcall FadeInFromWhite
 	ret
 
 ShakeHeadbuttTree:
@@ -75,7 +75,7 @@ ShakeHeadbuttTree:
 	jr .loop
 
 .done
-	call LoadScreenTilemapAndAttrmapPals
+	call LoadOverworldTilemapAndAttrmapPals
 	call WaitBGMap
 	xor a
 	ldh [hBGMapMode], a

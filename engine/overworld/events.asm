@@ -27,111 +27,111 @@ OverworldLoop::
 
 DisableEvents:
 	xor a
-	ld [wScriptFlags2], a
+	ld [wEnabledPlayerEvents], a
 	ret
 
 EnableEvents::
 	ld a, $ff
-	ld [wScriptFlags2], a
+	ld [wEnabledPlayerEvents], a
 	ret
 
 DisableTileEvents:
-; DisableWarpsConnxns + DisableCoordEvents + DisableStepCount + DisableWildEncounters
+; DisableWarpsConnections + DisableCoordEvents + DisableStepCount + DisableWildEncounters
 	push af
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	ld a, [hl]
 	and ~((1 << 0) | (1 << 1) | (1 << 2) | (1 << 3))
 	ld [hl], a
 	pop af
 	ret
 
-DisableWarpsConnxns: ; unreferenced
-	ld hl, wScriptFlags2
+DisableWarpsConnections: ; unreferenced
+	ld hl, wEnabledPlayerEvents
 	res 2, [hl]
 	ret
 
 DisableCoordEvents: ; unreferenced
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	res 1, [hl]
 	ret
 
 DisableStepCount: ; unreferenced
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	res 0, [hl]
 	ret
 
 DisableWildEncounters: ; unreferenced
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	res 3, [hl]
 	ret
 
 DisableSpaceEffects:
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	res 4, [hl]
 	ret
 
 DisableTrainerAndTalkerEvents: ; unreferenced
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	res 5, [hl]
 	ret
 
-EnableWarpsConnxns: ; unreferenced
-	ld hl, wScriptFlags2
+EnableWarpsConnections: ; unreferenced
+	ld hl, wEnabledPlayerEvents
 	set 2, [hl]
 	ret
 
 EnableCoordEvents: ; unreferenced
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	set 1, [hl]
 	ret
 
 EnableStepCount: ; unreferenced
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	set 0, [hl]
 	ret
 
 EnableWildEncounters:
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	set 3, [hl]
 	ret
 
 EnableSpaceEffects: ; unreferenced
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	set 4, [hl]
 	ret
 
 EnableTrainerAndTalkerEvents: ; unreferenced
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	set 5, [hl]
 	ret
 
-CheckWarpConnxnScriptFlag:
-	ld hl, wScriptFlags2
+CheckWarpConnectionsEnabled:
+	ld hl, wEnabledPlayerEvents
 	bit 2, [hl]
 	ret
 
-CheckCoordEventScriptFlag:
-	ld hl, wScriptFlags2
+CheckCoordEventsEnabled:
+	ld hl, wEnabledPlayerEvents
 	bit 1, [hl]
 	ret
 
-CheckStepCountScriptFlag:
-	ld hl, wScriptFlags2
+CheckStepCountEnabled:
+	ld hl, wEnabledPlayerEvents
 	bit 0, [hl]
 	ret
 
-CheckWildEncountersScriptFlag:
-	ld hl, wScriptFlags2
+CheckWildEncountersEnabled:
+	ld hl, wEnabledPlayerEvents
 	bit 3, [hl]
 	ret
 
 CheckSpaceEffectsScriptFlag:
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	bit 4, [hl]
 	ret
 
 CheckTrainerAndTalkerEvents:
-	ld hl, wScriptFlags2
+	ld hl, wEnabledPlayerEvents
 	bit 5, [hl]
 	ret
 
@@ -550,7 +550,7 @@ CheckTrainerOrTalkerEvent:
 CheckTileEvent:
 ; Check for warps, coord events, or wild battles.
 
-	call CheckWarpConnxnScriptFlag
+	call CheckWarpConnectionsEnabled
 	jr z, .connections_disabled
 
 	farcall CheckMovingOffEdgeOfMap
@@ -568,21 +568,21 @@ CheckTileEvent:
 	cp BOARDEVENT_VIEW_MAP_MODE
 	ret z ; nc
 
-	call CheckCoordEventScriptFlag
+	call CheckCoordEventsEnabled
 	jr z, .coord_events_disabled
 
 	call CheckCurrentMapCoordEvents
 	jr c, .coord_event
 
 .coord_events_disabled
-	call CheckStepCountScriptFlag
+	call CheckStepCountEnabled
 	jr z, .step_count_disabled
 
 	call CountStep
 	ret c
 
 .step_count_disabled
-	call CheckWildEncountersScriptFlag
+	call CheckWildEncountersEnabled
 	jr z, .ok
 
 	call RandomEncounter
@@ -1536,7 +1536,7 @@ RandomEncounter::
 
 	call CheckWildEncounterCooldown
 	jr c, .nope
-	call CanEncounterWildMonInThisTile
+	call CanEncounterWildMon
 	jr nc, .nope
 	ld hl, wStatusFlags2
 	bit STATUSFLAGS2_BUG_CONTEST_TIMER_F, [hl]
@@ -1576,7 +1576,7 @@ WildBattleScript:
 	reloadmapafterbattle
 	end
 
-CanEncounterWildMonInThisTile::
+CanEncounterWildMon::
 	ld hl, wStatusFlags
 	bit STATUSFLAGS_NO_WILD_ENCOUNTERS_F, [hl]
 	jr nz, .no

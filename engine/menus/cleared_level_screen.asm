@@ -12,14 +12,14 @@ ClearedLevelScreen:
 	call ClearMenuAndWindowData
 	ld b, CGB_DIPLOMA
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	call EnableLCD
 	ld hl, .LevelCleared1Text
 	bccoord 3, 1
-	call PrintHLTextAtBC
+	call PrintTextboxTextAt
 	ld hl, .LevelCleared2Text
 	bccoord 3, 3
-	call PrintHLTextAtBC
+	call PrintTextboxTextAt
 .loop
 	call DelayFrame
 	call GetJoypad

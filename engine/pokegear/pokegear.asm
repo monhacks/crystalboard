@@ -102,7 +102,7 @@ PokeGear:
 	call InitPokegearTilemap
 	ld b, CGB_POKEGEAR_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	ld a, %11100100
 	call DmgToCgbObjPal0
 	ret
@@ -1621,7 +1621,7 @@ _TownMap:
 	ld [wTownMapCursorObjectPointer + 1], a
 	ld b, CGB_POKEGEAR_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	ld a, %11100100
 	call DmgToCgbObjPal0
 	call DelayFrame
@@ -1840,7 +1840,7 @@ _FlyMap:
 	call Pokegear_DummyFunction
 	ld b, CGB_POKEGEAR_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 .loop
 	call JoyTextDelay
 	ld hl, hJoyPressed
@@ -2110,7 +2110,7 @@ Pokedex_GetArea:
 	call TownMapBGUpdate
 	ld b, CGB_POKEGEAR_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 	xor a
 	ldh [hBGMapMode], a
 	xor a ; JOHTO_REGION
@@ -2537,7 +2537,7 @@ EntireFlyMap: ; unreferenced
 	ld [wTownMapCursorCoordinates + 1], a
 	ld b, CGB_POKEGEAR_PALS
 	call GetCGBLayout
-	call SetPalettes
+	call SetDefaultBGPAndOBP
 .loop
 	call JoyTextDelay
 	ld hl, hJoyPressed
