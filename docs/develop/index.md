@@ -129,7 +129,7 @@
 
 ### Overworld workflow
 
-1) ``OverworldLoop`` is called from ``GameMenu_WorldMap`` with either ``hMapEntryMethod`` = ``MAPSETUP_ENTERLEVEL`` or ``hMapEntryMethod`` = ``MAPSETUP_CONTINUE``.
+1) ``OverworldLoop`` is called from ``GameMenu_World`` with either ``hMapEntryMethod`` = ``MAPSETUP_ENTERLEVEL`` or ``hMapEntryMethod`` = ``MAPSETUP_CONTINUE``.
 2) ``StartMap`` resets ``wCurTurn`` and ``wCurSpace`` if ``MAPSETUP_ENTERLEVEL``. ``StartMap`` sets ``hCurBoardEvent`` to ``BOARDEVENT_DISPLAY_MENU``. ``wEnabledPlayerEvents`` is cleared. ``wMapStatus`` is set to ``MAPSTATUS_HANDLE`` causing ``HandleMap`` to be called.
 3) ``MapEvents`` (from ``HandleMap``) calls ``PlayerEvents``. ``CheckBoardEvent`` queues ``BoardMenuScript`` which is executed by ``ScriptEvents``.
 4) ``BoardMenuScript.Upkeep`` saves the game, clears ``wTurnData[]``, increases ``wCurTurn``, and loads current space to ``wCurSpaceStruct[]``.

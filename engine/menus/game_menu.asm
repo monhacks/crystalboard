@@ -1,6 +1,6 @@
 	; GameMenu.String and GameMenu.Jumptable indexes
 	const_def
-	const GAMEMENU_WORLD_MAP
+	const GAMEMENU_WORLD
 	const GAMEMENU_SHOP
 
 GameMenu:
@@ -55,17 +55,17 @@ GameMenu_KeepMusic:
 
 .Strings:
 ; entries correspond to GAMEMENUITEM_* constants
-	db "WORLD MAP@"
+	db "WORLD@"
 	db "SHOP@"
 
 .Jumptable:
 ; entries correspond to GAMEMENUITEM_* constants
-	dw GameMenu_WorldMap
+	dw GameMenu_World
 	dw GameMenu_Shop
 
 GameMenuItems:
 	db 2
-	db GAMEMENU_WORLD_MAP
+	db GAMEMENU_WORLD
 	db GAMEMENU_SHOP
 	db -1
 
@@ -92,12 +92,12 @@ GameMenuJoypadLoop:
 	scf
 	ret
 
-GameMenu_WorldMap:
+GameMenu_World:
 ; the following 500ms fading delay applies:
 ; - from post-level screen to level selection menu
 ; - from overworld to level selection menu
-; - from selecting "WORLD MAP" in game menu to level selection menu (save outside ow)
-; - from selecting "WORLD MAP" in game menu to overworld (save in ow)
+; - from selecting "WORLD" in game menu to level selection menu (save outside ow)
+; - from selecting "WORLD" in game menu to overworld (save in ow)
 	ld a, 8
 	ld [wMusicFade], a
 	ld a, LOW(MUSIC_NONE)
@@ -165,7 +165,7 @@ GameMenu_WorldMap:
 	set LSMEVENT_SHOW_UNLOCKED_LEVELS, [hl]
 .save_and_return
 	farcall AutoSaveGameOutsideOverworld
-	jp GameMenu_WorldMap
+	jp GameMenu_World
 
 GameMenu_Shop:
 	ret
