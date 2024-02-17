@@ -236,7 +236,7 @@ ScriptCommandTable:
 	dw Script_checksave                    ; a9
 	dw Script_exitoverworld                ; aa
 	dw Script_reloadmapafterviewmapmode    ; ab
-	dw Script_jumptalkerscript             ; ac
+	dw Script_talkerscript                 ; ac
 	assert_table_length NUM_EVENT_COMMANDS
 
 StartScript:
@@ -681,14 +681,14 @@ Script_trainerortalkertext:
 	call MapTextbox
 	ret
 
-Script_jumptalkerscript:
+Script_talkerscript:
 	ld hl, wTempTalkerTextOrScriptPointer
 	ld a, [hli]
-	ld h, [hl]
-	ld l, a
+	ld d, [hl]
+	ld e, a
 	ld a, [wSeenTrainerOrTalkerBank]
 	ld b, a
-	jp ScriptJump
+	jp ScriptCall
 
 Script_jumptrainerafterbattlescript:
 	ld hl, wScriptAfterPointer

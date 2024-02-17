@@ -26,6 +26,7 @@ StartBattleWithMapTrainerScript:
 	startbattle
 	reloadmapafterbattle
 	trainerortalkerflagaction SET_FLAG
+	scall AfterTrainerOrTalkerScript
 	loadmem wRunningTrainerBattleScript, -1
 
 AlreadyBeatenTrainerScript:
@@ -53,10 +54,11 @@ SeenByTalkerScript::
 	trainerortalkertext TRAINERORTALKERTEXT_TALKER
 	waitbutton
 	closetext
-	end
+	sjump AfterTrainerOrTalkerScript
 
 .Script
-	jumptalkerscript
+	talkerscript
+	sjump AfterTrainerOrTalkerScript
 
 .TalkOrSkipTalker:
 	ld a, [wTempTalkerType]
@@ -88,3 +90,12 @@ SeenByTalkerScript::
 	and TALKERTYPE_MASK
 	ld [hScriptVar], a
 	ret
+
+AfterTrainerOrTalkerScript:
+	wait 200
+	readmem wSpacesLeft
+	iftrue .not_landed
+	turnobject PLAYER, DOWN
+	wait 100
+.not_landed
+	end

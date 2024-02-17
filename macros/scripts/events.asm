@@ -1076,9 +1076,9 @@ MACRO reloadmapafterviewmapmode
 	db reloadmapafterviewmapmode_command
 ENDM
 
-	const jumptalkerscript_command ; $ac
-MACRO jumptalkerscript
-	db jumptalkerscript_command
+	const talkerscript_command ; $ac
+MACRO talkerscript
+	db talkerscript_command
 ENDM
 
 DEF NUM_EVENT_COMMANDS EQU const_value
