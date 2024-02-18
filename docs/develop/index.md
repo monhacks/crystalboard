@@ -1,10 +1,3 @@
-<style>
-  c { color: #8f8f8f }
-  f { color: #bf1f1f }
-  j { color: #1f1fbf }
-  k { color: #1f7f1f }
-</style>
-
 ## Functions
 
 #### Apply VRAM/OAM
