@@ -1,33 +1,42 @@
-# Pokémon Crystal [![Build Status][ci-badge]][ci]
+# pokecrystal-board
 
-This is a disassembly of Pokémon Crystal.
+pokecrystal-board is a board game engine for the GBC based on [pokecrystal](https://github.com/pret/pokecrystal).
 
-It builds the following ROMs:
+In pokecrystal-board **you will find**:
+- Content with new built-in features
+  - Overworld board game engine: menus, movement, events, turn lifecycle, etc.
+  - Level selection menu ("world map")
+  - Game progression logic
+  - Other supporting features
+- Empty canvas with pokecrystal-board placeholder content, or with no content
+  - Actual levels and maps, and their design
+  - Board space effects
+  - Many GFX and SFX elements
+  - Layout of transition screens and menus
+  - ...
+- Empty canvas with pokecrystal placeholder content
+  - The complete battle engine
+  - Pokemon data and storage
+  - Item data and storage
+  - ...
 
-- Pokemon - Crystal Version (UE) (V1.0) [C][!].gbc `sha1: f4cd194bdee0d04ca4eac29e09b8e4e9d818c133`
-- Pokemon - Crystal Version (UE) (V1.1) [C][!].gbc `sha1: f2f52230b536214ef7c9924f483392993e226cfb`
-- Pokemon - Crystal Version (A) [C][!].gbc `sha1: a0fc810f1d4e124434f7be2c989ab5b5892ddf36`
-- CRYSTAL_ps3_010328d.bin `sha1: c60d57a24bbe8ecf7cba54ab3f90669f97bd330d`
-- CRYSTAL_ps3_us_revise_010710d.bin `sha1: 391ae86b1d5a26db712ffe6c28bbf2a1f804c3c4`
-- CGBBYTE1.784.patch `sha1: a25517f60ca0e887d39ec698aa56a0040532a4b3`
+In pokecrystal-board **you will *not* find**:
+- A ready-to-play game
+- An engine that requires less ASM knowledge to use than the pokecrystal disassembly
+- Guaranteed compatibility with extensions to pokecrystal developed by the community
+- Definitive GFX and SFX assets for the pokecrystal-board features
 
-To set up the repository, see [INSTALL.md](INSTALL.md).
+**How can you use and what can you do with pokecrystal-board**:
+- Use it as the base engine to develop your own game
+- Develop new features or expand existing features for the purpose of your own game
+- Develop new features or expand existing features to be incorporated into pokecrystal-board
+- Design assets to be incorporated in place of the placeholder GFX/SFX in pokecrystal-board (see issue #9)
+- Request or show your interest in specific features to be added to pokecrystal-board (open an issue for this)
 
+Compared to pokecrystal and the Pokemon Crystal ROM, the ROM built by pokecrystal-board uses a MBC5 chip and requires 64 KB of RAM (8 banks of 8KB each).
 
-## See also
+pokecrystal-board requires RGBDS 0.7.0 to build. It has two build targets: *crystal*, and *crystal_debug*. The former builds a ROM with the *_DEBUG* symbol undefined, and the latter builds a ROM with the *_DEBUG* symbol defined. *crystal_debug* is meant to include additional content and configurations to facilitate testing during development, while *crystal* builds the ROM meant to be hypothetically released to the public. Other than that, refer to the [install docs from pokecrystal](INSTALL.md) for detailed instructions on how to setup and build pokecrystal-board.
 
-- [**FAQ**](FAQ.md)
-- [**Documentation**][docs]
-- [**Wiki**][wiki] (includes [tutorials][tutorials])
-- [**Symbols**][symbols]
+If you have specific questions about the usage of pokecrystal-board or how to contribute to it, feel free to open an issue or to contact me on Discord. But please, do not do this for questions that are rather in the domain of pokecrystal.
 
-You can find us on [Discord (pret, #pokecrystal)](https://discord.gg/d5dubZ3).
-
-For other pret projects, see [pret.github.io](https://pret.github.io/).
-
-[docs]: https://pret.github.io/pokecrystal/
-[wiki]: https://github.com/pret/pokecrystal/wiki
-[tutorials]: https://github.com/pret/pokecrystal/wiki/Tutorials
-[symbols]: https://github.com/pret/pokecrystal/tree/symbols
-[ci]: https://github.com/pret/pokecrystal/actions
-[ci-badge]: https://github.com/pret/pokecrystal/actions/workflows/main.yml/badge.svg
+If you are interested on developing on top of pokecrystal-board, [docs/usage/index.md](docs/usage/index.md) details the different features. For generic changes made in pokecrystal-board (adaptations, cleaning up, etc.) refer to issues #1, #2, #7, #8. You can also navigate issues tagged with a "Feature" label to see commits pertaining specific features. Additionally, a rough list of new RAM addresses can be found in [docs/develop/ram_addresses.md](docs/develop/ram_addresses.md).
