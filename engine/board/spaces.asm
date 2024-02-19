@@ -195,19 +195,24 @@ ArriveToBranchSpaceScript:
 .DisableDirectionsRequiringLockedTechniques:
 ; set to BRANCH_DIRECTION_UNAVAILABLE each next space byte of the branch struct
 ; that has an unavailable direction due to required techniques not yet unlocked.
-	ld hl, wTempSpaceBranchStruct + NUM_DIRECTIONS
-	ld de, wTempSpaceBranchStruct
+for curdir, 0, NUM_DIRECTIONS
+	ld e, (NUM_TECHNIQUES + 7) / 8
+	ld hl, wTempSpaceBranchStruct + NUM_DIRECTIONS + curdir * (NUM_TECHNIQUES + 7) / 8
 	ld bc, wUnlockedTechniques
-rept NUM_DIRECTIONS
+.loop\@
 	ld a, [bc]
 	and [hl]
 	cp [hl]
-	jr z, .next\@
-	ld a, BRANCH_DIRECTION_UNAVAILABLE
-	ld [de], a
-.next\@
+	jr nz, .unavailable_next\@
+	dec e
+	jr z, .available_next\@
+	inc bc
 	inc hl
-	inc de
+	jr .loop\@
+.unavailable_next\@
+	ld a, BRANCH_DIRECTION_UNAVAILABLE
+	ld [wTempSpaceBranchStruct + curdir], a
+.available_next\@
 endr
 	ret
 

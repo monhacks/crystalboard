@@ -1715,7 +1715,7 @@ wStringBuffer5:: ds STRING_BUFFER_LENGTH
 NEXTU
 wTempSpaceStruct:: space_struct wTempSpace
 wTempSpaceStructEnd::
-wTempSpaceBranchStruct:: ds NUM_DIRECTIONS * 2
+wTempSpaceBranchStruct:: ds NUM_DIRECTIONS * (1 + ((NUM_TECHNIQUES) + 7) / 8)
 wTempSpaceBranchStructEnd::
 
 wViewMapModeRange:: db

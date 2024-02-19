@@ -118,11 +118,11 @@ DebugLevel5_Map1_MapSpaces:
 	space 16,  4,  $0,  8 ; 43
 
 .BS2:
-	branchdir RIGHT,   3, 0
-	branchdir UP,     35, 0
+	branchdir RIGHT,   3, 0, 0
+	branchdir UP,     35, 0, 0
 	endbranch
 
 .BS36:
-	branchdir RIGHT,  37, 0
-	branchdir UP,     GO_UP, 0
+	branchdir RIGHT,  37, 0, 0
+	branchdir UP,     GO_UP, 0, 0
 	endbranch

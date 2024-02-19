@@ -163,18 +163,40 @@ endc
 ENDM
 
 MACRO branchdir
+assert (_NARG - 2) == (NUM_TECHNIQUES + 7) / 8
+DEF techniques_byte = 0
 if !STRCMP("\1", "RIGHT")
 	DEF _NEXT_SPACE_RIGHT = \2
-	DEF _TECHNIQUES_RIGHT = \3
+	DEF _TECHNIQUES_RIGHT = TRUE
+	rept _NARG - 2
+		DEF _TECHNIQUES_RIGHT_{d:techniques_byte} = \3
+		shift
+		DEF techniques_byte += 1
+	endr
 elif !STRCMP("\1", "LEFT")
 	DEF _NEXT_SPACE_LEFT = \2
-	DEF _TECHNIQUES_LEFT = \3
+	DEF _TECHNIQUES_LEFT = TRUE
+	rept _NARG - 2
+		DEF _TECHNIQUES_LEFT_{d:techniques_byte} = \3
+		shift
+		DEF techniques_byte += 1
+	endr
 elif !STRCMP("\1", "UP")
 	DEF _NEXT_SPACE_UP = \2
-	DEF _TECHNIQUES_UP = \3
+	DEF _TECHNIQUES_UP = TRUE
+	rept _NARG - 2
+		DEF _TECHNIQUES_UP_{d:techniques_byte} = \3
+		shift
+		DEF techniques_byte += 1
+	endr
 elif !STRCMP("\1", "DOWN")
 	DEF _NEXT_SPACE_DOWN = \2
-	DEF _TECHNIQUES_DOWN = \3
+	DEF _TECHNIQUES_DOWN = TRUE
+	rept _NARG - 2
+		DEF _TECHNIQUES_DOWN_{d:techniques_byte} = \3
+		shift
+		DEF techniques_byte += 1
+	endr
 endc
 ENDM
 
@@ -204,28 +226,56 @@ else
 	db -1
 endc
 if DEF(_TECHNIQUES_RIGHT)
-	db {_TECHNIQUES_RIGHT}
+	DEF techniques_byte = 0
+	rept (NUM_TECHNIQUES + 7) / 8
+		db {_TECHNIQUES_RIGHT_{d:techniques_byte}}
+		PURGE _TECHNIQUES_RIGHT_{d:techniques_byte}
+		DEF techniques_byte += 1
+	endr
 	PURGE _TECHNIQUES_RIGHT
 else
-	db 0
+	rept (NUM_TECHNIQUES + 7) / 8
+		db 0
+	endr
 endc
 if DEF(_TECHNIQUES_LEFT)
-	db {_TECHNIQUES_LEFT}
+	DEF techniques_byte = 0
+	rept (NUM_TECHNIQUES + 7) / 8
+		db {_TECHNIQUES_LEFT_{d:techniques_byte}}
+		PURGE _TECHNIQUES_LEFT_{d:techniques_byte}
+		DEF techniques_byte += 1
+	endr
 	PURGE _TECHNIQUES_LEFT
 else
-	db 0
+	rept (NUM_TECHNIQUES + 7) / 8
+		db 0
+	endr
 endc
 if DEF(_TECHNIQUES_UP)
-	db {_TECHNIQUES_UP}
+	DEF techniques_byte = 0
+	rept (NUM_TECHNIQUES + 7) / 8
+		db {_TECHNIQUES_UP_{d:techniques_byte}}
+		PURGE _TECHNIQUES_UP_{d:techniques_byte}
+		DEF techniques_byte += 1
+	endr
 	PURGE _TECHNIQUES_UP
 else
-	db 0
+	rept (NUM_TECHNIQUES + 7) / 8
+		db 0
+	endr
 endc
 if DEF(_TECHNIQUES_DOWN)
-	db {_TECHNIQUES_DOWN}
+	DEF techniques_byte = 0
+	rept (NUM_TECHNIQUES + 7) / 8
+		db {_TECHNIQUES_DOWN_{d:techniques_byte}}
+		PURGE _TECHNIQUES_DOWN_{d:techniques_byte}
+		DEF techniques_byte += 1
+	endr
 	PURGE _TECHNIQUES_DOWN
 else
-	db 0
+	rept (NUM_TECHNIQUES + 7) / 8
+		db 0
+	endr
 endc
 ENDM
 

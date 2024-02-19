@@ -54,6 +54,6 @@ DebugLevel2_Map1_MapSpaces:
 	space  0, 12,  $0, GO_LEFT ; 15
 
 .BS1:
-	branchdir LEFT,   13, 0
-	branchdir UP,      3, 0
+	branchdir LEFT,   13, 0, 0
+	branchdir UP,      3, 0, 0
 	endbranch

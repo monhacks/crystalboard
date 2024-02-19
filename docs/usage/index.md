@@ -79,7 +79,7 @@ In a branch space, the last two bytes of the *space* macro are repurposed as a p
 	endbranch
 ```
 
-Each *branchdir* entry includes: direction, next space id, techniques required. The order of entries is irrelevant, but do not put the same direction more than once in the same branch struct (all but the last entry using that direction will be ignored).
+Each *branchdir* entry includes: direction, next space id, required techniques. The order of entries is irrelevant, but do not put the same direction more than once in the same branch struct (all but the last entry using that direction will be ignored). The number of arguments occupied by required techniques in each *branchdir* entry is equal to the number of techniques you have defined divided by eight.
 
 ### End space
 

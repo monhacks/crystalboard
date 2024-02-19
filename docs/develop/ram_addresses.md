@@ -19,7 +19,7 @@
 
 - Addresses within *wPlayerData* ~ *wPlayerDataEnd*: preserved on save. Includes:
   - **wUnlockedLevels**: flag array that tracks progression regarding which levels have been unlocked.
-  - **wClearedLevelsStage<N>**: flag array that tracks progression regarding which levels have been cleared. Each level can have up to four clearable endings (N).
+  - **wClearedLevelsStage\<N\>**: flag array that tracks progression regarding which levels have been cleared. Each level can have up to four stages (clearable endings).
   - **wUnlockedTechniques**: flag array that tracks progression regarding which techniques have been unlocked.
   - **wCurLevel**: initialized in LevelSelectionMenu (where it is also used), and stays static during the level.
   - **wDefaultLevelSelectionMenuLandmark**: used to know in which landmark to place the player when entering level selection menu.
@@ -28,7 +28,7 @@
 
 - These addresses share memory region with string buffers from *wStringBuffer3* onwards. They are placed in memory in the following order.
   - **wTempSpaceStruct**: Temporary scope. Same structure as *wCurSpaceStruct*
-  - **wTempSpaceBranchStruct**: Temporary scope. The structure is four bytes for next space for each direction (R/L/U/D; -1 if unavailable direction) followed by four bytes for required techniques for each direction (R/L/U/D)
+  - **wTempSpaceBranchStruct**: Temporary scope. The structure is four bytes for next space for each direction (R/L/U/D; -1 if unavailable direction) followed by at least four bytes (depending on *NUM_TECHNIQUES*) for required techniques for each direction (R/L/U/D)
   - **wViewMapModeRange**, **wViewMapModeDisplacementY**, **wViewMapModeDisplacementX**: Temporary scope during a Vew Map mode session.
   - **wBeforeViewMapYCoord**, **wBeforeViewMapXCoord**, **wBeforeViewMapMapGroup**, **wBeforeViewMapMapNumber**, **wBeforeViewMapDirection**: Temporary scope during a Vew Map mode session. Used to preserve player state before entering View Map mode.
 
