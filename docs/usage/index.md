@@ -24,7 +24,7 @@ The data is located in [data/levels/level_selection_menu.asm](data/levels/level_
 
 The overworld uses a turn-based system. Each level is composed of one or more maps, and the maps are designed with spaces in them, which are meant for the player to move through them. Each turn the player rolls a die and advances spaces accordingly. Events may occur as appropriate while the player is advancing and/or when it lands in a space.
 
-In addition to what is covered in this section, you can find more low level stuff about the pokecrystal-board overworld engine in the rough workflows described here: [docs/develop/workflows.md](docs/develop/workflows.md). The core of the overworld engine is in [engine/overworld/events.asm](engine/overworld/events.asm) and, in a way, the main logic occurs in *PlayerEvents*. New board logic in this context is in *CheckBoardEvent* and the state is defined by *BOARDEVENT_* constants. Again, for in-depth details refer to the aforementioned workflows or to the code itself.
+In addition to what is covered in this section, you can find more low level stuff about the pokecrystal-board overworld engine in the rough workflows described here: [docs/develop/workflows.md](docs/develop/workflows.md). The core of the overworld engine is in [engine/overworld/events.asm](engine/overworld/events.asm) and, in a way, the main logic occurs in *PlayerEvents*. New board logic in this context is in *CheckBoardEvent* and the state is defined by *BOARDEVENT_* constants. This state is maintained in *hCurBoardEvent* and is used for logic outside of *CheckBoardEvent* as well. Again, for in-depth details refer to the aforementioned workflows or to the code itself.
 
 ## Board menu
 
@@ -147,13 +147,54 @@ The main difference in pokecrystal-board is that techniques are executed in the 
 
 Techniques are implemented in different manners. Cut and Rock Smash use objects entirely and are implemented through *CheckFacingTileEvent* in *PlayerEvents*, queuing the corresponding script. Surf (start/stop surfing) and Waterfall are also implemented in *CheckFacingTileEvent* alongside specific collision values carried over from pokecrystal. Flash is instead implemented as a map setup command.
 
-## Object events
+As with other features, you can expand or modify the implemented techniques according to your needs.
+
+## Person events
+
+NPCs may interact with you while progressing in the board, either while on a non-space tile or on a space tile. These events are triggered through *CheckTrainerOrTalkerEvent* in *PlayerEvents* (this happens after a space effect, if applicable). Like trainers in Pokemon Crystal, NPCs interact with you when they notice you, i.e. if in the range of sight. All interactions in pokecrystal-board are NPC->player, not player->NPC.
+
+The way to define these events is the same as in pokecrystal, through *object_event*s in the map file.
+
+The logic for these events (other than *CheckTrainerOrTalkerEvent* in *PlayerEvents*) is in [home/trainers_talkers.asm](home/trainers_talkers.asm) and [engine/events/trainer_talker_scripts.asm](engine/events/trainer_talker_scripts.asm).
 
 ### Trainer events
 
+No mystery here. Trainer NPCs are defined the same way as in pokecrystal. The range of sight of each trainer object event has to be chosen appropriately. If a trainer battle interrupts a movement in the board, the movement is resumed when the battle is over. The exception is if the player loses the battle, in which case the player whites out from the overworld back to the level selection menu.
+
+The flags for "trainer beaten" are expected to be reused for trainers across different levels, and cleared whenever a player enters a level (but this is merely a proposed design choice). There are flags scoped for this purpose exactly (see [constants/event_flags.asm](constants/event_flags.asm)).
+
 ### Talker events
 
+Unlike trainer events, talker events are meant to be used for NPCs that interact with you for anything that's not a battle. As far as the *object_event* struct is concerned, it's the same as a trainer NPC (including range of sight mechanics), except the object type is *OBJECTTYPE_TALKER* instead of *OBJECTTYPE_TRAINER*.
+
+The script pointer of a talker NPC points to an struct that uses the *talker* macro. Its arguments are flag, OPTIONAL/MANDATORY, TEXT/SCRIPT, 2-byte pointer to text or script. *OPTIONAL* means that the player will receive a prompt to skip this NPC's event. *SCRIPT* means that the 2-byte pointer points to an arbitrary script to be executed, while *TEXT* is a shortcut to merely make the NPC display text (it just executes a simple script enclosed in opentext/closetext).
+
+Talkers can use turn-scoped flags that are cleared at the beginning of each turn, but like level-scoped trainer flags, this is just a predefined design choice.
+
+For example:
+
+```
+.DebugLevel5_Map1Talker1:
+	talker EVENT_TURN_SCOPED_1, OPTIONAL, TEXT, .Text
+
+.Text:
+	text "I'm a talker!"
+	done
+```
+
 ## View map mode
+
+The player can navigate a portion of the current overworld map by using a "View map" option available from the board menu or while choosing a direction in a branch space.
+
+The view map mode is like a moving camera. The player sprite stays static while you move around. Tile events, object events, and regular collisions are ignored here (e.g. warps are neither entered nor collided with), but going off-limits or off-range is accounted for. Off-limits means that tiles that have special collision value *COLL_OUT_OF_BOUNDS* (specifically defined for this) can't be crossed, and that map limits can't be crossed unless there is a connection to another map. Additionally, a maximum view map mode range that the player is allowed in either direction, counting from the coordinates where view map mode was started, is governed by *wViewMapModeRange* (in number of tiles). Initialization or unlocking of *wViewMapModeRange* is your design choice.
+
+View map mode is exited by pressing the B button. Exiting view map mode effectively triggers a warp to where the player was at before entering view map mode, with whatever the state was.
+
+TODO: add image in view map mode
+
+While in view map mode, *hCurBoardEvent* contains *BOARDEVENT_VIEW_MAP_MODE*. Transition from view map mode to the "regular" overworld occurs with *hCurBoardEvent* containing *BOARDEVENT_REDISPLAY_MENU* (if view map mode entered from board menu) or *BOARDEVENT_RESUME_BRANCH* (if view map mode entered from branch space). As with other board event values, they have a specific handler in *CheckBoardEvent*.
+
+A rough workflow of the view map mode engine is available in [docs/develop/workflows.asm](docs/develop/workflows.asm). View map mode player movement logic is at *DoPlayerMovement* in [engine/overworld/player_movement.asm](engine/overworld/player_movement.asm) along with other types of player movement. Logic for entering view map mode is embedded into the board menu code or the branch space code. When view map mode is entered, the player sprite is temporarily "turned into" an NPC (see *MockPlayerObject*), whereas the actual player sprite is made transparent.
 
 ## Map state preservation
 

@@ -301,7 +301,7 @@ SECTION "bank28", ROMX
 
 INCLUDE "engine/phone/scripts/unused.asm"
 INCLUDE "engine/events/std_scripts.asm"
-INCLUDE "engine/events/trainer_scripts.asm"
+INCLUDE "engine/events/trainer_talker_scripts.asm"
 
 
 SECTION "bank2E", ROMX
