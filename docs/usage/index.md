@@ -1,3 +1,33 @@
+- [Level selection menu](#level-selection-menu)
+- [Overworld](#overworld)
+	- [Board menu](#board-menu)
+	- [Board spaces](#board-spaces)
+		- [Regular spaces](#regular-spaces)
+		- [Branch space](#branch-space)
+		- [End space](#end-space)
+	- [Board movement](#board-movement)
+		- [Warp events and connections](#warp-events-and-connections)
+		- [Technique events](#technique-events)
+	- [Person events](#person-events)
+		- [Trainer events](#trainer-events)
+		- [Talker events](#talker-events)
+	- [View map mode](#view-map-mode)
+	- [Map state preservation](#map-state-preservation)
+- [Game navigation and progression](#game-navigation-and-progression)
+- [Other features](#other-features)
+	- [Window HUD](#window-hud)
+	- [Overworld textbox](#overworld-textbox)
+	- [RGB palette fading](#rgb-palette-fading)
+- [Internal design aspects](#internal-design-aspects)
+	- [Tilesets](#tilesets)
+	- [Map identifiers](#map-identifiers)
+	- [OAM management](#oam-management)
+- [Gameplay design aspects](#gameplay-design-aspects)
+	- [Levels](#levels)
+	- [Game currency](#game-currency)
+	- [Time counting](#time-counting)
+	- [Game autosaving](#game-autosaving)
+
 # Level selection menu
 
 The level selection menu is essentially a world map that the player navigates to select a level to play. The player can move through landmarks that correspond to unlocked levels in the level selection menu. The level seleciton menu can have multiple map pages each with their own landmarks. When the player moves from a landmark in one page to a landmark in another page, the new page is loaded during the transition.
@@ -53,7 +83,7 @@ The effects of each implemented type of board space are defined as scripts in [e
 
 Board space effects are triggered from *PlayerEvents.CheckBoardEvent* during *BOARDEVENT_HANDLE_BOARD*. Each space tile uses a specific collision value (*COLL_\*_SPACE*), and the appropriate script is queued via *CallScript* for its later execution in *ScriptEvents*. Most space scripts have a check for whether the player has already landed on the space. But others (e.g. branch space, end space) trigger even if the player has not completed the movement. A branch space additionally does not count as an actual space in the movement (so it can't be landed on either).
 
-When a player lands on a space, it turns into a "grey space" with no effect should the player land on it in a later turn.
+When a player lands on a space, it turns into a "grey space" or "disabled space" with no effect should the player land on it in a later turn.
 
 ### Regular spaces
 
@@ -85,7 +115,7 @@ Each *branchdir* entry includes: direction, next space id, required techniques. 
 
 Landing on an end space means that the player has cleared the level. Like the branch space, the end space effect triggers even if the player has not completed the movement. It transitions the player to a post-level screen (and then back to the level selection menu.)
 
-The space-specific argument in the *space* entry of an end space indicates the stage of the level to be cleared by reaching this end space. An *ES\** constant from [constants/space_constants.asm](constants/space_constants.asm) is used for this.
+The space-specific argument in the *space* entry of an end space indicates the stage of the level to be cleared by reaching this end space. An *ES\** constant from [constants/space_constants.asm](constants/space_constants.asm) is used for this (refer to [this section](#game-navigation-and-progression) for more information about level stages and level progression in general).
 
 ## Board movement
 
@@ -186,7 +216,9 @@ For example:
 
 The player can navigate a portion of the current overworld map by using a "View map" option available from the board menu or while choosing a direction in a branch space.
 
-The view map mode is like a moving camera. The player sprite stays static while you move around. Tile events, object events, and regular collisions are ignored here (e.g. warps are neither entered nor collided with), but going off-limits or off-range is accounted for. Off-limits means that tiles that have special collision value *COLL_OUT_OF_BOUNDS* (specifically defined for this) can't be crossed, and that map limits can't be crossed unless there is a connection to another map. Additionally, a maximum view map mode range that the player is allowed in either direction, counting from the coordinates where view map mode was started, is governed by *wViewMapModeRange* (in number of tiles). Initialization or unlocking of *wViewMapModeRange* is your design choice.
+The view map mode is like a moving camera. The player sprite stays static while you move around. Movement speed is twice as fast as regular walking. Tile events, object events, and regular collisions are ignored here (e.g. warps are neither entered nor collided with), but going off-limits or off-range is accounted for.
+
+Off-limits means that tiles that have special collision value *COLL_OUT_OF_BOUNDS* (specifically defined for this) can't be crossed, and that map limits can't be crossed unless there is a connection to another map. Additionally, a maximum view map mode range that the player is allowed in either direction, counting from the coordinates where view map mode was started, is governed by *wViewMapModeRange* (in number of tiles). Initialization or unlocking of *wViewMapModeRange* is your design choice.
 
 View map mode is exited by pressing the B button. Exiting view map mode effectively triggers a warp to where the player was at before entering view map mode, with whatever the state was.
 
@@ -194,11 +226,42 @@ TODO: add image in view map mode
 
 While in view map mode, *hCurBoardEvent* contains *BOARDEVENT_VIEW_MAP_MODE*. Transition from view map mode to the "regular" overworld occurs with *hCurBoardEvent* containing *BOARDEVENT_REDISPLAY_MENU* (if view map mode entered from board menu) or *BOARDEVENT_RESUME_BRANCH* (if view map mode entered from branch space). As with other board event values, they have a specific handler in *CheckBoardEvent*.
 
-A rough workflow of the view map mode engine is available in [docs/develop/workflows.asm](docs/develop/workflows.asm). View map mode player movement logic is at *DoPlayerMovement* in [engine/overworld/player_movement.asm](engine/overworld/player_movement.asm) along with other types of player movement. Logic for entering view map mode is embedded into the board menu code or the branch space code. When view map mode is entered, the player sprite is temporarily "turned into" an NPC (see *MockPlayerObject*), whereas the actual player sprite is made transparent.
+A rough workflow of the view map mode engine is available in [docs/develop/workflows.md](docs/develop/workflows.asm). View map mode player movement logic is at *DoPlayerMovement* in [engine/overworld/player_movement.md](engine/overworld/player_movement.asm) along with other types of player movement. Logic for entering view map mode is embedded into the board menu code or the branch space code. When view map mode is entered, the player sprite is temporarily "turned into" an NPC (see *MockPlayerObject*), whilst the actual player sprite is made transparent.
 
 ## Map state preservation
 
+During a level, the state of map objects and disabled spaces is preserved across map connections and warps (the latter of which includes exiting view map mode). The state of map objects here means coordinates, facing direction, visibility, etc. This allows to preserve continuity during a level, from disabled spaces, to trees or rocks, to NPCs.
+
+This backup state data is kept in dedicated WRAM banks and preserved on save to dedicated SRAM banks. The choice of the maximum amount of maps supported to backup state data is a trade-off between required RAM space and the maximum number of overlapping maps per level you want to support. You can define this value through the *NUM_MAP_OBJECT_BACKUPS* and *NUM_DISABLED_SPACES_BACKUPS* constants. WRAM (*wDisabledSpacesBackups*, *wMapObjectsBackups*) and SRAM space is allocated according to them. pokecrystal-board expands the SRAM size precisely to support expansion (but with the current configuration you could fit everything in Pokemon Crystal-sized SRAM).
+
+The backing up of disabled spaces to WRAM is done individually per space the moment that space becomes disabled, through *BackupDisabledSpace* called from the space effect script. On the other hand, backing up of map objects to WRAM happens only when transitioning between maps, as a map setup command (*BackupMapObjects*) or when entering view map mode (*BackupMapObjectsOnEnterViewMapMode*). The data is copied from WRAM to SRAM automatically during save.
+
+When a map is entered during a level, if the map has been visited before during the current level, there will be backup disabled space and map object data for it. Its existence is looked up in *wDisabledSpacesBackups* and *wMapObjectsBackups* by searching for an entry matching the map group and map id of the map being entered (*LoadDisabledSpaces* map setup command and an extension to *CopyMapObjectEvents* all the way from the *LoadMapAttributes* map setup command).
+
 # Game navigation and progression
+
+The main menus outside the overworld provided in pokecrystal-board are:
+- The titlescreen simply carried over from pokecrystal ([engine/menus/titlescreen.asm](engine/menus/titlescreen.asm))
+- A main menu ([engine/menus/main_menu.asm](engine/menus/main_menu.asm)) with "New game" and "Continue" options [engine/menus/intro_menu.asm](engine/menus/intro_menu.asm). Save file agnostic.
+- A game menu ([engine/menus/game_menu.asm](engine/menus/game_menu.asm)) which is the main entry point after the save file is loaded. The "World" option will lead to either the level selection menu or to the overworld, depending on where the save file is from.
+- The level selection menu, as covered [in its section](#level-selection-menu)
+- A "post-level screen" or "level cleared screen" ([engine/menus/cleared_level_screen.asm](engine/menus/cleared_level_screen.asm)) that transitions the player from the overworld to the level selection menu after a level is cleared (if whited out or exited level, player goes straight to level selection menu).
+
+The envisaged progression in pokecrystal-board is that the player progresses in the game by clearing level stages, which in turn unlock more levels that let the player clear more level stages. Progression is tracked by flag arrays *wUnlockedLevels* and *wClearedLevelsStage1* through *wClearedLevelsStage4*. [Unlocked techniques](#technique-events) are tracked by flag array *wUnlockedTechniques*. Each level supports anywhere from 1 to 4 clearable stages which corresponds to alternative endings of that level (whether you design one ending for all levels, four endings for all levels, a mix, etc., is your design choice).
+
+The logic to clear a level stage and to unlock levels happens within the aforementioned post-level screen (see *ClearedLevelScreen*) alognside other progression-related tasks like persisting the coins that the player has collected in the level.
+
+How levels are unlocked along the way is dictated by the *LevelUnlockRequirements* table in [data/levels/levels.asm](data/levels/levels.asm), which has one *level_unlock_req* entry per existing level. Everytime the player clears a level stage, the conditions for unlocking each level not yet unlocked are checked, unlocking those that meet the conditions, up to a maximum of *MAX_UNLOCK_LEVELS_AT_ONCE*. There are three types of conditions you can specify: *LEVELS_CLEARED*, *NUMBER_OF_LEVELS_CLEARED*, and *TECHNIQUES_CLEARED*. You can mix and match level unlock requirements as per your game design. For example:
+
+```
+	(...)
+	level_unlock_req LEVELS_CLEARED, LEVEL_1, STAGE_2_F, LEVEL_2, STAGE_1_F ; LEVEL_3
+	level_unlock_req NUMBER_OF_LEVELS_CLEARED, 3 ; LEVEL_4
+	level_unlock_req TECHNIQUES_CLEARED, TECHNIQUE_FLASH | TECHNIQUE_WATERFALL, 0 ; LEVEL_5
+	(...)
+```
+
+Means that: *LEVEL_3* becomes unlocked when stage 2 of *LEVEL_1* and stage 1 of *LEVEL_2* are both cleared; *LEVEL_4* becomes unlocked when you clear your third level stage; *LEVEL_5* becomes unlocked when Flash and Waterfall have both been unlocked. As with [*branchdir*](#branch-space), the number of arguments occupied by techniques after *TECHNIQUES_CLEARED* is equal to the number of techniques you have defined divided by eight (in the above case, there are 9-16 and both Flash and Waterfall are among the first eight).
 
 # Other features
 
@@ -208,13 +271,19 @@ A rough workflow of the view map mode engine is available in [docs/develop/workf
 
 ## RGB palette fading
 
+# Internal design aspects
+
+This section covers miscellaneous internal design aspects not yet fully covered in other sections, but that affect the management of specific data in pokecrystal-board.
+
 ## Tilesets
+
+## Map identifiers
 
 ## OAM management
 
-# Design aspects
+# Gameplay design aspects
 
-This section covers miscellaneous design aspects not yet fully covered in other sections.
+This section covers miscellaneous gameplay design aspects not yet fully covered in other sections.
 
 ## Levels
 

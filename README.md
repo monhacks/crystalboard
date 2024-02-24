@@ -15,7 +15,7 @@ In pokecrystal-board **you will find**:
   - Layout of transition screens and menus
   - ...
 - Empty canvas with pokecrystal placeholder content
-  - The complete battle engine
+  - The complete Pokemon battle engine
   - Pokemon data and storage
   - Item data and storage
   - ...
