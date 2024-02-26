@@ -1,6 +1,6 @@
 ; at normal speed:
 ; each color takes around 3.2 scanlines to fade
-; up to 10 (11?) colors can be faded per frame
+; up to 10 (11?) palettes can be faded per frame
 
 FadeStepColorsToBlack:
 .loop

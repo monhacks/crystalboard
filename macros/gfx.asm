@@ -28,6 +28,7 @@ MACRO RGB
 ENDM
 
 MACRO rgbpals_fade_src
+; \1: name of fade source
 	DEF fade_src EQUS \1
 	DEF color_index = 0
 ENDM
@@ -38,6 +39,9 @@ MACRO rgbpals_fade_src_end
 ENDM
 
 MACRO rgbpals_fade_apply
+; \1: name of fade source to fade from
+; \2: name of fade source to fade to
+; \3: additional intermediate fading steps
 	DEF fade_from EQUS \1
 	DEF fade_to EQUS \2
 	assert {fade_from}_len == {fade_to}_len, "fade_from pals and fade_to pals must be same length"

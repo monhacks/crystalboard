@@ -1,3 +1,5 @@
+This documentation covers a mix of topics that cover aspects ranging from how to use specific data structures to design your game, to the overview and code references of the internal workings of features, to gameplay design concepts. It explains the basics to begin using pokecrystal-board.
+
 - [Level selection menu](#level-selection-menu)
 - [Overworld](#overworld)
 	- [Board menu](#board-menu)
@@ -16,11 +18,13 @@
 - [Game navigation and progression](#game-navigation-and-progression)
 - [Other features](#other-features)
 	- [Window HUD](#window-hud)
-	- [Overworld textbox](#overworld-textbox)
+	- [Overworld textbox and font](#overworld-textbox-and-font)
 	- [RGB palette fading](#rgb-palette-fading)
 - [Internal design aspects](#internal-design-aspects)
 	- [Tilesets](#tilesets)
-	- [Map identifiers](#map-identifiers)
+	- [Maps](#maps)
+		- [Map identifiers](#map-identifiers)
+		- [Map environments](#map-environments)
 	- [OAM management](#oam-management)
 - [Gameplay design aspects](#gameplay-design-aspects)
 	- [Levels](#levels)
@@ -267,9 +271,44 @@ Means that: *LEVEL_3* becomes unlocked when stage 2 of *LEVEL_1* and stage 1 of 
 
 ## Window HUD
 
-## Overworld textbox
+[home/hud.asm](home/hud.asm) and [engine/gfx/hud.asm](engine/gfx/hud.asm) include an engine that can be used to construct and display a HUD at the top of the screen. This HUD uses the Game Boy's window, and overlays a portion of the Game Boy's BG map.
+
+The amount of scanlines occupied by the HUD is controlled by *hWindowHUDLY*. Writing any non-0 value to this address enables the window-based HUD. Enabling the window-based HUD means that the LCD interrupt is configured in LYC=LY mode in the corresponding scanline; the vblank interrupt enables the window, and the LCD interrupt disables it (through the LCDC register) (note: the window-based HUD can't be enabled simultaneously with pokecrystal-native LCD interrupt usage through *hLCDCPointer*, used during battle transition, battle animations, and movies).
+
+The available functions to use the HUD engine are:
+
+- *EnableWindowHUD*: Configure LCD interrupt in LYC=LY mode with corresponding LYC
+- *DisableWindowHUD*: Configure LCD interrupt in hblank mode
+- *LoadWindowHUD*: Load the HUD at *wWhichHUD* to the top of *wTilemap* and *wAttrmap*. Only does anything if *hWindowHUDLY* is non-0
+- *LoadHUD*: Load the HUD at *wWhichHUD* to the top of *wTilemap* and *wAttrmap* (without using the Game Boy's window)
+
+The window-based HUD is currently only used in the overworld. Individual HUD types with their own *hWindowHUDLY* (if window-based) and their own content are supported through the *LoadHUD*/*LoadWindowHUD* pointer table. Each entry points to a handler for a specific HUD type (e.g. *HUD_OVERWORLD*, as defined in [constants/gfx_constants.asm](constants/gfx_constants.asm)) meant to implement the loading of the HUD's content to *wTilemap* and *wAttrmap* whilst enabling the HUD. But the overworld normally doesn't use *wTilemap* and *wAttrmap* directly (only when a textbox is open), so the overworld HUD engine requires additional functions beyond the above four generic functions:
+
+- *ConstructOverworldHUDTilemap*: Draw the overworld HUD's tilemap into *wOverworldHUDTiles*
+- *TransferOverworldHUDToBGMap*: Transfer overworld HUD to *vBGMap1*/*vBGMap3* during v/hblank(s). Tilemap is read from *wOverworldHUDTiles*, attrmap is all *PAL_BG_TEXT | PRIORITY*.
+- *EnableOverworldHUD* & *DisableOverworldHUD*: Like *EnableWindowHUD* & *DisableWindowHUD* but include (un)setting *wWhichHUD* and *hWindowHUDLY*. *EnableOverworldHUD* also includes calling *TransferOverworldHUDToBGMap* first.
+- *ConstructAndEnableOverworldHUD*: *ConstructOverworldHUDTilemap* + *EnableOverworldHUD* (used to construct, enable, and transfer HUD when not enabled)
+- *RefreshOverworldHUD*: *ConstructOverworldHUDTilemap* + *TransferOverworldHUDToBGMap* (used to reconstruct and retransfer HUD when already enabled)
+
+For example, *ConstructAndEnableOverworldHUD* and *EnableOverworldHUD* are used in map setup scripts as appropriate, and *RefreshOverworldHUD* is called between turns or any other time that the HUD's content needs refreshing. *DisableOverworldHUD* is used for example when leaving the overworld or to transitions to screens that don't display the HUD (battle, party menu, view map mode, etc.).
+
+The content of the overworld HUD in pokecrystal-board shows: turn number, die number rolled this turn, coins accumulated in the level, and an unused metric ("experience"). Overworld HUD design is up to your implementation.
+
+## Overworld textbox and font
+
+The overworld uses a 2bpp font by default to display text, menus, etc. The font type (1bpp or 2bpp) is managed by *wText2bpp*, which is *TRUE* by default in the overworld. Actions like leaving the overworld, opening a submenu like the party menu, starting a battle, etc. turn *wText2bpp* to *FALSE*. This address dictates whether menu-drawing and text-printing functions act as 2bpp or 1bpp when drawing the textbox layout. Notably, note that 1bpp text is not compatible with the overworld HUD enabled, because the latter uses 2bpp font tiles.
+
+2bpp textboxes do not fully hide sprites that are partially covered like it (see *CheckObjectCoveredByTextbox*).
+
+Your custom textbox layout can be assigned on a per-map environment basis, including the tiles, tile arrangement, and color. See [engine/gfx/overworld_textbox.asm](engine/gfx/overworld_textbox.asm) for the implementation. Corresponding graphics are included in *OverworldFrames* in [engine/gfx/load_overworld_font.asm](engine/gfx/load_overworld_font.asm).
 
 ## RGB palette fading
+
+[engine/gfx/rgb_fade.asm](engine/gfx/rgb_fade.asm) includes an engine that can be used for individual color fading from source palettes to destination palettes in steps of 2 points per RGB channel. Custom fading functions (with their own fading speed and selection of source palettes and destination palettes) that use this engine are implemented in *RGBFadeEffectJumptable* triggered by calling *DoRGBFadeEffect*.
+
+This fading engine is used in the level selection menu and in the transition from overworld to post-level screen. When designing the timing your own fading functions, be aware of the latency introduced by the engine itself: each color takes around 3.2 scanlines to fade (in normal speed mode), so up to around 10-11 palettes can be faded in a whole frame.
+
+In addition to this engine, for manual fading you can automate the derivation of the RGB values of intermediate steps using the *rgbpals_\** macros available in [gfx/macros.asm](gfx/macros.asm), as done for example in [gfx/level_selection_menu/background_female.pal](gfx/level_selection_menu/background_female.pal).
 
 # Internal design aspects
 
@@ -277,7 +316,11 @@ This section covers miscellaneous internal design aspects not yet fully covered 
 
 ## Tilesets
 
-## Map identifiers
+## Maps
+
+### Map identifiers
+
+### Map environments
 
 ## OAM management
 
