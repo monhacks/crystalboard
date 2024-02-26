@@ -1,4 +1,4 @@
-This documentation covers a mix of topics that cover aspects ranging from how to use specific data structures to design your game, to the overview and code references of the internal workings of features, to gameplay design concepts. It explains the basics to begin using pokecrystal-board.
+This documentation covers a mix of topics that include aspects ranging from how to use specific data structures to design your game, to the overview and code references of the internal workings of features, to gameplay design concepts. It explains the basics to begin using pokecrystal-board.
 
 - [Level selection menu](#level-selection-menu)
 - [Overworld](#overworld)
@@ -21,7 +21,9 @@ This documentation covers a mix of topics that cover aspects ranging from how to
 	- [Overworld textbox and font](#overworld-textbox-and-font)
 	- [RGB palette fading](#rgb-palette-fading)
 - [Internal design aspects](#internal-design-aspects)
-	- [Tilesets](#tilesets)
+	- [Metatiles and tilesets](#metatiles-and-tilesets)
+		- [Metatiles](#metatiles)
+		- [Tilesets](#tilesets)
 	- [Maps](#maps)
 		- [Map identifiers](#map-identifiers)
 		- [Map environments](#map-environments)
@@ -85,7 +87,7 @@ The arguments of each *space* entry all take up one byte and are: x coordinate, 
 
 The effects of each implemented type of board space are defined as scripts in [engine/board/spaces.asm](engine/board/spaces.asm). Examples include gaining coins, losing coins, getting items, starting a Pokemon battle, or choosing among branching paths in the board. A lot of these are placeholder and can be implemented or augmented according to your design intentions.
 
-Board space effects are triggered from *PlayerEvents.CheckBoardEvent* during *BOARDEVENT_HANDLE_BOARD*. Each space tile uses a specific collision value (*COLL_\*_SPACE*), and the appropriate script is queued via *CallScript* for its later execution in *ScriptEvents*. Most space scripts have a check for whether the player has already landed on the space. But others (e.g. branch space, end space) trigger even if the player has not completed the movement. A branch space additionally does not count as an actual space in the movement (so it can't be landed on either).
+Board space effects are triggered from *PlayerEvents.CheckBoardEvent* during *BOARDEVENT_HANDLE_BOARD*. Each space tile uses a specific collision value (*COLL_\*_SPACE*, e.g. *COLL_BLUE_SPACE*), and the appropriate script is queued via *CallScript* for its later execution in *ScriptEvents*. Most space scripts have a check for whether the player has already landed on the space. But others (e.g. branch space, end space) trigger even if the player has not completed the movement. A branch space additionally does not count as an actual space in the movement (so it can't be landed on either).
 
 When a player lands on a space, it turns into a "grey space" or "disabled space" with no effect should the player land on it in a later turn.
 
@@ -244,7 +246,7 @@ When a map is entered during a level, if the map has been visited before during 
 
 # Game navigation and progression
 
-The main menus outside the overworld provided in pokecrystal-board are:
+The main menus (in some cases just mocks) outside the overworld provided in pokecrystal-board are:
 - The titlescreen simply carried over from pokecrystal ([engine/menus/titlescreen.asm](engine/menus/titlescreen.asm))
 - A main menu ([engine/menus/main_menu.asm](engine/menus/main_menu.asm)) with "New game" and "Continue" options [engine/menus/intro_menu.asm](engine/menus/intro_menu.asm). Save file agnostic.
 - A game menu ([engine/menus/game_menu.asm](engine/menus/game_menu.asm)) which is the main entry point after the save file is loaded. The "World" option will lead to either the level selection menu or to the overworld, depending on where the save file is from.
@@ -302,6 +304,8 @@ The overworld uses a 2bpp font by default to display text, menus, etc. The font 
 
 Your custom textbox layout can be assigned on a per-map environment basis, including the tiles, tile arrangement, and color. See [engine/gfx/overworld_textbox.asm](engine/gfx/overworld_textbox.asm) for the implementation. Corresponding graphics are included in *OverworldFrames* in [engine/gfx/load_overworld_font.asm](engine/gfx/load_overworld_font.asm).
 
+Note that the map name sign feature is not used in pokecrystal-board, and, in fact, the only placeholder type of overworld textbox currently in pokecrystal-board uses this frame.
+
 ## RGB palette fading
 
 [engine/gfx/rgb_fade.asm](engine/gfx/rgb_fade.asm) includes an engine that can be used for individual color fading from source palettes to destination palettes in steps of 2 points per RGB channel. Custom fading functions (with their own fading speed and selection of source palettes and destination palettes) that use this engine are implemented in *RGBFadeEffectJumptable* triggered by calling *DoRGBFadeEffect*.
@@ -314,15 +318,57 @@ In addition to this engine, for manual fading you can automate the derivation of
 
 This section covers miscellaneous internal design aspects not yet fully covered in other sections, but that affect the management of specific data in pokecrystal-board.
 
-## Tilesets
+## Metatiles and tilesets
+
+pokecrystal-board establishes design conventions regarding the arrangement of tilesets and metatiles that you may or may not want to alter depending on your needs. Note that in this section tile refers to a 16x16 pixel area (i.e. a quarter of a metatile).
+
+### Metatiles
+
+There are two groups of metatiles: those with a space tile, and those without one. space tiles are always located in the top-left tile of the metatile but this is not a requirement so long as you manage this in the board movement.
+
+Metatiles with a space tile take up metatile slots 0x80 through 0xff in a given map. A given metatile is identical, except for the space tile, to another metatile that is offset by 0x20 (so 0x80 is identical to 0xa0, to 0xc0, and to 0xe0). This is because the logic for disabling spaces (see [Board spaces](#board-spaces)) converts a given space into a grey space by *and*ing it by 0x1f.
+
+The distribution of space types in your tileset should be according to the needs of your specific level, or you could potentially standardize a base layout that works for all levels as much as possible. For example, in pokecrystal-board the blue space that gives coins to the player is the most prevalent, so metatiles 0x80 to 0x9f are reserved for blue spaces. On the other hand, red spaces and item spaces are less frequent, so they could split the space from 0xa0 to 0xbf.
+
+TODO: add image with tileset layout
+
+On the other hand, metatiles from slots 0x00 to 0x7f can be used for metatiles in the background that don't have any space tile. This space is additionally reserved for metatiles with a branch space or a union space, as these are un-landable and never convert into grey spaces.
+
+For space tiles (landable or un-landable), remember to use the right collision value (e.g. *BLUE_SPACE*).
+
+### Tilesets
+
+In pokecrystal-board, tiles 0xc0 through 0xff are reserved for space tiles, while tiles 0x00 through 0xbf complete the rest of the tileset with background tiles. As space tiles are 16x16 pixels, there is a row of eight spaces from 0xc0 through 0xdf and another row of eight spaces from 0xe0 through 0xff.
+
+TODO: image with tiles
+
+However, when loading tileset graphics, the area reserved for space tiles (0xc0-0xff) is not filled from the individual tileset. Instead, *LoadTilesetGFX* in [home/map.asm](home/map.asm), loads the first row from *TilesetFixedSpaces* and the second row from *TilesetVariableSpaces\**. The latter can be configured per tileset, as an additional numeric argument in the *tileset* macro that points to an entry of the *TilesetVariableSpacesPointers* and *TilesetVariableSpacesPalMaps* tables. The space tile graphics are included in [gfx/tilesets/spaces](gfx/tilesets/spaces).
+
+Overall, the first row of tiles is meant for spaces that are mostly fixed (e.g. blue, red, item, battle spaces) whereas the second row is meant for spaces that vary far more, but that still may be shared by some tilesets (e.g. different types of branch/union spaces, or regular spaces that are highly unique). Note that when using a tool like Polished Map, you probably still want to draw the space tiles as part of the regular tileset, for ease of building and editing maps (and the whole regular tileset is INCBIN'd compressed into the ROM anyway, so you could rightly argue that this whole separation is useless since it's not saving space at all!).
 
 ## Maps
 
 ### Map identifiers
 
+The concept of map group and map id is the same here as in pokecrystal. In pokecrystal-board, spritesets are assigned per map group and per map id rather than just per map group (you handle adjacent map consistency yourself where necessary), and apply to both outdoor and indoor maps rather than just the former. A sensible design approach would be to assign the same map group to all the maps that are part of the same level, thus effectively assigning a unique map group to each level. However, this isn't enforced anywhere in the logic of pokecrystal-board.
+
 ### Map environments
 
+The map environment value is meant to take more protagonism in pokecrystal-board compared to pokecrystal, as you see fit. With map environments, you can reflect the nature of a map, e.g. *OUTDOOR_GRASSY*, *OUTDOOR_MOUNTAIN*, *OUTDOOR_SEA*, *INDOOR_FOREST*, *INDOOR_CAVE*, etc. Environments are additionally split between outdoor and indoor at *INDOOR_ENVIRONMENT*. The elements indexed by map environment include *EnvironmentColorsPointers* and *OverworldFrames* (see [Overworld textbox and font](#overworld-textbox-and-font)).
+
 ## OAM management
+
+For drawing small complementary screen elements in the overworld or the level selection menu (e.g. arrows, legend text, the die, etc.), pokecrystal-board uses a mix of sprite animations or straight up writes to available space in *wShadowOAM*.
+
+In pokecrystal-board, the sprite animation engine supports a mode of not wiping up Shadow OAM (in *DoNextFrameForAllSprites*) in order to work alongside other OAM in the overworld. This is turned on by setting bit *DONT_CLEAR_SHADOW_OAM_IN_SPRITE_ANIMS_F* of *wStateFlags*.
+
+In the overworld, these complementary sprites are referred to as secondary sprites and are managed by the same logic that manages the displaying NPCs: *InitSprites*. In *InitSprites*, *InitSecondarySprites*, checks for requested secondary sprites in the form of *wDisplaySecondarySprites* bits set and processes each requested sprite collection sequentially. It's your responsibility to ensure that you are not exceeding the limit of more than 40 objects at once or more than 10 objects per row considering both NPCs and secondary sprites.
+
+TODO: image of OAM
+
+To update just secondary sprites without processing NPC sprites, you can use *UpdateSecondarySprites*. However, if secondary sprites have shrinked or expanded since the last sprites update, it will fall back to calling *UpdateActiveSprites* to properly reposition all sprites to avoid corruption.
+
+The tiles reserved for secondary sprites in the overworld are 0x20 through 0x7e in VRAM bank 0. Tiles from 0x00 through 0x1f are reserved for NPC sprites. You may want to adjust the separation point according to your needs. [charmap.asm](charmap.asm) defines the placement of secondary sprite tiles for different use cases. The start tile of 0x20 is denoted by *SECONDARY_SPRITES_FIRST_TILE*. From there, it's a matter of managing which sprites may or may not overlap to place their tiles in VRAM in the way that most optimizes the available space.
 
 # Gameplay design aspects
 

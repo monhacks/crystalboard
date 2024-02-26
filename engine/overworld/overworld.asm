@@ -96,7 +96,7 @@ AddMapSprites:
 	dec a
 	ld c, a
 	ld b, 0
-	ld hl, OutdoorSprites
+	ld hl, MapSprites
 	add hl, bc
 	add hl, bc
 	ld a, [hli]
@@ -564,6 +564,6 @@ INCLUDE "data/sprites/emotes.asm"
 
 INCLUDE "data/sprites/sprite_mons.asm"
 
-INCLUDE "data/maps/outdoor_sprites.asm"
+INCLUDE "data/maps/sprites.asm"
 
 INCLUDE "data/sprites/sprites.asm"

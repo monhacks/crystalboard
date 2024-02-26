@@ -1,9 +1,9 @@
 ; Valid sprite IDs for each map group.
 ; Maps with environment ROUTE or TOWN can only use these sprites.
 
-OutdoorSprites:
+MapSprites:
 ; entries correspond to MAPGROUP_* constants
-	table_width 2, OutdoorSprites
+	table_width 2, MapSprites
 	dw Level1GroupSprites
 ;	dw Level2GroupSprites
 if DEF(_DEBUG)

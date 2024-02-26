@@ -56,7 +56,7 @@ DoNextFrameForAllSprites:
 	jr nz, .loop
 
 	ld a, [wStateFlags]
-	bit 2, a
+	bit DONT_CLEAR_SHADOW_OAM_IN_SPRITE_ANIMS_F, a
 	ret nz
 
 ; Clear (wShadowOAM + [wCurSpriteOAMAddr] --> wShadowOAMEnd)
