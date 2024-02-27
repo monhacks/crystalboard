@@ -5,7 +5,7 @@ This documentation covers a mix of topics that include aspects ranging from how 
 	- [Board menu](#board-menu)
 	- [Board spaces](#board-spaces)
 		- [Regular spaces](#regular-spaces)
-		- [Branch space](#branch-space)
+		- [Branch and union spaces](#branch-and-union-spaces)
 		- [End space](#end-space)
 	- [Board movement](#board-movement)
 		- [Warp events and connections](#warp-events-and-connections)
@@ -29,7 +29,6 @@ This documentation covers a mix of topics that include aspects ranging from how 
 		- [Map environments](#map-environments)
 	- [OAM management](#oam-management)
 - [Gameplay design aspects](#gameplay-design-aspects)
-	- [Levels](#levels)
 	- [Game currency](#game-currency)
 	- [Time counting](#time-counting)
 	- [Game autosaving](#game-autosaving)
@@ -38,7 +37,7 @@ This documentation covers a mix of topics that include aspects ranging from how 
 
 The level selection menu is essentially a world map that the player navigates to select a level to play. The player can move through landmarks that correspond to unlocked levels in the level selection menu. The level seleciton menu can have multiple map pages each with their own landmarks. When the player moves from a landmark in one page to a landmark in another page, the new page is loaded during the transition.
 
-TODO: add image
+[Level selection menu](img/level_selection_menu.bmp)
 
 The usual level:landmark relation is expected to be 1:1, but 1:n is also supported, for levels that may have alternative starting points.
 
@@ -66,7 +65,7 @@ In addition to what is covered in this section, you can find more low level stuf
 
 The board menu is shown to the player at the beginning of each turn. In allows for several choices. The only ones that are specific to the pokecrystal-board engine are "roll die", "view map", and "exit level". The other three choices point to the party menu, bag menu, and pokegear, and are placeholders from pokecrystal. The board menu can be navigated horizontally. All menu options are accessed by selecting the corresponding icon of the menu, except for "view map" which is accessible via the Select button. All menu options except for "roll die" and "exit level" eventually return back to the board menu.
 
-TODO: add image
+[Board menu](img/board_menu.bmp)
 
 The implementation is located in [engine/board/menu.asm](engine/board/menu.asm). Icon tiles are drawn over the background of the textbox as if they were font characters. The current menu item is highlighted with a colored overlay using objects. This file includes also the animation logic for rolling a die when the "roll die" option is selected. These animations leverage the overworld sprite animation engine from pokecrystal. Finally, [gfx/board](gfx/board) contains GFX assets.
 
@@ -89,19 +88,19 @@ The effects of each implemented type of board space are defined as scripts in [e
 
 Board space effects are triggered from *PlayerEvents.CheckBoardEvent* during *BOARDEVENT_HANDLE_BOARD*. Each space tile uses a specific collision value (*COLL_\*_SPACE*, e.g. *COLL_BLUE_SPACE*), and the appropriate script is queued via *CallScript* for its later execution in *ScriptEvents*. Most space scripts have a check for whether the player has already landed on the space. But others (e.g. branch space, end space) trigger even if the player has not completed the movement. A branch space additionally does not count as an actual space in the movement (so it can't be landed on either).
 
-When a player lands on a space, it turns into a "grey space" or "disabled space" with no effect should the player land on it in a later turn.
+When a player lands on a space, it turns into a "grey space" or "disabled space" with no effect should the player land on it in a later turn. This grey space is also used by default as the starting space of a level (which matches the spawn point of the map).
 
 ### Regular spaces
 
 Regular space scripts have a check for whether the player has finished the movement according to the die roll and thus landed on the space. The actual effect is only executed when it is determined that the player has landed on the space.
 
-### Branch space
+### Branch and union spaces
 
 A branch space triggers even if the player has not completed the movement. A branch space additionally does not count as an actual space in the movement (so it can't be landed on either). In a branch space, the player is prompted to choose a direction to continue the movement. Some of these directions can be made locked until the player has unlocked a specific technique (Cut, Surf, etc.). Directions that can be followed are represented in the game with a colored arrow, whereas directions that are locked due to techniques are represented with a grey arrow.
 
-The counterpart to a branch space is a union space. It is also noncounting and is used to denote convergence from multiple directions.
+![Branch space](img/branch_space.bmp)
 
-TODO: add image with branch space and union space
+The counterpart to a branch space is a union space. It is also noncounting and is used to denote convergence from multiple directions.
 
 In a branch space, the last two bytes of the *space* macro are repurposed as a pointer to a branch struct with *branchdir* entries and ending with *endbranch*. For example:
 
@@ -228,7 +227,7 @@ Off-limits means that tiles that have special collision value *COLL_OUT_OF_BOUND
 
 View map mode is exited by pressing the B button. Exiting view map mode effectively triggers a warp to where the player was at before entering view map mode, with whatever the state was.
 
-TODO: add image in view map mode
+![View map mode](img/view_map_mode.bmp)
 
 While in view map mode, *hCurBoardEvent* contains *BOARDEVENT_VIEW_MAP_MODE*. Transition from view map mode to the "regular" overworld occurs with *hCurBoardEvent* containing *BOARDEVENT_REDISPLAY_MENU* (if view map mode entered from board menu) or *BOARDEVENT_RESUME_BRANCH* (if view map mode entered from branch space). As with other board event values, they have a specific handler in *CheckBoardEvent*.
 
@@ -267,7 +266,7 @@ How levels are unlocked along the way is dictated by the *LevelUnlockRequirement
 	(...)
 ```
 
-Means that: *LEVEL_3* becomes unlocked when stage 2 of *LEVEL_1* and stage 1 of *LEVEL_2* are both cleared; *LEVEL_4* becomes unlocked when you clear your third level stage; *LEVEL_5* becomes unlocked when Flash and Waterfall have both been unlocked. As with [*branchdir*](#branch-space), the number of arguments occupied by techniques after *TECHNIQUES_CLEARED* is equal to the number of techniques you have defined divided by eight (in the above case, there are 9-16 and both Flash and Waterfall are among the first eight).
+Means that: *LEVEL_3* becomes unlocked when stage 2 of *LEVEL_1* and stage 1 of *LEVEL_2* are both cleared; *LEVEL_4* becomes unlocked when you clear your third level stage; *LEVEL_5* becomes unlocked when Flash and Waterfall have both been unlocked. As with [*branchdir*](#branch-and-union-spaces), the number of arguments occupied by techniques after *TECHNIQUES_CLEARED* is equal to the number of techniques you have defined divided by eight (in the above case, there are 9-16 and both Flash and Waterfall are among the first eight).
 
 # Other features
 
@@ -326,11 +325,13 @@ pokecrystal-board establishes design conventions regarding the arrangement of ti
 
 There are two groups of metatiles: those with a space tile, and those without one. space tiles are always located in the top-left tile of the metatile but this is not a requirement so long as you manage this in the board movement.
 
-Metatiles with a space tile take up metatile slots 0x80 through 0xff in a given map. A given metatile is identical, except for the space tile, to another metatile that is offset by 0x20 (so 0x80 is identical to 0xa0, to 0xc0, and to 0xe0). This is because the logic for disabling spaces (see [Board spaces](#board-spaces)) converts a given space into a grey space by *and*ing it by 0x1f.
+Metatiles with a space tile take up metatile slots 0x80 through 0xff in a given map. A given metatile is identical, except for the space tile, to another metatile that is offset by 0x20 (so 0x80 is identical to 0xa0, to 0xc0, and to 0xe0). Metatiles from 0xe0 to 0xff all contain grey space tiles. This is because the logic for disabling spaces (see [Board spaces](#board-spaces)) converts a given space into a grey space by *or*ing it by 0xe0.
 
-The distribution of space types in your tileset should be according to the needs of your specific level, or you could potentially standardize a base layout that works for all levels as much as possible. For example, in pokecrystal-board the blue space that gives coins to the player is the most prevalent, so metatiles 0x80 to 0x9f are reserved for blue spaces. On the other hand, red spaces and item spaces are less frequent, so they could split the space from 0xa0 to 0xbf.
+The distribution of space types in your tileset should be according to the needs of your specific level, or you could potentially standardize a base layout that works for all levels as much as possible. For example, in pokecrystal-board the blue space that gives coins to the player is the most prevalent, so metatiles 0x80 to 0x97 could be reserved for blue spaces. On the other hand, red spaces and battle spaces are less frequent, so they could split the space from 0xa0 to 0xbf.
 
-TODO: add image with tileset layout
+The picture below made with [Polished Map](https://github.com/Rangi42/polished-map) illustrate an example layout. Notice how metatiles are identical in batches of 0x20 except for the space tile.
+
+![Metatiles](img/metatiles.png)
 
 On the other hand, metatiles from slots 0x00 to 0x7f can be used for metatiles in the background that don't have any space tile. This space is additionally reserved for metatiles with a branch space or a union space, as these are un-landable and never convert into grey spaces.
 
@@ -340,7 +341,7 @@ For space tiles (landable or un-landable), remember to use the right collision v
 
 In pokecrystal-board, tiles 0xc0 through 0xff are reserved for space tiles, while tiles 0x00 through 0xbf complete the rest of the tileset with background tiles. As space tiles are 16x16 pixels, there is a row of eight spaces from 0xc0 through 0xdf and another row of eight spaces from 0xe0 through 0xff.
 
-TODO: image with tiles
+![Tileset](img/tiles.png)
 
 However, when loading tileset graphics, the area reserved for space tiles (0xc0-0xff) is not filled from the individual tileset. Instead, *LoadTilesetGFX* in [home/map.asm](home/map.asm), loads the first row from *TilesetFixedSpaces* and the second row from *TilesetVariableSpaces\**. The latter can be configured per tileset, as an additional numeric argument in the *tileset* macro that points to an entry of the *TilesetVariableSpacesPointers* and *TilesetVariableSpacesPalMaps* tables. The space tile graphics are included in [gfx/tilesets/spaces](gfx/tilesets/spaces).
 
@@ -364,7 +365,7 @@ In pokecrystal-board, the sprite animation engine supports a mode of not wiping 
 
 In the overworld, these complementary sprites are referred to as secondary sprites and are managed by the same logic that manages the displaying NPCs: *InitSprites*. In *InitSprites*, *InitSecondarySprites*, checks for requested secondary sprites in the form of *wDisplaySecondarySprites* bits set and processes each requested sprite collection sequentially. It's your responsibility to ensure that you are not exceeding the limit of more than 40 objects at once or more than 10 objects per row considering both NPCs and secondary sprites.
 
-TODO: image of OAM
+![OAM](img/oam.png)
 
 To update just secondary sprites without processing NPC sprites, you can use *UpdateSecondarySprites*. However, if secondary sprites have shrinked or expanded since the last sprites update, it will fall back to calling *UpdateActiveSprites* to properly reposition all sprites to avoid corruption.
 
@@ -374,10 +375,22 @@ The tiles reserved for secondary sprites in the overworld are 0x20 through 0x7e 
 
 This section covers miscellaneous gameplay design aspects not yet fully covered in other sections.
 
-## Levels
-
 ## Game currency
+
+pokecrystal-board uses the concept of coins as the main currency. You can earn coins during a level by landing on blue spaces. The amount of coins added by landing on a blue space, or substracted by landing on a red space, are equal to the *MAP_BASECOINS* value of the current map (an argument of the *map* macro) multiplied by the die number rolled in the current turn.
+
+During a level, coins are tracked in a temporary balance that is only committed to the player's actual balance if and when the level is cleared. It's not possible to earn a negative amount of coins during a level (substracting below 0 results in 0).
+
+Other means to earn coins, and how to actually spend the earned coins is unspecified.
 
 ## Time counting
 
+Time counting in pokecrystal-board is detached from the RTC. In fact, pokecrystal-board uses a MBC chip without RTC support. Instead, there are four time of days: morning, day, evening, and night. Clearing a level advances the time of day (see *AdvanceTimeOfDay* in [home/time.asm](home/time.asm)) and time doesn't advance in any other manner.
+
+Time of day impacts the overworld as it does in pokecrystal, and in pokecrystal-board the time of day is also reflected in the level selection menu. However, day-based events are not used in pokecrystal-board. Still, the transition from night to day advances a day through *wCurDay*, up to *MAX_DAYS*, and triggers *ClearDailyTimers*, so you could implement day-based events by tracking days passed this way.
+
+Play time counting works in the same manner as pokecrystal and is enabled/disabled through *GAME_TIMER_COUNTING_F* in *wGameTimer*. By default, this flag is only set while in the overworld (i.e. in a level), but like many other things in pokecrystal-board, this is your design choice.
+
 ## Game autosaving
+
+During a level, the game is automatically saved between turns. This happens in *BoardMenuScript.Upkeep* by calling *AutoSaveGameInOverworld*. The game is also automatically saved right after exiting a level for any reason (clearing it, exiting it, whiting out) by calling *AutoSaveGameOutsideOverworld*. When the game is turned on, if the save file is in the overworld, the player spawns there. If the save is outside of the overworld, the player is sent to the level selection menu instead.
