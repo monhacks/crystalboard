@@ -11,10 +11,9 @@
 	const MAPSETUP_LINKRETURN  ; f8
 	const MAPSETUP_TRAIN       ; f9
 	const MAPSETUP_SUBMENU     ; fa
-	const MAPSETUP_BADWARP     ; fb
-	const MAPSETUP_FLY         ; fc
-	const MAPSETUP_ENTERLEVEL  ; fd
-	const MAPSETUP_EXITVIEWMAP ; fe
+	const MAPSETUP_FLY         ; fb
+	const MAPSETUP_ENTERLEVEL  ; fc
+	const MAPSETUP_EXITVIEWMAP ; fd
 DEF NUM_MAPSETUP_SCRIPTS EQU const_value - $f1
 
 ; callback types

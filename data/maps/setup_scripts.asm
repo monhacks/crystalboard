@@ -11,7 +11,6 @@ MapSetupScripts:
 	dw MapSetupScript_LinkReturn
 	dw MapSetupScript_Train
 	dw MapSetupScript_Submenu
-	dw MapSetupScript_BadWarp
 	dw MapSetupScript_Fly
 	dw MapSetupScript_EnterLevel
 	dw MapSetupScript_ExitViewMap
@@ -43,7 +42,6 @@ MapSetupScript_EnterLevel:
 	mapsetup SpawnInFacingDown
 	mapsetup RefreshMapSprites
 	mapsetup PlayMapMusicBike
-	mapsetup FadeInToMusic
 	mapsetup FadeInFromWhite
 	mapsetup ConstructAndEnableOverworldHUD
 	mapsetup ActivateMapAnims
@@ -78,34 +76,6 @@ MapSetupScript_Warp:
 	mapsetup RefreshMapSprites
 	mapsetup PlayMapMusicBike
 	mapsetup FadeInToMusic
-	mapsetup FadeInFromWhite
-	mapsetup ActivateMapAnims
-	mapsetup LoadWildMonData
-	mapsetup AnchorPointAfterWarp
-	mapsetup MapCallbackAtEndMapSetup
-	db -1 ; end
-
-MapSetupScript_BadWarp:
-	mapsetup BackupMapObjects
-	mapsetup EnterMapSpawnPoint
-	mapsetup LoadMapAttributes
-	mapsetup HandleNewMap
-	mapsetup SpawnPlayer
-	mapsetup RefreshPlayerCoords
-	mapsetup GetMapScreenCoords
-	mapsetup LoadBlockData
-	mapsetup LoadDisabledSpaces
-	mapsetup BufferScreen
-	mapsetup DisableLCD
-	mapsetup LoadMapGraphics
-	mapsetup LoadMapTimeOfDay
-	mapsetup FadeOutMapMusic
-	mapsetup EnableLCD
-	mapsetup LoadMapObjects
-	mapsetup LoadMapPalettes
-	mapsetup SpawnInFacingDown
-	mapsetup RefreshMapSprites
-	mapsetup FadeToMapMusic
 	mapsetup FadeInFromWhite
 	mapsetup ActivateMapAnims
 	mapsetup LoadWildMonData

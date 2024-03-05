@@ -2188,10 +2188,6 @@ Script_warpfacing:
 ; fallthrough
 
 Script_warp:
-; This seems to be some sort of error handling case.
-	call GetScriptByte
-	and a
-	jr z, .not_ok
 	ld [wMapGroup], a
 	call GetScriptByte
 	ld [wMapNumber], a
@@ -2202,19 +2198,6 @@ Script_warp:
 	ld a, SPAWN_N_A
 	ld [wDefaultSpawnpoint], a
 	ld a, MAPSETUP_WARP
-	ldh [hMapEntryMethod], a
-	ld a, MAPSTATUS_ENTER
-	call LoadMapStatus
-	call StopScript
-	ret
-
-.not_ok
-	call GetScriptByte
-	call GetScriptByte
-	call GetScriptByte
-	ld a, SPAWN_N_A
-	ld [wDefaultSpawnpoint], a
-	ld a, MAPSETUP_BADWARP
 	ldh [hMapEntryMethod], a
 	ld a, MAPSTATUS_ENTER
 	call LoadMapStatus

@@ -305,7 +305,7 @@ RefreshMapSprites:
 	call SafeUpdateSprites
 .skip
 	ld a, [wPlayerSpriteSetupFlags]
-	and (1 << PLAYERSPRITESETUP_FEMALE_TO_MALE_F) | (1 << 3) | (1 << 4)
+	and (1 << 3) | (1 << 4)
 	ld [wPlayerSpriteSetupFlags], a
 	ret
 

@@ -122,8 +122,6 @@ endc
 	; engine_flag wDailyPhoneTimeOfDayFlags,  0 ; jack
 	; engine_flag wDailyPhoneTimeOfDayFlags,  1 ; huey
 
-	engine_flag wPlayerSpriteSetupFlags, PLAYERSPRITESETUP_FEMALE_TO_MALE_F
-
 	engine_flag wSwarmFlags, SWARMFLAGS_DUNSPARCE_SWARM_F
 	engine_flag wSwarmFlags, SWARMFLAGS_YANMA_SWARM_F
 

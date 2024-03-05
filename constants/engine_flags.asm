@@ -110,8 +110,6 @@ endc
 ; wDailyPhoneTimeOfDayFlags
 	; const ENGINE_JACK_MONDAY_MORNING
 	; const ENGINE_HUEY_WEDNESDAY_NIGHT
-; wPlayerSpriteSetupFlags
-	const ENGINE_KRIS_IN_CABLE_CLUB
 ; wSwarmFlags
 	const ENGINE_DUNSPARCE_SWARM
 	const ENGINE_YANMA_SWARM

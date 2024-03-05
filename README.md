@@ -1,6 +1,6 @@
 # pokecrystal-board
 
-pokecrystal-board is a board game engine for the GBC based on [pokecrystal](https://github.com/pret/pokecrystal).
+pokecrystal-board is a single-player RPG board game engine for the GBC based on [pokecrystal](https://github.com/pret/pokecrystal).
 
 In pokecrystal-board **you will find**:
 - Content with new built-in features

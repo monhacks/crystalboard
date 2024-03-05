@@ -2545,7 +2545,6 @@ wKurtApricornQuantity:: db
 
 wCurLevel:: db
 wDefaultLevelSelectionMenuLandmark:: db
-wCurOverworldMiscPal:: db
 wLevelSelectionMenuEntryEventQueue:: flag_array NUM_LSM_EVENTS
 
 ; list of unlocked levels during post-level screen
@@ -2585,6 +2584,8 @@ wCurLevelExp:: ds 3
 
 wCurSpaceStruct:: space_struct wCurSpace
 wCurSpaceStructEnd::
+
+wCurOverworldMiscPal:: db
 
 wCurMapDataEnd::
 
