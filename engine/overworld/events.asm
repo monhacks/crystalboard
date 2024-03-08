@@ -175,6 +175,8 @@ StartMap:
 	ld [hl], a  ; wPrevMapNumber
 	ld [wPlayerState], a ; PLAYER_NORMAL
 	ld [wCurOverworldMiscPal], a ; OW_MISC_BOARD_MENU_ITEMS | BOARDMENUITEM_DIE
+	ld hl, wStatusFlags
+	res STATUSFLAGS_FLASH_F, [hl]
 
 	ld a, BANK(wDisabledSpacesBackups)
 	ld [rSVBK], a
