@@ -52,15 +52,11 @@ RefreshSprites::
 	call LoadAndSortSprites
 	ret
 
-GetPlayerSprite:
-; Get Chris or Kris's sprite.
-	ld hl, ChrisStateSprites
+DeterminePlayerSprite:
+; Return player's sprite in c and a.
 	ld a, [wPlayerGender]
-	bit PLAYERGENDER_FEMALE_F, a
-	jr z, .go
-	ld hl, KrisStateSprites
-
-.go
+	ld e, PLAYERDATA_STATE_SPRITES
+	call GetPlayerField
 	ld a, [wPlayerState]
 	ld c, a
 .loop
@@ -75,12 +71,16 @@ GetPlayerSprite:
 	xor a ; ld a, PLAYER_NORMAL
 	ld [wPlayerState], a
 	ld a, SPRITE_CHRIS
-	jr .finish
+	ret
 
 .good
 	ld a, [hl]
+	ld c, a
+	ret
 
-.finish
+GetPlayerSprite:
+; Get player's sprite in a.
+	call DeterminePlayerSprite
 	ld [wUsedSprites + 0], a
 	ld [wPlayerSprite], a
 	ld [wPlayerObjectSprite], a

@@ -504,13 +504,8 @@ GetPlayerOrMonPalettePointer:
 	and a
 	jp nz, GetMonNormalOrShinyPalettePointer
 	ld a, [wPlayerGender]
-	and a
-	jr z, .male
-	ld hl, KrisPalette
-	ret
-
-.male
-	ld hl, PlayerPalette
+	ld e, PLAYERDATA_PIC_PAL
+	call GetPlayerField
 	ret
 
 GetFrontpicPalettePointer:

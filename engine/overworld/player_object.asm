@@ -944,33 +944,19 @@ MockPlayerObject::
 	ld bc, OBJECT_EVENT_SIZE + 1
 	call CopyBytes
 
-; adjust sprite id and palette number
-	ld hl, .PlayerObjectFields
-.loop
+; adjust palette number
 	ld a, [wPlayerGender]
-	cp [hl]
-	inc hl
-	jr nz, .next1
-	ld a, [wPlayerState]
-	cp [hl]
-	inc hl
-	jr nz, .next2
-; found a match
-	ld a, [hli] ; sprite
-	ld [wMapObject{d:LAST_OBJECT}Sprite], a
-	ld a, [hl] ; palette | objecttype
+	ld e, PLAYERDATA_NPC_PAL
+	call GetPlayerField
+	swap a
+	or OBJECTTYPE_SCRIPT
 	ld [wMapObject{d:LAST_OBJECT}Palette], a ; also wMapObject{d:LAST_OBJECT}Type
-	jr .copy_player_coords
-.next1
-	inc hl
-.next2
-	inc hl
-	inc hl
-	ld a, [hl]
-	cp -1
-	jr nz, .loop
 
-.copy_player_coords
+; adjust sprite id
+	farcall DeterminePlayerSprite
+	ld a, c
+	ld [wMapObject{d:LAST_OBJECT}Sprite], a
+
 ; copy player's coordinates
 	ld hl, wPlayerMockYCoord
 	ld de, wMapObject{d:LAST_OBJECT}YCoord
@@ -1000,16 +986,6 @@ MockPlayerObject::
 .DefaultPlayerObject:
 	db -1 ; MAPOBJECT_OBJECT_STRUCT_ID
 	object_event  0,  0, SPRITE_CHRIS, SPRITEMOVEDATA_STANDING_DOWN, 0, 0, -1, -1, PAL_NPC_RED,  OBJECTTYPE_SCRIPT, 0, ObjectEvent, -1
-
-.PlayerObjectFields:
-; [wPlayerGender], [wPlayerState], sprite id, palette
-	db 0,                          PLAYER_NORMAL, SPRITE_CHRIS,      PAL_NPC_RED << 4 | OBJECTTYPE_SCRIPT
-	db 1 << PLAYERGENDER_FEMALE_F, PLAYER_NORMAL, SPRITE_KRIS,       PAL_NPC_BLUE << 4 | OBJECTTYPE_SCRIPT
-	db 0,                          PLAYER_SURF,   SPRITE_SURF,       PAL_NPC_RED << 4 | OBJECTTYPE_SCRIPT
-	db 1 << PLAYERGENDER_FEMALE_F, PLAYER_SURF,   SPRITE_SURF,       PAL_NPC_BLUE << 4 | OBJECTTYPE_SCRIPT
-	db 0,                          PLAYER_BIKE,   SPRITE_CHRIS_BIKE, PAL_NPC_RED << 4 | OBJECTTYPE_SCRIPT
-	db 1 << PLAYERGENDER_FEMALE_F, PLAYER_BIKE,   SPRITE_KRIS_BIKE,  PAL_NPC_BLUE << 4 | OBJECTTYPE_SCRIPT
-	db -1
 
 GetSouthConnectedSpriteCoords:
 ; ycoord / 2 <= 2

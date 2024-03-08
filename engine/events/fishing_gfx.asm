@@ -4,12 +4,11 @@ LoadFishingGFX:
 	ld a, $1
 	ldh [rVBK], a
 
-	ld de, FishingGFX
 	ld a, [wPlayerGender]
-	bit PLAYERGENDER_FEMALE_F, a
-	jr z, .got_gender
-	ld de, KrisFishingGFX
-.got_gender
+	ld e, PLAYERDATA_FISHING_SPRITE
+	call GetPlayerField
+	ld d, h
+	ld e, l
 
 	ld hl, vTiles0 tile $02
 	call .LoadGFX

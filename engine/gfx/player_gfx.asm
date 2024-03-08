@@ -58,7 +58,7 @@ ShowPlayerNamingChoices:
 	call CloseWindow
 	ret
 
-INCLUDE "data/player_names.asm"
+INCLUDE "data/players/names.asm"
 
 GetPlayerIcon:
 	ld de, ChrisSpriteGFX
@@ -100,16 +100,11 @@ INCBIN "gfx/trainer_card/trainer_card.2bpp"
 
 GetPlayerBackpic:
 	ld a, [wPlayerGender]
-	bit PLAYERGENDER_FEMALE_F, a
-	jr z, GetChrisBackpic
-	call GetKrisBackpic
-	ret
-
-GetChrisBackpic:
-	ld hl, ChrisBackpic
-	ld b, BANK(ChrisBackpic)
+	ld e, PLAYERDATA_BACKPIC
+	call GetPlayerField
 	ld de, vTiles2 tile $31
 	ld c, 7 * 7
+	ld b, BANK(ChrisBackpic)
 	predef DecompressGet2bpp
 	ret
 
@@ -177,20 +172,3 @@ DrawIntroPlayerPic:
 	lb bc, 7, 7
 	predef PlaceGraphic
 	ret
-
-ChrisPic:
-INCBIN "gfx/player/chris.2bpp"
-
-KrisPic:
-INCBIN "gfx/player/kris.2bpp"
-
-GetKrisBackpic:
-; Kris's backpic is uncompressed.
-	ld de, KrisBackpic
-	ld hl, vTiles2 tile $31
-	lb bc, BANK(KrisBackpic), 7 * 7 ; dimensions
-	call Get2bpp
-	ret
-
-KrisBackpic:
-INCBIN "gfx/player/kris_back.2bpp"

@@ -17,6 +17,35 @@ SECTION "Trainer Pic Pointers", ROMX
 INCLUDE "data/trainers/pic_pointers.asm"
 
 
+SECTION "Player Frontpics", ROMX
+
+ChrisPic::
+INCBIN "gfx/player/chris.2bpp"
+
+KrisPic::
+INCBIN "gfx/player/kris.2bpp"
+
+
+SECTION "Player Backpics", ROMX
+
+ChrisBackpic::
+INCBIN "gfx/player/chris_back.2bpp.lz"
+
+KrisBackpic::
+INCBIN "gfx/player/kris_back.2bpp.lz"
+
+DudeBackpic::
+INCBIN "gfx/battle/dude.2bpp.lz"
+
+
+SECTION "Shrink Pics", ROMX
+
+Shrink1Pic::
+INCBIN "gfx/new_game/shrink1.2bpp.lz"
+Shrink2Pic::
+INCBIN "gfx/new_game/shrink2.2bpp.lz"
+
+
 SECTION "Pics 1", ROMX
 
 HoOhFrontpic:        INCBIN "gfx/pokemon/ho_oh/front.animated.2bpp.lz"
@@ -709,74 +738,10 @@ UnownIBackpic:       INCBIN "gfx/pokemon/unown_i/back.2bpp.lz"
 UnownRBackpic:       INCBIN "gfx/pokemon/unown_r/back.2bpp.lz"
 
 
-SECTION "Pics 19", ROMX
-
-; Seems to be an accidental copy of the previous bank
-
-INCBIN "gfx/pokemon/spinarak/back.2bpp.lz"
-INCBIN "gfx/pokemon/raikou/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_k/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/houndour/back.2bpp.lz"
-INCBIN "gfx/pokemon/poliwag/back.2bpp.lz"
-INCBIN "gfx/pokemon/squirtle/back.2bpp.lz"
-INCBIN "gfx/pokemon/shuckle/back.2bpp.lz"
-INCBIN "gfx/pokemon/dewgong/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_b/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/slowpoke/back.2bpp.lz"
-INCBIN "gfx/pokemon/dunsparce/back.2bpp.lz"
-INCBIN "gfx/pokemon/donphan/back.2bpp.lz"
-INCBIN "gfx/pokemon/wooper/back.2bpp.lz"
-INCBIN "gfx/pokemon/tauros/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_x/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/unown_n/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/tangela/back.2bpp.lz"
-INCBIN "gfx/pokemon/voltorb/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_j/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/mantine/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_l/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/piloswine/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_m/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/unown_f/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/natu/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_a/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/golem/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_u/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/diglett/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_q/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/unown_p/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/unown_c/back.2bpp.lz"
-INCBIN "gfx/pokemon/jynx/back.2bpp.lz"
-INCBIN "gfx/pokemon/golbat/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_y/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/unown_g/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_i/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/unown_v/back.2bpp.lz"
-INCBIN "gfx/pokemon/forretress/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_s/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_r/front.animated.2bpp.lz"
-INCBIN "gfx/pokemon/unown_e/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_j/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_b/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_o/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_z/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_w/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_n/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_a/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_m/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_k/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_t/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_x/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_l/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_u/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_q/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_y/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_p/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_i/back.2bpp.lz"
-INCBIN "gfx/pokemon/unown_r/back.2bpp.lz"
-
-
-; Sections "Pics 20" to "Pics 24" are not used for any graphics,
+; Sections "Pics 19" to "Pics 24" are not used for any graphics,
 ; but entries for their banks exist in FixPicBank (see engine/gfx/load_pics.asm).
+
+SECTION "Pics 19", ROMX
 
 SECTION "Pics 20", ROMX
 

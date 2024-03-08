@@ -53,7 +53,6 @@ ROMX $09
 	"bank9"
 ROMX $0a
 	"bankA"
-	"Trainer Backpics"
 ROMX $0b
 	"bankB"
 ROMX $0c
@@ -73,7 +72,6 @@ ROMX $12
 	"Crystal Features 1"
 ROMX $13
 	"bank13"
-	"Shrink Pics"
 	"bank13_2"
 ROMX $14
 	"bank14"
