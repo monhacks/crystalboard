@@ -162,7 +162,7 @@ InitPartyMenuBGPal0:
 	ret
 
 _CGB_PokegearPals:
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	bit PLAYERGENDER_FEMALE_F, a
 	jr z, .male
 	ld hl, FemalePokegearPals
@@ -556,7 +556,11 @@ _CGB_LevelSelectionMenu:
 	ld bc, 8 palettes
 	ld hl, MapObjectPals
 	call AddNTimes
-	gender_to_pal
+	ld a, [wPlayerCharacter]
+	ld e, PLAYERDATA_OW_PAL
+	push hl
+	call GetPlayerField
+	pop hl
 	ld bc, 1 palettes
 	call AddNTimes
 	ld de, wOBPals1
@@ -578,15 +582,8 @@ _CGB_LevelSelectionMenu:
 	ld a, BANK(wOBPals1)
 	call FarCopyWRAM
 
-; load daytime and gender-based background pals
-	ld a, [wPlayerGender]
-	bit PLAYERGENDER_FEMALE_F, a
-	jr z, .male
-	ld hl, LevelSelectionMenuFemalePals
-	jr .got_pals
-.male
-	ld hl, LevelSelectionMenuMalePals
-.got_pals
+; load daytime background pals
+	ld hl, LevelSelectionMenuPals
 	ld a, [wTimeOfDay]
 	maskbits NUM_DAYTIMES
 	ld bc, 6 palettes
@@ -638,16 +635,8 @@ _CGB_LevelSelectionMenuToDChange:
 	jr .loop
 
 .match
-	ld e, [hl]
-	ld a, [wPlayerGender]
-	bit PLAYERGENDER_FEMALE_F, a
-	jr z, .male
-	ld hl, LevelSelectionMenuFemalePals
-	jr .got_pals
-.male
-	ld hl, LevelSelectionMenuMalePals
-.got_pals
-	ld a, e
+	ld a, [hl]
+	ld hl, LevelSelectionMenuPals
 	ld bc, 6 palettes
 	call AddNTimes
 	ld de, wBGPals1
@@ -737,7 +726,7 @@ _CGB_TrainerCard:
 	; fill screen with opposite-gender palette for the card border
 	hlcoord 0, 0, wAttrmap
 	ld bc, SCREEN_WIDTH * SCREEN_HEIGHT
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	and a
 	ld a, $1 ; kris
 	jr z, .got_gender
@@ -747,7 +736,7 @@ _CGB_TrainerCard:
 	; fill trainer sprite area with same-gender palette
 	hlcoord 14, 1, wAttrmap
 	lb bc, 7, 5
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	and a
 	ld a, $0 ; chris
 	jr z, .got_gender2
@@ -786,7 +775,7 @@ _CGB_TrainerCard:
 	ld a, $7 ; pryce
 	call FillBoxCGB
 	; clair uses kris's palette
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	and a
 	push af
 	jr z, .got_gender3
@@ -861,7 +850,7 @@ _CGB_PackPals:
 	cp BATTLETYPE_TUTORIAL
 	jr z, .tutorial_male
 
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	bit PLAYERGENDER_FEMALE_F, a
 	jr z, .tutorial_male
 

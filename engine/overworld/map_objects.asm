@@ -3233,12 +3233,12 @@ InitBranchArrowsSprites:
 	cp BRANCH_DIRECTION_INVALID
 	jr z, .next1 ; skip this arrow if this direction is not valid
 	cp BRANCH_DIRECTION_UNAVAILABLE
-	gender_to_pal
-	ld b, a
-	jr nz, .available
 	ld b, PAL_OW_GREY ; draw grey arrow if this direction is unavailable
+	jr z, .got_pal
+	call GetSecondarySpritesPal
+	ld b, a
 
-.available
+.got_pal
 ; draw this arrow and advance hUsedSpriteIndex
 ; preserve loop variables d, e, c
 	push de
@@ -3281,7 +3281,7 @@ InitBranchArrowsSprites:
 ; the palette byte overrides that data as it matches the player's color palette.
 	ld e, a
 	ld d, HIGH(wShadowOAM)
-	gender_to_pal
+	call GetSecondarySpritesPal
 	ld b, a
 	ld c, 8 ; number of objects
 	ld hl, BranchLegendOAM
@@ -3322,7 +3322,7 @@ InitViewMapModeSprites:
 	ld a, [de]
 	cp $ff
 	jr z, .next1 ; skip this arrow if this direction is not valid
-	gender_to_pal
+	call GetSecondarySpritesPal
 	ld b, a
 ; draw this arrow and advance hUsedSpriteIndex
 ; preserve loop variables d, e, c
@@ -3366,7 +3366,7 @@ InitViewMapModeSprites:
 ; the palette byte overrides that data as it matches the player's color palette.
 	ld e, a
 	ld d, HIGH(wShadowOAM)
-	gender_to_pal
+	call GetSecondarySpritesPal
 	ld b, a
 	ld c, 8 ; number of objects
 	ld hl, ViewMapModeLegendOAM
@@ -3401,7 +3401,7 @@ InitTalkerEventSprites:
 ; the palette byte overrides that data as it matches the player's color palette.
 	ld e, a
 	ld d, HIGH(wShadowOAM)
-	gender_to_pal
+	call GetSecondarySpritesPal
 	ld b, a
 	ld c, 8 ; number of objects
 	ld hl, TalkerEventLegendOAM
@@ -3493,6 +3493,18 @@ InitGainOrLoseCoinsSprites:
 
 .oam_full
 	pop af
+	ret
+
+GetSecondarySpritesPal:
+	push hl
+	push de
+	push bc
+	ld a, [wPlayerCharacter]
+	ld e, PLAYERDATA_OW_PAL
+	call GetPlayerField
+	pop bc
+	pop de
+	pop hl
 	ret
 
 INCLUDE "data/sprites/secondary_sprites.asm"

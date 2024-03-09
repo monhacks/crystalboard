@@ -13,7 +13,7 @@ InitGender:
 	call CloseWindow
 	ld a, [wMenuCursorY]
 	dec a
-	ld [wPlayerGender], a
+	ld [wPlayerCharacter], a
 	ld c, 10
 	call DelayFrames
 	ret

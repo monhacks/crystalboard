@@ -417,10 +417,10 @@ DebugRoom_PrintBattleSkip:
 DebugRoomMenu_ChangeSex:
 	ld a, BANK(sGameData)
 	call OpenSRAM
-	ld a, [sGameData + (wPlayerGender - wGameData)]
+	ld a, [sGameData + (wPlayerCharacter - wGameData)]
 	inc a
 	and 1
-	ld [sGameData + (wPlayerGender - wGameData)], a
+	ld [sGameData + (wPlayerCharacter - wGameData)], a
 	call CloseSRAM
 	ret
 
@@ -430,7 +430,7 @@ DebugRoom_PrintGender:
 	call PlaceString
 	ld a, BANK(sGameData)
 	call OpenSRAM
-	ld a, [sGameData + (wPlayerGender - wGameData)]
+	ld a, [sGameData + (wPlayerCharacter - wGameData)]
 	call CloseSRAM
 	or a
 	ld a, "♂"

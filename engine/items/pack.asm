@@ -1215,7 +1215,7 @@ DrawPackGFX:
 	ld a, [wBattleType]
 	cp BATTLETYPE_TUTORIAL
 	jr z, .male_dude
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	bit PLAYERGENDER_FEMALE_F, a
 	jr nz, .female
 .male_dude

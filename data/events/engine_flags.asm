@@ -108,7 +108,7 @@ endc
 
 	engine_flag wGameTimer, 7 ; unused
 
-	engine_flag wPlayerGender, PLAYERGENDER_FEMALE_F
+	engine_flag wPlayerCharacter, PLAYERGENDER_FEMALE_F
 
 	engine_flag wCelebiEvent, CELEBIEVENT_FOREST_IS_RESTLESS_F
 

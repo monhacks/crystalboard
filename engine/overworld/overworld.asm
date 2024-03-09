@@ -54,7 +54,7 @@ RefreshSprites::
 
 DeterminePlayerSprite:
 ; Return player's sprite in c and a.
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	ld e, PLAYERDATA_STATE_SPRITES
 	call GetPlayerField
 	ld a, [wPlayerState]

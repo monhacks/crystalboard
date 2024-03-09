@@ -8761,7 +8761,7 @@ GetTrainerBackpic:
 	jr z, .Decompress
 
 ; What gender are we?
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	ld e, PLAYERDATA_BACKPIC
 	call GetPlayerField
 .Decompress

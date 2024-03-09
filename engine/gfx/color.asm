@@ -503,7 +503,7 @@ GetEnemyFrontpicPalettePointer:
 GetPlayerOrMonPalettePointer:
 	and a
 	jp nz, GetMonNormalOrShinyPalettePointer
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	ld e, PLAYERDATA_PIC_PAL
 	call GetPlayerField
 	ret
@@ -862,14 +862,9 @@ INCLUDE "gfx/beta_poker/beta_poker.pal"
 SlotMachinePals:
 INCLUDE "gfx/slots/slots.pal"
 
-LevelSelectionMenuMalePals:
-	table_width PAL_COLOR_SIZE * 4 * 6, LevelSelectionMenuMalePals
-INCLUDE "gfx/level_selection_menu/background_male.pal"
-	assert_table_length (NUM_DAYTIMES + NUM_DAYTIMES * 2)
-
-LevelSelectionMenuFemalePals:
-	table_width PAL_COLOR_SIZE * 4 * 6, LevelSelectionMenuFemalePals
-INCLUDE "gfx/level_selection_menu/background_female.pal"
+LevelSelectionMenuPals:
+	table_width PAL_COLOR_SIZE * 4 * 6, LevelSelectionMenuPals
+INCLUDE "gfx/level_selection_menu/background.pal"
 	assert_table_length (NUM_DAYTIMES + NUM_DAYTIMES * 2)
 
 LevelSelectionMenuStageTrophiesPals:

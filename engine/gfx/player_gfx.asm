@@ -45,7 +45,7 @@ MovePlayerPic:
 
 ShowPlayerNamingChoices:
 	ld hl, ChrisNameMenuHeader
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	bit PLAYERGENDER_FEMALE_F, a
 	jr z, .got_header
 	ld hl, KrisNameMenuHeader
@@ -61,19 +61,17 @@ ShowPlayerNamingChoices:
 INCLUDE "data/players/names.asm"
 
 GetPlayerIcon:
-	ld de, ChrisSpriteGFX
+	ld a, [wPlayerCharacter]
+	ld e, PLAYERDATA_DEFAULT_SPRITE
+	call GetPlayerField
+	ld d, h
+	ld e, l
 	ld b, BANK(ChrisSpriteGFX)
-	ld a, [wPlayerGender]
-	bit PLAYERGENDER_FEMALE_F, a
-	jr z, .got_gfx
-	ld de, KrisSpriteGFX
-	ld b, BANK(KrisSpriteGFX)
-.got_gfx
 	ret
 
 GetCardPic:
 	ld hl, ChrisCardPic
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	bit PLAYERGENDER_FEMALE_F, a
 	jr z, .got_pic
 	ld hl, KrisCardPic
@@ -99,7 +97,7 @@ TrainerCardGFX:
 INCBIN "gfx/trainer_card/trainer_card.2bpp"
 
 GetPlayerBackpic:
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	ld e, PLAYERDATA_BACKPIC
 	call GetPlayerField
 	ld de, vTiles2 tile $31
@@ -115,7 +113,7 @@ HOF_LoadTrainerFrontpic:
 
 ; Get class
 	ld e, CHRIS
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	bit PLAYERGENDER_FEMALE_F, a
 	jr z, .got_class
 	ld e, KRIS
@@ -125,7 +123,7 @@ HOF_LoadTrainerFrontpic:
 
 ; Load pic
 	ld de, ChrisPic
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	bit PLAYERGENDER_FEMALE_F, a
 	jr z, .got_pic
 	ld de, KrisPic
@@ -145,7 +143,7 @@ DrawIntroPlayerPic:
 
 ; Get class
 	ld e, CHRIS
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	bit PLAYERGENDER_FEMALE_F, a
 	jr z, .got_class
 	ld e, KRIS
@@ -155,7 +153,7 @@ DrawIntroPlayerPic:
 
 ; Load pic
 	ld de, ChrisPic
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	bit PLAYERGENDER_FEMALE_F, a
 	jr z, .got_pic
 	ld de, KrisPic

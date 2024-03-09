@@ -4,7 +4,7 @@ LoadFishingGFX:
 	ld a, $1
 	ldh [rVBK], a
 
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	ld e, PLAYERDATA_FISHING_SPRITE
 	call GetPlayerField
 	ld d, h

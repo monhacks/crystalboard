@@ -97,7 +97,7 @@ endc
 	const ENGINE_GOLDENROD_DEPT_STORE_SALE_IS_ON
 ; wGameTimer
 	const ENGINE_62
-; wPlayerGender
+; wPlayerCharacter
 	const ENGINE_PLAYER_IS_FEMALE
 ; wCelebiEvent
 	const ENGINE_FOREST_IS_RESTLESS

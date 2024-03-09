@@ -29,14 +29,15 @@ SpawnPlayer:
 	call GetMapObject
 	ld hl, MAPOBJECT_PALETTE
 	add hl, bc
-	ln e, PAL_NPC_RED, OBJECTTYPE_SCRIPT
-	ld a, [wPlayerGender]
-	bit PLAYERGENDER_FEMALE_F, a
-	jr z, .ok
-	ln e, PAL_NPC_BLUE, OBJECTTYPE_SCRIPT
-
-.ok
-	ld [hl], e
+	push hl
+	ld a, [wPlayerCharacter]
+	ld e, PLAYERDATA_OW_PAL
+	call GetPlayerField
+	add PAL_NPC ; convert from PAL_OW to PAL_NPC
+	swap a
+	or OBJECTTYPE_SCRIPT
+	pop hl
+	ld [hl], a
 	ld a, PLAYER_OBJECT
 	ldh [hMapObjectIndex], a
 	ld bc, wMapObjects
@@ -945,9 +946,10 @@ MockPlayerObject::
 	call CopyBytes
 
 ; adjust palette number
-	ld a, [wPlayerGender]
-	ld e, PLAYERDATA_NPC_PAL
+	ld a, [wPlayerCharacter]
+	ld e, PLAYERDATA_OW_PAL
 	call GetPlayerField
+	add PAL_NPC ; convert from PAL_OW to PAL_NPC
 	swap a
 	or OBJECTTYPE_SCRIPT
 	ld [wMapObject{d:LAST_OBJECT}Palette], a ; also wMapObject{d:LAST_OBJECT}Type

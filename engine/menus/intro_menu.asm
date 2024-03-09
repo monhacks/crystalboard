@@ -527,7 +527,7 @@ NamePlayer:
 
 	ld hl, wPlayerName
 	ld de, .Chris
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	bit PLAYERGENDER_FEMALE_F, a
 	jr z, .Male
 	ld de, .Kris
@@ -682,13 +682,15 @@ Intro_PlacePlayerSprite:
 	inc de
 	ld [hli], a ; tile id
 
-	ld b, PAL_OW_RED
-	ld a, [wPlayerGender]
-	bit PLAYERGENDER_FEMALE_F, a
-	jr z, .male
-	ld b, PAL_OW_BLUE
-.male
-	ld a, b
+	ld a, [wPlayerCharacter]
+	ld e, PLAYERDATA_OW_PAL
+	push hl
+	push de
+	push bc
+	call GetPlayerField
+	pop bc
+	pop de
+	pop hl
 
 	ld [hli], a ; attributes
 	dec c

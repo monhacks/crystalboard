@@ -2317,7 +2317,7 @@ wRivalName::  ds NAME_LENGTH
 wRedsName::   ds NAME_LENGTH
 wGreensName:: ds NAME_LENGTH
 
-wPlayerGender::
+wPlayerCharacter::
 ; bit 0:
 ;	0 male
 ;	1 female

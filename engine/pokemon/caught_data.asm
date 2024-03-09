@@ -177,7 +177,7 @@ SetBoxmonOrEggmonCaughtData:
 	ld c, a
 	call GetWorldMapLocation
 	ld b, a
-	ld a, [wPlayerGender]
+	ld a, [wPlayerCharacter]
 	rrca ; shift bit 0 (PLAYERGENDER_FEMALE_F) to bit 7 (CAUGHT_GENDER_MASK)
 	or b
 	ld [hl], a

@@ -28,6 +28,7 @@ This documentation covers a mix of topics that include aspects ranging from how 
 		- [Map identifiers](#map-identifiers)
 		- [Map environments](#map-environments)
 	- [OAM management](#oam-management)
+	- [Player characters](#player-characters)
 - [Gameplay design aspects](#gameplay-design-aspects)
 	- [Game currency](#game-currency)
 	- [Time counting](#time-counting)
@@ -37,7 +38,7 @@ This documentation covers a mix of topics that include aspects ranging from how 
 
 The level selection menu is essentially a world map that the player navigates to select a level to play. The player can move through landmarks that correspond to unlocked levels in the level selection menu. The level seleciton menu can have multiple map pages each with their own landmarks. When the player moves from a landmark in one page to a landmark in another page, the new page is loaded during the transition.
 
-[Level selection menu](img/level_selection_menu.bmp)
+![Level selection menu](img/level_selection_menu.bmp)
 
 The usual level:landmark relation is expected to be 1:1, but 1:n is also supported, for levels that may have alternative starting points.
 
@@ -65,7 +66,7 @@ In addition to what is covered in this section, you can find more low level stuf
 
 The board menu is shown to the player at the beginning of each turn. In allows for several choices. The only ones that are specific to the pokecrystal-board engine are "roll die", "view map", and "exit level". The other three choices point to the party menu, bag menu, and pokegear, and are placeholders from pokecrystal. The board menu can be navigated horizontally. All menu options are accessed by selecting the corresponding icon of the menu, except for "view map" which is accessible via the Select button. All menu options except for "roll die" and "exit level" eventually return back to the board menu.
 
-[Board menu](img/board_menu.bmp)
+![Board menu](img/board_menu.bmp)
 
 The implementation is located in [engine/board/menu.asm](engine/board/menu.asm). Icon tiles are drawn over the background of the textbox as if they were font characters. The current menu item is highlighted with a colored overlay using objects. This file includes also the animation logic for rolling a die when the "roll die" option is selected. These animations leverage the overworld sprite animation engine from pokecrystal. Finally, [gfx/board](gfx/board) contains GFX assets.
 
@@ -204,6 +205,8 @@ Unlike trainer events, talker events are meant to be used for NPCs that interact
 
 The script pointer of a talker NPC points to an struct that uses the *talker* macro. Its arguments are flag, OPTIONAL/MANDATORY, TEXT/SCRIPT, 2-byte pointer to text or script. *OPTIONAL* means that the player will receive a prompt to skip this NPC's event. *SCRIPT* means that the 2-byte pointer points to an arbitrary script to be executed, while *TEXT* is a shortcut to merely make the NPC display text (it just executes a simple script enclosed in opentext/closetext).
 
+![Talker](img/talker.bmp)
+
 Talkers can use turn-scoped flags that are cleared at the beginning of each turn, but like level-scoped trainer flags, this is just a predefined design choice.
 
 For example:
@@ -311,7 +314,7 @@ Note that the map name sign feature is not used in pokecrystal-board, and, in fa
 
 This fading engine is used in the level selection menu and in the transition from overworld to post-level screen. When designing the timing your own fading functions, be aware of the latency introduced by the engine itself: each color takes around 3.2 scanlines to fade (in normal speed mode), so up to around 10-11 palettes can be faded in a whole frame.
 
-In addition to this engine, for manual fading you can automate the derivation of the RGB values of intermediate steps using the *rgbpals_\** macros available in [gfx/macros.asm](gfx/macros.asm), as done for example in [gfx/level_selection_menu/background_female.pal](gfx/level_selection_menu/background_female.pal).
+In addition to this engine, for manual fading you can automate the derivation of the RGB values of intermediate steps using the *rgbpals_\** macros available in [gfx/macros.asm](gfx/macros.asm), as done for example in [gfx/level_selection_menu/background.pal](gfx/level_selection_menu/background.pal).
 
 # Internal design aspects
 
@@ -370,6 +373,24 @@ In the overworld, these complementary sprites are referred to as secondary sprit
 To update just secondary sprites without processing NPC sprites, you can use *UpdateSecondarySprites*. However, if secondary sprites have shrinked or expanded since the last sprites update, it will fall back to calling *UpdateActiveSprites* to properly reposition all sprites to avoid corruption.
 
 The tiles reserved for secondary sprites in the overworld are 0x20 through 0x7e in VRAM bank 0. Tiles from 0x00 through 0x1f are reserved for NPC sprites. You may want to adjust the separation point according to your needs. [charmap.asm](charmap.asm) defines the placement of secondary sprite tiles for different use cases. The start tile of 0x20 is denoted by *SECONDARY_SPRITES_FIRST_TILE*. From there, it's a matter of managing which sprites may or may not overlap to place their tiles in VRAM in the way that most optimizes the available space.
+
+## Player characters
+
+Player data has been centralized into the *Players* table from [data/players/players.asm](data/players/players.asm), including overworld sprites and their states, player pictures, and their palettes. Player constants are defined in [constants/player_constants.asm](constants/player_constants.asm). When you define pointers in a *player* entry in the *Players* table, you must ensure the equivalent argument in all entries points to something in the same bank.
+
+For example, in:
+
+```
+Players::
+	player ChrisStateSprites, PAL_OW_RED, ChrisSpriteGFX, FishingGFX, ChrisPic, ChrisBackpic, PlayerPalette   ; PLAYER_CHRIS
+	player KrisStateSprites, PAL_OW_BLUE, KrisSpriteGFX, KrisFishingGFX, KrisPic, KrisBackpic, KrisPalette    ; PLAYER_KRIS
+	player GreenStateSprites, PAL_OW_GREEN, RivalSpriteGFX, FishingGFX, ChrisPic, ChrisBackpic, PlayerPalette ; PLAYER_GREEN
+```
+*ChrisSpriteGFX*, *KrisSpriteGFX*, and *RivalSpriteGFX* must point to graphics located in the same bank as each other, and so on.
+
+Note that for many pokecrystal features that are considered placeholder or discontinued in pokecrystal-board (e.g. player selection/naming screen, Pokegear, pack, trainer card, Magnet Train, etc.), pokecrystal-board still uses legacy *PLAYERGENDER_FEMALE_F* flag. The concept of gender is otherwise deprecated.
+
+![Player](img/player.bmp)
 
 # Gameplay design aspects
 
