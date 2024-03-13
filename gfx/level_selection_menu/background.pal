@@ -1,6 +1,6 @@
 ; morn
 
-	rgbpals_fade_src "lsm_m_morn"
+	rgbpals_fade_src "lsm_morn"
 
 ; border
 	RGB 28, 31, 20
@@ -37,7 +37,7 @@
 
 ; day (original)
 
-	rgbpals_fade_src "lsm_m_day"
+	rgbpals_fade_src "lsm_day"
 
 ; border
 	RGB 28, 31, 20
@@ -74,7 +74,7 @@
 
 ; nite
 
-	rgbpals_fade_src "lsm_m_nite"
+	rgbpals_fade_src "lsm_nite"
 
 ; border
 	RGB 28, 31, 20
@@ -111,7 +111,7 @@
 
 ; eve
 
-	rgbpals_fade_src "lsm_m_eve"
+	rgbpals_fade_src "lsm_eve"
 
 ; border
 	RGB 28, 31, 20
@@ -146,7 +146,7 @@
 
 	rgbpals_fade_src_end
 
-	rgbpals_fade_apply "lsm_m_morn", "lsm_m_day", 2
-	rgbpals_fade_apply "lsm_m_day", "lsm_m_eve", 2
-	rgbpals_fade_apply "lsm_m_eve", "lsm_m_nite", 2
-	rgbpals_fade_apply "lsm_m_nite", "lsm_m_morn", 2
+	rgbpals_fade_apply "lsm_morn", "lsm_day", 2
+	rgbpals_fade_apply "lsm_day", "lsm_eve", 2
+	rgbpals_fade_apply "lsm_eve", "lsm_nite", 2
+	rgbpals_fade_apply "lsm_nite", "lsm_morn", 2

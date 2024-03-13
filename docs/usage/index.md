@@ -89,7 +89,7 @@ The effects of each implemented type of board space are defined as scripts in [e
 
 Board space effects are triggered from *PlayerEvents.CheckBoardEvent* during *BOARDEVENT_HANDLE_BOARD*. Each space tile uses a specific collision value (*COLL_\*_SPACE*, e.g. *COLL_BLUE_SPACE*), and the appropriate script is queued via *CallScript* for its later execution in *ScriptEvents*. Most space scripts have a check for whether the player has already landed on the space. But others (e.g. branch space, end space) trigger even if the player has not completed the movement. A branch space additionally does not count as an actual space in the movement (so it can't be landed on either).
 
-When a player lands on a space, it turns into a "grey space" or "disabled space" with no effect should the player land on it in a later turn. This grey space is also used by default as the starting space of a level (which matches the spawn point of the map).
+When a player lands on a space, it turns into a "grey space" or "disabled space" with no effect should the player land on it in a later turn. This is so that potential paths in a closed loop don't allow the player to "go infinite", though this is more of an aesthetic thing, since technically there is no built-in mechanism that prevents the player from re-entering a level indefinitely to rack up coins, for example. This grey space is also used by default as the starting space of a level (which should be made to match the spawn point of the map).
 
 ### Regular spaces
 
@@ -115,7 +115,7 @@ In a branch space, the last two bytes of the *space* macro are repurposed as a p
 	endbranch
 ```
 
-Each *branchdir* entry includes: direction, next space id, required techniques. The order of entries is irrelevant, but do not put the same direction more than once in the same branch struct (all but the last entry using that direction will be ignored). The number of arguments occupied by required techniques in each *branchdir* entry is equal to the number of techniques you have defined divided by eight.
+Each *branchdir* entry includes: direction, next space id, required techniques. The order of entries is irrelevant, but do not put the same direction more than once in the same branch struct (in that case, all but the last entry using that direction will be ignored). The number of arguments occupied by required techniques in each *branchdir* entry is equal to the number of techniques you have defined divided by eight, and the techniques in each argument must be aligned to their byte as per the technique constants (more on this in [Unlocked techniques](#technique-events)).
 
 ### End space
 
@@ -271,6 +271,12 @@ How levels are unlocked along the way is dictated by the *LevelUnlockRequirement
 
 Means that: *LEVEL_3* becomes unlocked when stage 2 of *LEVEL_1* and stage 1 of *LEVEL_2* are both cleared; *LEVEL_4* becomes unlocked when you clear your third level stage; *LEVEL_5* becomes unlocked when Flash and Waterfall have both been unlocked. As with [*branchdir*](#branch-and-union-spaces), the number of arguments occupied by techniques after *TECHNIQUES_CLEARED* is equal to the number of techniques you have defined divided by eight (in the above case, there are 9-16 and both Flash and Waterfall are among the first eight).
 
+As mentioned before, when a level stage is cleared, the transition is overworld -> post-level screen -> level selection menu. When the player unlocks one or more levels as a result of this, the entry to the level selection menu displays a small animation that indicates the levels that have been unlocked:
+
+![Unlock](img/lsm_unlock.bmp)
+
+On the other hand, an exit from the overworld directly to the level selection menu can occur if the player whites out or leaves the level through the "exit level" board menu option. Exiting the overworld is done through the *exitoverworld* script and its only argument is a constant that denotes the exit overworld reason. Currently, *CLEARED_LEVEL*, *ABANDONED_LEVEL*, and *WHITED_OUT_IN_LEVEL* are defined.
+
 # Other features
 
 ## Window HUD
@@ -279,6 +285,8 @@ Means that: *LEVEL_3* becomes unlocked when stage 2 of *LEVEL_1* and stage 1 of 
 
 The amount of scanlines occupied by the HUD is controlled by *hWindowHUDLY*. Writing any non-0 value to this address enables the window-based HUD. Enabling the window-based HUD means that the LCD interrupt is configured in LYC=LY mode in the corresponding scanline; the vblank interrupt enables the window, and the LCD interrupt disables it (through the LCDC register) (note: the window-based HUD can't be enabled simultaneously with pokecrystal-native LCD interrupt usage through *hLCDCPointer*, used during battle transition, battle animations, and movies).
 
+The content of the overworld HUD in pokecrystal-board shows: turn number, die number rolled this turn, coins accumulated in the level, and an unused metric ("experience"). Overworld HUD design is up to your implementation. Several states cause the overworld HUD to be hidden, such as a Pokemon battle, the "view map" mode, the party menu, or the bag menu.
+
 The available functions to use the HUD engine are:
 
 - *EnableWindowHUD*: Configure LCD interrupt in LYC=LY mode with corresponding LYC
@@ -286,7 +294,7 @@ The available functions to use the HUD engine are:
 - *LoadWindowHUD*: Load the HUD at *wWhichHUD* to the top of *wTilemap* and *wAttrmap*. Only does anything if *hWindowHUDLY* is non-0
 - *LoadHUD*: Load the HUD at *wWhichHUD* to the top of *wTilemap* and *wAttrmap* (without using the Game Boy's window)
 
-The window-based HUD is currently only used in the overworld. Individual HUD types with their own *hWindowHUDLY* (if window-based) and their own content are supported through the *LoadHUD*/*LoadWindowHUD* pointer table. Each entry points to a handler for a specific HUD type (e.g. *HUD_OVERWORLD*, as defined in [constants/gfx_constants.asm](constants/gfx_constants.asm)) meant to implement the loading of the HUD's content to *wTilemap* and *wAttrmap* whilst enabling the HUD. But the overworld normally doesn't use *wTilemap* and *wAttrmap* directly (only when a textbox is open), so the overworld HUD engine requires additional functions beyond the above four generic functions:
+The window-based HUD is currently only used in the overworld. Individual HUD types with their own *hWindowHUDLY* (if window-based) and their own content are supported through the *LoadHUD*/*LoadWindowHUD* pointer table. Each entry points to a handler for a specific HUD type (e.g. *HUD_OVERWORLD*, as defined in [constants/gfx_constants.asm](constants/gfx_constants.asm)) meant to implement the loading of the HUD's content to *wTilemap* and *wAttrmap* whilst enabling the HUD. But, in pokecrystal and thus also pokecrystal-board, the overworld normally doesn't use *wTilemap* and *wAttrmap* directly (only when a textbox is open), so the overworld HUD engine requires additional functions beyond the above four generic functions:
 
 - *ConstructOverworldHUDTilemap*: Draw the overworld HUD's tilemap into *wOverworldHUDTiles*
 - *TransferOverworldHUDToBGMap*: Transfer overworld HUD to *vBGMap1*/*vBGMap3* during v/hblank(s). Tilemap is read from *wOverworldHUDTiles*, attrmap is all *PAL_BG_TEXT | PRIORITY*.
@@ -295,8 +303,6 @@ The window-based HUD is currently only used in the overworld. Individual HUD typ
 - *RefreshOverworldHUD*: *ConstructOverworldHUDTilemap* + *TransferOverworldHUDToBGMap* (used to reconstruct and retransfer HUD when already enabled)
 
 For example, *ConstructAndEnableOverworldHUD* and *EnableOverworldHUD* are used in map setup scripts as appropriate, and *RefreshOverworldHUD* is called between turns or any other time that the HUD's content needs refreshing. *DisableOverworldHUD* is used for example when leaving the overworld or to transitions to screens that don't display the HUD (battle, party menu, view map mode, etc.).
-
-The content of the overworld HUD in pokecrystal-board shows: turn number, die number rolled this turn, coins accumulated in the level, and an unused metric ("experience"). Overworld HUD design is up to your implementation.
 
 ## Overworld textbox and font
 
@@ -366,13 +372,15 @@ For drawing small complementary screen elements in the overworld or the level se
 
 In pokecrystal-board, the sprite animation engine supports a mode of not wiping up Shadow OAM (in *DoNextFrameForAllSprites*) in order to work alongside other OAM in the overworld. This is turned on by setting bit *DONT_CLEAR_SHADOW_OAM_IN_SPRITE_ANIMS_F* of *wStateFlags*.
 
-In the overworld, these complementary sprites are referred to as secondary sprites and are managed by the same logic that manages the displaying NPCs: *InitSprites*. In *InitSprites*, *InitSecondarySprites*, checks for requested secondary sprites in the form of *wDisplaySecondarySprites* bits set and processes each requested sprite collection sequentially. It's your responsibility to ensure that you are not exceeding the limit of more than 40 objects at once or more than 10 objects per row considering both NPCs and secondary sprites.
+In the overworld, these complementary sprites are referred to as secondary sprites and are managed by the same logic that manages the displaying NPCs: *InitSprites*. In *InitSprites*, *InitSecondarySprites*, checks for requested secondary sprites in the form of *wDisplaySecondarySprites* bits set and processes each requested sprite collection sequentially. It's your responsibility to ensure that you are not exceeding the hardware limit of more than 40 objects at once or more than 10 objects per row considering both NPCs and secondary sprites.
 
 ![OAM](img/oam.png)
 
 To update just secondary sprites without processing NPC sprites, you can use *UpdateSecondarySprites*. However, if secondary sprites have shrinked or expanded since the last sprites update, it will fall back to calling *UpdateActiveSprites* to properly reposition all sprites to avoid corruption.
 
 The tiles reserved for secondary sprites in the overworld are 0x20 through 0x7e in VRAM bank 0. Tiles from 0x00 through 0x1f are reserved for NPC sprites. You may want to adjust the separation point according to your needs. [charmap.asm](charmap.asm) defines the placement of secondary sprite tiles for different use cases. The start tile of 0x20 is denoted by *SECONDARY_SPRITES_FIRST_TILE*. From there, it's a matter of managing which sprites may or may not overlap to place their tiles in VRAM in the way that most optimizes the available space.
+
+A bunch of these secondary sprites, like the directional arrows in the level selection menu, a branch space, or the "view map" mode, share the palette of the player character. Others use a specific palette. Again, this is your design and graphical aspects are considered placeholder.
 
 ## Player characters
 
@@ -388,9 +396,9 @@ Players::
 ```
 *ChrisSpriteGFX*, *KrisSpriteGFX*, and *RivalSpriteGFX* must point to graphics located in the same bank as each other, and so on.
 
-Note that for many pokecrystal features that are considered placeholder or discontinued in pokecrystal-board (e.g. player selection/naming screen, Pokegear, pack, trainer card, Magnet Train, etc.), pokecrystal-board still uses legacy *PLAYERGENDER_FEMALE_F* flag. The concept of gender is otherwise deprecated.
+Note that for many pokecrystal features that are considered placeholder or discontinued in pokecrystal-board (e.g. player selection/naming screen, Pokegear, pack, trainer card, Magnet Train, etc.), pokecrystal-board still uses legacy *PLAYERGENDER_FEMALE_F* flag. The concept of player gender is otherwise deprecated.
 
-![Player](img/player.bmp)
+![Player](img/players.bmp)
 
 # Gameplay design aspects
 
