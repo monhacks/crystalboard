@@ -127,16 +127,6 @@ endc
 	ld a, LOW(START_COINS)
 	ld [wCoins + 2], a
 
-	xor a
-	ld [wWhichMomItem], a
-
-	ld hl, wMomItemTriggerBalance
-	ld [hl], HIGH(MOM_COINS >> 8)
-	inc hl
-	ld [hl], HIGH(MOM_COINS) ; mid
-	inc hl
-	ld [hl], LOW(MOM_COINS)
-
 	call InitializeNPCNames
 
 	farcall InitDecorations

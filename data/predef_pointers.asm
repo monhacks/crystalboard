@@ -64,7 +64,6 @@ PredefPointers::
 	add_predef PlayBattleAnim
 	add_predef DummyPredef38
 	add_predef DummyPredef39
-	add_predef DummyPredef3A
 	add_predef PartyMonItemName
 	add_predef GetMonFrontpic
 	add_predef GetMonBackpic

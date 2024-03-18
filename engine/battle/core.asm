@@ -2332,27 +2332,7 @@ WinTrainerBattle:
 	ld a, [wAmuletCoin]
 	and a
 	call nz, .DoubleReward
-	call .CheckMaxedOutMomCoins
-	push af
-	ld a, FALSE
-	jr nc, .okay
-	ld a, [wMomSavingCoins]
-	and MOM_SAVING_COINS_MASK
-	cp (1 << MOM_SAVING_SOME_COINS_F) | (1 << MOM_SAVING_HALF_COINS_F)
-	jr nz, .okay
-	inc a ; TRUE
-
-.okay
-	ld b, a
 	ld c, 4
-.loop
-	ld a, b
-	and a
-	jr z, .loop2
-	call .AddCoinsToMom
-	dec c
-	dec b
-	jr .loop
 
 .loop2
 	ld a, c
@@ -2365,38 +2345,13 @@ WinTrainerBattle:
 .done
 	call .DoubleReward
 	call .DoubleReward
-	pop af
-	jr nc, .KeepItAll
-	ld a, [wMomSavingCoins]
-	and MOM_SAVING_COINS_MASK
-	jr z, .KeepItAll
-	ld hl, .SentToMomTexts
-	dec a
-	ld c, a
-	ld b, 0
-	add hl, bc
-	add hl, bc
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp StdBattleTextbox
-
-.KeepItAll:
 	ld hl, GotCoinsForWinningText
 	jp StdBattleTextbox
-
-.AddCoinsToMom:
-	push bc
-	ld hl, wBattleReward + 2
-	ld de, wMomsCoins + 2
-	call AddBattleCoinsToAccount
-	pop bc
-	ret
 
 .AddCoinsToWallet:
 	push bc
 	ld hl, wBattleReward + 2
-	ld de, wCoins + 2
+	ld de, wCurLevelCoins + 2
 	call AddBattleCoinsToAccount
 	pop bc
 	ret
@@ -2413,22 +2368,6 @@ WinTrainerBattle:
 	ld [hli], a
 	ld [hli], a
 	ld [hl], a
-	ret
-
-.SentToMomTexts:
-; entries correspond to MOM_SAVING_* constants
-	dw SentSomeToMomText
-	dw SentHalfToMomText
-	dw SentAllToMomText
-
-.CheckMaxedOutMomCoins:
-	ld hl, wMomsCoins + 2
-	ld a, [hld]
-	cp LOW(MAX_COINS)
-	ld a, [hld]
-	sbc HIGH(MAX_COINS) ; mid
-	ld a, [hl]
-	sbc HIGH(MAX_COINS >> 8)
 	ret
 
 AddBattleCoinsToAccount:
@@ -2451,17 +2390,17 @@ AddBattleCoinsToAccount:
 	jr nz, .loop
 	pop hl
 	ld a, [hld]
-	cp LOW(MAX_COINS)
+	cp LOW(MAX_LEVEL_COINS)
 	ld a, [hld]
-	sbc HIGH(MAX_COINS) ; mid
+	sbc HIGH(MAX_LEVEL_COINS) ; mid
 	ld a, [hl]
-	sbc HIGH(MAX_COINS >> 8)
+	sbc HIGH(MAX_LEVEL_COINS >> 8)
 	ret c
-	ld [hl], HIGH(MAX_COINS >> 8)
+	ld [hl], HIGH(MAX_LEVEL_COINS >> 8)
 	inc hl
-	ld [hl], HIGH(MAX_COINS) ; mid
+	ld [hl], HIGH(MAX_LEVEL_COINS) ; mid
 	inc hl
-	ld [hl], LOW(MAX_COINS)
+	ld [hl], LOW(MAX_LEVEL_COINS)
 	ret
 
 PlayVictoryMusic:
@@ -8166,7 +8105,7 @@ CheckPayDay:
 
 .okay
 	ld hl, wPayDayCoins + 2
-	ld de, wCoins + 2
+	ld de, wCurLevelCoins + 2
 	call AddBattleCoinsToAccount
 	ld hl, BattleText_PlayerPickedUpPayDayCoins
 	call StdBattleTextbox

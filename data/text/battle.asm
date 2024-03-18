@@ -183,28 +183,6 @@ TiedAgainstText:
 	line "<ENEMY>!"
 	prompt
 
-SentSomeToMomText:
-	text "<PLAYER> got <COIN>@"
-	text_decimal wBattleReward, 3, 6
-	text_start
-	line "for winning!"
-	cont "Sent some to MOM!"
-	prompt
-
-SentHalfToMomText:
-	text "Sent half to MOM!"
-	prompt
-
-SentAllToMomText:
-	text "Sent all to MOM!"
-	prompt
-
-UnusedRivalLossText: ; unreferenced
-	text "<RIVAL>: Huh? I"
-	line "should've chosen"
-	cont "your #MON!"
-	prompt
-
 BattleText_MonFainted:
 	text_ram wBattleMonNickname
 	text_start
@@ -214,12 +192,6 @@ BattleText_MonFainted:
 BattleText_UseNextMon:
 	text "Use next #MON?"
 	done
-
-UnusedRivalWinText: ; unreferenced
-	text "<RIVAL>: Yes!"
-	line "I guess I chose a"
-	cont "good #MON!"
-	prompt
 
 LostAgainstText:
 	text "Lost against"

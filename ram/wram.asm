@@ -2396,14 +2396,6 @@ wStatusFlags2::
 	db
 
 wCoins:: ds 3
-wMomsCoins:: ds 3
-
-wMomSavingCoins::
-; bit 0: saving some coins
-; bit 1: saving half coins (unused)
-; bit 2: saving all coins (unused)
-; bit 7: active
-	db
 
 wChips:: dw
 
@@ -2502,11 +2494,6 @@ wDecoConsole::       db
 wDecoLeftOrnament::  db
 wDecoRightOrnament:: db
 wDecoBigDoll::       db
-
-; Items bought from Mom
-wWhichMomItem:: db
-wWhichMomItemSet:: db
-wMomItemTriggerBalance:: ds 3
 
 wDailyResetTimer:: dw
 wDailyFlags1:: db

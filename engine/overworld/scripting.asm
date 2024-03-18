@@ -1205,7 +1205,6 @@ Script_reloadmapafterbattle:
 .notblackedout
 	bit 0, d
 	jr z, .was_wild
-	farcall MomTriesToBuySomething
 	jr .next
 
 .was_wild
@@ -1223,6 +1222,7 @@ Script_reloadmapafterbattle:
 	farcall LoadBoardMenuDieNumbersGFX
 	ld hl, wDisplaySecondarySprites
 	set SECONDARYSPRITES_SPACES_LEFT_F, [hl]
+	call ConstructOverworldHUDTilemap ; refresh coins just won
 .done
 	jp Script_reloadmap
 
@@ -1874,10 +1874,7 @@ GetCoinsAccount:
 	and a
 	ld de, wCoins ; YOUR_COINS
 	ret z
-	dec a
 	ld de, wCurLevelCoins ; CUR_LEVEL_COINS
-	ret z
-	ld de, wMomsCoins ; MOMS_COINS
 	ret
 
 LoadCoinsAmountToMem:

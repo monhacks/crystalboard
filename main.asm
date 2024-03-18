@@ -82,7 +82,6 @@ INCLUDE "engine/events/pokecenter_pc.asm"
 INCLUDE "engine/items/mart.asm"
 INCLUDE "engine/events/coins.asm"
 INCLUDE "data/items/marts.asm"
-INCLUDE "engine/events/mom.asm"
 INCLUDE "engine/events/daycare.asm"
 INCLUDE "engine/events/print_unown.asm"
 INCLUDE "engine/events/print_photo.asm"
@@ -394,7 +393,6 @@ SECTION "bank3F", ROMX
 
 INCLUDE "engine/tilesets/tileset_anims.asm"
 INCLUDE "engine/events/npc_trade.asm"
-INCLUDE "engine/events/mom_phone.asm"
 
 
 SECTION "bank41", ROMX

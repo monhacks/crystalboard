@@ -11,9 +11,6 @@
 	const ENGINE_DAY_CARE_MAN_HAS_MON
 ; wDayCareLady
 	const ENGINE_DAY_CARE_LADY_HAS_MON
-; wMomSavingCoins
-	const ENGINE_MOM_SAVING_COINS
-	const ENGINE_MOM_ACTIVE
 ; wStatusFlags
 	const ENGINE_POKEDEX
 	const ENGINE_UNOWN_DEX

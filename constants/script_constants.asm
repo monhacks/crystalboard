@@ -15,7 +15,6 @@ DEF STRING_BUFFER_LENGTH EQU 19
 	const_def
 	const YOUR_COINS      ; 0
 	const CUR_LEVEL_COINS ; 1
-	const MOMS_COINS      ; 2
 
 ; checkcoins/checkchips return values
 	const_def

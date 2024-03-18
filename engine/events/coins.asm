@@ -27,7 +27,7 @@ LoadMaxCoins_bc:
 	cp HIGH(wCurLevelCoins)
 	ld bc, MaxCurLevelCoins ; CUR_LEVEL_COINS
 	ret z
-	ld bc, MaxCoins ; YOUR_COINS or MOMS_COINS
+	ld bc, MaxCoins ; YOUR_COINS
 	ret
 
 LoadMaxCoins_hl:
