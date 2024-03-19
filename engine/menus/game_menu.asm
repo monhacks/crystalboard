@@ -14,6 +14,7 @@ GameMenu:
 GameMenu_KeepMusic:
 	xor a
 	ldh [hMapAnims], a
+	ldh [hLCDStatIntRequired], a
 	call ClearTilemap
 	call LoadFrame
 	call LoadStandardFont

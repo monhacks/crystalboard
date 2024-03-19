@@ -35,12 +35,12 @@ VBlank::
 	reti
 
 .VBlanks:
-	dw VBlank0
-	dw VBlank1
-	dw VBlank2
-	dw VBlank3
-	dw VBlank4
-	dw VBlank5
+	dw VBlank0 ; normal operation
+	dw VBlank1 ; battle transition, battle anims (double speed mode)
+	dw VBlank2 ; link
+	dw VBlank3 ; battle anims (regular speed mode)
+	dw VBlank4 ; printer
+	dw VBlank5 ; credits
 	dw VBlank6
 	dw VBlank0 ; just in case
 
@@ -118,6 +118,7 @@ VBlank0::
 	ldh [hVBlankOccurred], a
 
 	; if hWindowHUDLY is active, enable interrupts so the LCD interrupt can trigger
+	; while non-vblank-sensitive operations are executed.
 	ldh a, [hWindowHUDLY]
 	and a
 	jr z, .next2
@@ -163,10 +164,9 @@ VBlank0::
 	ldh a, [hROMBankBackup]
 	rst Bankswitch
 
-	; if hWindowHUDLY is not active, we're done
 	ldh a, [hWindowHUDLY]
 	and a
-	ret z
+	jr z, .no_window_hud
 
 	; interrupts must be enabled in the cycle that rLY becomes [hWindowHUDLY] to prevent flickering
 	; wait until [hWindowHUDLY] - [rLY] is NOT between 0 and 2 before disabling interrupts
@@ -178,9 +178,17 @@ VBlank0::
 	cp 2 + 1
 	jr c, .wait_loop
 
-	; restore normal interrupts: enable ints besides joypad and let vblank finish
+.no_window_hud
+	; if hWindowHUDLY is active, only LCD_STAT is enabled.
+	; if hLCDStatIntRequired changeed during last frame, interrupts to request have changed.
+	; so, restore normal interrupts: enable ints besides joypad (and maybe lcd stat) and let vblank finish.
 	di
+	ld a, [hLCDStatIntRequired]
+	and a
 	ld a, IE_DEFAULT
+	jr nz, .enable_ints
+	ld a, IE_DEFAULT_WO_LCD_STAT
+.enable_ints
 	ldh [rIE], a
 
 	ret

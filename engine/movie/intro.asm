@@ -1,4 +1,6 @@
 CrystalIntro:
+	ld a, TRUE
+	ldh [hLCDStatIntRequired], a
 	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wGBCPalettes)

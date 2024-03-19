@@ -3,6 +3,8 @@ SECTION "Events", ROMX
 OverworldLoop::
 	xor a ; MAPSTATUS_START
 	ld [wMapStatus], a
+	ld a, TRUE
+	ld [hLCDStatIntRequired], a
 .loop
 	ld a, [wMapStatus]
 	ld hl, .Jumptable

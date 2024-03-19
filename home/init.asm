@@ -151,7 +151,8 @@ Init::
 
 	xor a
 	ldh [rIF], a
-	ld a, IE_DEFAULT
+	ldh [hLCDStatIntRequired], a
+	ld a, IE_DEFAULT_WO_LCD_STAT
 	ldh [rIE], a
 	ei
 

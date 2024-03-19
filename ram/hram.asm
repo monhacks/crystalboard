@@ -13,6 +13,8 @@ hVBlankOccurred:: db
 
 hROMBank:: db
 hVBlank:: db
+hLCDStatIntRequired:: db
+
 hMapEntryMethod:: db
 
 hJoypadReleased:: db

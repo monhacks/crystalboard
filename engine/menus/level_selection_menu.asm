@@ -4,6 +4,7 @@ LevelSelectionMenu::
 	ldh [hMapAnims], a
 	ldh [hSCY], a
 	ldh [hSCX], a
+	ldh [hLCDStatIntRequired], a
 	ld a, 1 << DONT_CLEAR_SHADOW_OAM_IN_SPRITE_ANIMS_F
 	ld [wStateFlags], a
 

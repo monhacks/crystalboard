@@ -1,6 +1,7 @@
 ClearedLevelScreen:
 	xor a
 	ldh [hMapAnims], a
+	ldh [hLCDStatIntRequired], a
 	ldh [hSCY], a
 	ld a, -$4
 	ldh [hSCX], a

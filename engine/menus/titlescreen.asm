@@ -13,6 +13,8 @@ IntroSequence:
 	; fallthrough
 
 StartTitleScreen:
+	ld a, TRUE
+	ldh [hLCDStatIntRequired], a
 	ldh a, [rSVBK]
 	push af
 	ld a, BANK(wLYOverrides)

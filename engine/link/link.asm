@@ -104,7 +104,7 @@ endc
 
 	xor a
 	ldh [rIF], a
-	ld a, (1 << JOYPAD) | (1 << SERIAL) | (1 << TIMER) | (1 << VBLANK)
+	ld a, (1 << JOYPAD) | (1 << SERIAL) | (1 << VBLANK)
 	ldh [rIE], a
 
 	call Link_CopyRandomNumbers
@@ -280,7 +280,7 @@ endc
 
 	xor a
 	ldh [rIF], a
-	ld a, (1 << JOYPAD) | (1 << SERIAL) | (1 << TIMER) | (1 << VBLANK)
+	ld a, (1 << JOYPAD) | (1 << SERIAL) | (1 << VBLANK)
 	ldh [rIE], a
 	ld de, MUSIC_NONE
 	call PlayMusic
