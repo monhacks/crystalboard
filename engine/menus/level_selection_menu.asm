@@ -298,7 +298,8 @@ LevelSelectionMenu::
 
 .EnterLevelFadeOut:
 	ld b, RGBFADE_TO_WHITE_6BGP_6OBP
-	jp DoRGBFadeEffect
+	call DoRGBFadeEffect
+	jp ClearBGPalettes
 
 .exit
 	call LevelSelectionMenu_Delay10Frames
