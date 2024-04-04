@@ -2537,6 +2537,8 @@ wLevelSelectionMenuEntryEventQueue:: flag_array NUM_LSM_EVENTS
 ; list of unlocked levels during post-level screen
 wLastUnlockedLevelsCount:: db
 wLastUnlockedLevels:: ds MAX_UNLOCK_LEVELS_AT_ONCE + 1
+; which stage of the current level cleared during post-level screen ($ff if no new stage cleared)
+wLastClearedLevelStage:: db
 
 wPlayerDataEnd::
 

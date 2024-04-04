@@ -120,6 +120,28 @@ LevelSelectionMenu::
 	call LevelSelectionMenu_RefreshTextboxAttrs
 
 	ld a, [wLevelSelectionMenuEntryEventQueue]
+	bit LSMEVENT_SHOW_CLEARED_LEVEL, a
+	jr z, .check_animate_tod
+	ld a, [wLastClearedLevelStage]
+	cp NUM_LEVEL_STAGES
+	jr nc, .check_animate_tod
+
+	call LevelSelectionMenu_Delay10Frames
+
+; the previous LevelSelectionMenu_DrawStageTrophies showed this stage trophy empty
+; due to wLastClearedLevelStage being set to a non-$ff value.
+; redisplay stage trophies to show the stage being cleared.
+	ld a, $ff
+	ld [wLastClearedLevelStage], a
+	call LevelSelectionMenu_DrawStageTrophies
+	ld de, SFX_FORESIGHT
+	call PlaySFX
+
+	call LevelSelectionMenu_Delay10Frames
+	call LevelSelectionMenu_Delay10Frames
+
+.check_animate_tod
+	ld a, [wLevelSelectionMenuEntryEventQueue]
 	bit LSMEVENT_ANIMATE_TIME_OF_DAY, a
 	jp z, .main_loop
 
@@ -723,8 +745,13 @@ LevelSelectionMenu_DrawStageTrophies:
 	ret
 
 .IsLevelStageCleared:
-; return nz if [wCurLevel]'s stage in a has been cleared, z otherwise.
+; return z if a is equal to wLastClearedLevelStage (for LSMEVENT_SHOW_CLEARED_LEVEL animation).
+; else, return nz if [wCurLevel]'s stage in a has been cleared
+; return z otherwise.
 ; preserve a and de.
+	ld hl, wLastClearedLevelStage
+	cp [hl]
+	ret z
 	ld c, a
 	push bc
 	push de

@@ -146,11 +146,12 @@ GameMenu_World:
 	call ClearObjectStructs
 	call ClearBGPalettes
 	call ClearSprites
-; clear unlocked levels
+; initialize buffer for temporary unlocked and cleared levels
 	xor a
 	ld [wLastUnlockedLevelsCount], a
 	ld a, $ff
 	ld [wLastUnlockedLevels], a
+	ld [wLastClearedLevelStage], a
 ; handle overworld exit
 	ld a, [wExitOverworldReason]
 	cp CLEARED_LEVEL
@@ -160,6 +161,11 @@ GameMenu_World:
 	farcall ClearedLevelScreen
 	ld hl, wLevelSelectionMenuEntryEventQueue
 	set LSMEVENT_ANIMATE_TIME_OF_DAY, [hl]
+	ld a, [wLastClearedLevelStage]
+	inc a
+	jr z, .no_new_stage_cleared
+	set LSMEVENT_SHOW_CLEARED_LEVEL, [hl]
+.no_new_stage_cleared
 	ld a, [wLastUnlockedLevelsCount]
 	and a
 	jr z, .save_and_return

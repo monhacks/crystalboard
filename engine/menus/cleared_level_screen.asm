@@ -62,12 +62,22 @@ AddLevelCoinsToBalance:
 
 ClearLevel:
 	ld a, [wCurSpaceEffect] ; End Space effect byte contains STAGE_*_F
+	ld [wLastClearedLevelStage], a
 	call GetClearedLevelsStageAddress
-	ld b, SET_FLAG
+	ld b, CHECK_FLAG
 	ld d, 0
 	ld a, [wCurLevel]
 	ld e, a
+	push de
 	call FlagAction
+	pop de
+	jr nz, .already_cleared ; return if this level stage already cleared
+	ld b, SET_FLAG
+	call FlagAction
+	ret
+.already_cleared
+	ld a, $ff
+	ld [wLastClearedLevelStage], a
 	ret
 
 UnlockLevels:

@@ -29,8 +29,9 @@ DEF LSMTEXTBOX_LEVEL_NUMBERS_FIRST_TILE EQU $31 ; and $41
 
 ; events when entering Level Selection menu (wLevelSelectionMenuEntryEventQueue)
 	const_def
-	const LSMEVENT_SHOW_UNLOCKED_LEVELS ; 0
-	const LSMEVENT_ANIMATE_TIME_OF_DAY  ; 1
+	const LSMEVENT_SHOW_CLEARED_LEVEL   ; 0
+	const LSMEVENT_SHOW_UNLOCKED_LEVELS ; 1
+	const LSMEVENT_ANIMATE_TIME_OF_DAY  ; 2
 DEF NUM_LSM_EVENTS EQU const_value
 
 ; used in CaughtData (legacy)
