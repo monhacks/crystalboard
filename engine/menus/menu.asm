@@ -233,7 +233,7 @@ MenuJoypadLoop:
 .loop
 	call Move2DMenuCursor
 	call .BGMap_OAM
-	call Do2DMenuJoypad
+	call Do2DMenuJoypad.loop
 	jr nc, .done
 	call _2DMenuInterpretJoypad
 	jr c, .done
@@ -262,13 +262,14 @@ MenuJoypadLoop:
 	ret
 
 Do2DMenuJoypad:
+	call DelayFrame
 .loop
 	call UpdateTimeSensitivePals
 	call Menu_WasButtonPressed
 	ret c
 	ld a, [w2DMenuFlags1]
 	bit 7, a
-	jr z, .loop
+	jr z, Do2DMenuJoypad
 	and a
 	ret
 

@@ -218,6 +218,7 @@ endr
 
 PromptPlayerToChooseBranchDirection:
 ; sample a dpad press or SELECT button
+	call DelayFrame
 	ld hl, wTempSpaceBranchStruct
 	call GetJoypad
 	ldh a, [hJoyPressed]

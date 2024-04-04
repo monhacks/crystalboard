@@ -214,6 +214,7 @@ ApplyBoardMenuSpritePalette:
 	ret
 
 GetBoardMenuSelection:
+	call DelayFrame
 	call JoyTextDelay
 	call GetMenuJoypad
 	bit A_BUTTON_F, a
@@ -272,7 +273,7 @@ DEF DIE_MAX_NUMBER EQU 6
 	ld a, 1
 	ld [wDieRoll], a
 	call HDMATransferTilemapAndAttrmap_Menu ;
-	call CloseText	                                    ; closetext
+	call CloseText	                        ; closetext
 
 .rotate_die_loop
 	call IsSFXPlaying

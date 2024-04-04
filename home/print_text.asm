@@ -70,7 +70,9 @@ PrintLetterDelay::
 .wait
 	ldh a, [hTextDelayFrames]
 	and a
-	jr nz, .checkjoypad
+	jr z, .end
+	call DelayFrame
+	jr .checkjoypad
 
 .end
 	pop af
