@@ -15,7 +15,7 @@ UseFlashAuto::
 	ld a, [wTimeOfDayPalset]
 	cp DARKNESS_PALSET
 	ret nz
-	ld c, 30 ; 500 ms
+	ld c, 50 ; 800 ms
 	call DelayFrames
 	call WaitSFX
 	ld de, SFX_FLASH
