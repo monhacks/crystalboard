@@ -49,12 +49,12 @@ RGBLINK ?= $(RGBDS)rgblink
 ### Build targets
 
 .SUFFIXES:
-.PHONY: all crystal crystal11 crystal_au crystal_debug crystal11_debug clean tidy compare tools
+.PHONY: all crystal crystal11 crystal_au crystal_debug crystal11_debug clean tidy compare tools text
 .SECONDEXPANSION:
 .PRECIOUS:
 .SECONDARY:
 
-all: crystal
+all: text crystal crystal_debug
 crystal:         pokecrystal.gbc
 crystal11:       pokecrystal11.gbc
 crystal_au:      pokecrystal_au.gbc
@@ -100,6 +100,9 @@ compare: $(roms) $(patches)
 
 tools:
 	$(MAKE) -C tools/
+
+text:
+	python3 tools/text.py
 
 
 RGBASMFLAGS = -Q8 -P includes.asm -Weverything -Wnumeric-string=2 -Wtruncation=1

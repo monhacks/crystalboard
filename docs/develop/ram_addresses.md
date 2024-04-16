@@ -25,7 +25,7 @@
   - **wCurLevel**: initialized in LevelSelectionMenu (where it is also used), and stays static during the level.
   - **wDefaultLevelSelectionMenuLandmark**: used to know in which landmark to place the player when entering level selection menu.
   - **wLevelSelectionMenuEntryEventQueue**: which events have to be triggered the next time the player enters the level selection menu.
-  - **wLastUnlockedLevelsCount**, **wLastUnlockedLevels**: temporary list of unlocked levels during post-level screen
+  - **wLastUnlockedLevelsCount**, **wLastUnlockedLevels**, **wLastClearedLevelStage**: temporary list of unlocked and cleared levels during post-level screen
 
 - These addresses share memory region with string buffers from *wStringBuffer3* onwards. They are placed in memory in the following order.
   - **wTempSpaceStruct**: Temporary scope. Same structure as *wCurSpaceStruct*

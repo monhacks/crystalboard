@@ -59,14 +59,20 @@ DebugLevel5_Map1_MapEvents:
 	done
 
 .YoungsterMikeyAfterText:
-	text "Becoming a good"
+;>text
+;	You're a #MON trainer, right?
+;	Becoming a good trainer is really tough.
+;	I'm going to battle other people to get better.
+	text "You're a #MON"
+	line "trainer, right?"
+	para "Becoming a good"
 	line "trainer is really"
 	cont "tough."
-
-	para "I'm going to bat-"
-	line "tle other people"
-	cont "to get better."
+	para "I'm going to battle"
+	line "other people to"
+	cont "get better."
 	done
+;<text
 
 DebugLevel5_Map1_MapSpaces:
 	space  2,  4,  $0,  1 ;  0

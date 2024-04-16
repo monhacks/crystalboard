@@ -22,7 +22,7 @@ In pokecrystal-board **you will find**:
 
 In pokecrystal-board **you will *not* find**:
 - A ready-to-play game
-- An engine that requires less ASM knowledge to use than the pokecrystal disassembly
+- An engine that requires less ASM knowledge than the pokecrystal disassembly to develop features that don't yet exist
 - Guaranteed compatibility with extensions to pokecrystal developed by the community
 - Definitive GFX and SFX assets for the pokecrystal-board features
 
