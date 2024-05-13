@@ -1,3 +1,39 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Usage: python tools/board/tileset.py
+
+Generates palette map, 2bpp image, metatiles, and collision for a new tileset. A source tileset is used as a base to generate the new one.
+
+The layout of the generated tileset is as follows:
+- Tiles from 0x00 to 0xbf come from the source tileset.
+- Tiles from 0xc0 to 0xdf come from gfx/tilesets/spaces/fixed_spaces.png
+- Tiles from 0xe0 to 0xff come from gfx/tilesets/spaces/variable_spaces_<N>.png
+
+The layout of the generated tileset's metatiles is as follows:
+- Metatiles from 0x00 to 0x7f come from the source tileset.
+- Metatiles from 0x80 to 0xdf are each made to use the specified space in the top left tile.
+- Metatiles from 0xe0 to 0xff are fixed to use the grey space in the top left tile.
+- All non-space tiles in the metatiles are fixed to 0x01.
+
+The user inputs the following before generating the new tileset:
+- In the fixed_spaces list of the program: your layout of gfx/tilesets/spaces/fixed_spaces.png
+- In the program window: name of the source tileset.
+- In the program window: name of the tileset to create
+- In the program window: index of variable spaces to use in the new tileset.
+- In the program window: layout of spaces in metatiles 0x80 - 0xdf.
+
+User must later add the tileset information in the following assembly files:
+- constants/tileset_constants.asm
+- gfx/tilesets.asm
+- gfx/tileset_palette_maps.asm
+- data/tilesets.asm
+- engine/tilesets/tileset_anims.asm
+
+Run this script from the base directory of the repository.
+"""
+
 import os
 import re
 import tkinter as tk
